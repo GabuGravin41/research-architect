@@ -1,0 +1,5 @@
+{
+  "name": "Research Architect",
+  "description": "A systematic, AI-powered research paper polisher that fleshes out sketches into formatted LaTeX, section by section.",
+  "requestFramePermissions": []
+}
