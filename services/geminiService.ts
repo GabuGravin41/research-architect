@@ -1,38 +1,34 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { PaperConfig, Section } from "../types";
 
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+import { GoogleGenAI, Type, ThinkingLevel } from "@google/genai";
+import { CurriculumConfig, Journey, Module, Section } from "../types";
 
-// Helper to clean markdown blocks if the model adds them despite instructions
-const cleanLatex = (text: string) => {
-  return text.replace(/```latex/g, '').replace(/```/g, '').trim();
+const getAI = () => {
+  const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY || '';
+  return new GoogleGenAI({ apiKey });
 };
 
-export const generateOutline = async (config: PaperConfig): Promise<Array<{ title: string; description: string }>> => {
-  const model = "gemini-3-pro-preview"; 
+/**
+ * Stage 1: The Grand Architect
+ * Generates the high-level Journeys for the curriculum.
+ */
+export const generateJourneys = async (config: CurriculumConfig): Promise<Array<{ title: string; description: string }>> => {
+  const ai = getAI();
+  const model = "gemini-3.1-pro-preview"; 
 
   const prompt = `
-    You are an expert academic editor. I have a sketch for a research paper/document. 
-    Please break this sketch down into a logical sequence of sections.
+    You are a Master Curriculum Designer for elite mathematics (Olympiad level).
+    Task: Create the high-level "Journeys" (conceptual layers) for a discovery-based curriculum titled "${config.title}".
     
-    **Constraint:**
-    The user wants a document of type: "${config.targetLength}".
-    - If it is a "Dissertation" or "Extended Report", generate a comprehensive list of sections (likely 10-20 sections including sub-chapters).
-    - If it is a "Short Letter", keep it concise (4-5 sections).
-    
-    The Title of the paper is: ${config.title}
-    Tone: ${config.tone}
-    Template Style: ${config.template}
-    
-    Here is the raw sketch:
-    ${config.rawSketch}
+    **Vision:**
+    ${config.rawVision}
 
-    Return a JSON array of sections. Each section must have a 'title' and a 'description'. 
-    The 'description' should contain the specific points from the sketch that belong in that section. 
-    If a part of the sketch is general, assign it to the most relevant section (e.g., Introduction or Methodology).
-    
-    Ensure the flow is logical.
+    **Requirements:**
+    1. Generate exactly 7 Journeys.
+    2. Each Journey should represent a major conceptual leap.
+    3. Focus on discovery-based learning: problems first, names later.
+    4. Target Audience: ${config.targetAudience}.
+
+    Return a JSON array of objects with {title, description}.
   `;
 
   try {
@@ -47,7 +43,7 @@ export const generateOutline = async (config: PaperConfig): Promise<Array<{ titl
             type: Type.OBJECT,
             properties: {
               title: { type: Type.STRING },
-              description: { type: Type.STRING, description: "Detailed instructions for what goes in this section based on the sketch" }
+              description: { type: Type.STRING }
             },
             required: ["title", "description"]
           }
@@ -55,71 +51,37 @@ export const generateOutline = async (config: PaperConfig): Promise<Array<{ titl
       }
     });
 
-    if (response.text) {
-      return JSON.parse(response.text);
-    }
-    throw new Error("No text returned from Gemini");
+    return JSON.parse(response.text || "[]");
   } catch (error) {
-    console.error("Error generating outline:", error);
+    console.error("Journey generation error:", error);
     throw error;
   }
 };
 
-export const generateSectionContent = async (
-  section: Section,
-  allSections: Section[],
-  config: PaperConfig
-): Promise<string> => {
-  const model = "gemini-3-pro-preview"; 
-
-  // Context gathering: 
-  const completedSections = allSections.filter(s => s.status === 'COMPLETED');
-  const previousSection = completedSections.length > 0 ? completedSections[completedSections.length - 1] : null;
-  
-  // Truncate previous section content to save tokens but keep immediate context
-  // We keep the last 3000 chars (approx 1-2 pages of text) to ensure flow
-  const previousContentSnippet = previousSection 
-    ? (previousSection.content.length > 3000 
-        ? "...(truncated)..." + previousSection.content.slice(-3000) 
-        : previousSection.content)
-    : "This is the first section.";
-
-  // We send the full structure map so it knows where it fits in the 50-page document
-  const structureMap = allSections.map(s => `- ${s.title}`).join('\n');
+/**
+ * Stage 2: The Journey Guide
+ * Generates Modules for a specific Journey.
+ */
+export const generateModules = async (journey: Journey, config: CurriculumConfig): Promise<Array<{ title: string; description: string }>> => {
+  const ai = getAI();
+  const model = "gemini-3.1-pro-preview"; 
 
   const prompt = `
-    You are a professional mathematician and researcher writing a specific section of a paper.
+    You are a Curriculum Architect. 
+    Task: Break down the Journey "${journey.title}" into 5-7 distinct Modules.
     
-    **Paper Metadata:**
+    **Journey Description:**
+    ${journey.description}
+
+    **Curriculum Context:**
     Title: ${config.title}
-    Tone: ${config.tone}
-    Style: ${config.template}
-    Target Scope: ${config.targetLength}
+    Audience: ${config.targetAudience}
+
+    **Module Requirements:**
+    1. Each module should be a self-contained unit of discovery.
+    2. Follow the "Discovery" philosophy: Motivation -> Exploration -> Concept Discovery -> Explanation -> Advanced Problems.
     
-    **Document Structure (Your Roadmap):**
-    ${structureMap}
-    
-    **Current Task:**
-    Write the LaTeX content for the section titled: "${section.title}".
-    
-    **Instructions for this section (from sketch):**
-    ${section.description}
-    
-    **Context (End of Previous Section):**
-    ${previousContentSnippet}
-    
-    **CRITICAL WRITING RULES:**
-    1. **Mathematician Style:** When presenting math, do NOT bury equations in verbose paragraphs. Use "equation after equation" style.
-       - Use \`\\begin{align}\` or \`\\begin{align*}\` for derivations.
-       - Show steps clearly in a vertical flow.
-       - Avoid "sketchy" lines. Be rigorous.
-    2. **Fleshing Out:** Your job is to polish and expand the user's sketch into full academic prose.
-       - If the user provided a formula in plain text, convert it to proper LaTeX.
-       - If the user's sketch is brief, expand on the *implications* and *context* of that point, but DO NOT invent new experimental data or results unless told to "fill in gaps".
-    3. **LaTeX Format:**
-       - Output ONLY the raw LaTeX content for this section. Do NOT wrap it in \\begin{document}.
-       - Use standard LaTeX commands (\\section, \\cite, \\ref).
-    4. **Flow:** Ensure the opening sentence connects smoothly to the previous section context provided.
+    Return a JSON array of objects with {title, description}.
   `;
 
   try {
@@ -127,15 +89,179 @@ export const generateSectionContent = async (
       model,
       contents: prompt,
       config: {
-        thinkingConfig: {
-            thinkingBudget: 4096 // Higher budget for complex derivation structure
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              title: { type: Type.STRING },
+              description: { type: Type.STRING }
+            },
+            required: ["title", "description"]
+          }
         }
       }
     });
 
-    return cleanLatex(response.text || "");
+    return JSON.parse(response.text || "[]");
   } catch (error) {
-    console.error(`Error generating section ${section.title}:`, error);
+    console.error("Module generation error:", error);
+    throw error;
+  }
+};
+
+/**
+ * Stage 3: The Module Scribe
+ * Generates Sections for a specific Module.
+ */
+export const generateSections = async (
+  module: Module, 
+  journey: Journey, 
+  config: CurriculumConfig,
+  onThought?: (thought: string) => void
+): Promise<Array<{ title: string; description: string }>> => {
+  const ai = getAI();
+  const model = "gemini-3.1-pro-preview"; 
+
+  const prompt = `
+    You are a Mathematical Pedagogue.
+    Task: Create a detailed section-by-section outline for the Module "${module.title}".
+    
+    **Module Context:**
+    ${module.description}
+    (Part of Journey: ${journey.title})
+
+    **Required Section Types (Ensure these are covered):**
+    1. Motivation/Hook
+    2. Exploration Problems (The "Discovery" phase)
+    3. Concept Formalization
+    4. Detailed Explanation/Proof
+    5. Advanced Olympiad-Level Problems
+    6. Reflection/Metacognition
+
+    Return a JSON array of objects with {title, description}.
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+      model,
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH },
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              title: { type: Type.STRING },
+              description: { type: Type.STRING }
+            },
+            required: ["title", "description"]
+          }
+        }
+      }
+    });
+
+    if (onThought && response.thought) {
+      onThought(response.thought);
+    }
+
+    return JSON.parse(response.text || "[]");
+  } catch (error) {
+    console.error("Section outline error:", error);
+    throw error;
+  }
+};
+
+/**
+ * Stage 4: The Final Writer
+ * Generates the actual content for a section with context compression.
+ */
+export const generateSectionContent = async (
+  section: Section,
+  module: Module,
+  journey: Journey,
+  config: CurriculumConfig,
+  previousSectionContent?: string,
+  moduleSummary?: string,
+  onChunk?: (chunk: string) => void,
+  onThought?: (thought: string) => void
+): Promise<string> => {
+  const ai = getAI();
+  // Using Flash for faster streaming and better reliability in high-volume generation
+  const model = "gemini-3-flash-preview"; 
+
+  const prompt = `
+    You are a World-Class Mathematics Educator writing for top 0.1% students.
+    Task: Write the full content for the section: "${section.title}".
+
+    **Context (Compressed):**
+    - Book: ${config.title}
+    - Journey: ${journey.title}
+    - Module: ${module.title}
+    - Module Goal: ${module.description}
+    - Section Goal: ${section.description}
+
+    **Continuity:**
+    ${moduleSummary ? `Summary of previous modules: ${moduleSummary}` : ""}
+    ${previousSectionContent ? `Immediately preceding section content: \n"""\n${previousSectionContent}\n"""` : "This is the start of the module."}
+
+    **Style Guidelines:**
+    - Tone: ${config.tone}
+    - Rhetorical Mode: ${config.rhetoricalMode}
+    - Use LaTeX for all math.
+    - Prioritize conceptual depth.
+    - For problems, provide hints or scaffolding if they are extremely difficult.
+    - Output in Markdown with LaTeX.
+
+    **Specific Instructions for this Section:**
+    ${section.description}
+  `;
+
+  try {
+    if (onChunk) {
+      const response = await ai.models.generateContentStream({
+        model,
+        contents: prompt,
+        config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH }
+        }
+      });
+
+      let fullText = "";
+      let fullThought = "";
+      for await (const chunk of response) {
+        const text = chunk.text;
+        const thought = chunk.thought;
+
+        if (thought && onThought) {
+          fullThought += thought;
+          onThought(fullThought);
+        }
+
+        if (text) {
+          fullText += text;
+          onChunk(fullText);
+        }
+      }
+      return fullText;
+    } else {
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.HIGH }
+        }
+      });
+      if (onThought && response.thought) {
+        onThought(response.thought);
+      }
+      return response.text || "";
+    }
+  } catch (error) {
+    console.error(`Content generation error:`, error);
     throw error;
   }
 };

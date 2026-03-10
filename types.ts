@@ -1,3 +1,4 @@
+
 export enum AppStep {
   INPUT = 'INPUT',
   OUTLINE = 'OUTLINE',
@@ -5,7 +6,7 @@ export enum AppStep {
   FINISHED = 'FINISHED'
 }
 
-export enum SectionStatus {
+export enum Status {
   PENDING = 'PENDING',
   GENERATING = 'GENERATING',
   COMPLETED = 'COMPLETED',
@@ -15,24 +16,39 @@ export enum SectionStatus {
 export interface Section {
   id: string;
   title: string;
-  description: string; // The "sketch" or prompt for this specific section
-  content: string; // The generated LaTeX
-  status: SectionStatus;
+  description: string;
+  content: string;
+  status: Status;
 }
 
-export type PaperLength = 'Short Letter (2-4 pages)' | 'Standard Article (8-12 pages)' | 'Extended Report (20-30 pages)' | 'Dissertation/Book (40+ pages)';
-
-export interface PaperConfig {
+export interface Module {
+  id: string;
   title: string;
-  tone: 'Formal Academic' | 'Casual/Blog' | 'Technical Report';
-  template: 'Standard Article' | 'IEEE' | 'ACM' | 'Minimalist';
-  targetLength: PaperLength;
-  rawSketch: string;
+  description: string;
+  sections: Section[];
+  status: Status;
 }
 
-export interface GlobalState {
-  step: AppStep;
-  config: PaperConfig;
-  sections: Section[];
-  isGeneratingOutline: boolean;
+export interface Journey {
+  id: string;
+  title: string;
+  description: string;
+  modules: Module[];
+  status: Status;
+}
+
+export interface CurriculumConfig {
+  title: string;
+  targetAudience: string; // e.g., "Top Olympiad level"
+  tone: string;
+  discipline: string;
+  rhetoricalMode: string;
+  rawVision: string;
+}
+
+export interface ProjectState {
+  config: CurriculumConfig;
+  journeys: Journey[];
+  currentStep: AppStep;
+  lastUpdated: number;
 }
