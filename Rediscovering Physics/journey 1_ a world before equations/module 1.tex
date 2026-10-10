@@ -1,0 +1,370 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\setlength{\headheight}{24pt}
+\usepackage{fontenc}
+\usepackage{inputenc}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{fontawesome5}
+
+\usepackage{setspace}
+\usepackage{parskip}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=midblue,
+  urlcolor=accent,
+  citecolor=teal,
+  pdftitle={Discovery Physics: Journey 1 — The World Before Equations},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}
+  {\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+
+% Puzzle box
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep},
+  title={\faIcon{puzzle-piece}\ The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold},
+  #1
+}
+
+% Observation box
+\newtcolorbox{observebox}[1][]{
+  enhanced, breakable,
+  colback=greenbg, colframe=teal,
+  fonttitle=\bfseries\color{deep},
+  title={Observation},
+  #1
+}
+
+% Exploration/problem box
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue},
+  #1
+}
+
+% Discovery box
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white},
+  coltitle=white,
+  title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent},
+  drop shadow,
+  #1
+}
+
+% Name reveal box
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep},
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Reflection},
+  #1
+}
+
+% Margin note style
+\newtcolorbox{marginidea}{
+  enhanced,
+  colback=gold!15, colframe=gold,
+  fontupper=\small\itshape,
+  left=2mm, right=2mm, top=1mm, bottom=1mm,
+  boxrule=0.6pt
+}
+
+% Problem counter
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi%
+}
+
+% Key idea
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[
+    enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}
+  ]
+  #1
+  \end{tcolorbox}
+}
+
+% ─── Theorem-like environments ──────────────────────────────────────────────
+\newtheoremstyle{disc}
+  {8pt}{8pt}{\itshape}{}
+  {\bfseries\color{midblue}}{.}{.5em}{}
+
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Epigraph style ─────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{0}
+\setcounter{section}{0}
+
+\section{Module 1.1 — How to See}
+\label{sec:how_to_see}
+
+\epigraph{%
+  \itshape It is a capital mistake to theorise before one has data.%
+}{--- Arthur Conan Doyle, \textit{A Scandal in Bohemia}}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+Can you describe what you see precisely enough that someone who was not there could reproduce it?
+\end{tcolorbox}
+
+\subsection{Introduction}
+
+Imagine that an alien civilisation receives a single radio transmission from Earth. It contains a description of a falling stone, written by a scientist. The alien scientists, who have never experienced gravity, must reconstruct from this description what actually happens.
+
+What would they need to know? How far the stone fell? How long it took? Whether it fell faster at the start or the end? Whether it accelerated smoothly or in jumps? Whether the same thing happens to all stones, or only heavy ones?
+
+To answer these questions, the scientist would need to be precise. Not approximate. Not vague. Precise. And precision in observation is a skill, not an innate ability. It must be trained.
+
+This module trains it.
+
+\subsection{What Is an Observation?}
+
+There is a difference between:
+\begin{quote}
+\textit{``The stone fell quickly.''}
+\end{quote}
+and:
+\begin{quote}
+\textit{``The stone was released from a height of 2.0 metres above the ground. It struck the ground approximately 0.64 seconds later. During its fall, it appeared to accelerate---it was moving noticeably faster near the ground than when first released.''}
+\end{quote}
+
+The first statement is an impression. The second is an observation. Science requires the second.
+
+But even the second can be improved. A truly careful observer would ask: how do I know it was 2.0 metres? How did I measure 0.64 seconds? What do I mean by ``appeared to accelerate''---can I measure that more directly?
+
+\begin{explobox}
+\problem[Before reading further] Drop a pen from a height of roughly 1 metre. Write down, in as much detail as you can, what happened. Then read your description and ask: what did I actually observe, and what did I assume?
+\end{explobox}
+
+\subsection{The Trap of Prior Knowledge}
+
+Here is a dangerous thing that happens to experienced scientists (and even more to students): they stop seeing what is actually there and start seeing what they expect to be there.
+
+The classic example is the discovery that heavier objects do not fall faster than lighter ones. For nearly 2000 years, educated people believed they did. Aristotle had said so. It seemed obvious. Nobody questioned it carefully, because they already thought they knew the answer.
+
+When Galileo (or perhaps his contemporaries---the exact history is disputed) actually tested this, the result was shocking. Drop a cannonball and a musket ball from the same height. They land at the same time. The mass does not matter.
+
+The observation had been available to anyone for two millennia. But because people thought they already knew the answer, nobody looked carefully enough to notice they were wrong.
+
+\begin{discoverybox}
+\textbf{The lesson.} Prior knowledge is invaluable, but it can also blind you. The first discipline of observation is to genuinely look---not to confirm what you already believe, but to see what is actually there.
+\end{discoverybox}
+
+\subsection{The Language of Observation}
+
+Good scientific observation uses three kinds of statements:
+
+\begin{enumerate}[leftmargin=2em]
+  \item \textbf{Qualitative statements}: Describing patterns, directions, behaviours. \textit{``The compass needle rotates toward the wire.''} These establish that something is happening.
+
+  \item \textbf{Quantitative statements}: Attaching numbers to the observation. \textit{``The needle rotates 15 degrees when the wire carries 2 amperes of current.''} These allow comparison and prediction.
+
+  \item \textbf{Null results}: Noting what did \emph{not} happen. \textit{``The needle did not respond when the wire carried no current.''} These are often more informative than positive results.
+\end{enumerate}
+
+All three are essential. Many of the greatest discoveries in physics came from null results---from experiments that showed something everyone expected to happen, did not. The Michelson-Morley experiment, which you will encounter in Journey 5, is one of the most famous examples.
+
+\subsection{Exploration Problems}
+
+\begin{explobox}
+\problem Take a glass of water. Place a straw or pencil in it at an angle. Look at it from the side. Describe precisely what you see. Now answer: is the straw actually bent? How do you know?
+
+\problem Light a candle (if available) and observe the flame for two full minutes. Write a description. What moves? What stays still? What patterns repeat? What is constant?
+
+\problem Hold two sheets of paper horizontally, one above the other, and release them simultaneously. Describe what happens in as much detail as possible. Does the result surprise you?
+
+\problem Place a magnet near a pile of small iron objects (paper clips, pins). Describe the behaviour: what moves first? Fastest? Furthest? Is there a boundary beyond which objects do not respond?
+\end{explobox}
+
+\subsection{Forming Good Questions}
+
+An observation by itself is not yet science. Observations become science when they generate questions of a particular form: questions that can, in principle, be answered by further observation or experiment.
+
+Compare:
+\begin{itemize}
+  \item \textit{``Why does nature work this way?''} --- Not yet a scientific question. Too broad.
+  \item \textit{``Does the time a pendulum takes to swing depend on how far it swings?''} --- A scientific question. We can test it.
+\end{itemize}
+
+The second type of question has a structure: it identifies two specific quantities (swing distance, swing time) and asks about their relationship. It implies a specific experiment that could answer it.
+
+\begin{reflectionbox}
+\textbf{Reflection.} Go back to one of your observations from the exploration problems. Write three scientific questions---in the form of ``does X depend on Y?''---that arise from what you saw. Then think: what experiment would answer each one?
+\end{reflectionbox}
+
+\subsection{A Historical Interlude: Eratosthenes}
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.9]
+  % Earth circle
+  \draw[midblue, line width=1.5pt] (0,0) circle (2cm);
+  \fill[midblue!15] (0,0) circle (2cm);
+
+  % Sun rays (parallel, from top)
+  \foreach \x in {-1.5,-0.8,0,0.8,1.5}{
+    \draw[->, gold, line width=1pt] (\x, 3.2) -- (\x, 2.1);
+  }
+  \node[gold] at (1.8, 2.8) {\small Sun};
+
+  % Alexandria (slightly off-center from top)
+  \coordinate (alex) at (0.35, 1.96);
+  \fill[accent] (alex) circle (2pt);
+  \node[accent, right, font=\scriptsize] at (alex) {Alexandria};
+
+  % Syene (directly under sun)
+  \coordinate (syen) at (0, 2.0);
+  \fill[teal] (syen) circle (2pt);
+  \node[teal, left, font=\scriptsize] at (-0.15, 1.8) {Syene};
+
+  % Vertical at Syene (toward center)
+  \draw[teal, dashed] (0,0) -- (0, 2.2);
+
+  % Vertical at Alexandria
+  \draw[accent, dashed] (0,0) -- (0.45, 2.2);
+
+  % Angle arc
+  \draw[gold, line width=1pt] (0,0.6) arc (90:79:0.6);
+  \node[gold, font=\scriptsize] at (0.25, 0.85) {$\theta$};
+
+  % Shadow stick at Alexandria
+  \draw[accent, line width=1.5pt] (0.35, 1.96) -- (0.55, 2.2);
+  \draw[accent!50, line width=1pt] (0.35,1.96) -- (0.62, 1.93);
+  \node[font=\scriptsize, accent] at (0.9, 2.05) {shadow};
+
+\end{tikzpicture}
+\caption{Eratosthenes' method: the shadow angle at Alexandria equals the central angle to Syene.}
+\label{fig:eratosthenes}
+\end{wrapfigure}
+
+Around 240 BCE, a man named Eratosthenes---a librarian in Alexandria, Egypt---performed one of the greatest acts of scientific reasoning in history. He measured the circumference of the Earth using only a stick, a shadow, and a piece of information he had read in a scroll.
+
+He knew that at noon on the summer solstice, in the city of Syene (modern Aswan), the sun was directly overhead: objects cast no shadow, and sunlight shone straight down into a deep well. But in Alexandria, 800 kilometres to the north, objects still cast a shadow at that same moment. The shadow angle was about $7.2$ degrees---roughly $1/50$ of a full circle.
+
+His reasoning: if the sun's rays are parallel (which they essentially are, given the sun's enormous distance), then the angle of the shadow equals the angle subtended at Earth's centre between the two cities. That angle is $7.2°$. The distance between the cities corresponds to $7.2/360 = 1/50$ of Earth's circumference. Therefore:
+
+\begin{equation}
+  C_{\text{Earth}} = 50 \times 800\,\text{km} = 40{,}000\,\text{km}
+\end{equation}
+
+The modern accepted value is $40{,}075$ km. Eratosthenes was essentially correct---two thousand years before anyone could travel into space to check.
+
+What made this possible? Not advanced instruments. Not a university degree. Just one extraordinary observational fact (no shadow in Syene at solstice noon) combined with careful geometric reasoning and a willingness to ask: \textit{what does this imply?}
+
+That is the template for everything that follows.
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

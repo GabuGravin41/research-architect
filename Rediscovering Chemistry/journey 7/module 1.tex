@@ -1,0 +1,373 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Journey 7 — forest green / amber) ────────────────────────────────
+\definecolor{JourneyColor}{HTML}{065F46}
+\definecolor{ModuleColor}{HTML}{059669}
+\definecolor{PuzzleColor}{HTML}{B45309}
+\definecolor{DiscoveryColor}{HTML}{D97706}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{6}
+\chapter[Journey 7 --- Organic Chemistry: The World It Builds]
+        {Journey Seven\\[8pt]
+         \textcolor{ModuleColor}{\large Organic Chemistry: The World It Builds}}
+\setcounter{section}{0}
+
+\section{Module 7.1 --- Chirality in Medicine and Drug Design}
+\label{sec:mod7.1}
+
+\subsection*{Motivation}
+
+We mastered in Journey 6 the grammar of organic structures: geometries, stereochemistry, and electron flow.
+But abstract molecular geometry has profound real-world consequences when it meets the machinery of life.
+
+The human body is an intrinsically chiral environment.
+Our proteins, enzymes, and receptors are composed exclusively of left-handed (L) amino acids.
+Consequently, the receptors that transmit signals in our brains and bodies behave like chiral gloves.
+An organic drug molecule of a specific handedness will fit into the glove perfectly, triggering a curative response.
+Its mirror image, however, may not fit at all, or worse, may fit into a different glove, causing severe toxicity.
+This module explores how stereochemistry governs pharmacology, how we model the thermodynamics of drug binding, and how chiral specificity dictates the design of modern medicine.
+
+\subsection{The Levodopa Asymmetry}
+
+We analyze how the chiral blood-brain barrier distinguishes between mirror-image molecules.
+
+\begin{puzzlebox}
+\textbf{L-DOPA vs. D-DOPA.}
+
+Parkinson's disease is a neurodegenerative disorder caused by a depletion of dopamine in the brain. Dopamine itself cannot cross the blood-brain barrier from the blood to the brain.
+To treat the disease, patients are given a chiral precursor molecule: **L-DOPA** (levodopa). Once inside the brain, an enzyme removes a carboxyl group to convert L-DOPA into active dopamine.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item If patients are given the mirror-image molecule, **D-DOPA** (dextrodopa), it is completely ineffective: it cannot cross the blood-brain barrier and is not recognized by the decarboxylase enzyme. Instead, it accumulates in the body and causes bone marrow toxicity.
+        Why do the transport proteins in the blood-brain barrier and the brain enzymes distinguish so sharply between these two mirror-image molecules?
+  \item Draw a schematic representing a "chiral lock" (a receptor pocket with three specific binding sites: A, B, and C) and a "chiral key" (a molecule with three corresponding groups: 1, 2, and 3).
+        Show that one enantiomer can align all three groups with their matching sites simultaneously, whereas its mirror image can align at most two groups at a time.
+  \item This geometric model is the **Easson-Stedman hypothesis**. Explain why the difference between three-point binding and two-point binding leads to a large difference in binding free energy ($\Delta G^\circ$).
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Thermodynamics of Receptor Binding}
+
+We model the equilibrium kinetics of a drug binding to a biological receptor.
+
+\begin{explobox}
+The binding of a drug ligand (L) to a receptor (R) is a reversible equilibrium:
+\[
+  \ce{R + L <=> RL},
+\]
+characterized by the **dissociation constant** $K_d$:
+\[
+  K_d \;=\; \frac{[\ce{R}][\ce{L}]}{[\ce{RL}]}.
+\]
+The standard Gibbs free energy of binding is related to $K_d$ by:
+\[
+  \Delta G^\circ \;=\; R T \ln K_d.
+\]
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Let the total concentration of receptors be $[\ce{R}]_{\text{tot}} = [\ce{R}] + [\ce{RL}]$. Prove that the fraction of bound receptors $\theta$ is given by:
+  \[
+    \theta \;=\; \frac{[\ce{L}]}{K_d + [\ce{L}]}.
+  \]
+  Observe that this has the exact same mathematical form as the Langmuir adsorption isotherm (Module 5.4) and the Michaelis-Menten equation (Module 5.4). Why does this same hyperbolic scaling emerge across physics, chemistry, and biology?
+  \item A drug designer measures the binding affinity of two enantiomers at $T = \SI{298}{K}$.
+        The active (R)-enantiomer has $K_{d,\text{R}} = \SI{1.0}{\nano M}$ ($1.0 \times 10^{-9}$ M), while the inactive (S)-enantiomer has $K_{d,\text{S}} = \SI{1.0}{\micro M}$ ($1.0 \times 10^{-6}$ M).
+        Calculate the difference in binding free energy $\Delta \Delta G^\circ = \Delta G^\circ_{\text{S}} - \Delta G^\circ_{\text{R}}$.
+  \item Notice that a minor energy difference of only $\sim \SI{17}{kJ/mol}$ (the energy of a single weak hydrogen bond) leads to a massive, $1000$-fold difference in binding affinity. Why does this make receptor binding highly sensitive to tiny structural deformations?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Chiral Drugs in the Clinic}
+
+We study how the human body metabolizes different chiral pharmaceuticals.
+
+\begin{explobox}
+Because enantiomers can have completely different biological activities, the FDA regulates the stereochemistry of drugs.
+\problem **Ibuprofen:** The popular anti-inflammatory ibuprofen is sold as a racemic mixture. The active form is (S)-ibuprofen. The (R)-enantiomer is inactive but is completely harmless because an isomerase enzyme in the human liver converts (R)-ibuprofen into (S)-ibuprofen in vivo.
+\problem **Naproxen:** The structurally similar anti-inflammatory naproxen cannot be interconverted. The (S)-enantiomer is the active pain reliever, whereas the (R)-enantiomer is a severe liver toxin. Consequently, naproxen is sold strictly as a pure enantiomer.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Why is it safe to sell ibuprofen as a racemic mixture but highly dangerous for naproxen?
+  \item When a pharmaceutical company changes a drug formulation from a racemic mixture to a pure single enantiomer, we call it a **chiral switch**. Explain the clinical advantages of a chiral switch (consider dosage reduction, metabolic load on the liver, and side effects).
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The biological environment is homochiral (proteins are built of L-amino acids), making drug receptors structurally asymmetric.
+
+\textbf{Second.} The Easson-Stedman hypothesis models chiral recognition: a minimum of three specific spatial interactions are required for a receptor to distinguish between two enantiomers.
+
+\textbf{Third.} The fraction of receptors occupied by a drug follows the binding equation $\theta = [\ce{L}]/(K_d + [\ce{L}])$. The dissociation constant $K_d$ is exponentially related to the binding free energy $\Delta G^\circ$.
+
+\textbf{Fourth.} Enantiomers of the same drug can behave differently in vivo: one may be curative while the other is inactive, metabolized into the active form (like ibuprofen), or highly toxic (like naproxen or thalidomide).
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Pharmacological parameters}
+* **Molecular Recognition:** The specific thermodynamic interaction between a receptor and a drug ligand through non-covalent bonds.
+* **Dissociation Constant ($K_d$):** The equilibrium constant measuring a ligand's tendency to detach from a receptor. A smaller $K_d$ indicates tighter binding.
+* **Pharmacophore:** The specific 3D spatial arrangement of chemical groups (hydrogen bond donors/acceptors, charges, hydrophobic groups) required for biological activity.
+* **Chiral Switch:** The replacement of a previously approved racemic drug with a pure single-enantiomer version.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Calculating Binding Free Energy Difference.}
+  
+        An anti-viral drug binds to a viral protease. The active (S)-enantiomer has $K_{d,\text{S}} = 2.5 \times 10^{-9}$ M, while the (R)-enantiomer has $K_{d,\text{R}} = 5.0 \times 10^{-7}$ M at \SI{310}{K} (body temperature).
+        Calculate the difference in binding free energy $\Delta \Delta G^\circ$ between the two enantiomers.
+        
+        \textbf{Solution:}
+        The binding free energy for each enantiomer is:
+        \[
+          \Delta G^\circ_{\text{S}} \;=\; R T \ln K_{d,\text{S}}, \qquad \Delta G^\circ_{\text{R}} \;=\; R T \ln K_{d,\text{R}}.
+        \]
+        The difference in binding free energy is:
+        \[
+          \Delta \Delta G^\circ \;=\; \Delta G^\circ_{\text{R}} - \Delta G^\circ_{\text{S}} \;=\; R T \ln K_{d,\text{R}} - R T \ln K_{d,\text{S}} \;=\; R T \ln\left( \frac{K_{d,\text{R}}}{K_{d,\text{S}}} \right).
+        \]
+        Here:
+        * $R = 8.314$ J$\cdot$mol$^{-1}$K$^{-1}$.
+        * $T = 310$ K.
+        * $K_{d,\text{R}}/K_{d,\text{S}} = \frac{5.0 \times 10^{-7}}{2.5 \times 10^{-9}} = 200$.
+        
+        Substitute these values:
+        \[
+          \Delta \Delta G^\circ \;=\; \left( 8.314 \text{ J}\cdot\text{mol}^{-1}\text{K}^{-1} \right) \left( 310 \text{ K} \right) \ln(200).
+        \]
+        Evaluate the natural logarithm: $\ln(200) \approx 5.30$.
+        \[
+          \Delta \Delta G^\circ \;=\; 2577 \text{ J/mol} \times 5.30 \;=\; 1.37 \times 10^4 \text{ J/mol} \;=\; 13.7 \text{ kJ/mol}.
+        \]
+        Thus, the difference in binding free energy is \SI{13.7}{kJ/mol}. This tiny energy difference accounts for the $200$-fold selectivity of the viral protease.
+        
+  \item \textbf{Deriving Receptor fractional Occupancy.}
+  
+        Derive the expression for the fraction of bound receptors $\theta = \frac{[\ce{RL}]}{[\ce{R}]_{\text{tot}}}$ in terms of free ligand concentration $[\ce{L}]$ and dissociation constant $K_d$.
+        
+        \textbf{Solution:}
+        By definition, the total receptor concentration is:
+        \[
+          [\ce{R}]_{\text{tot}} \;=\; [\ce{R}] + [\ce{RL}].
+        \]
+        The fractional occupancy is:
+        \[
+          \theta \;=\; \frac{[\ce{RL}]}{[\ce{R}]_{\text{tot}}} \;=\; \frac{[\ce{RL}]}{[\ce{R}] + [\ce{RL}]}.
+        \]
+        From the definition of the dissociation constant:
+        \[
+          K_d \;=\; \frac{[\ce{R}][\ce{L}]}{[\ce{RL}]} \implies [\ce{R}] \;=\; \frac{K_d [\ce{RL}]}{[\ce{L}]}.
+        \]
+        Substitute this expression for $[\ce{R}]$ into the occupancy equation:
+        \[
+          \theta \;=\; \frac{[\ce{RL}]}{\dfrac{K_d [\ce{RL}]}{[\ce{L}]} + [\ce{RL}]}.
+        \]
+        Divide the numerator and denominator by $[\ce{RL}]$ (assuming $[\ce{RL}] \neq 0$):
+        \[
+          \theta \;=\; \frac{1}{\dfrac{K_d}{[\ce{L}]} + 1}.
+        \]
+        Multiply the numerator and denominator by $[\ce{L}]$:
+        \[
+          \theta \;=\; \frac{[\ce{L}]}{K_d + [\ce{L}]}.
+        \]
+        This completes the derivation.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Easson-Stedman Three-Point Binding.}
+  
+        Let a receptor active site have three pockets: a hydrogen-bond acceptor, a hydrophobic pocket, and a positively charged electrostatic site.
+        A chiral drug molecule has three corresponding functional groups: a hydrogen-bond donor ($-\ce{OH}$), a phenyl ring ($-\ce{C6H5}$), and a carboxylate anion ($-\ce{COO-}$).
+        \begin{enumerate}[label=(\alph*)]
+          \item Sketch a diagram of the active site and show how the active enantiomer aligns all three groups to bind.
+          \item Sketch the mirror-image enantiomer trying to align with the same site. Show that it can align at most two groups at a time.
+          \item If each successful interaction releases $\sim \SI{6}{kJ/mol}$ of binding enthalpy, estimate the difference in binding enthalpy $\Delta \Delta H^\circ$ between the two enantiomers.
+        \end{enumerate}
+
+  \item \textbf{Enantiomeric Inversion of Ibuprofen.}
+  
+        In the liver, (R)-ibuprofen is converted to the active (S)-enantiomer through a thioester intermediate. The reaction proceeds by abstracting the hydrogen from the chiral carbon, forming a planar enol intermediate, which is then re-protonated.
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain why the planar enol intermediate is achiral. (What is the hybridization state of the carbon atom in the enol double bond?)
+          \item Why does this planar geometry allow the chiral center to invert configuration upon re-protonation?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Thermodynamics of Drug Rigidification.}
+  
+        The binding free energy of a drug ligand is $\Delta G^\circ = \Delta H^\circ - T \Delta S^\circ$.
+        When a flexible drug molecule binds to a receptor, it must freeze its internal bond rotations, resulting in a large loss of conformational entropy: $\Delta S^\circ_{\text{conformational}} < 0$.
+        To design tighter-binding drugs, chemists often "rigidify" the drug molecule, locking it into the active binding conformation by incorporating it into a ring structure.
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain why locking a drug into its active conformation beforehand increases the binding affinity (decreases $K_d$). Refer to the thermodynamic entropy term $-T\Delta S^\circ$.
+          \item Suppose a flexible drug loses $\SI{15}{kJ/mol}$ of conformational entropy upon binding at $T = \SI{298}{K}$.
+                If we pre-rigidify this drug into its active conformation without changing its enthalpy of binding, calculate the expected increase in binding affinity (the ratio $K_{d,\text{flexible}}/K_{d,\text{rigid}}$).
+        \end{enumerate}
+
+  \item \textbf{Chiral Chromatographic Resolution.}
+  
+        Because enantiomers have identical physical properties in achiral environments, separating them requires a chiral stationary phase (CSP) in chromatography.
+        The column is packed with silica beads coated with a single pure enantiomer of a chiral selector molecule (e.g., cellulose).
+        Let the two enantiomers of a racemic drug mixture be $\ce{L_R}$ and $\ce{L_S}$. As they pass down the column, they interact reversibly with the chiral selector ($\ce{CS}$):
+        \[
+          \ce{CS + L_R <=> CS\cdot L_R}, \qquad K_{d,\text{R}} \;=\; \frac{[\ce{CS}][\ce{L_R}]}{[\ce{CS\cdot L_R}]},
+        \]
+        \[
+          \ce{CS + L_S <=> CS\cdot L_S}, \qquad K_{d,\text{S}} \;=\; \frac{[\ce{CS}][\ce{L_S}]}{[\ce{CS\cdot L_S}]}.
+        \]
+        \begin{enumerate}[label=(\alph*)]
+          \item Show why the difference in binding affinities ($K_{d,\text{R}} \neq K_{d,\text{S}}$) leads to different travel speeds down the column. Which enantiomer elutes (exits) first: the one with the larger or smaller $K_d$?
+          \item If $K_{d,\text{R}} = 1.0 \times 10^{-4}$ M and $K_{d,\text{S}} = 2.0 \times 10^{-4}$ M, calculate the ratio of bound fractions $\theta_{\text{R}}/\theta_{\text{S}}$ on the column stationary phase at low ligand concentrations.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Biological gloves:** If all L-amino acids in our bodies were suddenly replaced with D-amino acids, would we survive? Would we be able to digest our food or respond to our current drugs?
+  \item **On the Easson-Stedman Model:** Why is a minimum of three points of interaction necessary to distinguish chirality in 3D space? Why would a two-point interaction fail to distinguish between mirror images? (Think about the mathematical definition of a plane).
+  \item **On Pharmacology Ethics:** If one enantiomer of a drug is active and the other is toxic (like thalidomide), is it ethical to sell the drug as a racemic mixture if a chiral switch is chemically possible? What if the body interconverts them anyway?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~7.2 introduces **Nucleic Acids and DNA Structure**. Having explored the chiral pharmacology of small molecules, we will scale up to the absolute genetic blueprint of life. We will study the specific hydrogen-bonding geometries of base pairs and discover how organic structures encode the information of heredity.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 7, Module 7.1 --- Chirality in Medicine and Drug Design}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 7.2 --- Nucleic Acids and DNA Structure}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

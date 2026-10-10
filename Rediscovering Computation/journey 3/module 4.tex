@@ -1,0 +1,369 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{2}
+\chapter[Journey 3 --- Automata, Complexity, and the Limits of Computation]
+        {Journey Three\\[8pt]
+         \textcolor{ModuleColor}{\large Automata, Complexity, and the Limits of Computation}}
+\setcounter{section}{3}
+
+\section{Module 3.4 --- Computational Complexity and P vs NP}
+\label{sec:mod3.4}
+
+\subsection*{Motivation}
+
+We formalized in Module 3.3 the boundaries of computability, proving that some mathematical questions (like the Halting Problem) are undecidable in infinite time.
+However, in physical computing, time is a scarce resource. A problem is not solved if the algorithm requires trillions of years to halt.
+We must study the complexity of computation within our physical lifetimes.
+
+This module introduces **Computational Complexity Theory**, which classifies decidable problems by the time and space required to solve them.
+We will define the class **P** of problems solvable in polynomial time, and the class **NP** of problems whose solutions can be verified in polynomial time.
+We will study polynomial reductions and the Cook-Levin theorem to formalize **NP-completeness**.
+Finally, we will analyze the most famous open question in mathematics: the **$\text{P}$ vs $\text{NP}$** question, which divides search from verification.
+
+\subsection{The Tour Planner}
+
+We investigate the asymmetry between finding a path and verifying one.
+
+\begin{puzzlebox}
+\textbf{The Traveling Salesperson.}
+
+Suppose a salesperson must visit $N$ cities, starting and ending at the same city, while minimizing the total distance traveled.
+We are given the list of cities and the distance between each pair.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item If $N=100$, the number of possible round-trip routes is $100! \approx 9.3 \times 10^{157}$.
+        If a supercomputer could verify one billion routes per second, explain why it cannot find the shortest route by searching all paths before the Sun burns out.
+  \item Now, suppose a route planner hands you a specific tour route and claims: "The total length of this tour is less than 5,000 miles."
+        Describe how you can verify this claim.
+        How many mathematical additions are required to check the length of a tour visiting $N$ cities?
+  \item Why is finding a solution to this problem so much harder than verifying a proposed solution?
+        What does this reveal about the mathematical distinction between *creativity* (finding a path) and *criticism* (verifying a path)?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Formalizing P and NP}
+
+We define the mathematical classes that represent efficiency.
+
+\begin{namedconcept}{The Complexity Classes}
+* **$\text{P}$ (Polynomial Time):** The class of languages decidable in polynomial time on a deterministic single-tape Turing Machine:
+  \[
+    \text{P} \;=\; \bigcup_{k \ge 1} \text{TIME}(n^k).
+  \]
+  This represents the set of mathematically tractable (efficiently solvable) problems.
+* **$\text{NP}$ (Nondeterministic Polynomial Time):** The class of languages that have a polynomial-time **verifier**. A verifier $V$ is a polynomial-time algorithm such that:
+  \[
+    L \;=\; \{w : \text{there exists a certificate } c \text{ of length } |c| \le |w|^k \text{ such that } V(w, c) \text{ accepts}\}.
+  \]
+  Alternatively, $\text{NP}$ is the class of languages decidable in polynomial time by a **Nondeterministic Turing Machine**.
+\end{namedconcept}
+
+\begin{explobox}
+We analyze the relation between these classes:
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Prove that $\text{P} \subseteq \text{NP}$. (Hint: If a language is in $\text{P}$, how do we construct a verifier that ignores the certificate?)
+  \item A language $A$ is **polynomial-time reducible** to $B$ (written $A \le_p B$) if there exists a polynomial-time computable function $f: \Sigma^* \to \Sigma^*$ such that for all $w$:
+        \[
+          w \in A \;\iff\; f(w) \in B.
+        \]
+        Prove that if $A \le_p B$ and $B \in \text{P}$, then $A \in \text{P}$.
+  \item Why does this reduction property show that if we can solve $B$ quickly, we can also solve $A$ quickly?
+\end{enumerate}
+\end{explobox}
+
+\subsection{NP-Completeness and the Cook-Levin Theorem}
+
+We study the hardest problems in $\text{NP}$ and the structure of Boolean logic.
+
+\begin{explobox}
+A language $B$ is **NP-complete** if:
+1. $B \in \text{NP}$.
+2. For every $A \in \text{NP}$, $A \le_p B$ (meaning $B$ is at least as hard as any problem in $\text{NP}$).
+* **The Cook-Levin Theorem:** The Boolean satisfiability problem ($\text{SAT}$) is NP-complete.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Explain why, if any single NP-complete problem is shown to be in $\text{P}$, it would immediately follow that $\text{P} = \text{NP}$.
+  \item The $\text{P}$ vs $\text{NP}$ problem is one of the seven Millennium Prize Problems, carrying a $\$1$ million prize.
+        If $\text{P} = \text{NP}$ were proven true, explain why modern public-key cryptography (such as RSA, which relies on the asymmetry of factoring integers versus multiplying them) would instantly collapse.
+  \item Most computer scientists believe $\text{P} \neq \text{NP}$.
+        If $\text{P} \neq \text{NP}$ is true, what does it reveal about the limits of automation? (Why are some problems destined to remain forever beyond the reach of fast algorithms?)
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The class $\text{P}$ represents problems solvable in polynomial time, defining the mathematical boundary of tractability.
+
+\textbf{Second.} The class $\text{NP}$ represents problems whose solutions can be verified in polynomial time, or solved by a nondeterministic machine.
+
+\textbf{Third.} Polynomial reductions ($\le_p$) allow us to map the difficulty of one problem to another in polynomial time.
+
+\textbf{Fourth.} NP-complete problems are the hardest problems in $\text{NP}$. The Cook-Levin Theorem proves that Boolean satisfiability ($\text{SAT}$) is NP-complete, anchoring the P vs NP question.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Complexity parameters}
+* **$\text{P}$:** Polynomial Time. The class of problems solvable in $O(n^k)$ steps by a deterministic Turing Machine.
+* **$\text{NP}$:** Nondeterministic Polynomial Time. The class of problems verifiable in $O(n^k)$ steps.
+* **NP-Complete:** A class of problems in $\text{NP}$ to which all other $\text{NP}$ problems can be reduced in polynomial time.
+* **SAT:** Satisfiability. The problem of determining if a Boolean formula has a satisfying assignment of truth values.
+* **Reduction:** A mapping function used to prove NP-completeness by transforming inputs of a known hard problem.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Proof of $\text{P} \subseteq \text{NP}$.}
+  
+        Prove that any language $L$ belonging to the class $\text{P}$ must also belong to the class $\text{NP}$.
+        
+        \textbf{Solution:}
+        To prove $L \in \text{NP}$, we must show that $L$ has a polynomial-time verifier.
+        By definition, since $L \in \text{P}$, there exists a deterministic Turing Machine $M$ that decides $L$ in polynomial time $O(n^k)$.
+        
+        We construct a verifier $V(w, c)$ that takes an input string $w$ and a certificate $c$:
+        1. On input $(w, c)$, the verifier $V$ runs the decider $M$ on the string $w$.
+        2. If $M$ accepts $w$, the verifier $V$ **Accepts**.
+        3. If $M$ rejects $w$, the verifier $V$ **Rejects**.
+        
+        Let us analyze the complexity of $V$:
+        * Running $M$ on $w$ takes $O(|w|^k)$ time, which is polynomial in the length of the input.
+        * The certificate $c$ is completely ignored.
+        * Since $w \in L \iff M(w) \text{ accepts} \iff \text{there exists } c \text{ such that } V(w, c) \text{ accepts}$, $V$ is a valid verifier for $L$.
+        Since $V$ runs in polynomial time, $L \in \text{NP}$.
+        Thus, $\text{P} \subseteq \text{NP}$.
+        
+  \item \textbf{Transitivity of Polynomial Reductions.}
+  
+        Prove that polynomial-time mapping reductions are transitive: if $A \le_p B$ and $B \le_p C$, then $A \le_p C$.
+        
+        \textbf{Solution:}
+        By definition:
+        * $A \le_p B$ means there exists a function $f: \Sigma^* \to \Sigma^*$ computable in polynomial time $O(n^a)$ such that $w \in A \iff f(w) \in B$.
+        * $B \le_p C$ means there exists a function $g: \Sigma^* \to \Sigma^*$ computable in polynomial time $O(n^b)$ such that $x \in B \iff g(x) \in C$.
+        
+        We define the composition function $h(w) = g(f(w))$.
+        Let us verify the reduction properties:
+        1. **Equivalence:**
+           \[
+             w \in A \;\iff\; f(w) \in B \;\iff\; g(f(w)) \in C \;\iff\; h(w) \in C.
+           \]
+           This holds.
+        2. **Complexity:**
+           * Computing $f(w)$ takes $O(|w|^a)$ time, producing an output of maximum length $L \le c_1 |w|^a$ (since a machine can write at most one character per step).
+           * Computing $g$ on $f(w)$ takes $O(L^b) = O((c_1 |w|^a)^b) = O(|w|^{ab})$ time.
+           * Since $a$ and $b$ are constants, the composition $h$ is computable in polynomial time $O(|w|^{ab})$.
+        Therefore, $A \le_p C$ via the reduction function $h$.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{NP-Completeness of 3SAT.}
+  
+        The language $\text{3SAT}$ consists of Boolean formulas in Conjunctive Normal Form (CNF) where each clause contains exactly three literals (e.g. $(x_1 \lor \overline{x}_2 \lor x_3) \land (\overline{x}_1 \lor x_4 \lor \overline{x}_3)$).
+        Prove that $\text{3SAT}$ is NP-complete by reducing the general satisfiability problem $\text{SAT}$ to $\text{3SAT}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Show that $\text{3SAT} \in \text{NP}$.
+          \item Suppose a clause in a SAT formula contains $k$ literals: $C = (l_1 \lor l_2 \lor \dots \lor l_k)$.
+                Show how to convert $C$ into an equivalent set of clauses with exactly 3 literals by introducing $k-3$ new helper variables $y_1, y_2, \dots, y_{k-3}$.
+                *(Hint: For $k=4$, show $(l_1 \lor l_2 \lor y_1) \land (\overline{y}_1 \lor l_3 \lor l_4)$ is satisfiable if and only if $(l_1 \lor l_2 \lor l_3 \lor l_4)$ is).*
+          \item Prove that this transformation runs in polynomial time.
+        \end{enumerate}
+
+  \item \textbf{The CLIQUE Problem.}
+  
+        A **clique** in an undirected graph $G$ is a subgraph where every pair of vertices is connected by an edge.
+        The language is $\text{CLIQUE} = \{\langle G, k \rangle : G \text{ is a graph containing a clique of size } k\}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Show that $\text{CLIQUE} \in \text{NP}$ by specifying a polynomial-time verifier and certificate.
+          \item Prove that $\text{CLIQUE}$ is NP-complete by reducing $\text{3SAT}$ to $\text{CLIQUE}$.
+                Describe the gadget construction where each clause corresponds to a group of 3 vertices, and edges connect compatible literals across different clauses.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{The Space Hierarchy and PSPACE.}
+  
+        The class $\text{PSPACE}$ consists of all languages decidable in polynomial *space* (memory) on a deterministic Turing Machine, with no limit placed on execution time.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Prove that $\text{P} \subseteq \text{PSPACE}$.
+          \item Prove that $\text{NP} \subseteq \text{PSPACE}$. (Hint: A space-bounded machine can reuse its memory tape. Show how to check all possible certificates of length $n^k$ sequentially, reusing the same space for each verification).
+          \item Explain the significance of the **Space Hierarchy Theorem**:
+                \[
+                  \text{SPACE}(f(n)) \;\subsetneq\; \text{SPACE}(g(n)) \quad \text{for } f(n) = o(g(n)).
+                \]
+                Why does this guarantee that using more memory strictly increases the computing power of a machine?
+        \end{enumerate}
+
+  \item \textbf{The P vs NP Boundary in Cryptography.}
+  
+        A **one-way function** is a function $f: \Sigma^* \to \Sigma^*$ that is easy to compute (in polynomial time) but hard to invert (any algorithm to compute $f^{-1}$ requires super-polynomial time).
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain why the existence of one-way functions requires that $\text{P} \neq \text{NP}$. (If $\text{P} = \text{NP}$, why can any easy-to-compute function be inverted in polynomial time?)
+          \item Modern secure communication (HTTPS, RSA) assumes that factoring the product of two large prime numbers, $N = p \cdot q$, is a one-way function.
+                Describe how a proof that $\text{P} = \text{NP}$ (supplying a polynomial-time algorithm for SAT) would allow an attacker to factor $N$ instantly by encoding the multiplication relations as a SAT formula.
+          \item Why is proving $\text{P} \neq \text{NP}$ one of the most critical open tasks in pure mathematics, and what would a proof of either result reveal about the nature of human intelligence?
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Verification vs. Discovery:** The P vs NP question asks if verifying a solution is as easy as finding one. In art, science, and mathematics, we routinely verify proofs or appreciate masterpieces much faster than we discover or create them. Does this intuitive human experience suggest that $\text{P} \neq \text{NP}$ is a fundamental law of cognition?
+  \item **On the Physicality of Nondeterminism:** An NP-complete problem can be solved quickly by a Nondeterministic Turing Machine, which branches into parallel universes to check all solutions at once. Since our physical universe appears to allow parallel quantum states, can quantum computers solve NP-complete problems in polynomial time? (Research note: Quantum computers can solve some problems in BQP, but it is believed BQP does not contain all of NP).
+  \item **On the Limits of Optimization:** Many critical human decisions (resource allocation, protein folding, circuit routing) are NP-complete. If $\text{P} \neq \text{NP}$, we can never find perfect solutions efficiently. Does this mean computer science must transition from finding *exact* solutions to designing *approximation* algorithms?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking back at Journey 3.}
+You have traversed the mathematical boundaries of computation:
+* **Module 3.1:** Deterministic and nondeterministic finite automata, regular expressions, and memory limits via the Pumping Lemma.
+* **Module 3.2:** Context-Free Grammars, Pushdown Automata, DPDAs vs. NPDAs, and stack limits.
+* **Module 3.3:** Turing Machines, decidability vs. recognizability, Cantor's diagonalization, the Halting Problem, and reductions.
+* **Module 3.4:** Time complexity classes P and NP, polynomial reductions, NP-completeness, SAT, and P vs NP.
+
+This completes Journey 3, providing the complete theoretical foundation of computational limits. You are now ready to proceed to: **Computation Journey 4 --- Programming Paradigms and Language Semantics**.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 3 --- Automata, Complexity, and the Limits of Computation}}\\[4pt]
+{\small\color{JourneyColor}You have completed the theoretical complexity track. Continue to: \textbf{Computation Journey 4 --- Programming Paradigms and Language Semantics}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

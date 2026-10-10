@@ -1,0 +1,357 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Journey 6 — forest green / amber) ────────────────────────────────
+\definecolor{JourneyColor}{HTML}{065F46}
+\definecolor{ModuleColor}{HTML}{059669}
+\definecolor{PuzzleColor}{HTML}{B45309}
+\definecolor{DiscoveryColor}{HTML}{D97706}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{5}
+\chapter[Journey 6 --- Organic Chemistry: Carbon's Grammar]
+        {Journey Six\\[8pt]
+         \textcolor{ModuleColor}{\large Organic Chemistry: Carbon's Grammar}}
+\setcounter{section}{2}
+
+\section{Module 6.3 --- Resonance and Aromatics}
+\label{sec:mod6.3}
+
+\subsection*{Motivation}
+
+We explored in Module 6.1 how head-on $\sigma$ overlaps and lateral $\pi$ overlaps lock the localized geometries of organic compounds.
+However, in many chemical structures, electrons refuse to stay locked between two specific nuclei.
+
+When a double bond is adjacent to another double bond or a lone pair, the $\pi$ electrons can delocalize, spreading out over multiple atoms to pool their energies.
+This delocalization leads to a unique chemical stability called **aromaticity**.
+This module explores how to represent delocalized electrons using resonance structures, derives the quantum particle-on-a-ring model of cyclic systems, and discovers Hückel's rule ($4n+2$), which defines the electronic boundaries of chemical stability.
+
+\subsection{The Benzene Paradox}
+
+We analyze the historical and physical anomalies of the benzene molecule.
+
+\begin{puzzlebox}
+\textbf{The Benzene Bond Lengths.}
+
+In 1865, August Kekulé proposed that benzene ($\ce{C6H6}$) consists of a six-membered carbon ring with alternating single and double bonds.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item In organic chemistry, a standard $\ce{C-C}$ single bond has a length of $\sim \SI{1.54}{\text{\AA}}$, whereas a $\ce{C=C}$ double bond is significantly shorter ($\sim \SI{1.34}{\text{\AA}}$).
+        If Kekulé's alternating structure were correct, why would we expect benzene to have a distorted hexagonal shape with alternating bond lengths?
+  \item Experimentally, X-ray diffraction reveals that all six carbon-carbon bonds in benzene are completely identical, with a length of exactly $\SI{1.40}{\text{\AA}}$—precisely in between a single and double bond.
+        How does the concept of **resonance** (representing a molecule as a hybrid blend of multiple contributing Lewis structures) resolve this?
+  \item Cyclic alkenes (like cyclohexene) react rapidly with bromine water via addition reactions.
+        Benzene, however, refuses to undergo addition reactions, instead undergoing substitution only under harsh conditions.
+        Why does benzene display this extraordinary resistance to reaction? (What would happen to the cyclic delocalization of $\pi$ electrons if bromine added to the ring?)
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Resonance and Formal Charge}
+
+We study how to evaluate the stability of contributing resonance structures using the rules of formal charge.
+
+\begin{explobox}
+We calculate the **formal charge (FC)** on any atom in a Lewis structure to track the distribution of valence electrons:
+\[
+  \text{FC} \;=\; V - N - \frac{1}{2} B,
+\]
+where $V$ is the number of valence electrons of the free atom, $N$ is the number of non-bonding valence electrons, and $B$ is the number of bonding electrons.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item When drawing resonance structures, the true structure is a hybrid. But not all resonance contributors are equal in energy.
+        Explain why the most stable contributor is the one that:
+        1. Minimizes the magnitude of formal charges (ideally zero).
+        2. Places negative formal charges on the most electronegative atoms.
+        3. Avoids placing adjacent formal charges of the same sign.
+  \item Draw the three major resonance structures for the carbonate ion ($\ce{CO3^2-}$). Calculate the formal charge of the carbon atom and each oxygen atom in one of the structures.
+  \item What is the average bond order for the carbon-oxygen bonds in carbonate?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Hückel's Rule and Aromaticity}
+
+We explore the criteria that dictate whether a cyclic conjugated molecule is exceptionally stable.
+
+\begin{explobox}
+Erich Hückel proposed that a cyclic, planar, fully conjugated ring displays aromatic stability if and only if it possesses a specific number of $\pi$ electrons:
+\[
+  \text{Number of } \pi \text{ electrons} \;=\; 4n + 2, \qquad n \in \{0, 1, 2, \dots\}.
+\]
+If the ring has $4n$ $\pi$ electrons, it is **antiaromatic** and exceptionally *unstable*.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Count the number of $\pi$ electrons in benzene. Show that it satisfies Hückel's rule for $n=1$.
+  \item Consider the cyclobutadiene molecule ($\ce{C4H4}$), a four-membered ring with alternating double bonds. Count its $\pi$ electrons. Is it aromatic or antiaromatic?
+  \item Explain why cyclobutadiene is so unstable that it can only be isolated at temperatures near absolute zero ($<\SI{10}{K}$) inside solid argon.
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Benzene is a resonance hybrid. The $\pi$ electrons are not localized between specific carbon pairs, but form two continuous donut-shaped clouds above and below the planar ring, forcing all bond lengths to be identical ($\SI{1.40}{\text{\AA}}$).
+
+\textbf{Second.} Formal charge analysis ($\text{FC} = V - N - \frac{1}{2}B$) evaluates the relative weight of resonance contributors. The overall molecule is a weighted average of these structures.
+
+\textbf{Third.} Hückel's rule states that cyclic, planar, conjugated systems are aromatic and exceptionally stable if they contain $4n+2$ $\pi$ electrons. If they contain $4n$ $\pi$ electrons, they are antiaromatic and unstable.
+
+\textbf{Fourth.} Delocalization energy (resonance energy) represents the thermodynamic stability gained by allowing electrons to expand their configuration space.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Aromatic parameters}
+* **Resonance:** The representation of a molecule's electronic structure as a hybrid blend of two or more Lewis structures that differ only in the positions of electrons.
+* **Aromaticity:** The property of cyclic, planar, conjugated rings containing $4n+2$ $\pi$ electrons that exhibits high stability and resistance to addition reactions.
+* **Antiaromaticity:** The property of cyclic, planar, conjugated rings containing $4n$ $\pi$ electrons that is thermodynamically less stable than its open-chain counterpart.
+* **Resonance Energy:** The difference in energy between the actual resonance hybrid and the calculated energy of its most stable hypothetical localized Lewis structure.
+* **Frost Circle:** A geometric mnemonic to find the relative orbital energy levels of a conjugated ring by drawing the polygon vertex-down inside a circle.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Aromaticity of Cyclopentadienyl Ions.}
+  
+        Determine whether the cyclopentadienyl anion ($\ce{C5H5-}$) and the cyclopentadienyl cation ($\ce{C5H5+}$) are aromatic, antiaromatic, or non-aromatic.
+        
+        \textbf{Solution:}
+        Both ions are planar, cyclic, and fully conjugated five-membered rings of carbon.
+        Each of the five carbon atoms is $sp^2$ hybridized, contributing one $p$ orbital perpendicular to the ring.
+        
+        * **For the Cyclopentadienyl Cation ($\ce{C5H5+}$):**
+        The positive charge represents a carbocation with an empty $p$ orbital.
+        The remaining four carbon atoms each contribute one electron from their double bonds to the $\pi$ system.
+        \[
+          \text{Total } \pi \text{ electrons} \;=\; 4.
+        \]
+        This matches the $4n$ formula for $n=1$. Thus, the cyclopentadienyl cation is **antiaromatic** and highly unstable.
+        
+        * **For the Cyclopentadienyl Anion ($\ce{C5H5-}$):**
+        The negative charge represents a lone pair residing in a $p$ orbital on one carbon.
+        The remaining four carbon atoms contribute their double-bond electrons.
+        \[
+          \text{Total } \pi \text{ electrons} \;=\; 4 + 2 \;=\; 6.
+        \]
+        This matches the $4n+2$ formula for $n=1$. Thus, the cyclopentadienyl anion is **aromatic** and exceptionally stable. (This explains why cyclopentadiene is anomalously acidic for a hydrocarbon, with a $\text{p}K_a$ of 16, as deprotonation yields the highly stable aromatic anion).
+        
+  \item \textbf{Calculating Resonance Stabilization Energy.}
+  
+        The experimental heat of hydrogenation of cyclohexene to cyclohexane:
+        \[
+          \ce{C6H10 + H2 -> C6H12}
+        \]
+        is $\Delta H^\circ = -\SI{120}{kJ/mol}$.
+        If benzene ($\ce{C6H6}$) were simply a localized "cyclohexatriene" with three isolated double bonds, we would expect its heat of hydrogenation to be:
+        \[
+          \Delta H^\circ_{\text{hypothetical}} \;=\; 3 \times (-\SI{120}{kJ/mol}) \;=\; -\SI{360}{kJ/mol}.
+        \]
+        The experimentally measured heat of hydrogenation of benzene is $-\SI{208}{kJ/mol}$.
+        Calculate the resonance stabilization energy of benzene.
+        
+        \textbf{Solution:}
+        The resonance stabilization energy is the difference between the expected localized energy and the actual experimental energy:
+        \[
+          E_{\text{resonance}} \;=\; \Delta H^\circ_{\text{hypothetical}} - \Delta H^\circ_{\text{actual}}
+        \]
+        \[
+          E_{\text{resonance}} \;=\; -\SI{360}{kJ/mol} - (-\SI{208}{kJ/mol}) \;=\; -\SI{152}{kJ/mol}.
+        \]
+        Thus, benzene is more stable than the hypothetical localized triene by exactly \SI{152}{kJ/mol} (\SI{36}{kcal/mol}). This represents the thermodynamic energy saved by allowing the six valence electrons to delocalize around the ring.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Frost Circle Construction.}
+  
+        A Frost circle is constructed by drawing a regular polygon vertex-down inside a circle of radius $2\beta$, centered at energy $\alpha$. The intersection points of the polygon with the circle represent the energy levels of the molecular orbitals.
+        \begin{enumerate}[label=(\alph*)]
+          \item Draw the Frost circle diagrams for benzene ($N=6$) and cyclobutadiene ($N=4$).
+          \item Using the diagram, show how cyclobutadiene has two unpaired electrons in its highest occupied molecular orbitals (a diradical state). Explain why this orbital configuration causes its antiaromatic instability.
+        \end{enumerate}
+
+  \item \textbf{Pyridine vs. Pyrrole.}
+  
+        Both pyridine ($\ce{C5H5N}$) and pyrrole ($\ce{C4H5N}$) are nitrogen-containing heterocyclic aromatic rings.
+        \begin{enumerate}[label=(\alph*)]
+          \item Draw their structures. Count the number of $\pi$ electrons in the conjugated ring for both molecules, specifying the source of the nitrogen atom's electrons.
+          \item Explain why pyridine behaves as a weak base (its nitrogen lone pair is available to bind protons), whereas pyrrole is completely non-basic. \textit{Hint: Where does the nitrogen lone pair reside in each molecule? Does it participate in the $4n+2$ aromatic ring system?}
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Quantum Mechanics of Aromaticity: The Particle on a Ring.}
+  
+        We model the six $\pi$ electrons of benzene as particles free to move in a 1D circular path of radius $R$.
+        The angular Schrödinger equation is:
+        \[
+          -\frac{\hbar^2}{2m R^2} \frac{d^2 \psi}{d\phi^2} \;=\; E \psi,
+        \]
+        where $\phi \in [0, 2\pi]$ is the angle, $m$ is the electron mass, and $R$ is the ring radius.
+        \begin{enumerate}[label=(\alph*)]
+          \item Apply the periodic boundary condition $\psi(\phi) = \psi(\phi + 2\pi)$ to show that the wave functions are $\psi_n(\phi) = A e^{i n \phi}$ and the quantized energy levels are:
+          \[
+            E_n \;=\; \frac{n^2 \hbar^2}{2m R^2}, \qquad n \in \{0, \, \pm 1, \, \pm 2, \, \pm 3, \dots\}.
+          \]
+          Note that $n=0$ is non-degenerate, but all states with $n \ge 1$ are two-fold degenerate ($n$ and $-n$ have the same energy, representing clockwise and counterclockwise orbital motion).
+          \item Place the 6 $\pi$ electrons of benzene into these energy levels, respecting the Pauli Exclusion Principle (two electrons per orbital state). Show that they occupy the $n=0$ level (2 electrons) and the $n=\pm 1$ levels (4 electrons).
+          \item Draw the energy level diagram. Observe that the 6 electrons form a completely filled, closed shell.
+          \item Generalize this filling sequence. Show that to fill the $n=0$ shell and $m$ higher degenerate shells ($n = \pm 1, \pm 2, \dots, \pm m$), the total number of electrons must be:
+          \[
+            N \;=\; 2 + 4m.
+          \]
+          This is the physical origin of Hückel's $4n+2$ rule!
+        \end{enumerate}
+
+  \item \textbf{Resonance in the Carboxylate Anion.}
+  
+        When a carboxylic acid ($\ce{R-COOH}$) is deprotonated, it forms a carboxylate anion ($\ce{R-COO-}$).
+        \begin{enumerate}[label=(\alph*)]
+          \item Draw the two equivalent resonance structures for the carboxylate anion.
+          \item Explain how the delocalization of the negative charge over both oxygen atoms stabilizes the anion compared to an alkoxide ion ($\ce{R-CH2-O-}$), which has its negative charge localized on a single oxygen atom.
+          \item How does this resonance stabilization explain why carboxylic acids are millions of times more acidic than alcohols ($\text{p}K_a \approx 5$ vs. $\text{p}K_a \approx 16$)?
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Closed Shell:** We saw that Hückel's rule is the spatial ring equivalent of the closed octet shell in atomic orbitals. What does this tell you about how physical boundary conditions (in this case, wrapping a 1D path into a circle) dictate the electronic stability rules of chemistry?
+  \item **On Reactivity vs. Stability:** Benzene is highly stable and resists addition reactions because addition would destroy its aromatic conjugation. If delocalized systems are so stable, why do they undergo reactions at all? (What is the energetic driving force behind electrophilic aromatic substitution?)
+  \item **On Molecular Electronics:** Because conjugated rings allow electrons to move freely around the loop, they can conduct current. If we construct a single-molecule circuit, could an aromatic ring act as a molecular switch or transistor?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6.4 completes this journey by introducing **Electron Flow and Reaction Mechanisms**. Having mapped carbon geometries and resonance stabilities, we will learn the grammar of chemical change. We will master curved arrow notation to trace the flow of electron pairs, and study the SN1, SN2, E1, and E2 mechanisms that form the foundation of organic synthesis.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 6, Module 6.3 --- Resonance and Aromatics}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 6.4 --- Electron Flow and Reaction Mechanisms}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

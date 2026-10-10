@@ -1,0 +1,605 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, patterns, decorations.markings, positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal,
+  pdftitle={Discovery Physics J3 M3.5-3.6},pdfauthor={Discovery Institute}}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{thunderbox}[1][]{enhanced,breakable,
+  colback=midblue!5,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,
+  title={The Thunderclap},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{2cm}
+
+\begin{tikzpicture}[scale=0.9]
+  % Wire carrying current
+  \draw[white!60, line width=3pt] (-5,0) -- (5,0);
+  \draw[->, white, line width=2pt] (3,0.1) -- (4.5,0.1);
+  \node[white, font=\large\bfseries] at (4.8,0.2) {I};
+  % Circular B field lines
+  \foreach \r/\op in {0.8/0.9, 1.5/0.75, 2.3/0.6, 3.2/0.45}{
+    \draw[teal, line width=1pt, opacity=\op] (0,0) circle (\r cm);
+    \draw[->, teal, line width=1pt, opacity=\op]
+      ({-\r*0.01},{\r}) -- ({\r*0.15},{\r});
+  }
+  % Changing B → E loop
+  \draw[accent!80, line width=1.5pt, dashed, ->]
+    (3.5,1.5) arc (30:330:1.2cm);
+  \node[accent, font=\small] at (5.2, 1.5) {induced $\mathcal{E}$};
+\end{tikzpicture}
+
+\vspace{0.4cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 3}}}
+\vspace{0.3cm}
+
+{\fontsize{32}{38}\selectfont\bfseries Modules 3.5 \& 3.6}
+\vspace{0.3cm}
+
+{\fontsize{18}{24}\selectfont\textcolor{gold}{Magnetic Fields \& Moving Charges\\[6pt]
+Changing Fields Create Fields}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+The two fields are not separate things.\\[4pt]
+Each one continuously generates the other.}}
+
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+
+\tableofcontents
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter{Magnetic Fields and the Dance of E and B}
+\markboth{Journey 3: Modules 3.5 \& 3.6}{}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 3.5 — Magnetic Fields and Moving Charges}
+\label{sec:magnetic_fields}
+
+\epigraph{\itshape
+  Nothing is too wonderful to be true, if it be consistent with the
+  laws of nature; and in such things as these, experiment is the best
+  test of such consistency.
+}{--- Michael Faraday, Laboratory notebook, 1849}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+A compass needle points north because Earth has a magnetic field. But what \emph{creates} that field? And why does a wire carrying an electric current also deflect a compass?
+\end{puzzlebox}
+
+\subsection{A Compass Needle Moves}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{O}}{n} 21 April 1820, the Danish physicist Hans Christian \O{}rsted was delivering a lecture and, almost as an afterthought, placed a compass near a wire he was about to connect to a battery. When he closed the circuit, the compass needle swung sharply to one side. When he disconnected it, the needle returned. He repeated the experiment. The effect was real.
+
+\O{}rsted had discovered something extraordinary: \textbf{electric currents create magnetic fields}. The two phenomena --- electricity and magnetism --- which had been studied separately for centuries, were connected. A moving charge creates a magnetic influence in the space around it.
+
+This was the first crack in what would become one of the great unifications in science. Within a few weeks of \O{}rsted's announcement, Amp\`ere had worked out the mathematical law relating current to magnetic field. Within a decade, Faraday had discovered the reverse: changing magnetic fields create electric currents. Within forty years, Maxwell had united the whole story in four equations.
+
+We begin where \O{}rsted began: a wire, a battery, a compass needle.
+
+\begin{historybox}
+\textbf{Hans Christian \O{}rsted (1777--1851).} The accidental nature of \O{}rsted's discovery is sometimes exaggerated --- he had suspected a connection between electricity and magnetism for years, based on a philosophical conviction that the forces of nature must be unified. What was accidental was the timing: his experiment happened in front of an audience, and the result was so striking that word spread immediately across Europe.
+
+Amp\`ere, in Paris, heard of it within weeks. Within months, he had derived the full mathematical law for the magnetic force between current-carrying wires. He also proposed that magnetism in ordinary magnets was caused by tiny loops of current within atoms --- an idea that proved exactly right.
+\end{historybox}
+
+\subsection{The Magnetic Field of a Straight Wire}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_wire_field}
+\caption{Left: cross-section of a wire carrying current into the page. The magnetic field lines form concentric circles. The field strength falls as $1/r$ (not $1/r^2$) --- a consequence of the wire's infinite extent. Right: three-dimensional view with field loops along the wire and the right-hand rule for determining their orientation.}
+\label{fig:wire_field}
+\end{figure}
+
+For a long straight wire carrying current $I$, the magnetic field at distance $r$ is:
+
+\begin{equation}
+  \boxed{B = \frac{\mu_0 I}{2\pi r}}
+\end{equation}
+
+where $\mu_0 = 4\pi \times 10^{-7}\,\si{T\cdot m/A}$ is the \textbf{permeability of free space} --- a constant whose significance will become clear in Module 3.7. The field circles the wire; its direction is given by the \textbf{right-hand rule}: point the thumb of your right hand in the direction of current flow, and your fingers curl in the direction of the magnetic field.
+
+Notice: the field falls as $1/r$, not $1/r^2$. This is because an infinite wire is a one-dimensional source --- the ``flux'' spreads over cylinders (perimeter $2\pi r$) rather than spheres (area $4\pi r^2$).
+
+\begin{explobox}
+\problem A wire carries a current of $\SI{5}{A}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the magnetic field at $r = \SI{0.01}{m}$ from the wire?
+  \item At $r = \SI{0.1}{m}$?
+  \item At $r = \SI{1}{m}$?
+  \item Earth's magnetic field at the surface is about $\SI{50}{\mu T}$. At what distance from the wire does the wire's field equal Earth's?
+\end{enumerate}
+
+\problem Two parallel wires each carry current $I$ in the same direction, separated by distance $d$.
+\begin{enumerate}[label=(\alph*)]
+  \item Wire 1 creates a magnetic field at the location of Wire 2. What is its magnitude and direction?
+  \item The field of Wire 1 exerts a force on Wire 2 (carrying current in a magnetic field). Use $F/L = BIl/l = BI$ to find the force per unit length.
+  \item Is the force attractive or repulsive? (Hint: apply the right-hand rule, or draw the fields.)
+  \item What happens if the currents run in opposite directions?
+\end{enumerate}
+
+\problem \textit{Amp\`ere's law.} For any closed loop, Amp\`ere's law states:
+\begin{equation}
+  \oint \bm{B}\cdot d\bm{l} = \mu_0 I_{\rm enc}
+\end{equation}
+where $I_{\rm enc}$ is the current passing through any surface bounded by the loop. Use this to re-derive $B = \mu_0 I / (2\pi r)$ for an infinite straight wire by choosing a circular loop of radius $r$.
+\end{explobox}
+
+\subsection{The Force on a Moving Charge}
+
+A charged particle moving through a magnetic field experiences a force. This force is perpendicular to both the velocity and the field:
+
+\begin{equation}
+  \bm{F} = q\bm{v}\times\bm{B}
+\end{equation}
+
+The magnitude is $F = qvB\sin\theta$ where $\theta$ is the angle between $\bm{v}$ and $\bm{B}$.
+
+\keyidea{The magnetic force never does work on a charge. Since $\bm{F}$ is always perpendicular to $\bm{v}$, no energy is transferred. The magnetic force changes direction, not speed.}
+
+\begin{explobox}
+\problem An electron ($q = -\SI{1.6e-19}{C}$, $m = \SI{9.1e-31}{kg}$) moves at $\SI{2e6}{m/s}$ in the $+x$ direction through a magnetic field $B = \SI{0.3}{T}$ in the $+z$ direction.
+\begin{enumerate}[label=(\alph*)]
+  \item Find the force on the electron (magnitude and direction).
+  \item Does this force do work on the electron? Does the electron speed up?
+  \item The force is centripetal --- what radius circular path does the electron follow?
+  \item What is the period of this circular motion (the cyclotron period)?
+\end{enumerate}
+
+\problem \textit{The mass spectrometer.} Ions are accelerated through a potential difference $V$, enter a region of uniform field $B$, and follow semicircular paths before hitting a detector. The radius $r$ of the semicircle depends on the mass.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $m = qBr^2/(2V)$ for an ion of charge $q$.
+  \item Two isotopes of carbon, $^{12}$C and $^{14}$C, are both singly ionised ($q = e$). If they enter the same field and $V$, what is the ratio of their path radii?
+  \item How does this allow the mass spectrometer to separate isotopes?
+\end{enumerate}
+
+\problem \textit{Aurora borealis.} Charged particles from the solar wind are deflected by Earth's magnetic field and spiral along field lines toward the poles, where they collide with atmospheric atoms and produce light.
+\begin{enumerate}[label=(\alph*)]
+  \item Explain qualitatively why the particles spiral rather than follow a simple circle (hint: the field is not uniform).
+  \item Why do auroras appear near the poles rather than at the equator?
+  \item The same principle --- charged particles spiraling along field lines --- is used in magnetic confinement fusion reactors (tokamaks). Look up how a tokamak works and describe the basic principle in one paragraph.
+\end{enumerate}
+\end{explobox}
+
+\subsection{The Force on a Current: Motors}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_motor}
+\caption{Left: a straight wire carrying current $I$ in a uniform magnetic field $\bm{B}$ (into page) experiences a force $\bm{F} = I\bm{L}\times\bm{B}$ perpendicular to both. Right: a rectangular current loop in a magnetic field experiences a torque --- the basis of every electric motor.}
+\label{fig:motor}
+\end{figure}
+
+A current-carrying wire in a magnetic field experiences a force. This is simply the magnetic force $q\bm{v}\times\bm{B}$ acting on the individual moving charges inside the wire, summed over the whole wire:
+
+\begin{equation}
+  \bm{F} = I\bm{L}\times\bm{B}
+\end{equation}
+
+For a current loop, the forces on opposite sides create a \textbf{torque} that tends to rotate the loop. This is the principle behind every electric motor.
+
+\begin{explobox}
+\problem A rectangular loop of wire ($\SI{0.05}{m} \times \SI{0.08}{m}$) carries a current of $\SI{2}{A}$ in a uniform magnetic field of $\SI{0.3}{T}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the maximum torque on the loop?
+  \item At what orientation does this maximum occur?
+  \item At what orientation is the torque zero? Is this a stable or unstable equilibrium?
+\end{enumerate}
+
+\problem \textit{The galvanometer.} The device used to measure small currents works by the torque on a current loop in a magnetic field. A spring provides a restoring torque. At equilibrium, the needle deflection angle is proportional to the current. Sketch this device and explain how it works.
+
+\problem \textit{From motor to generator.} If you mechanically rotate a current loop in a magnetic field instead of using current to rotate it, a current is induced in the loop. Why? What is the source of the energy in the electrical output?
+\end{explobox}
+
+\subsection{Amp\`ere's Law and the Solenoid}
+
+A \textbf{solenoid} is a tightly wound coil of wire. When current flows through it, the fields from individual loops add up to produce a nearly uniform field inside.
+
+For a solenoid with $n$ turns per unit length carrying current $I$:
+\begin{equation}
+  B_{\rm inside} = \mu_0 n I
+  \qquad\qquad
+  B_{\rm outside} \approx 0
+\end{equation}
+
+\begin{explobox}
+\problem Derive $B = \mu_0 nI$ for a solenoid using Amp\`ere's law. (Choose a rectangular loop that passes through the inside of the solenoid along the axis and returns outside, where $B \approx 0$.)
+
+\problem A solenoid has $500$ turns, length $\SI{0.25}{m}$, and carries $\SI{2}{A}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the field inside?
+  \item A small compass is placed at the centre. How does it orient?
+  \item The solenoid is equivalent to a bar magnet. Which end is the north pole?
+\end{enumerate}
+
+\problem \textit{An electromagnet.} If an iron core is inserted into the solenoid, the field is amplified by the \textbf{relative permeability} $\mu_r$ of the iron: $B = \mu_r\mu_0 nI$. For soft iron, $\mu_r \approx 5000$.
+\begin{enumerate}[label=(\alph*)]
+  \item Recalculate the field of the previous problem with an iron core.
+  \item Why does inserting iron amplify the field so dramatically? (Hint: think about Amp\`ere's atomic current-loop model of magnetism.)
+  \item Why do electromagnets use ``soft'' iron rather than ``hard'' steel?
+\end{enumerate}
+\end{explobox}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 3.6 — Changing Fields Create Fields}
+\label{sec:changing_fields}
+
+\epigraph{\itshape
+  The electromagnetic field acts as a carrier of both energy and momentum,
+  spreading its influence at the speed of light --- \emph{the} speed,
+  the fundamental speed of the universe.
+}{--- Richard Feynman, \textit{The Feynman Lectures on Physics}}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+\O{}rsted showed that a current (moving charges) creates a magnetic field. Faraday discovered the reverse: a \emph{changing} magnetic field creates an electric field. If each field can create the other when it changes --- what happens if they keep changing back and forth?
+\end{puzzlebox}
+
+\subsection{Faraday's Law of Induction}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_induction}
+\caption{Left: Faraday's induction experiment. A magnet moving toward a coil causes a changing magnetic flux through the coil. This induces an EMF (and therefore a current) in the coil, detected by the galvanometer. Right: Lenz's law --- the induced current creates its own magnetic field that opposes the change in flux. If flux is increasing (out of page), the induced current flows clockwise to create flux into the page.}
+\label{fig:induction}
+\end{figure}
+
+In 1831, Faraday discovered that a \textbf{changing} magnetic flux through a conducting loop induces an electromotive force (EMF) --- a voltage that drives a current. The key word is \textit{changing}: a static magnetic field, no matter how strong, induces nothing. Only a changing field induces a current.
+
+The mathematical law is:
+
+\begin{equation}
+  \boxed{\mathcal{E} = -\frac{d\Phi_B}{dt}}
+\end{equation}
+
+where $\Phi_B = \int \bm{B}\cdot d\bm{A}$ is the magnetic flux through the loop. The negative sign encodes \textbf{Lenz's law}: the induced EMF drives a current that \textit{opposes} the change in flux that caused it.
+
+Lenz's law is a consequence of energy conservation. If the induced current aided the change instead of opposing it, it would create a runaway effect --- ever-increasing current with no external energy input. Nature does not allow this.
+
+\begin{explobox}
+\problem A circular coil of radius $\SI{0.1}{m}$ and $50$ turns sits in a magnetic field that increases uniformly from $\SI{0}{T}$ to $\SI{0.5}{T}$ in $\SI{0.02}{s}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the rate of change of flux through the coil?
+  \item What is the induced EMF?
+  \item If the coil has resistance $\SI{2}{\Omega}$, what current flows?
+  \item In which direction does this current flow? (State clearly what ``opposing the change'' means here.)
+\end{enumerate}
+
+\problem A rectangular loop ($\SI{0.1}{m}\times\SI{0.2}{m}$) moves at constant velocity $\SI{5}{m/s}$ out of a region of uniform field $B = \SI{0.3}{T}$ (perpendicular to the loop).
+\begin{enumerate}[label=(\alph*)]
+  \item As the loop exits the field, at what rate does the flux decrease?
+  \item What EMF is induced?
+  \item If the loop has resistance $\SI{1}{\Omega}$, what force is needed to pull it at constant velocity? (Hint: the induced current in the field experiences a braking force.)
+  \item Where does the energy go?
+\end{enumerate}
+
+\problem \textit{The transformer.} Two coils are wound on the same iron core. AC current in the primary coil creates a changing $B$ field in the core, which induces an EMF in the secondary.
+\begin{enumerate}[label=(\alph*)]
+  \item If the primary has $N_1$ turns and the secondary has $N_2$ turns, show that $V_2/V_1 = N_2/N_1$.
+  \item A transformer steps up voltage from $\SI{230}{V}$ to $\SI{11000}{V}$ for power transmission. What is the turns ratio?
+  \item Why is power transmitted at high voltage and low current rather than low voltage and high current? (Calculate the power lost in a wire of resistance $R$ for both cases at the same transmitted power $P$.)
+\end{enumerate}
+
+\problem \textit{Eddy currents.} When a solid conductor moves through a non-uniform magnetic field, the changing flux induces currents that swirl within the conductor (eddy currents). These currents dissipate energy as heat.
+\begin{enumerate}[label=(\alph*)]
+  \item A copper disc falls between the poles of a strong magnet. Describe qualitatively what happens to the disc's speed. (This is used in magnetic braking systems.)
+  \item Why are transformer cores made of thin laminated sheets rather than solid iron?
+  \item Induction cooktops heat pots using eddy currents. Explain how this works, and why an induction cooktop can heat a steel pot but not a glass dish.
+\end{enumerate}
+\end{explobox}
+
+\subsection{The Full Symmetry: Maxwell's Addition}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_displacement}
+\caption{Left: Amp\`ere's original law --- current creates a circulating magnetic field. Right: Maxwell's crucial addition --- even where there is no real current (between the plates of a charging capacitor), a changing electric field acts like a current and creates a magnetic field. Maxwell called this the \textbf{displacement current}.}
+\label{fig:displacement}
+\end{figure}
+
+Faraday showed: \textbf{a changing $B$ field creates an $E$ field}.
+
+But the full symmetry demands a companion: \textbf{should a changing $E$ field also create a $B$ field?}
+
+Amp\`ere's original law said that currents create magnetic fields: $\oint \bm{B}\cdot d\bm{l} = \mu_0 I_{\rm enc}$. But James Clerk Maxwell noticed a subtle inconsistency when applied to a charging capacitor.
+
+Consider a capacitor being charged by a current $I$. Amp\`ere's law should give the same $\oint \bm{B}\cdot d\bm{l}$ regardless of which surface you choose to integrate over. Choose a flat surface through the wire: it is pierced by current $I$ --- fine. Now choose a surface that passes between the capacitor plates, where there is no current at all: it gives zero --- a contradiction.
+
+Maxwell resolved this by adding a term to Amp\`ere's law. Between the plates, the electric field is changing as the capacitor charges. This changing $\bm{E}$ field --- which Maxwell called the \textbf{displacement current} --- creates a magnetic field exactly as a real current would:
+
+\begin{equation}
+  \boxed{\oint \bm{B}\cdot d\bm{l} = \mu_0\left(I_{\rm enc} + \varepsilon_0\frac{d\Phi_E}{dt}\right)}
+\end{equation}
+
+This modification was not motivated by any experimental observation. It was motivated purely by mathematical consistency --- the need for the equation to give the same answer regardless of which surface you chose.
+
+And then Maxwell computed the consequences.
+
+\begin{explobox}
+\problem A circular parallel-plate capacitor of radius $R = \SI{0.05}{m}$ is being charged so that the electric field between the plates grows at rate $d E/dt = \SI{1e12}{V/m/s}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the displacement current between the plates?
+  \item Using Amp\`ere's modified law, find the magnetic field at a radius $r = \SI{0.03}{m}$ from the axis (between the plates).
+  \item Compare this to the field you would get from a real wire carrying the same current through a region of that size.
+\end{enumerate}
+
+\problem \textit{Why the displacement current term matters.} Without Maxwell's addition, Amp\`ere's law is inconsistent at the capacitor.
+\begin{enumerate}[label=(\alph*)]
+  \item Show explicitly that the two surface choices (through wire vs between plates) give contradictory results without the $\varepsilon_0\,dE/dt$ term.
+  \item Show that with the term, both surfaces give the same $\oint \bm{B}\cdot d\bm{l}$.
+  \item In physics, when we find a mathematical inconsistency, we face a choice: (i) abandon the law, (ii) restrict its domain of applicability, or (iii) modify the law to restore consistency. Maxwell chose (iii). What distinguishes a valid modification from an arbitrary one?
+\end{enumerate}
+\end{explobox}
+
+\subsection{The Four Equations Together}
+
+With Maxwell's addition, the complete laws of electricity and magnetism can be written in four equations:
+
+\begin{align}
+  \nabla\cdot\bm{E} &= \frac{\rho}{\varepsilon_0}
+  && \text{(Gauss: charges create diverging $E$ fields)} \label{eq:gauss_E}\\[6pt]
+  \nabla\cdot\bm{B} &= 0
+  && \text{(No magnetic monopoles: $B$ fields have no sources)} \label{eq:gauss_B}\\[6pt]
+  \nabla\times\bm{E} &= -\frac{\partial\bm{B}}{\partial t}
+  && \text{(Faraday: changing $B$ creates circulating $E$)} \label{eq:faraday}\\[6pt]
+  \nabla\times\bm{B} &= \mu_0\bm{J} + \mu_0\varepsilon_0\frac{\partial\bm{E}}{\partial t}
+  && \text{(Amp\`ere-Maxwell: currents \emph{and} changing $E$ create $B$)} \label{eq:ampere}
+\end{align}
+
+These are \textbf{Maxwell's equations}. They encode everything known about classical electromagnetism.
+
+\begin{tcolorbox}[enhanced, colback=deep!5, colframe=deep,
+  title={\bfseries\color{white} Reading Maxwell's Equations},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+Each equation is a statement about a different aspect of the fields:
+\begin{itemize}[leftmargin=1.5em, itemsep=4pt]
+  \item \textbf{Equation 1} ($\nabla\cdot\bm{E} = \rho/\varepsilon_0$): Electric field lines \emph{diverge} from positive charges and \emph{converge} toward negative charges. This is Gauss's law in differential form.
+  \item \textbf{Equation 2} ($\nabla\cdot\bm{B} = 0$): Magnetic field lines never diverge --- they always close on themselves. There are no magnetic monopoles.
+  \item \textbf{Equation 3} ($\nabla\times\bm{E} = -\partial\bm{B}/\partial t$): A changing magnetic field produces a circulating electric field (Faraday's law). In empty space (no charges, no currents), $E$ and $B$ regenerate each other.
+  \item \textbf{Equation 4} ($\nabla\times\bm{B} = \mu_0\bm{J} + \mu_0\varepsilon_0\,\partial\bm{E}/\partial t$): Currents \emph{and} changing electric fields both produce circulating magnetic fields (Amp\`ere-Maxwell law).
+\end{itemize}
+\end{tcolorbox}
+
+\begin{explobox}
+\problem Read each of Maxwell's equations as a sentence in plain language (not symbols). Write your own one-sentence plain-English version of each equation, different from the descriptions above.
+
+\problem \textit{The symmetry.} Equations 3 and 4 together describe a mutual relationship: changing $\bm{B}$ creates $\bm{E}$; changing $\bm{E}$ creates $\bm{B}$. In empty space (no charges $\rho=0$, no currents $\bm{J}=\bm{0}$), show that combining these two equations produces a wave equation for $\bm{E}$:
+\begin{equation}
+  \nabla^2\bm{E} = \mu_0\varepsilon_0\frac{\partial^2\bm{E}}{\partial t^2}
+\end{equation}
+\textit{(Hint: take the curl of Equation 3, use the vector identity $\nabla\times(\nabla\times\bm{E}) = \nabla(\nabla\cdot\bm{E}) - \nabla^2\bm{E}$, and substitute Equation 4.)}
+
+\problem \textit{The speed.} A wave equation of the form $\nabla^2 f = (1/v^2)\partial^2 f/\partial t^2$ describes waves propagating at speed $v$. What is the speed of the electromagnetic wave predicted by Maxwell's equations? Calculate it using $\mu_0 = 4\pi\times10^{-7}\,\si{T\cdot m/A}$ and $\varepsilon_0 = 8.85\times10^{-12}\,\si{C^2/N/m^2}$.
+
+\problem Compare your answer to the measured speed of light in vacuum: $c = \SI{2.998e8}{m/s}$. What conclusion is forced upon you?
+\end{explobox}
+
+\begin{thunderbox}
+\textbf{Maxwell's Thunderclap.} In 1865, Maxwell computed the speed of electromagnetic waves from the constants $\mu_0$ and $\varepsilon_0$ --- constants measured in experiments involving wires, batteries, and capacitors, with no reference to light whatsoever. The result was:
+
+\begin{equation}
+  c = \frac{1}{\sqrt{\mu_0\varepsilon_0}} = \SI{2.998e8}{m/s}
+\end{equation}
+
+This was, within experimental error, exactly the measured speed of light.
+
+Maxwell wrote: ``\textit{The agreement of the results seems to show that light and magnetism are affections of the same substance, and that light is an electromagnetic disturbance propagated through the field according to electromagnetic laws.}''
+
+In one calculation, he had unified electricity, magnetism, and optics --- three entirely separate fields of study --- into a single mathematical framework. Light is not some separate phenomenon. It is an oscillating electromagnetic field, propagating through space at speed $c$.
+
+This is one of the most stunning moments in the history of science. It was achieved not by a new experiment but by a mathematical consistency argument --- by noticing that Amp\`ere's law was inconsistent, fixing it, and following the mathematics to its conclusion.
+\end{thunderbox}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j3_em_wave}
+\caption{An electromagnetic wave. The electric field $\bm{E}$ oscillates in one plane; the magnetic field $\bm{B}$ oscillates perpendicular to it; both propagate in the direction of travel. Each field continuously regenerates the other: Faraday's law (changing $B$ creates $E$) and the Amp\`ere-Maxwell law (changing $E$ creates $B$) together produce a self-sustaining wave. Its speed, derived from the constants $\mu_0$ and $\varepsilon_0$, is the speed of light.}
+\label{fig:em_wave}
+\end{figure}
+
+\begin{explobox}
+\problem An electromagnetic wave in vacuum has electric field amplitude $E_0 = \SI{100}{V/m}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the magnetic field amplitude $B_0$? (Use $E_0/B_0 = c$.)
+  \item Compare $E_0$ and $B_0$ numerically. Which field carries more energy per unit volume?
+  \item The intensity (power per unit area) of the wave is $I = E_0 B_0/(2\mu_0)$. Calculate it.
+\end{enumerate}
+
+\problem \textit{The electromagnetic spectrum.} Visible light, radio waves, X-rays, and gamma rays are all electromagnetic waves of different frequencies.
+\begin{enumerate}[label=(\alph*)]
+  \item Red light has wavelength $\lambda \approx \SI{700}{nm}$. What is its frequency?
+  \item A radio station broadcasts at $\SI{100}{MHz}$. What is its wavelength?
+  \item X-rays used in medicine have energies around $\SI{10}{keV}$. If photon energy is $E = hf$ where $h = \SI{6.63e-34}{J\cdot s}$, what is the X-ray wavelength?
+  \item Why can radio waves pass through walls but X-rays cannot? Why can X-rays pass through flesh but not bone?
+\end{enumerate}
+
+\problem \textit{Radiation pressure.} Electromagnetic waves carry momentum. The pressure exerted by light on a surface is $P = I/c$ for an absorbing surface and $P = 2I/c$ for a perfectly reflecting surface.
+\begin{enumerate}[label=(\alph*)]
+  \item Sunlight has intensity $\SI{1360}{W/m^2}$ at Earth's distance from the Sun. What pressure does it exert on a $\SI{1}{m^2}$ solar sail?
+  \item How does this compare to atmospheric pressure ($\SI{101325}{Pa}$)?
+  \item Solar sails have been proposed for spacecraft propulsion. For a $\SI{100}{kg}$ spacecraft with a $\SI{10000}{m^2}$ sail, what acceleration would solar radiation provide?
+\end{enumerate}
+\end{explobox}
+
+\begin{reflectionbox}
+\textbf{Reflection: Modules 3.5 -- 3.6.}
+
+Write two to three pages on the following. These are not just technical questions; they ask you to think about what Maxwell's achievement means.
+
+\begin{enumerate}[leftmargin=2em, itemsep=6pt]
+  \item \textit{The pattern of discovery.} \O{}rsted found electricity creates magnetism. Faraday found changing magnetism creates electricity. Maxwell added changing electricity creates magnetism --- and found light. Each step was a generalisation or a symmetry argument, not a new experiment. What does this suggest about the role of symmetry and mathematical consistency in discovering new physics?
+
+  \item \textit{What Maxwell unified.} Before 1865, electricity, magnetism, and optics were three separate subjects. After Maxwell, they were one. What does unification mean in physics? Is it merely convenient, or does it tell us something deep about the structure of nature?
+
+  \item \textit{The displacement current paradox.} Maxwell introduced the displacement current $\varepsilon_0\,\partial\bm{E}/\partial t$ to fix a mathematical inconsistency. At the time, no experiment required it. Later, it was confirmed indirectly through the existence of electromagnetic waves. Should a physicist accept a modification to physical law that is required only by mathematical consistency, without direct experimental confirmation? What risks does this carry? What rewards?
+
+  \item \textit{A question for Module 3.7.} Maxwell showed that light is an electromagnetic wave. But a wave needs a medium to propagate in --- sound waves propagate through air, ocean waves through water. What does light propagate through? This question haunted physicists for thirty years after Maxwell. Can you already guess what the answer turned out to be?
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Module Summary: 3.5--3.6}
+\addcontentsline{toc}{chapter}{Module Summary: 3.5--3.6}
+\markboth{Module Summary: 3.5--3.6}{}
+
+\begin{tcolorbox}[enhanced,colback=deep!4,colframe=deep,
+  title={\bfseries\color{white} Key Ideas: Modules 3.5--3.6},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+
+\textbf{Module 3.5 --- Magnetic Fields and Moving Charges}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item \O{}rsted 1820: electric current creates magnetic field
+  \item Field of a straight wire: $B = \mu_0 I/(2\pi r)$, falls as $1/r$, circles the wire
+  \item Right-hand rule determines field direction
+  \item Force on moving charge: $\bm{F} = q\bm{v}\times\bm{B}$ --- perpendicular, no work done
+  \item Force on current: $\bm{F} = I\bm{L}\times\bm{B}$ --- basis of electric motors
+  \item Amp\`ere's law: $\oint\bm{B}\cdot d\bm{l} = \mu_0 I_{\rm enc}$
+\end{itemize}
+
+\vspace{6pt}
+\textbf{Module 3.6 --- Changing Fields Create Fields}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Faraday's law: $\mathcal{E} = -d\Phi_B/dt$ --- changing $B$ creates circulating $E$
+  \item Lenz's law: induced current opposes the change (energy conservation)
+  \item Maxwell's addition: changing $E$ also creates $B$ (displacement current)
+  \item Motivation: mathematical consistency, not experimental necessity
+  \item The four Maxwell equations: complete description of classical electromagnetism
+  \item Consequence: $\nabla^2\bm{E} = \mu_0\varepsilon_0\,\partial^2\bm{E}/\partial t^2$ --- electromagnetic waves
+  \item Wave speed: $c = 1/\sqrt{\mu_0\varepsilon_0} = \SI{3e8}{m/s}$ = speed of light
+  \item \textbf{Light is an electromagnetic wave.}
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.6cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[teal,line width=1.5pt] (0,0) -- (12,0);
+  \node[below,teal] at (6,-0.1)
+    {\small\itshape End of Modules 3.5--3.6. Next: Maxwell's Unification \& What Is a Field? (Modules 3.7--3.8).};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5cm}
+\begin{center}
+{\large\textcolor{deep}{\textbf{Coming in Modules 3.7--3.8:}}}\\[6pt]
+{\itshape\textcolor{midblue}{%
+Maxwell showed light is an electromagnetic wave.\\[3pt]
+But what does light travel \emph{through}?\\[3pt]
+The 40-year search for an answer destroyed the classical world.\\[3pt]
+And the question ``what \emph{is} a field, really?'' still has no complete answer.
+}}
+\end{center}
+
+\end{document}

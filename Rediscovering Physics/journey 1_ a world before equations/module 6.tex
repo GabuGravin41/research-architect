@@ -1,0 +1,310 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\setlength{\headheight}{24pt}
+\usepackage{fontenc}
+\usepackage{inputenc}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{fontawesome5}
+
+\usepackage{setspace}
+\usepackage{parskip}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=midblue,
+  urlcolor=accent,
+  citecolor=teal,
+  pdftitle={Discovery Physics: Journey 1 — The World Before Equations},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}
+  {\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+
+% Puzzle box
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep},
+  title={\faIcon{puzzle-piece}\ The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold},
+  #1
+}
+
+% Observation box
+\newtcolorbox{observebox}[1][]{
+  enhanced, breakable,
+  colback=greenbg, colframe=teal,
+  fonttitle=\bfseries\color{deep},
+  title={Observation},
+  #1
+}
+
+% Exploration/problem box
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue},
+  #1
+}
+
+% Discovery box
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white},
+  coltitle=white,
+  title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent},
+  drop shadow,
+  #1
+}
+
+% Name reveal box
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep},
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Reflection},
+  #1
+}
+
+% Margin note style
+\newtcolorbox{marginidea}{
+  enhanced,
+  colback=gold!15, colframe=gold,
+  fontupper=\small\itshape,
+  left=2mm, right=2mm, top=1mm, bottom=1mm,
+  boxrule=0.6pt
+}
+
+% Problem counter
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi%
+}
+
+% Key idea
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[
+    enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}
+  ]
+  #1
+  \end{tcolorbox}
+}
+
+% ─── Theorem-like environments ──────────────────────────────────────────────
+\newtheoremstyle{disc}
+  {8pt}{8pt}{\itshape}{}
+  {\bfseries\color{midblue}}{.}{.5em}{}
+
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Epigraph style ─────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{0}
+\setcounter{section}{5}
+
+\section{Module 1.6 — The Night Sky}
+\label{sec:night_sky}
+
+\epigraph{%
+  \itshape Two things fill the mind with ever-increasing wonder and awe, the more often and the more intensely I reflect on them: the starry heavens above me and the moral law within me.%
+}{--- Immanuel Kant}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+Is the sky obeying the same rules as the stone you drop?
+\end{tcolorbox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{figures/fig_sky}
+  \caption{Left: the inner solar system. Planets move; stars (at their vastly greater distances) appear fixed. Right: retrograde motion---Mars appears to move backward against the background stars for several weeks each year, because Earth, moving faster on an inner orbit, overtakes it.}
+  \label{fig:sky}
+\end{figure}
+
+\subsection{Introduction}
+
+The night sky is humanity's oldest physics laboratory. For tens of thousands of years, people observed the sky carefully---not from academic curiosity alone, but because their lives depended on it. Agriculture requires knowing when to plant. Navigation requires knowing where you are. Religion and ritual often followed celestial cycles. The sky was both clock and compass.
+
+From this close observation, over many generations, an extraordinary amount of structure was found. Stars rise and set with a cycle of approximately 24 hours. The same stars appear in the same positions at the same time each year. The Moon follows a cycle of roughly 29.5 days. Five ``wandering stars''---what we now call planets---move against the background of fixed stars following complicated paths.
+
+This module is about looking at that complexity and finding the simple patterns underneath.
+
+\subsection{What Moves? What Does Not?}
+
+\begin{explobox}
+\problem On a clear night, look at the sky for at least 30 minutes. Note the positions of 5 or 6 bright stars relative to landmarks on the horizon. Return to the same spot one hour later. What has changed?
+
+\problem Over two or three consecutive nights, locate a bright planet (Jupiter, Mars, Saturn, or Venus---look up which are currently visible). Sketch its position relative to nearby stars each night. Does it move? In which direction?
+
+\problem The Moon's position changes noticeably from night to night. Approximately how many degrees does it move per day against the background stars?
+\end{explobox}
+
+\subsection{Retrograde Motion: A Puzzle}
+
+For most of the year, the planets move in one direction against the background stars (generally eastward). But for several weeks each year, each planet appears to slow down, stop, reverse direction (retrograde), then stop again and resume its usual direction.
+
+This puzzled people for thousands of years. The ancient Greeks explained it using complicated systems of ``epicycles''---circles rolling on circles. The system worked, but it was extraordinarily complicated. Copernicus suggested a simpler explanation in 1543: both Earth and the other planets orbit the Sun. Earth, on an inner orbit, moves faster than Mars or Jupiter. When Earth overtakes an outer planet, that planet appears to move backward relative to the distant stars---just as a slower car appears to move backward when you overtake it on a motorway.
+
+\begin{explobox}
+\problem In Figure~\ref{fig:sky}, follow the lines connecting Earth's successive positions to Mars's successive positions, and project them to the background stars. Explain in your own words why the projected position moves backward for a period.
+
+\problem If Mars and Earth are on the same side of the Sun, Mars appears brightest. If on opposite sides, Mars appears dimmer. How does this fit with the explanation of retrograde motion?
+
+\problem Ancient observations placed Earth at the centre of the universe for understandable reasons. What observations, available to the ancient Greeks, could have told them they were wrong? Why do you think nobody drew the correct conclusion?
+\end{explobox}
+
+\subsection{The Moon is Falling}
+
+Here is the question Newton asked that changed everything.
+
+The Moon orbits Earth at a distance of approximately 384,000 km, completing one orbit in about 27.3 days. This means the Moon is continuously changing its direction of motion---it is accelerating toward Earth at all times, even though it never comes any closer.
+
+\begin{explobox}
+\problem The Moon's orbit is nearly circular. Compute the Moon's acceleration toward Earth.
+
+\textit{Hint:} For circular motion at speed $v$ and radius $r$, the acceleration is $a = v^2/r$. First compute $v$ from the circumference of the orbit and the period.
+
+\problem The acceleration due to gravity at Earth's surface is $g \approx 9.8\,\text{m/s}^2$. The Moon is about 60 Earth radii away from Earth's centre (Earth's radius is about 6,400 km). If gravity follows an inverse square law, what should the gravitational acceleration at the Moon's distance be?
+
+\problem Compare your answers to the two previous problems. What conclusion do you draw?
+\end{explobox}
+
+When Newton performed this calculation, the two numbers agreed. The same force that pulls an apple from a tree is holding the Moon in its orbit. The sky and the ground are governed by the same physics.
+
+This was not a small discovery. For two thousand years, celestial and terrestrial mechanics were thought to be fundamentally different. Newton's calculation demolished that distinction in a single step.
+
+\begin{discoverybox}
+\textbf{The unification.} Terrestrial gravity (objects falling near Earth's surface) and celestial gravity (the Moon orbiting Earth, the planets orbiting the Sun) are the same phenomenon, described by the same inverse square law.
+
+This is one of the great unifications in physics. It will not be the last. Throughout this curriculum, you will see apparently different phenomena repeatedly revealed as different expressions of the same underlying structure.
+\end{discoverybox}
+
+\subsection{The Sizes and Distances of Things}
+
+The universe is vast. Here is an attempt to make the scale vivid.
+
+\begin{itemize}
+  \item The Earth's radius: 6,400 km.
+  \item The Moon's distance: 384,000 km $\approx$ 60 Earth radii.
+  \item The Sun's distance: 150,000,000 km $\approx$ 23,500 Earth radii.
+  \item The nearest star (Proxima Centauri): $4.24$ light-years $\approx 40\,000\,000\,000\,000$ km.
+  \item The diameter of the Milky Way: about 100,000 light-years.
+  \item The observable universe: about 93 billion light-years in diameter.
+\end{itemize}
+
+\begin{explobox}
+\problem If the Sun were the size of a basketball (diameter 24 cm), what would be the size of Earth, and how far away would it be?
+
+\problem On the same scale, how far away would Proxima Centauri be? How does this compare to real distances you can imagine?
+
+\problem Light takes about 8 minutes to travel from the Sun to Earth. If the Sun suddenly went dark, how long before we would know?
+\end{explobox}
+
+% ════════════════════════════════════════════════════════════════════════════
+
+\end{document}

@@ -1,0 +1,319 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds, decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Page geometry fix ──────────────────────────────────────────────────────
+\setlength{\headheight}{24pt}
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true, linkcolor=midblue, urlcolor=accent, citecolor=teal,
+  pdftitle={Discovery Physics: Journey 2 — Motion and Its Causes},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep}, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold}, #1}
+
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white}, coltitle=white, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent}, drop shadow, #1}
+
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Reflection}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=gold!8, colframe=gold!70!brown,
+  fonttitle=\bfseries\color{deep}, title={Historical Note}, #1}
+
+% ─── Problem counter ────────────────────────────────────────────────────────
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi}
+
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+% ─── Theorem environments ───────────────────────────────────────────────────
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{1}
+\setcounter{section}{0}
+
+\section{Module 2.1 — Inventing the Language of Motion}
+\label{sec:language_motion}
+
+\epigraph{
+  \itshape To measure is to know.
+}{--- Lord Kelvin}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+A stone falls. A planet orbits. A car accelerates. Can we describe all of these with the same language?
+\end{tcolorbox}
+
+\subsection{Position, Distance, and Displacement}
+
+Before we can describe motion, we need a way to describe \textit{where} something is. This requires a reference point and a coordinate system---a way of assigning numbers to positions.
+
+For motion along a line, a single number suffices: the position $x$, measured from some agreed origin. The distance between two positions is $|x_2 - x_1|$. But distance alone is not enough: we also need direction. A displacement of $+5$ metres (moving right) is different from a displacement of $-5$ metres (moving left).
+
+\begin{namebox}
+\textbf{Displacement} is the change in position, including direction:
+\begin{equation}
+  \Delta x = x_{\text{final}} - x_{\text{initial}}
+\end{equation}
+It is positive if the motion is in the positive direction, negative otherwise. It is a \textbf{vector}---a quantity with both magnitude and direction.
+\end{namebox}
+
+\begin{explobox}
+\problem A runner starts at position $x = 0$, runs to $x = 100\,\text{m}$, then returns to $x = 40\,\text{m}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the total distance travelled?
+  \item What is the displacement from start to finish?
+  \item Why are these different, and which is more useful for describing the runner's final state?
+\end{enumerate}
+
+\problem A ball is thrown upward and returns to its starting point. What is its displacement? What is the distance it travelled?
+
+\problem Why is it not enough to say ``the car moved 50 metres''? What additional information is needed for a complete description?
+\end{explobox}
+
+\subsection{Speed and Velocity}
+
+Distance and displacement describe where something is. Speed and velocity describe how fast it is getting there.
+
+\begin{equation}
+  \text{average speed} = \frac{\text{distance travelled}}{\text{time taken}}
+  \qquad
+  \bar{v} = \frac{\Delta x}{\Delta t}
+\end{equation}
+
+But again, direction matters. A car moving at \SI{60}{km/h} northward and a car moving at \SI{60}{km/h} southward have the same speed but opposite velocities. \textbf{Velocity} is speed with a direction.
+
+\begin{explobox}
+\problem A train travels 120 km in 90 minutes. What is its average speed in km/h? In m/s?
+
+\problem A person walks 3 km east, then 4 km north. The journey takes 2 hours.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the total distance walked?
+  \item What is the displacement (magnitude and direction)?
+  \item What is the average speed?
+  \item What is the average velocity (magnitude and direction)?
+\end{enumerate}
+
+\problem The position of a particle is given by the data below. Compute the average velocity over each interval, and then over the full time.
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Time (s) & Position (m) & Avg. velocity (m/s) \\
+\midrule
+0 & 0 & --- \\
+1 & 5 & \\
+2 & 18 & \\
+3 & 39 & \\
+4 & 68 & \\
+\bottomrule
+\end{tabular}
+\end{center}
+What pattern do you notice in the average velocities?
+\end{explobox}
+
+\subsection{The Problem of Instantaneous Velocity}
+
+Average velocity works over a time interval. But what about \textit{right now}, at this instant? A speedometer reads your speed at this moment, not your average over the last hour. What does ``speed right now'' actually mean?
+
+This is not a trivial question. At a single instant, no time has elapsed and no distance has been covered. The ratio $\Delta x / \Delta t$ gives $0/0$---meaningless.
+
+The resolution came from considering what happens as the time interval $\Delta t$ is made smaller and smaller:
+
+\begin{explobox}
+\problem A ball's position is $x(t) = 5t^2$ (in metres, with $t$ in seconds).
+
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the average velocity between $t = 2$ and $t = 3$.
+  \item Compute the average velocity between $t = 2$ and $t = 2.5$.
+  \item Compute the average velocity between $t = 2$ and $t = 2.1$.
+  \item Compute the average velocity between $t = 2$ and $t = 2.01$.
+  \item What value do these approach as the interval gets smaller?
+\end{enumerate}
+
+\problem For the same $x(t) = 5t^2$, try to find a formula for the average velocity between $t = 2$ and $t = 2 + h$, where $h$ is a small positive number. What happens as $h \to 0$?
+
+\problem Repeat for $x(t) = 3t^2 + 2t$. What is the velocity at $t = 1$?
+\end{explobox}
+
+\begin{discoverybox}
+What you are computing in the limit above is the \textbf{derivative} of position with respect to time. The instantaneous velocity is:
+\begin{equation}
+  v(t) = \lim_{\Delta t \to 0} \frac{x(t + \Delta t) - x(t)}{\Delta t} = \frac{dx}{dt}
+\end{equation}
+This is the same limit that defines the slope of a curve at a point. The velocity is the slope of the position-time graph.
+
+For $x = kt^n$, the derivative gives $v = knt^{n-1}$. This is a rule you will use constantly---but notice how it \textit{emerged} from the problem rather than being handed to you.
+\end{discoverybox}
+
+\subsection{Acceleration: The Rate of Change of Velocity}
+
+If velocity is the rate of change of position, what is the rate of change of velocity? This quantity---how quickly the velocity itself is changing---is called \textbf{acceleration}.
+
+\begin{equation}
+  a(t) = \frac{dv}{dt} = \frac{d^2x}{dt^2}
+\end{equation}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/fig_j2_kinematics}
+  \caption{Left column: constant velocity (position grows linearly, velocity is flat). Right column: uniform acceleration (position grows as $t^2$, velocity grows linearly). The area under the velocity-time graph equals the displacement.}
+  \label{fig:kinematics}
+\end{figure}
+
+\begin{explobox}
+\problem A car's velocity is measured every second:
+
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+Time (s) & Velocity (m/s) \\
+\midrule
+0 & 0 \\
+1 & 3 \\
+2 & 6 \\
+3 & 9 \\
+4 & 12 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{enumerate}[label=(\alph*)]
+  \item What is the acceleration?
+  \item Plot the velocity-time graph. What is its shape?
+  \item The area under the velocity-time graph gives the displacement. Estimate the displacement from $t=0$ to $t=4$.
+\end{enumerate}
+
+\problem An object has position $x(t) = 2t^3 - 3t^2 + t$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find the velocity $v(t)$.
+  \item Find the acceleration $a(t)$.
+  \item At what time is the velocity zero?
+  \item At what time is the acceleration zero?
+\end{enumerate}
+\end{explobox}
+
+\keyidea{Position, velocity, and acceleration form a \emph{chain}: each is the rate of change of the previous one. Velocity is the slope of position; acceleration is the slope of velocity. This chain is the mathematical language of motion.}
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

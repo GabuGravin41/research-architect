@@ -1,0 +1,1112 @@
+\documentclass[12pt, a4paper]{book}
+
+% ─── Core packages ────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=30mm, bottom=30mm,
+  inner=32mm, outer=25mm,
+  marginparwidth=18mm
+}
+
+% ─── Mathematics ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amsthm}
+
+% ─── Chemistry ────────────────────────────────────────────────────────────────
+\usepackage[version=4]{mhchem}
+
+% ─── Graphics & colour ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning,
+                calc, backgrounds, patterns, decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% ─── Layout ───────────────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{marginnote}
+\usepackage{mdframed}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COLOUR PALETTE
+% ══════════════════════════════════════════════════════════════════════════════
+\definecolor{JourneyColor}{HTML}{065F46}   % forest green — journey headings
+\definecolor{ModuleColor}{HTML}{0F766E}    % deep teal — module headings
+\definecolor{PuzzleColor}{HTML}{B45309}    % deep amber — puzzle boxes
+\definecolor{DiscoveryColor}{HTML}{D97706} % golden amber — discovery boxes
+\definecolor{WarningColor}{HTML}{E11D48}   % coral red — "model breaks" boxes
+\definecolor{ProblemColor}{HTML}{0F766E}   % dark teal — problem sets
+\definecolor{ReflectColor}{HTML}{047857}   % green — reflection boxes
+\definecolor{HistoryColor}{HTML}{9A3412}   % brown — history notes
+\definecolor{LightBg}{HTML}{F8FAFC}        % near-white background
+
+% ══════════════════════════════════════════════════════════════════════════════
+% TCOLORBOX ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=PuzzleColor!6, colframe=PuzzleColor,
+  fonttitle=\bfseries\sffamily, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=PuzzleColor, colframe=PuzzleColor},
+  borderline west={3pt}{0pt}{PuzzleColor}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  fonttitle=\bfseries\sffamily, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor}, #1}
+
+\newtcolorbox{problembox}[1][]{
+  enhanced, breakable,
+  colback=ProblemColor!5, colframe=ProblemColor,
+  fonttitle=\bfseries\sffamily, title={Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ProblemColor, colframe=ProblemColor},
+  borderline west={3pt}{0pt}{ProblemColor}, #1}
+
+\newtcolorbox{deepbox}[1][]{
+  enhanced, breakable,
+  colback=JourneyColor!5, colframe=JourneyColor,
+  fonttitle=\bfseries\sffamily, title={Deep Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=JourneyColor, colframe=JourneyColor},
+  borderline west={4pt}{0pt}{JourneyColor}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=HistoryColor!7, colframe=HistoryColor!60,
+  fonttitle=\bfseries\sffamily\small, title={Historical Note},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=HistoryColor!80, colframe=HistoryColor}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=ReflectColor!6, colframe=ReflectColor,
+  fonttitle=\bfseries\sffamily, title={Reflection},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ReflectColor, colframe=ReflectColor},
+  borderline west={3pt}{0pt}{ReflectColor}, #1}
+
+\newtcolorbox{modelbreaks}[1][]{
+  enhanced, breakable,
+  colback=WarningColor!6, colframe=WarningColor,
+  fonttitle=\bfseries\sffamily, title={Where This Model Breaks},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=WarningColor, colframe=WarningColor},
+  borderline west={4pt}{0pt}{WarningColor}, #1}
+
+\newtcolorbox{namedconcept}[2][]{
+  enhanced,
+  colback=ModuleColor!6, colframe=ModuleColor,
+  fonttitle=\bfseries\sffamily\large, title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ModuleColor, colframe=ModuleColor}, #1}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% THEOREM ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\theoremstyle{definition}
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{question}{Question}[chapter]
+\newtheorem{experiment}{Experiment}[chapter]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECTION FORMATTING
+% ══════════════════════════════════════════════════════════════════════════════
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}
+  {10pt}{\Huge}[\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% HEADER / FOOTER
+% ══════════════════════════════════════════════════════════════════════════════
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CUSTOM COMMANDS
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\chem}[1]{\ce{#1}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\sidenote}[1]{%
+  \marginnote{\footnotesize\sffamily\textcolor{JourneyColor!70}{#1}}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% DOCUMENT
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\setcounter{chapter}{0}
+\chapter[Journey 1 --- What Is Stuff?]
+        {Journey One\\[8pt]
+         \textcolor{ModuleColor}{\large What Is Stuff?\ \ Matter and Its Patterns}}
+\setcounter{section}{2}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  MODULE 1.3 — ELEMENTS, LAVOISIER'S TABLE, AND THE FIXED-RATIO MYSTERY
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Module 1.3 --- Elements, Fixed Ratios, and the Demand for Atoms}
+\label{sec:mod1.3}
+
+\subsection*{Motivation}
+
+By the end of Module~1.2 we had two powerful tools:
+\begin{itemize}[leftmargin=2em, nosep]
+  \item A precise definition of an \emph{element}
+        (a substance that resists all chemical decomposition), and
+  \item The law of conservation of mass
+        (total mass is unchanged in any reaction).
+\end{itemize}
+
+\vspace{0.4em}
+
+But something deeper and stranger was hiding in Lavoisier's data,
+waiting to be noticed.
+
+When hydrogen and oxygen combine to form water,
+the ratio of their masses is always
+\SI{1}{\gram} of hydrogen to \SI{8}{\gram} of oxygen.
+Not sometimes. Not approximately. \emph{Always}, regardless
+of source, temperature, or apparatus.
+
+When carbon burns to form carbon dioxide,
+the ratio is always
+\SI{3}{\gram} of carbon to \SI{8}{\gram} of oxygen.
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=LightBg, colframe=JourneyColor!40,
+  width=0.86\textwidth, arc=3pt, fontupper=\sffamily
+]
+\centering
+Why should elements always combine in \emph{fixed mass ratios}?\\[6pt]
+\small
+If matter were continuous --- like water poured into water ---\\
+you could combine any amounts in any ratio.\\[4pt]
+\normalsize
+The \emph{fixed ratios} are a clue.\\
+They are whispering something about the structure of matter.
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+In this module we will follow the data until it forces upon us
+a single unavoidable conclusion:
+matter must be made of \emph{discrete, indivisible particles}
+--- atoms --- and each element has its own characteristic particle.
+
+% ─── Section: Lavoisier's Table of Elements ───────────────────────────────────
+\subsection{Lavoisier's Table of Elements: The First Inventory}
+
+Before we reach fixed ratios, we need to know how many
+elements there were to work with.
+
+Lavoisier compiled the first modern list of elements in 1789,
+in his textbook \textit{Traité Élémentaire de Chimie}.
+His criterion: an element is any substance that resists
+decomposition by any known chemical method.
+
+He listed 33 substances as elements.
+Most were correct.
+Some were wrong in illuminating ways.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\footnotesize},
+  box/.style={rounded corners=3pt, minimum height=0.7cm,
+              minimum width=3.2cm, align=center}
+]
+  % Title
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+        at (0, 2.0) {Lavoisier's 1789 Element List (selected)};
+
+  % Three columns
+  % Column 1: Correct elements
+  \node[box, draw=ModuleColor!70, fill=ModuleColor!8,
+        minimum width=4cm]
+        at (-5.0, 0.8) {\textbf{Correct elements}};
+  \foreach \elem/\y in {
+    {Oxygen (\ce{O})}/0.0,
+    {Hydrogen (\ce{H})}/-0.7,
+    {Nitrogen (\ce{N})}/-1.4,
+    {Sulfur (\ce{S})}/-2.1,
+    {Carbon (\ce{C})}/-2.8,
+    {Iron (\ce{Fe})}/-3.5,
+    {Copper (\ce{Cu})}/-4.2,
+    {Gold (\ce{Au})}/-4.9}
+  {
+    \node[box, draw=ModuleColor!40, fill=ModuleColor!5,
+          minimum width=4cm] at (-5.0, \y) {\elem};
+  }
+
+  % Column 2: Wrong entries
+  \node[box, draw=WarningColor!70, fill=WarningColor!8,
+        minimum width=4cm]
+        at (0.2, 0.8) {\textbf{Wrongly listed as elements}};
+  \foreach \elem/\y in {
+    {Light}/0.0,
+    {Caloric (heat)}/-0.7,
+    {Lime (\ce{CaO})}/-1.4,
+    {Magnesia (\ce{MgO})}/-2.1,
+    {Barytes (\ce{BaSO4})}/-2.8}
+  {
+    \node[box, draw=WarningColor!40, fill=WarningColor!5,
+          minimum width=4cm] at (0.2, \y) {\elem};
+  }
+
+  % Column 3: Unknown at the time
+  \node[box, draw=DiscoveryColor!70, fill=DiscoveryColor!8,
+        minimum width=4cm]
+        at (5.4, 0.8) {\textbf{Unknown in 1789}};
+  \foreach \elem/\y in {
+    {Sodium (\ce{Na})}/ 0.0,
+    {Potassium (\ce{K})}/-0.7,
+    {Calcium (\ce{Ca})}/-1.4,
+    {Chlorine (\ce{Cl})}/-2.1,
+    {Iodine (\ce{I})}/-2.8,
+    {All noble gases}/-3.5}
+  {
+    \node[box, draw=DiscoveryColor!40, fill=DiscoveryColor!5,
+          minimum width=4cm] at (5.4, \y) {\elem};
+  }
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The errors are instructive.
+Lavoisier listed \emph{light} and \emph{caloric} (heat)
+as elements because neither could be decomposed.
+This shows the danger of a purely operational definition:
+if your definition of ``element'' is
+``what cannot be decomposed,''
+you may inadvertently include things that are not matter at all.
+
+The wrong entries were corrected over the following decades
+as better instruments were invented.
+Lime (\ce{CaO}) was decomposed into calcium and oxygen in 1808
+by Humphry Davy using electrolysis.
+
+\begin{historybox}
+\textbf{Humphry Davy and the Electrolysis Revolution (1807--1808)}
+
+Humphry Davy was a showman and a brilliant experimentalist.
+In 1807 he passed an electric current through molten potash
+(\ce{K2O}) and obtained tiny globules of a new metal
+that burst into violet flame on contact with water.
+He named it \emph{potassium}.
+
+Days later, he repeated the process with molten soda (\ce{Na2O})
+and obtained \emph{sodium} --- another metal that reacts violently
+with water.
+
+In 1808 he decomposed lime (\ce{CaO}), magnesia (\ce{MgO}),
+and baryta (\ce{BaO}), revealing calcium, magnesium, and barium.
+
+In a few months, Davy doubled the number of known elements.
+His tool was electricity --- a force powerful enough to break
+bonds that no chemical reagent could touch.
+
+This episode reveals a recurring pattern in chemistry:
+each new energy source or instrument reveals a new layer of reality.
+\end{historybox}
+
+\begin{puzzlebox}
+Lavoisier listed ``caloric'' (heat) as an element,
+reasoning that it could not be created or destroyed,
+could pass between bodies, and behaved like a fluid.
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item In what ways does caloric theory \emph{fit} the
+        observations of heat flow?
+        (Hint: what happens when you put a hot and cold object together?)
+
+  \item Benjamin Thompson (Count Rumford) drilled cannon barrels
+        and noticed that the boring process generated heat
+        \emph{indefinitely} as long as the horse turned the drill.
+        Why is this a fatal problem for caloric theory?
+
+  \item If heat were a fluid substance, what experimental result
+        would you expect if you ground two identical pieces of metal
+        together for a long time inside a sealed, insulated container?
+        What did Rumford actually observe?
+\end{enumerate}
+\end{puzzlebox}
+
+% ─── Section: The Law of Definite Proportions ─────────────────────────────────
+\subsection{The Law of Definite Proportions}
+
+With Lavoisier's framework established, other chemists began
+systematically measuring the mass ratios in which elements combine.
+
+The results were startling in their regularity.
+
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Compound} & \textbf{Formula} &
+\textbf{Element 1 (mass \%)} &
+\textbf{Element 2 (mass \%)} &
+\textbf{Mass ratio} \\
+\midrule
+Water             & \ce{H2O}     & H: 11.1\%  & O: 88.9\%  & H:O = 1:8    \\
+Carbon dioxide    & \ce{CO2}     & C: 27.3\%  & O: 72.7\%  & C:O = 3:8    \\
+Ammonia           & \ce{NH3}     & N: 82.3\%  & H: 17.7\%  & N:H = 14:3   \\
+Iron(II) sulfide  & \ce{FeS}     & Fe: 63.5\% & S: 36.5\%  & Fe:S = 7:4   \\
+Magnesium oxide   & \ce{MgO}     & Mg: 60.3\% & O: 39.7\%  & Mg:O = 3:2   \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.6em}
+
+The French chemist Joseph Louis Proust measured
+these ratios obsessively between 1797 and 1804,
+working with samples from different sources, different continents,
+different methods of preparation.
+The ratios never changed.
+
+\begin{namedconcept}{Law of Definite Proportions (Proust, 1799)}
+Every pure chemical compound contains its elements
+in \emph{fixed, definite proportions by mass},
+regardless of the source of the compound or the
+method by which it was prepared.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+This law sounds dry.
+Its implication is explosive.
+
+\begin{puzzlebox}
+Suppose matter is \emph{continuous} --- like a perfectly
+smooth, infinitely divisible fluid.
+You are mixing hydrogen and oxygen to make water.
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item If matter is continuous, is there any reason
+        why hydrogen and oxygen should combine in
+        a fixed ratio rather than any ratio you choose?
+
+  \item Now suppose instead that hydrogen and oxygen are made
+        of tiny indivisible particles (call them $h$ and $o$),
+        and that water is formed when exactly \emph{one} $h$
+        combines with exactly \emph{one} $o$.
+        \begin{itemize}[nosep]
+          \item Would you expect a fixed mass ratio? Why?
+          \item What would the fixed ratio tell you about
+                the relative masses of $h$ and $o$?
+        \end{itemize}
+
+  \item The actual mass ratio for water is $\text{H}:\text{O} = 1:8$.
+        If water is \ce{HO} (one hydrogen atom per one oxygen atom),
+        what is the mass of an oxygen atom relative to hydrogen?
+        If water is \ce{H2O} (two hydrogens per one oxygen),
+        what is the relative mass of oxygen?
+        How would you decide which formula is correct?
+\end{enumerate}
+\end{puzzlebox}
+
+\vspace{0.5em}
+
+This puzzle is not rhetorical.
+It is \emph{exactly} the reasoning that led John Dalton
+to the atomic hypothesis.
+The fixed ratios demand a discrete structure.
+
+% ─── Section: The Law of Multiple Proportions ─────────────────────────────────
+\subsection{A Second Clue: The Law of Multiple Proportions}
+
+If the law of definite proportions was surprising,
+the next discovery was even stranger.
+
+Carbon and oxygen form \emph{two} different compounds.
+In one (carbon monoxide, \ce{CO}), the ratio C:O by mass is
+approximately 3:4.
+In the other (carbon dioxide, \ce{CO2}), the ratio C:O by mass is
+approximately 3:8.
+
+Notice what happens when you fix the amount of carbon
+and compare the oxygen in the two compounds:
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  bar/.style={fill=ModuleColor!60, draw=ModuleColor, minimum width=0.8cm}
+]
+  % Carbon monoxide bar
+  \node at (0, 2.5) {\textbf{Carbon monoxide}};
+  \node[bar, minimum height=1.5cm] at (-0.5, 0.75) {};
+  \node[bar, fill=DiscoveryColor!60, draw=DiscoveryColor,
+        minimum height=2.0cm, minimum width=0.8cm] at (0.5, 1.0) {};
+  \node[font=\sffamily\footnotesize, text=ModuleColor]
+        at (-0.5, -0.2) {C: 3 g};
+  \node[font=\sffamily\footnotesize, text=DiscoveryColor]
+        at (0.5, -0.2) {O: 4 g};
+
+  % Carbon dioxide bar
+  \node at (5, 2.5) {\textbf{Carbon dioxide}};
+  \node[bar, minimum height=1.5cm] at (4.5, 0.75) {};
+  \node[bar, fill=DiscoveryColor!60, draw=DiscoveryColor,
+        minimum height=4.0cm, minimum width=0.8cm] at (5.5, 2.0) {};
+  \node[font=\sffamily\footnotesize, text=ModuleColor]
+        at (4.5, -0.2) {C: 3 g};
+  \node[font=\sffamily\footnotesize, text=DiscoveryColor]
+        at (5.5, -0.2) {O: 8 g};
+
+  % Ratio annotation
+  \draw[{Stealth}-{Stealth}, thick, color=HistoryColor]
+        (1.2, 1.0) -- (4.0, 1.0)
+        node[midway, above, font=\sffamily\footnotesize,
+             text=HistoryColor]{O ratio = 4:8 = \textbf{1:2}};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+For a fixed mass of carbon, the masses of oxygen in the two
+compounds are in the ratio \textbf{1:2} --- a small whole number.
+
+Dalton noticed this for many pairs of compounds and stated it
+as a general law.
+
+\begin{namedconcept}{Law of Multiple Proportions (Dalton, 1803)}
+When two elements combine to form more than one compound,
+the masses of one element that combine with a fixed mass
+of the other are in the ratio of \emph{small whole numbers}.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+Why \emph{small whole numbers}?
+This is the decisive clue.
+Continuous matter has no reason to produce integer ratios.
+Only discrete particles do.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  atom/.style={circle, minimum size=0.65cm, font=\sffamily\tiny\bfseries,
+               draw, thick}
+]
+  % CO: one C, one O
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+        at (0, 1.5) {Carbon monoxide: \ce{CO}};
+  \node[atom, fill=ModuleColor!30, draw=ModuleColor] (c1) at (-0.5, 0) {C};
+  \node[atom, fill=DiscoveryColor!30, draw=DiscoveryColor] (o1) at (0.5, 0) {O};
+  \draw[thick, JourneyColor!60] (c1) -- (o1);
+
+  % CO2: one C, two O
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+        at (6, 1.5) {Carbon dioxide: \ce{CO2}};
+  \node[atom, fill=ModuleColor!30, draw=ModuleColor] (c2) at (5.5, 0) {C};
+  \node[atom, fill=DiscoveryColor!30, draw=DiscoveryColor] (o2a) at (6.7, 0.5) {O};
+  \node[atom, fill=DiscoveryColor!30, draw=DiscoveryColor] (o2b) at (6.7,-0.5) {O};
+  \draw[thick, JourneyColor!60] (c2) -- (o2a);
+  \draw[thick, JourneyColor!60] (c2) -- (o2b);
+
+  % Explanation
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor,
+        align=center]
+        at (3, -1.2)
+        {Each C gets 1 oxygen in CO, and 2 oxygens in CO$_2$.\\
+         The ratio of oxygen per carbon is exactly 1:2.\\
+         This is only possible if oxygen comes in discrete units.};
+\end{tikzpicture}
+\end{center}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Nitrogen and oxygen form several compounds.
+        In three of them, the mass of oxygen that combines
+        with \SI{14.0}{\gram} of nitrogen is:
+        \begin{center}
+        \begin{tabular}{lll}
+        \toprule
+        Compound & Formula & O mass per \SI{14}{\gram} N \\
+        \midrule
+        Nitrous oxide   & \ce{N2O}  & \SI{8.0}{\gram}  \\
+        Nitric oxide    & \ce{NO}   & \SI{16.0}{\gram} \\
+        Nitrogen dioxide & \ce{NO2} & \SI{32.0}{\gram} \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+        \begin{enumerate}[label=(\alph*)]
+          \item Show that these masses are in the ratio 1:2:4.
+          \item Explain why this ratio is consistent with
+                the law of multiple proportions.
+          \item If matter were continuous,
+                could you have a compound with O:N = 1.73:1
+                (an irrational number)?
+                Would atoms allow this?
+        \end{enumerate}
+
+  \item Sulfur and oxygen form two compounds:
+        sulfur dioxide (\ce{SO2}) and sulfur trioxide (\ce{SO3}).
+        In \ce{SO2}, the mass ratio S:O is approximately 1:1.
+        \begin{enumerate}[label=(\alph*)]
+          \item Predict the mass ratio S:O in \ce{SO3}.
+          \item Verify your prediction:
+                sulfur has atomic mass \SI{32}{\gram\per\mol},
+                oxygen \SI{16}{\gram\per\mol}.
+          \item What is the ratio of oxygen in \ce{SO2} to
+                oxygen in \ce{SO3}
+                (for the same amount of sulfur)?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Dalton's Atomic Theory ──────────────────────────────────────────
+\subsection{Dalton's Atomic Theory: The Inevitable Conclusion}
+
+By 1803, John Dalton --- a quiet English schoolteacher with
+a passion for meteorology and gas behaviour ---
+had assembled the evidence into a coherent theory.
+He was not the first to suggest atoms existed.
+He was the first to make the idea \emph{quantitative}
+and connect it directly to experimental data.
+
+\begin{namedconcept}{Dalton's Atomic Theory (1803)}
+\begin{enumerate}[leftmargin=2em, nosep]
+  \item All matter is composed of extremely small, indivisible
+        particles called \newterm{atoms}.
+  \item Atoms of a given element are identical in mass
+        and properties.
+  \item Atoms of different elements have different masses.
+  \item Compounds are formed when atoms of different elements
+        combine in fixed, small whole-number ratios.
+  \item Chemical reactions are the rearrangement of atoms.
+        No atoms are created, destroyed, or changed into
+        atoms of a different element.
+\end{enumerate}
+\end{namedconcept}
+
+\vspace{0.5em}
+
+Notice what this theory accomplishes in one stroke:
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  arrow/.style={-{Stealth[length=5pt]}, thick, color=ModuleColor}
+]
+  % Laws on the left
+  \node[draw=JourneyColor!50, fill=JourneyColor!8, rounded corners=3pt,
+        minimum width=4.0cm, minimum height=0.8cm]
+        (cons) at (0, 2.0) {Conservation of mass};
+  \node[draw=JourneyColor!50, fill=JourneyColor!8, rounded corners=3pt,
+        minimum width=4.0cm, minimum height=0.8cm]
+        (def)  at (0, 0.8) {Definite proportions};
+  \node[draw=JourneyColor!50, fill=JourneyColor!8, rounded corners=3pt,
+        minimum width=4.0cm, minimum height=0.8cm]
+        (mult) at (0,-0.4) {Multiple proportions};
+
+  % Dalton's theory in center
+  \node[draw=DiscoveryColor, fill=DiscoveryColor!10, rounded corners=5pt,
+        minimum width=3.5cm, minimum height=1.4cm,
+        font=\sffamily\small\bfseries]
+        (dalton) at (5.5, 0.8) {Dalton's\\Atomic Theory};
+
+  \foreach \src in {cons, def, mult}
+    \draw[arrow] (\src.east) -- (dalton.west);
+
+  % What it predicts on right
+  \node[draw=ModuleColor!50, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=4.0cm, minimum height=0.8cm]
+        (p1) at (11, 2.0) {Explains conservation of mass};
+  \node[draw=ModuleColor!50, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=4.0cm, minimum height=0.8cm]
+        (p2) at (11, 0.8) {Explains definite proportions};
+  \node[draw=ModuleColor!50, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=4.0cm, minimum height=0.8cm]
+        (p3) at (11,-0.4) {Explains multiple proportions};
+  \node[draw=ModuleColor!50, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=4.0cm, minimum height=0.8cm]
+        (p4) at (11,-1.6) {\emph{Predicts} atomic masses};
+
+  \foreach \tgt in {p1, p2, p3, p4}
+    \draw[arrow] (dalton.east) -- (\tgt.west);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+Three laws become consequences of one underlying picture.
+And the theory makes a new prediction:
+we should be able to determine the \emph{relative masses}
+of atoms from the mass ratios in compounds.
+
+\begin{historybox}
+\textbf{Dalton's Atomic Symbols}
+
+Before Berzelius introduced the modern letter-based notation,
+Dalton drew elaborate circular symbols for each element.
+Hydrogen was a plain circle,
+oxygen a circle with a dot,
+nitrogen a circle with a vertical line, and so on.
+Water was depicted as a circle-with-dot touching a plain circle.
+
+Dalton assumed water was \ce{HO} (one atom of each).
+This gave him the wrong atomic mass for oxygen
+(he calculated 8, when it is actually 16).
+He did not know the formula was \ce{H2O}.
+That would be corrected by Gay-Lussac's law of combining volumes
+and Avogadro's hypothesis --- a story we will pick up in Journey~2.
+\end{historybox}
+
+% ─── Section: Relative Atomic Masses ──────────────────────────────────────────
+\subsection{Relative Atomic Masses: Weighing the Invisible}
+
+Dalton could not see atoms.
+But he could \emph{weigh} them --- relatively.
+
+The logic is elegant.
+If water is \ce{H2O} and the mass ratio H:O is 1:8,
+then one oxygen atom must be 16 times heavier than
+one hydrogen atom.
+(Because 2 hydrogen atoms weigh 1 part, and 1 oxygen atom
+weighs 8 parts, so oxygen : hydrogen = 8 : (1/2) = 16 : 1.)
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  atom/.style={circle, draw, thick, font=\sffamily\footnotesize\bfseries}
+]
+  % Water molecule
+  \node[atom, minimum size=1.6cm,
+        fill=DiscoveryColor!25, draw=DiscoveryColor]
+        (O) at (0,0) {O, 16 u};
+  \node[atom, minimum size=0.9cm,
+        fill=blue!20, draw=blue!70]
+        (H1) at (-1.6, 0.8) {H, 1 u};
+  \node[atom, minimum size=0.9cm,
+        fill=blue!20, draw=blue!70]
+        (H2) at (-1.6,-0.8) {H, 1 u};
+  \draw[thick, JourneyColor!60] (O) -- (H1);
+  \draw[thick, JourneyColor!60] (O) -- (H2);
+
+  % Mass annotation
+  \node[font=\sffamily\footnotesize, text=JourneyColor!70]
+        at (2.5, 0.8) {Total mass = 18 u};
+  \node[font=\sffamily\footnotesize, text=JourneyColor!70]
+        at (2.5, 0.2) {H fraction = 2/18 = 11.1\%};
+  \node[font=\sffamily\footnotesize, text=JourneyColor!70]
+        at (2.5,-0.4) {O fraction = 16/18 = 88.9\%};
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor]
+        at (2.5,-1.0) {Matches Lavoisier's measurement!};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The unit ``u'' stands for \newterm{atomic mass unit},
+defined so that hydrogen has mass 1.
+This is purely a relative scale; we are not yet
+measuring actual masses in grams.
+
+Berzelius spent years measuring mass ratios for dozens of compounds
+to build the first table of relative atomic masses.
+His values for many elements were accurate to within 1\%.
+
+\subsubsection{The Mole: Connecting Atoms to Grams}
+
+The atomic mass unit is useful for relative comparisons,
+but chemists need to work with laboratory quantities.
+The bridge is the \newterm{mole}.
+
+\begin{namedconcept}{The Mole}
+One \newterm{mole} of a substance contains
+exactly $6.022 \times 10^{23}$ particles
+(Avogadro's number, $N_A$).
+
+The \newterm{molar mass} of a substance is the mass
+of one mole in grams, numerically equal to the
+relative atomic (or molecular) mass.
+
+\begin{center}
+$n = \dfrac{m}{M}$
+\end{center}
+
+where $n$ is moles, $m$ is mass in grams,
+and $M$ is molar mass in \si{\gram\per\mol}.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+The mole is simply a convenient counting unit,
+like a ``dozen'' for eggs.
+We use it because atoms are so small that even a tiny quantity
+of substance contains an incomprehensibly large number of them.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center}
+]
+  % Scale comparison
+  \node[draw=JourneyColor!50, fill=JourneyColor!8, rounded corners=3pt,
+        minimum width=5cm, minimum height=1.4cm]
+        (lab) at (0,0)
+        {\textbf{Laboratory scale}\\
+         \SI{18}{\gram} of water = 1 mole\\
+         contains $6.022\times10^{23}$ molecules};
+
+  \node[draw=ModuleColor!50, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=5cm, minimum height=1.4cm]
+        (atom) at (7.5,0)
+        {\textbf{Atomic scale}\\
+         1 water molecule\\
+         mass = $3.0\times10^{-23}\ \si{\gram}$};
+
+  \draw[-{Stealth[length=5pt]}, thick, color=DiscoveryColor]
+        (lab.east) -- (atom.west)
+        node[midway, above, font=\sffamily\footnotesize]{$\times N_A$};
+  \draw[-{Stealth[length=5pt]}, thick, color=DiscoveryColor]
+        (atom.west) -- (lab.east)
+        node[midway, below, font=\sffamily\footnotesize]{$\div N_A$};
+\end{tikzpicture}
+\end{center}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Calculate the molar mass of each compound.
+        Then find the number of moles in the given sample.
+        \begin{enumerate}[label=(\alph*)]
+          \item \ce{H2O}: \SI{36.0}{\gram}
+          \item \ce{CO2}: \SI{22.0}{\gram}
+          \item \ce{NaCl}: \SI{58.5}{\gram}
+          \item \ce{CaCO3}: \SI{50.0}{\gram}
+        \end{enumerate}
+
+  \item \SI{4.0}{\gram} of hydrogen gas (\ce{H2}) reacts
+        completely with oxygen to form water.
+        \begin{enumerate}[label=(\alph*)]
+          \item How many moles of \ce{H2} is this?
+          \item Using the balanced equation
+                \ce{2H2 + O2 -> 2H2O},
+                how many moles of \ce{O2} are needed?
+          \item What mass of \ce{O2} is required?
+          \item What mass of water is produced?
+        \end{enumerate}
+
+  \item An unknown compound contains only carbon and hydrogen.
+        Complete combustion of \SI{2.40}{\gram} of the compound
+        produces \SI{7.92}{\gram} of \ce{CO2} and
+        \SI{3.24}{\gram} of \ce{H2O}.
+        \begin{enumerate}[label=(\alph*)]
+          \item Find the mass of carbon in the sample.
+                (Hint: all carbon ends up in \ce{CO2}.)
+          \item Find the mass of hydrogen in the sample.
+          \item Find the simplest whole-number ratio of
+                C atoms to H atoms.
+          \item What is the \emph{empirical formula} of
+                the compound?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Empirical and Molecular Formulas ────────────────────────────────
+\subsection{Empirical Formulas vs Molecular Formulas}
+
+Dalton's theory gives us the \emph{ratio} of atoms in a compound,
+but not always the actual number.
+
+\begin{namedconcept}{Empirical Formula vs Molecular Formula}
+The \newterm{empirical formula} gives the simplest whole-number
+ratio of atoms in a compound.
+
+The \newterm{molecular formula} gives the actual number of
+each atom in one molecule.
+It is always a whole-number multiple of the empirical formula.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+\textbf{Compound} & \textbf{Empirical} & \textbf{Molecular} & \textbf{Multiple} \\
+\midrule
+Water             & \ce{H2O}    & \ce{H2O}   & $\times 1$ \\
+Hydrogen peroxide & \ce{HO}     & \ce{H2O2}  & $\times 2$ \\
+Glucose           & \ce{CH2O}   & \ce{C6H12O6} & $\times 6$ \\
+Benzene           & \ce{CH}     & \ce{C6H6}  & $\times 6$ \\
+Ethane            & \ce{CH3}    & \ce{C2H6}  & $\times 2$ \\
+Acetylene         & \ce{CH}     & \ce{C2H2}  & $\times 2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+Notice that benzene and acetylene have the \emph{same empirical
+formula} (\ce{CH}) but are completely different compounds
+with completely different properties.
+To determine the molecular formula, we need additional information:
+the \emph{molar mass} of the compound.
+
+\begin{puzzlebox}
+Glucose (\ce{C6H12O6}) and formaldehyde (\ce{CH2O})
+have the same empirical formula.
+Glucose is the primary fuel for the brain.
+Formaldehyde is a toxic preservative used for embalming.
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item What are the molar masses of glucose and formaldehyde?
+  \item By what factor do the molecular formulas differ?
+  \item What does this example illustrate about the relationship
+        between empirical formula and chemical properties?
+  \item We will return to this question in Journey~6.
+        Write your best current hypothesis for why the
+        same empirical formula can produce such different substances.
+\end{enumerate}
+\end{puzzlebox}
+
+% ─── Section: Where Dalton's Theory Breaks Down ───────────────────────────────
+\subsection{Where Dalton's Theory Breaks Down}
+
+Dalton's atomic theory was a triumph.
+But every theory has a boundary,
+and great scientists know that finding the boundary
+is as important as establishing the theory.
+
+\begin{modelbreaks}
+Dalton's theory, as originally stated, makes several claims
+that turned out to be wrong or incomplete.
+
+\textbf{1. Atoms are not indivisible.}\\
+In 1897, J.~J.~Thomson discovered that atoms contain
+\emph{electrons} --- particles far smaller than atoms
+that can be removed from them.
+Atoms have internal structure.
+
+\textbf{2. Atoms of the same element are not always identical.}\\
+In the 20th century, \newterm{isotopes} were discovered:
+atoms of the same element with different masses
+(different numbers of neutrons in the nucleus).
+Chlorine, for instance, exists naturally as a mixture of
+\ce{^{35}Cl} (mass 35) and \ce{^{37}Cl} (mass 37),
+which is why its average atomic mass is 35.5.
+
+\textbf{3. Atoms \emph{can} be converted to other elements.}\\
+In nuclear reactions, one element transforms into another.
+Dalton's statement that atoms cannot change into a different
+element holds only for \emph{chemical} reactions.
+
+\textbf{4. The assumption of simplest formulas was wrong.}\\
+Dalton assumed water was \ce{HO}.
+It is \ce{H2O}.
+Without independent evidence (such as gas volumes),
+the atomic mass scale is ambiguous.
+
+\vspace{0.4em}
+\emph{Despite these failures, Dalton's core insight ---
+that matter is made of discrete particles whose ratios
+determine composition --- remains completely correct.
+The failures refined the theory; they did not overturn it.}
+\end{modelbreaks}
+
+% ─── Section: Deep Problems ───────────────────────────────────────────────────
+\subsection*{Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+
+  \item \textbf{The Avogadro Number from First Principles.}\\
+        The actual numerical value of Avogadro's number
+        ($N_A = 6.022\times10^{23}$) could not be determined
+        from Dalton's theory alone.
+        Dalton only established \emph{relative} atomic masses.
+        To find absolute masses, we need an independent measurement.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Why can we not deduce $N_A$ from mass ratios alone?
+                What additional type of measurement is needed?
+
+          \item One method uses Brownian motion:
+                Robert Brown observed in 1827 that pollen grains
+                suspended in water jiggle randomly.
+                Einstein showed in 1905 that the statistics of
+                this jiggling could be used to calculate $N_A$.
+                Qualitatively, what does the jiggling tell us
+                about the structure of the water?
+
+          \item Millikan's oil drop experiment (1909) measured
+                the charge of a single electron to be
+                $e = 1.602\times10^{-19}\ \si{\coulomb}$.
+                The Faraday constant (charge to deposit 1 mole
+                of a singly-charged ion in electrolysis) is
+                $F = \SI{96485}{\coulomb\per\mol}$.
+                Use these to calculate $N_A$.
+        \end{enumerate}
+
+  \item \textbf{Reasoning About Isotopes.}\\
+        Chlorine has two stable isotopes:
+        \ce{^{35}Cl} (mass exactly 35 u, natural abundance 75.77\%)
+        and \ce{^{37}Cl} (mass exactly 37 u, natural abundance 24.23\%).
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the weighted average atomic mass of chlorine.
+                Verify it matches the periodic table value of 35.45 u.
+
+          \item If Dalton had used natural chlorine in his experiments,
+                why would the mass ratios he measured still obey
+                the law of definite proportions?
+                (Hint: what is the probability distribution of
+                \ce{^{35}Cl} vs \ce{^{37}Cl} in a large sample?)
+
+          \item Dalton's postulate says atoms of the same element are
+                identical. Isotopes violate this.
+                But the law of multiple proportions still holds.
+                Explain why the existence of isotopes does not
+                destroy Dalton's framework,
+                even though it contradicts his postulate.
+        \end{enumerate}
+
+  \item \textbf{Building the Atom Count.}\\
+        One mole of water (\SI{18}{\gram}) contains
+        $6.022\times10^{23}$ molecules.
+        Each molecule contains 3 atoms.
+        The diameter of a water molecule is approximately
+        $3.2\times10^{-10}\ \si{\metre}$.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item How many atoms are in \SI{18}{\gram} of water?
+
+          \item If you lined up all the water molecules in
+                one mole in a single row,
+                how long would the line be?
+                Express your answer in light-years
+                ($1\ \text{ly} \approx 9.46\times10^{15}\ \si{\metre}$).
+
+          \item The volume of one water molecule is approximately
+                $(3.2\times10^{-10})^3\ \si{\metre\cubed}$.
+                The volume of \SI{18}{\gram} of liquid water is
+                \SI{18}{\milli\litre}.
+                Estimate the packing fraction
+                (fraction of the volume actually occupied by molecules).
+                What does this tell you about the space \emph{between}
+                molecules?
+        \end{enumerate}
+
+\end{enumerate}
+\end{deepbox}
+
+% ─── Reflection ───────────────────────────────────────────────────────────────
+\subsection*{Reflection}
+
+\begin{reflectionbox}
+\begin{enumerate}[label=\textbf{R\arabic*.}]
+  \item Dalton's atomic theory explains three macroscopic laws
+        (conservation of mass, definite proportions, multiple proportions)
+        in terms of one microscopic picture.
+        \textbf{What is the logical structure of this kind of argument?}
+        Is Dalton \emph{proving} that atoms exist,
+        or is he proposing the \emph{simplest hypothesis consistent}
+        with the data?
+        What would it take to \emph{prove} atoms exist?
+
+  \item The law of multiple proportions gives ratios of small whole numbers:
+        1:2, 1:3, 2:3, and so on.
+        \textbf{Why must these be \emph{small} integers,
+        not large ones like 1:247?}
+        What does this tell us about chemical bonding?
+        (You do not need to answer this fully ---
+        write your current hypothesis.)
+
+  \item We found that the empirical formula alone does not
+        determine the molecular formula.
+        Glucose and formaldehyde have the same empirical formula
+        but utterly different properties.
+        \textbf{What additional structural feature must be responsible
+        for the difference?}
+        Is composition the whole story?
+
+  \item Dalton assumed water was \ce{HO} and got the wrong atomic
+        mass for oxygen.
+        \textbf{What does this tell us about the relationship
+        between a theory and its predictions?}
+        A theory can be deeply right in its core structure
+        but wrong in details.
+        How do scientists decide which parts of a wrong prediction
+        to fix and which parts to keep?
+\end{enumerate}
+\end{reflectionbox}
+
+\vspace{1.5em}
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  width=0.88\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\textbf{What we invented in this module.}\\[4pt]
+We invented the atom --- not by seeing it,
+but by being \emph{forced to} by the data.
+The fixed mass ratios in compounds are not just a curiosity.
+They are a logical demand: only a world made of discrete,
+indivisible particles with fixed relative masses
+can produce such ratios.
+Dalton's genius was not in proposing that atoms might exist.
+It was in showing that the existing experimental measurements
+\emph{require} their existence.\\[4pt]
+This pattern --- experimental regularity demanding a hidden structure ---
+will appear again and again as we go deeper into chemistry.
+The hydrogen spectrum will demand quantised energy levels.
+The reactivity of the noble gases will demand electron shells.
+Each new regularity is a door that can only be opened
+by proposing something invisible.
+\end{tcolorbox}
+\end{center}
+
+\vspace{2em}
+\noindent\textcolor{JourneyColor!40}{\rule{\textwidth}{0.6pt}}
+\begin{center}
+\textit{\sffamily\small
+Module 1.3 complete. Continue to Module 1.4:
+\textbf{Lavoisier's Conservation and the Quantitative Revolution}---
+or proceed to Journey~2:
+\textbf{Architecture of the Atom}.}
+\end{center}
+
+\end{document}

@@ -1,0 +1,380 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{2}
+\chapter[Journey 3 --- Automata, Complexity, and the Limits of Computation]
+        {Journey Three\\[8pt]
+         \textcolor{ModuleColor}{\large Automata, Complexity, and the Limits of Computation}}
+\setcounter{section}{1}
+
+\section{Module 3.2 --- Context-Free Languages and Pushdown Automata}
+\label{sec:mod3.2}
+
+\subsection*{Motivation}
+
+We proved in Module 3.1 that deterministic and nondeterministic finite automata are limited by their finite state space. Because they cannot record arbitrarily large counts, they fail to recognize simple languages like $\{0^n 1^n\}$.
+To recognize nested grammatical structures (which define programming languages and logical expressions), we must equip our model of computation with a memory structure.
+
+This module introduces **Pushdown Automata (PDA)**, which augment finite state controls with a last-in, first-out (LIFO) **stack** memory.
+We will formalize Context-Free Grammars (CFGs) and study the pushdown machines that parse them.
+We will discover that, unlike regular automata, deterministic and nondeterministic pushdown automata are not equivalent in power.
+Finally, we will derive the **Pumping Lemma for Context-Free Languages** to establish the absolute physical limits of stack-based computation.
+
+\subsection{The Matching Brackets}
+
+We analyze how a stack resolves nested syntax dependencies.
+
+\begin{puzzlebox}
+\textbf{The Nested Bracket Problem.}
+
+Suppose we want to construct a machine that reads a string of brackets (parentheses `(` and `)`) and decides if they are balanced (e.g. `(())` is balanced, but `())(` and `(()` are not).
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Explain why a DFA cannot solve this problem for arbitrary nesting depths. (Refer to the memory limit proved in Module 3.1).
+  \item Suppose we equip our machine with a **Stack** (a memory store where we can only push symbols onto the top, or pop them off).
+        If we read the symbol `(`, we push a token onto the stack. If we read `)`, we pop a token.
+        Describe how the stack state (empty or non-empty) at the end of the string allows us to decide if the parentheses are balanced.
+  \item Now, suppose the alphabet contains three types of brackets: parentheses `()`, square brackets `[]`, and curly braces `{}` (e.g. `{[()]}` is balanced, but `[(])` is not).
+        How does the stack structure ensure that brackets are closed in the exact reverse order of their opening?
+  \item What happens if we ask this machine to recognize strings of the form $\{0^n 1^n 2^n : n \ge 0\}$?
+        Why does a single stack fail to match three sequential counts of equal length? (Hint: Once you pop symbols to match $0^n$ and $1^n$, what is left of the count on the stack?)
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Context-Free Grammars}
+
+We define the algebraic grammar rules that describe nested languages.
+
+\begin{namedconcept}{The CFG Tuple}
+A \newterm{Context-Free Grammar (CFG)} is a 4-tuple $(V, \Sigma, R, S)$, where:
+1. $V$ is a finite set of **variables** (non-terminals).
+2. $\Sigma$ is a finite set of **terminals** (disjoint from $V$).
+3. $R$ is a finite set of **rules**, mapping a variable to a string of variables and terminals: $A \to \alpha$, where $\alpha \in (V \cup \Sigma)^*$.
+4. $S \in V$ is the **start variable**.
+\end{namedconcept}
+
+\begin{explobox}
+We write a CFG for balanced parentheses over $\Sigma = \{(, )\}$:
+\[
+  S \;\to\; (S) \;\mid\; SS \;\mid\; \epsilon
+\]
+where $\epsilon$ is the empty string.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Show the step-by-step derivation of the string `(())()` starting from $S$.
+  \item Draw a **Parse Tree** for this derivation, showing the hierarchical tree structure of the variable expansions.
+  \item A grammar is **ambiguous** if there exists a string that can produce two distinct parse trees.
+        Show that the grammar $S \to S + S \mid S \times S \mid a$ is ambiguous by drawing two distinct parse trees for the string $a + a \times a$.
+        Why is grammar ambiguity problematic for compilers translating code?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Pushdown Automata and the Pumping Lemma for CFLs}
+
+We model stack-based transitions and derive the limits of stack computation.
+
+\begin{explobox}
+A **Pushdown Automaton (PDA)** is defined as a 6-tuple $(Q, \Sigma, \Gamma, \delta, q_0, F)$, where $\Gamma$ is the **stack alphabet**, and the transition function is:
+\[
+  \delta: Q \times \Sigma_\epsilon \times \Gamma_\epsilon \;\to\; \mathcal{P}(Q \times \Gamma_\epsilon).
+\]
+This means the transition depends on: the current state, the input symbol, and the top stack symbol. It yields: a next state, and a symbol to push onto the stack.
+* A language is context-free if and only if it is recognized by a PDA.
+* Unlike finite automata, **Deterministic PDAs (DPDAs)** are strictly less powerful than **Nondeterministic PDAs (NPDAs)**.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item The language of even-length palindromes $L = \{w w^R : w \in \{0, 1\}^*\}$ requires an NPDA.
+        Why must the machine be nondeterministic to parse this language? (How does it know when it has reached the exact middle of the string to switch from pushing symbols to popping them?)
+  \item **Pumping Lemma for CFLs:** If a language $A$ is context-free, there exists a pumping length $p$ such that any string $s \in A$ of length $|s| \ge p$ can be split into five parts, $s = u v x y z$, satisfying:
+        1. $u v^i x y^i z \in A$ for all $i \ge 0$.
+        2. $|v y| > 0$.
+        3. $|v x y| \le p$.
+        Use this Pumping Lemma to prove that the language $L = \{0^n 1^n 2^n : n \ge 0\}$ is not context-free.
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Context-Free Grammars formalize nested syntax structures using variables and production rules.
+
+\textbf{Second.} Pushdown Automata extend finite state machines by adding a LIFO stack, matching the expressive power of CFGs.
+
+\textbf{Third.} DPDAs are strictly weaker than NPDAs because deterministic stack machines cannot parse symmetric structures (like palindromes) without nondeterministic midpoint guessing.
+
+\textbf{Fourth.} The Pumping Lemma for CFLs proves that a single stack cannot coordinate three independent matching counts, showing that $\{0^n 1^n 2^n\}$ is not context-free.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Context-free parameters}
+* **CFG:** Context-Free Grammar. A set of production rules for generating nested structures.
+* **Parse Tree:** A tree representing the syntactic structure of a string derived from a grammar.
+* **PDA:** Pushdown Automaton. A finite state machine equipped with a stack memory.
+* **DPDA:** Deterministic Pushdown Automaton. A stack machine with deterministic transitions.
+* **Ambiguity:** The property of a grammar where a single string has multiple distinct parse trees.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Constructing a CFG for Union Languages.}
+  
+        Write a Context-Free Grammar for the language $L = \{0^n 1^n : n \ge 0\} \cup \{1^n 0^n : n \ge 0\}$ over the alphabet $\Sigma = \{0, 1\}$.
+        
+        \textbf{Solution:}
+        The language $L$ is the union of two distinct context-free languages:
+        1. $L_1 = \{0^n 1^n : n \ge 0\}$, which generates matching groups of 0s followed by 1s.
+        2. $L_2 = \{1^n 0^n : n \ge 0\}$, which generates matching groups of 1s followed by 0s.
+        
+        We can design a grammar by introducing a start variable $S$ that branches nondeterministically to two separate sub-grammars, each recognizing one of the two parts:
+        * Let $S$ expand to either $S_1$ (for $L_1$) or $S_2$ (for $L_2$).
+        * For $L_1$, we write the recursive rule: $S_1 \to 0 S_1 1 \mid \epsilon$.
+        * For $L_2$, we write the recursive rule: $S_2 \to 1 S_2 0 \mid \epsilon$.
+        
+        Let us define the 4-tuple components $(V, \Sigma, R, S)$:
+        * $V = \{S, S_1, S_2\}$.
+        * $\Sigma = \{0, 1\}$.
+        * Start Variable: $S$.
+        * Production Rules $R$:
+          \[
+            \begin{aligned}
+              S   &\;\to\; S_1 \;\mid\; S_2 \\
+              S_1 &\;\to\; 0 S_1 1 \;\mid\; \epsilon \\
+              S_2 &\;\to\; 1 S_2 0 \;\mid\; \epsilon
+            \end{aligned}
+          \]
+        This grammar successfully recognizes $L$.
+        
+  \item \textbf{Transitions of a PDA for Balanced Parentheses.}
+  
+        Write down the state transitions of a PDA that recognizes the language of balanced parentheses.
+        
+        \textbf{Solution:}
+        Let the PDA have states $Q = \{q_{\text{start}}, q_{\text{loop}}, q_{\text{accept}}\}$, input alphabet $\Sigma = \{(, )\}$, and stack alphabet $\Gamma = \{\$\}$, where $\$$ is a special bottom-of-stack marker.
+        
+        The machine operates as follows:
+        1. In $q_{\text{start}}$, we push the bottom marker $\$$ onto the stack and transition to $q_{\text{loop}}$.
+        2. In $q_{\text{loop}}$, we read input symbols:
+           * If we read `(`, we push a dummy token (say, `(`) onto the stack.
+           * If we read `)` and the top of the stack is `(`, we pop it.
+        3. If we read no input ($\epsilon$) and the top of the stack is the bottom marker $\$$, we pop it and transition to $q_{\text{accept}}$.
+        
+        Let us write the transitions in the format $\delta(state, input, pop) = \{(next\_state, push)\}$:
+        * $\delta(q_{\text{start}}, \epsilon, \epsilon) = \{(q_{\text{loop}}, \$)\}$ (initialization).
+        * $\delta(q_{\text{loop}}, (, \epsilon) = \{(q_{\text{loop}}, ()\}$ (push on open parenthesis).
+        * $\delta(q_{\text{loop}}, ), () = \{(q_{\text{loop}}, \epsilon)\}$ (pop on closed parenthesis).
+        * $\delta(q_{\text{loop}}, \epsilon, \$) = \{(q_{\text{accept}}, \epsilon)\}$ (successful end).
+        
+        This PDA accepts balanced parentheses by ending in $q_{\text{accept}}$.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Enforcing Operator Precedence in Grammars.}
+  
+        Consider the ambiguous arithmetic grammar:
+        \[
+          S \;\to\; S + S \;\mid\; S \times S \;\mid\; (S) \;\mid\; a.
+        \]
+        \begin{enumerate}[label=(\alph*)]
+          \item Draw two distinct parse trees for the string $a + a \times a$.
+          \item Rewrite this grammar by introducing new variables $E$ (expression), $T$ (term), and $F$ (factor) to enforce standard mathematical precedence (where multiplication binds tighter than addition, and parentheses have the highest priority).
+          \item Draw the unique parse tree for $a + a \times a$ using your new grammar.
+        \end{enumerate}
+
+  \item \textbf{CFL Pumping Lemma Proofs.}
+  
+        Use the Pumping Lemma for Context-Free Languages to prove that the following languages are not context-free:
+        \begin{enumerate}[label=(\alph*)]
+          \item The language with three matching counts:
+                \[
+                  L \;= \; \{0^n 1^n 2^n : n \ge 0\}.
+                \]
+          \item The copy language:
+                \[
+                  L \;=\; \{w w : w \in \{0, 1\}^*\}.
+                \]
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{NPDA vs. DPDA and the Palindrome Boundary.}
+  
+        Let $L_{\text{even}} = \{w w^R : w \in \{0,1\}^*\}$ be the language of even-length palindromes.
+        \begin{enumerate}[label=(\alph*)]
+          \item Construct the transition set for a Nondeterministic Pushdown Automaton (NPDA) that accepts $L_{\text{even}}$.
+                Highlight the transition where the machine nondeterministically guesses that it has reached the midpoint.
+          \item A language is a **Deterministic Context-Free Language (DCFL)** if it can be recognized by a Deterministic PDA (DPDA).
+                Prove that $L_{\text{even}}$ is not a DCFL. (Why can a deterministic machine with a single stack never verify the midpoint of a palindrome without looking ahead to the end of the string?)
+          \item If we modify the language by adding a middle marker: $L_{\text{marked}} = \{w c w^R : w \in \{0, 1\}^*\}$, show that $L_{\text{marked}}$ is a DCFL by constructing a DPDA for it.
+                What does this reveal about the role of syntax separators (like semicolons or braces) in compiler design?
+        \end{enumerate}
+
+  \item \textbf{Chomsky Normal Form and Derivation Bounds.}
+  
+        A Context-Free Grammar is in **Chomsky Normal Form (CNF)** if all its production rules are of the form:
+        \[
+          A \;\to\; B C \qquad \text{or} \qquad A \;\to\; a,
+        \]
+        where $A, B, C$ are variables (neither $B$ nor $C$ can be the start variable) and $a$ is a terminal.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Prove by induction on the string length that if a grammar is in Chomsky Normal Form, any derivation of a string of length $n > 0$ requires exactly $2n - 1$ steps.
+          \item Let a string $w$ have length $n$.
+                If we use a CNF grammar, the **CYK (Cocke-Younger-Kasami) algorithm** decides if $w$ is generated by the grammar in $O(n^3)$ time using dynamic programming.
+                
+                Explain how the CYK algorithm fills in a triangular table where cell $T[i, j]$ contains the set of variables that can derive the substring $w[i \dots j]$.
+                Why does this dynamic programming approach bypass the exponential search space of grammar derivations?
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Geometry of Memory:** A stack is a 1-dimensional memory structure: we can only write and read from a single point (the top). Because of this LIFO geometry, we can match elements in reverse order ($w w^R$), but we cannot match them in direct order ($w w$). Does this mean that the geometric topology of a computer's memory store restricts the class of languages it can speak?
+  \item **On Nondeterminism and Guessing:** We saw that DPDAs cannot recognize even-length palindromes, whereas NPDAs can. In physics, a system cannot explore multiple parallel trajectories without replicating mass. Does this imply that nondeterministic machines are purely mathematical fictions, or can quantum systems (which explore multiple states in superposition) realize true nondeterministic PDA parsing?
+  \item **On Compilers and Syntax:** Natural human languages are filled with ambiguities and require context to resolve. Programming languages, by contrast, must be parsed deterministically and unambiguously by a compiler. How does the choice of compiler grammar structure (like LL or LR parsing subsets of CFGs) shape the syntax of modern programming languages?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~3.3 introduces **Turing Machines and the Limits of Decidability**. Having proved that stack-based automata cannot recognize languages like $\{0^n 1^n 2^n\}$, we will remove all memory access limitations. We will study the Turing Machine, which has an infinite random-access tape, and explore the absolute mathematical boundaries of computation: the Halting Problem and undecidability.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 3, Module 3.2 --- Context-Free Languages and Pushdown Automata}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 3.3 --- Turing Machines and the Limits of Decidability}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

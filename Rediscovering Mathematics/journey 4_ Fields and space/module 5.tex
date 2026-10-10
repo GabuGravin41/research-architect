@@ -1,0 +1,307 @@
+% ============================================================
+%  DISCOVERY CURRICULUM — Journey 4, Module 5
+%  "Classical Mechanics and the Principle of Least Action"
+%  Compile with: pdflatex J4_M5.tex  (run twice)
+% ============================================================
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.8cm,right=2.8cm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue}
+
+\definecolor{NavyBlue}{HTML}{1A3A5C}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{C8922A}
+\definecolor{LightBlue}{HTML}{EBF2FA}
+\definecolor{LightGold}{HTML}{FDF4E3}
+\definecolor{DarkGrey}{HTML}{3A3A3A}
+\definecolor{BoxGreen}{HTML}{E8F5E9}
+\definecolor{SidebarGrey}{HTML}{F5F5F5}
+
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 4 $\cdot$ Module 5}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newmdenv[backgroundcolor=NavyBlue!7,linecolor=NavyBlue,linewidth=2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{puzzlebox}
+\newmdenv[backgroundcolor=LightGold,linecolor=Gold,linewidth=2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{discoverybox}
+\newmdenv[backgroundcolor=LightBlue,linecolor=MidBlue,linewidth=1.5pt,roundcorner=4pt,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{namebox}
+\newmdenv[backgroundcolor=BoxGreen,linecolor=DarkGrey!35,linewidth=1pt,roundcorner=4pt,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{reflectionbox}
+\newmdenv[backgroundcolor=SidebarGrey,linecolor=Gold,linewidth=1.2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=12pt,innerrightmargin=10pt,innertopmargin=7pt,innerbottommargin=7pt,skipabove=10pt,skipbelow=10pt]{thought}
+
+\newcounter{problem}
+\newenvironment{problem}[1][]{\refstepcounter{problem}\par\vspace{6pt}\noindent\textbf{\color{MidBlue}Problem \theproblem}\ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip}{\par\vspace{4pt}}
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{\refstepcounter{deepproblem}\par\vspace{6pt}\noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}\ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip}{\par\vspace{4pt}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 4: FIELDS AND SPACE}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 5}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Classical Mechanics and the\\[0.2cm]Principle of Least Action}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+Nature is parsimonious. Among all possible paths\\[0.15cm]
+from here to there, the one actually taken\\[0.15cm]
+is the one that makes the action stationary.}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}           & Journey 4 --- Fields and Space \\[4pt]
+\color{DarkGrey}\textbf{Module}            & 5 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}     & J2 Modules 2--4; J3 Module 1; J4 Module 4 \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & Lagrangian mechanics, Euler-Lagrange equations, Hamiltonian mechanics, Noether's theorem \\[4pt]
+\color{DarkGrey}\textbf{Format}            & 8 problems $+$ 3 deep problems $\approx$ 14 pages \\
+\end{tabular}
+\vspace{1cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+\noindent\textbf{The reformulation of mechanics.}
+Newton's laws state $\mathbf{F}=m\ddot{\mathbf{r}}$: for each particle, the force equals mass times acceleration. This is local and vector-valued. Lagrange and Hamilton reformulated the same physics using a scalar function --- the Lagrangian $L = T - V$ (kinetic minus potential energy) --- and a variational principle: nature chooses the path that makes the action $S = \int L\,dt$ stationary. This reformulation is not merely elegant. It generalises to fields, to relativity, to quantum mechanics, and to every fundamental theory of modern physics. The path integral of Module~4 is the quantum-mechanical action principle. Maxwell's equations follow from an action principle. General relativity is an action principle (the Einstein-Hilbert action). The Standard Model of particle physics is an action principle. Every fundamental law of physics known today can be derived from an action.
+
+\newpage
+
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle: Snell's law by least time.}
+
+Light travels from medium 1 (speed $v_1$) to medium 2 (speed $v_2$), crossing a horizontal boundary. A ray goes from point $A = (0, a)$ to point $B = (d, -b)$ (both with $a,b,d>0$).
+
+\medskip
+\textbf{Question 1.} If the ray crosses the boundary at horizontal position $x$, write the total travel time $T(x) = \frac{\sqrt{x^2+a^2}}{v_1}+\frac{\sqrt{(d-x)^2+b^2}}{v_2}$ as a function of $x$.
+
+\textbf{Question 2.} Minimise $T(x)$ by setting $T'(x)=0$. Show this gives $\frac{\sin\theta_1}{v_1}=\frac{\sin\theta_2}{v_2}$, i.e.\ Snell's law, where $\theta_1,\theta_2$ are the angles of incidence and refraction.
+
+\textbf{Question 3.} Light obeys Snell's law because it minimises travel time (Fermat's principle, 1662). Is there an analogous principle that \emph{particles} obey --- not minimising time, but minimising some other quantity?
+
+\textbf{Question 4.} In Module~4 of Journey~2 we saw that Fermat's principle is a preview of the ``principle of least action.'' The action for a particle is $S = \int(T-V)\,dt$. What would it mean to minimise $S$ over all paths from a fixed start to a fixed endpoint?
+\end{puzzlebox}
+
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+
+\subsection{Step 1: The Euler-Lagrange equation}
+
+\begin{problem}
+\label{prob:EL}
+Consider varying a path $q(t)$ with fixed endpoints: $q(t_1)=q_1$, $q(t_2)=q_2$. Let $q(t)\to q(t)+\epsilon\eta(t)$ where $\eta(t_1)=\eta(t_2)=0$. The action is $S[q]=\int_{t_1}^{t_2}L(q,\dot q,t)\,dt$.
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Compute $\frac{dS[q+\epsilon\eta]}{d\epsilon}\Big|_{\epsilon=0}$ by differentiating under the integral sign and integrating by parts. Show the result is
+  $\delta S = \int_{t_1}^{t_2}\eta(t)\left[\frac{\partial L}{\partial q}-\frac{d}{dt}\frac{\partial L}{\partial\dot q}\right]dt$.
+  \item Setting $\delta S=0$ for all $\eta$ gives the \textbf{Euler-Lagrange equation}:
+  $\frac{d}{dt}\frac{\partial L}{\partial\dot q} - \frac{\partial L}{\partial q} = 0$.
+  Why does $\delta S=0$ for all $\eta$ force the bracketed term to vanish pointwise?
+  \item For a particle in a potential: $L = \frac{1}{2}m\dot q^2 - V(q)$. Derive the Euler-Lagrange equation and show it gives Newton's second law $m\ddot q = -V'(q)$.
+  \item For two generalised coordinates $(q_1,q_2)$: there is one Euler-Lagrange equation per coordinate. Write both. Apply to a double pendulum (small oscillations), where $L = \frac{1}{2}m_1l_1^2\dot\theta_1^2+\frac{1}{2}m_2l_2^2\dot\theta_2^2 - m_1gl_1(1-\cos\theta_1)-m_2gl_2(1-\cos\theta_2)$.
+  \item \textbf{Bead on a wire.} A bead of mass $m$ slides frictionlessly along a wire in the shape $y=f(x)$. Using $x$ as the single generalised coordinate, write the Lagrangian and derive the equation of motion. Notice how smoothly the constraint is handled --- no need for constraint forces.
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{Why the Lagrangian formulation is more powerful than Newton's.}
+Newton requires you to identify all forces, including constraint forces (normal force, tension in a string). These forces do no work but are often unknown and must be solved for simultaneously. The Lagrangian approach uses only one scalar function $L = T-V$ and automatically handles constraints through the choice of generalised coordinates. The constraint forces never appear. Moreover, the Euler-Lagrange equations are form-invariant: they look the same in any coordinate system. Newton's $\mathbf{F}=m\mathbf{a}$ is only simple in Cartesian coordinates; in polar or spherical coordinates, fictitious forces appear. The Lagrangian has no such issue. This coordinate-independence is what makes the Lagrangian formulation the right language for general relativity and gauge field theory.
+\end{thought}
+
+\subsection{Step 2: Conservation laws and Noether's theorem}
+
+\begin{problem}
+\label{prob:noether}
+Emmy Noether's theorem (1915): every continuous symmetry of the action corresponds to a conserved quantity.
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Define the \textbf{conjugate momentum} $p = \partial L/\partial\dot q$. Show the Euler-Lagrange equation is $\dot p = \partial L/\partial q$. If $L$ does not depend on $q$ (cyclic coordinate), then $\dot p = 0$: $p$ is conserved. This is Noether's theorem for translations.
+  \item For a particle in 3D with $L = \frac{1}{2}m|\dot{\mathbf{r}}|^2 - V(r)$ (central force, $V$ depends only on $r=|\mathbf{r}|$): show all three components of angular momentum $\mathbf{L} = \mathbf{r}\times m\dot{\mathbf{r}}$ are conserved. Which symmetry does this correspond to?
+  \item If $L$ has no explicit time dependence ($\partial L/\partial t=0$), define the \textbf{Hamiltonian} $H = \sum_i p_i\dot q_i - L$. Show $\dot H = 0$: energy is conserved. Which symmetry corresponds to energy conservation?
+  \item Complete the Noether table:
+  \begin{center}
+  \begin{tabular}{lll}
+  \toprule
+  \textbf{Symmetry} & \textbf{Conserved quantity} & \textbf{Example} \\
+  \midrule
+  Translation in space & & Free particle \\
+  Rotation & & Central force \\
+  Translation in time & & Time-independent $V$ \\
+  \bottomrule
+  \end{tabular}
+  \end{center}
+  \item Noether's theorem also applies to field theories: invariance of the electromagnetic Lagrangian under phase rotation $\psi\to e^{i\alpha}\psi$ (a $U(1)$ gauge symmetry) implies conservation of electric charge. State in one sentence why this is more profound than energy conservation.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 3: Hamiltonian mechanics}
+
+\begin{problem}
+\label{prob:hamilton}
+The \textbf{Hamiltonian} is defined by the Legendre transform of $L$:
+$H(q,p,t) = \sum_i p_i\dot q_i - L(q,\dot q,t)$
+where $p_i = \partial L/\partial\dot q_i$ and $\dot q_i$ is expressed in terms of $(q,p)$.
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Derive \textbf{Hamilton's equations}: $\dot q_i = \frac{\partial H}{\partial p_i}$, $\dot p_i = -\frac{\partial H}{\partial q_i}$.
+  \item For $L = \frac{1}{2}m\dot q^2 - V(q)$: find $p$, invert to get $\dot q = p/m$, construct $H$, and verify $H = \frac{p^2}{2m}+V(q)$ (total energy).
+  \item Write Hamilton's equations for the harmonic oscillator $H = \frac{p^2}{2m}+\frac{1}{2}m\omega^2 q^2$. The equations are $\dot q = p/m$ and $\dot p = -m\omega^2 q$. The solutions trace ellipses in the $(q,p)$ plane (phase space). Draw the phase portrait.
+  \item The \textbf{Poisson bracket} $\{f,g\} = \frac{\partial f}{\partial q}\frac{\partial g}{\partial p}-\frac{\partial f}{\partial p}\frac{\partial g}{\partial q}$. Show:
+    \begin{itemize}[noitemsep]
+      \item $\{q,p\}=1$ (fundamental Poisson bracket)
+      \item $\dot f = \{f,H\}+\partial_t f$ for any observable $f$
+      \item $\{q,H\}=\partial H/\partial p$ and $\{p,H\}=-\partial H/\partial q$ recover Hamilton's equations
+    \end{itemize}
+  \item Compare: $\{q,p\}=1$ in classical mechanics versus $[\hat q,\hat p]=i\hbar$ in quantum mechanics. The quantum commutator is $i\hbar$ times the Poisson bracket. This is Dirac's quantisation rule. Show it gives $\Delta q\cdot\Delta p\geq\hbar/2$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:phase_space}
+\textbf{Phase space and Liouville's theorem.}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Phase space is the space of all $(q_1,\ldots,q_n,p_1,\ldots,p_n)$. Hamilton's equations define a flow on phase space. Show the divergence of the phase-space velocity field $(\dot q_i,\dot p_i)$ is zero:
+  $\sum_i\left(\frac{\partial\dot q_i}{\partial q_i}+\frac{\partial\dot p_i}{\partial p_i}\right) = 0$.
+  \item By the continuity equation (Journey~4 Module~2), this means any volume of phase space is preserved under Hamiltonian flow. This is \textbf{Liouville's theorem}. Verify for the harmonic oscillator: a small rectangle in phase space evolves to a rotated rectangle of equal area.
+  \item Liouville's theorem implies: Hamiltonian systems are time-reversible and area-preserving. Dissipative systems (with friction) violate both. The volume in phase space of a dissipative system shrinks to an \textbf{attractor}. Describe a strange attractor in one sentence.
+  \item \textbf{Entropy and phase space.} The Boltzmann entropy $S = k_B\ln\Omega$ counts the volume of accessible phase space. Liouville's theorem says this volume is conserved --- so entropy cannot increase in a Hamiltonian system! Yet macroscopic entropy increases. Write one sentence on where this apparent contradiction (Loschmidt's paradox) is resolved.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 4: Applications and field theory preview}
+
+\begin{problem}
+\label{prob:applications_mechanics}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item \textbf{Kepler's problem.} For a particle in a gravitational field, $L = \frac{1}{2}m(r^2+r^2\dot\theta^2)-(-GMm/r)$ (polar coordinates, 2D). Identify the cyclic coordinate and the conserved quantity. This is angular momentum. Show that angular momentum conservation implies Kepler's second law (equal areas in equal times).
+  \item \textbf{Normal modes via Lagrangian.} For two coupled springs (from J3 Module~6), write the Lagrangian, derive the equations of motion, and find the normal mode frequencies as the eigenvalues of a matrix. This is the standard procedure for any mechanical system near equilibrium.
+  \item \textbf{Geodesics.} A geodesic on a surface is a path of minimum length. The action is $S = \int ds = \int\sqrt{g_{ij}\dot q^i\dot q^j}\,dt$ where $g_{ij}$ is the metric tensor. Derive the \textbf{geodesic equation} $\ddot q^k + \Gamma^k_{ij}\dot q^i\dot q^j = 0$ (where $\Gamma^k_{ij}$ are the Christoffel symbols) from the Euler-Lagrange equations. In general relativity, this is Newton's first law: free particles follow geodesics in curved spacetime.
+  \item \textbf{Field theory.} For a scalar field $\phi(x,t)$, the Lagrangian density is $\mathcal{L}(\phi,\partial_\mu\phi)$ and the action is $S=\int\mathcal{L}\,d^4x$. The Euler-Lagrange equation is $\partial_\mu\frac{\partial\mathcal{L}}{\partial(\partial_\mu\phi)}-\frac{\partial\mathcal{L}}{\partial\phi}=0$. For $\mathcal{L}=\frac{1}{2}(\partial_t\phi)^2-\frac{1}{2}c^2(\nabla\phi)^2$, derive the wave equation.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:canonical}
+\textbf{Canonical transformations and action-angle variables.}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item A \textbf{canonical transformation} $(q,p)\to(Q,P)$ preserves Hamilton's equations. It must preserve the Poisson bracket structure: $\{Q,P\}=1$. Verify that the transformation $Q=p$, $P=-q$ is canonical.
+  \item \textbf{Action-angle variables} for an integrable system: the action variable $J = \frac{1}{2\pi}\oint p\,dq$ (integral over one period in phase space) and the angle variable $\theta$ are canonical. Show that in action-angle variables, $H = H(J)$ (Hamiltonian depends only on $J$), so $\dot J=0$ and $\dot\theta=\partial H/\partial J = \omega(J)$ = constant.
+  \item For the harmonic oscillator: compute $J = \frac{1}{2\pi}\oint p\,dq$ (area of the ellipse in phase space divided by $2\pi$). Show $J=E/\omega$. Interpret: the action is the phase-space area divided by $2\pi$.
+  \item \textbf{Adiabatic invariants.} If $H$ changes slowly (adiabatically), $J$ is approximately conserved even though $H$ changes. This is the adiabatic theorem. For a pendulum slowly lengthened, the ratio $E/\omega$ is conserved --- the amplitude changes but the phase-space area stays constant. State one quantum-mechanical analogue.
+\end{enumerate}
+\end{problem}
+
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The principle of least (stationary) action: nature chooses the path from $(q_1,t_1)$ to $(q_2,t_2)$ that makes $S=\int L\,dt$ stationary. The Euler-Lagrange equations are the resulting equations of motion. They reproduce Newton's laws but are coordinate-independent and handle constraints automatically.
+
+\textbf{Second.} Noether's theorem: every continuous symmetry of the action gives a conserved quantity. Time-translation symmetry $\to$ energy. Space-translation symmetry $\to$ momentum. Rotational symmetry $\to$ angular momentum. This is the deepest statement in classical physics.
+
+\textbf{Third.} The Hamiltonian reformulation uses phase space $(q,p)$ and Hamilton's equations. The Hamiltonian is the total energy; Liouville's theorem says Hamiltonian flow preserves phase-space volume. The Poisson bracket $\{q,p\}=1$ is the classical shadow of the quantum commutator $[\hat q,\hat p]=i\hbar$.
+
+\textbf{Fourth.} Field theory: the Lagrangian formulation extends from particles to fields. The action is a spacetime integral of the Lagrangian density. Every fundamental field theory --- electromagnetism, general relativity, quantum field theory --- is an action principle.
+
+\medskip
+\textbf{The thread to everything.} The path integral of quantum mechanics (Module~4) is the sum of $e^{iS/\hbar}$ over all paths. In the limit $\hbar\to 0$, stationary-phase approximation gives $\delta S=0$: classical mechanics. Quantum mechanics contains classical mechanics as the limit of large actions. Noether's theorem holds in quantum field theory too: charge conservation is the Noether current of the $U(1)$ gauge symmetry of the electromagnetic Lagrangian. Every conservation law in the Standard Model of particle physics is a Noether current.
+\end{discoverybox}
+
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+
+\begin{namebox}
+\textbf{Lagrangian and Hamiltonian mechanics.}
+
+\textbf{Lagrangian}: $L(q,\dot q,t) = T-V$. Action: $S[q]=\int L\,dt$. Euler-Lagrange: $\frac{d}{dt}\frac{\partial L}{\partial\dot q}-\frac{\partial L}{\partial q}=0$.
+
+\textbf{Conjugate momentum}: $p=\partial L/\partial\dot q$. Cyclic coordinate $\Rightarrow$ conserved $p$.
+
+\textbf{Hamiltonian}: $H=\sum p_i\dot q_i-L$. Hamilton's equations: $\dot q=\partial H/\partial p$, $\dot p=-\partial H/\partial q$.
+
+\textbf{Poisson bracket}: $\{f,g\}=\partial_q f\partial_p g - \partial_p f\partial_q g$. Evolution: $\dot f=\{f,H\}$.
+
+\textbf{Noether}: symmetry $\to$ conservation law. \textbf{Liouville}: Hamiltonian flow preserves phase-space volume.
+\end{namebox}
+
+\section{Part 5 \texorpdfstring{---}{--} Deep Problems}
+
+\begin{deepproblem}[The Hamilton-Jacobi equation]
+Define $S(q,t) = \int_{t_0}^t L(q,\dot q,t')\,dt'$ (the action along the classical trajectory ending at $(q,t)$). Then $S$ satisfies the \textbf{Hamilton-Jacobi equation}:
+\[
+  \frac{\partial S}{\partial t} + H\left(q,\frac{\partial S}{\partial q},t\right) = 0.
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Derive this equation by differentiating $S(q,t)$ with respect to time along the trajectory and using Hamilton's equations.
+  \item For the harmonic oscillator: try a separation $S(q,t) = W(q)-Et$. Show $W$ satisfies $\frac{1}{2m}(W')^2+\frac{1}{2}m\omega^2 q^2=E$, giving $W = \int\sqrt{2mE-m^2\omega^2 q^2}\,dq$. Evaluate this integral.
+  \item The Hamilton-Jacobi equation is a PDE, and $S$ is its solution (the generating function of the canonical transformation to action-angle variables). Interpret: finding the action function $S$ is equivalent to solving the mechanical problem completely.
+  \item The Hamilton-Jacobi equation for a free particle in $\mathbb{R}^3$ is $\partial_t S + \frac{|\nabla S|^2}{2m}=0$. Compare with the eikonal equation of geometric optics $|\nabla\phi|=n/c$. Then note that the Schr\"{o}dinger equation $i\hbar\partial_t\psi=-\frac{\hbar^2}{2m}\nabla^2\psi$ reduces to the Hamilton-Jacobi equation when $\psi=e^{iS/\hbar}$ and $\hbar\to 0$. Write the chain: optics $\to$ mechanics $\to$ quantum mechanics, via a single equation evolving in complexity.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Noether's theorem --- full proof]
+\begin{enumerate}[label=(\alph*)]
+  \item A continuous symmetry is a one-parameter family of transformations $q\to q+\epsilon\xi(q,t)+O(\epsilon^2)$ that leaves the action invariant: $S[q+\epsilon\xi]=S[q]+O(\epsilon^2)$. Show that the variation of $S$ under this transformation gives $0=\int\frac{d}{dt}\left(\frac{\partial L}{\partial\dot q}\xi\right)dt$ when the Euler-Lagrange equations hold.
+  \item Deduce: the \textbf{Noether current} $J = \frac{\partial L}{\partial\dot q}\xi$ is conserved along solutions ($\dot J=0$).
+  \item Apply: for spatial translation ($\xi=1$, constant), $J=\partial L/\partial\dot q = p$ (momentum). For time translation ($q(t)\to q(t-\epsilon)$, so $\xi=-\dot q$): compute $J=p(-\dot q)-L(-1)=-(p\dot q-L)=-H$. The conserved current is (minus) the Hamiltonian: energy conservation.
+  \item Extend to field theory: the Noether current for a field $\phi$ under a symmetry with infinitesimal generator $\xi^\mu$ is the energy-momentum tensor $T^{\mu\nu}$. Conservation of $T^{\mu\nu}$ encodes both energy and momentum conservation. Write the formula.
+  \item \textbf{Converse of Noether's theorem}: is every conservation law the result of a symmetry? In classical mechanics yes (for Hamiltonian systems). In quantum mechanics yes (for any connected Lie group symmetry). But there exist ``accidental'' conservation laws (like the Runge-Lenz vector for the Kepler problem) that correspond to hidden symmetries. Find the hidden symmetry of the Kepler problem.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Symplectic geometry]
+Phase space carries a natural geometric structure: the \textbf{symplectic form} $\omega = \sum_i dq_i\wedge dp_i$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show $\omega$ is a closed 2-form ($d\omega=0$) and non-degenerate (no vector is in the kernel). A manifold with such a form is a \textbf{symplectic manifold}.
+  \item Hamilton's equations can be written as $\iota_{X_H}\omega = dH$, where $X_H$ is the Hamiltonian vector field. Show this recovers $\dot q=\partial H/\partial p$, $\dot p=-\partial H/\partial q$.
+  \item \textbf{Darboux's theorem}: every symplectic manifold is locally equivalent to $(\mathbb{R}^{2n},\sum dq_i\wedge dp_i)$. This is the symplectic analogue of the fact that every Riemannian manifold is locally Euclidean. Interpret: there is no local symplectic geometry --- all symplectic manifolds look the same locally.
+  \item Liouville's theorem restated: the Hamiltonian flow preserves $\omega$, hence preserves $\omega^n = \omega\wedge\cdots\wedge\omega$ ($n$-fold), which is the volume form on phase space.
+  \item \textbf{Quantisation as deformation}: quantum mechanics replaces the Poisson bracket $\{f,g\}$ by $\frac{1}{i\hbar}[f,g]$. This is \textbf{deformation quantisation}: the commutative algebra of classical observables is deformed into the non-commutative algebra of quantum operators. At $\hbar\to 0$, the commutator bracket reduces to the Poisson bracket. Write one sentence on why non-commutativity is the signature of quantum behaviour.
+\end{enumerate}
+\end{deepproblem}
+
+\section{Part 6 \texorpdfstring{---}{--} Reflection}
+
+\begin{reflectionbox}
+\textbf{Your reflection task.}
+
+\begin{enumerate}
+  \item \textbf{On the principle of least action.} Why should nature minimise (or make stationary) anything at all? Newton's laws say nothing about minimisation --- they are local: at each instant, force equals mass times acceleration. Yet the action principle is global: it refers to the entire path from start to finish. Write a paragraph: are these two descriptions of the same reality, or do they reveal different aspects of it?
+
+  \item \textbf{On Noether's theorem.} Energy is conserved because the laws of physics are the same today as they were yesterday (time-translation symmetry). Momentum is conserved because the laws of physics are the same here as they are in Nairobi (space-translation symmetry). Does this feel like an explanation, or like a restatement? What would it mean to ask \emph{why} the laws of physics have these symmetries?
+
+  \item \textbf{On the Poisson bracket.} The Poisson bracket $\{q,p\}=1$ is the classical shadow of the quantum commutator $[\hat q,\hat p]=i\hbar$. Dirac's quantisation procedure replaces Poisson brackets by commutators. Is classical mechanics a special case of quantum mechanics, or is it a completely different theory that happens to be a limit?
+
+  \item \textbf{Looking ahead.} Module~6 closes Journey~4 with the geometry of curved spaces, connecting the Lagrangian geodesic equation to general relativity. You have seen that free particles follow paths of stationary action, and that geodesics on surfaces satisfy the Euler-Lagrange equations for the arc-length functional. What should the ``action'' for spacetime be?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6 closes Journey~4 by studying the geometry of curved spaces: Riemannian manifolds, the metric tensor, curvature, and the Einstein field equations of general relativity. The Lagrangian of Module~5 becomes the geodesic action; Newton's gravity becomes the geometry of spacetime.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 4, Module 5 --- Classical Mechanics and the Principle of Least Action}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 6 --- Curved Spaces and General Relativity}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

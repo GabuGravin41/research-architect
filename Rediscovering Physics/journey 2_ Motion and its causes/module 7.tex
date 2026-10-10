@@ -1,0 +1,301 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds, decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Page geometry fix ──────────────────────────────────────────────────────
+\setlength{\headheight}{24pt}
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true, linkcolor=midblue, urlcolor=accent, citecolor=teal,
+  pdftitle={Discovery Physics: Journey 2 — Motion and Its Causes},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep}, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold}, #1}
+
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white}, coltitle=white, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent}, drop shadow, #1}
+
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Reflection}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=gold!8, colframe=gold!70!brown,
+  fonttitle=\bfseries\color{deep}, title={Historical Note}, #1}
+
+% ─── Problem counter ────────────────────────────────────────────────────────
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi}
+
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+% ─── Theorem environments ───────────────────────────────────────────────────
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{1}
+\setcounter{section}{6}
+
+\section{Module 2.7 — Symmetry and Conservation}
+\label{sec:symmetry_conservation}
+
+\epigraph{
+  \itshape The most incomprehensible thing about the universe is that it is comprehensible.
+}{--- Albert Einstein}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+Why is anything conserved? What is the relationship between symmetry and conservation laws?
+\end{tcolorbox}
+
+\subsection{Conservation of Energy}
+
+In Journey 1, you saw that heat and mechanical motion are both forms of energy, and that energy seems to be conserved across its transformations. Now we can be more precise.
+
+The \textbf{kinetic energy} of a moving object is:
+\begin{equation}
+  KE = \frac{1}{2}mv^2
+\end{equation}
+
+The \textbf{potential energy} stored in a gravitational field (near Earth's surface) is:
+\begin{equation}
+  PE = mgh
+\end{equation}
+where $h$ is the height above some reference level.
+
+In the absence of friction, the total mechanical energy $E = KE + PE$ is conserved.
+
+\begin{explobox}
+\problem A ball of mass $\SI{0.5}{kg}$ is dropped from height $\SI{10}{m}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is its potential energy initially?
+  \item What is its speed just before hitting the ground? Use energy conservation (no $F = ma$ needed).
+  \item Compare this to the result you'd get using kinematics.
+\end{enumerate}
+
+\problem A pendulum of length $\SI{1}{m}$ is released from a horizontal position.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the maximum speed of the bob?
+  \item At what height above the lowest point is the bob's speed half its maximum value?
+\end{enumerate}
+
+\problem A roller coaster starts from rest at the top of a $\SI{40}{m}$ hill.
+\begin{enumerate}[label=(\alph*)]
+  \item What is its speed at the bottom?
+  \item If the next hill is $\SI{32}{m}$ high, what is the speed at the top of the second hill?
+  \item Could the coaster reach a hill of $\SI{45}{m}$? Why or why not?
+\end{enumerate}
+
+\problem \textit{Deep question.} Energy conservation and momentum conservation are both conservation laws. But energy can be stored and released (a compressed spring, a battery, a nucleus), while momentum is more directly about motion. In what sense are these two laws ``the same kind of thing''? In what sense are they different?
+\end{explobox}
+
+\subsection{Angular Momentum}
+
+When an object moves in a circle, or when a system rotates, there is another conserved quantity: angular momentum.
+
+For a point mass moving at speed $v$ at distance $r$ from a fixed point, the angular momentum is:
+\begin{equation}
+  L = mvr
+\end{equation}
+
+\begin{explobox}
+\problem A figure skater begins spinning with arms outstretched at radius $\SI{0.8}{m}$ and speed $\SI{2}{m/s}$. She pulls her arms in to radius $\SI{0.3}{m}$. What is her new speed? (Use conservation of angular momentum.)
+
+\problem Planets move in elliptical orbits. They move faster when close to the Sun and slower when far away. Using conservation of angular momentum, explain why this must be so.
+
+\problem Why does a gyroscope resist being tilted? (This is harder---think about what angular momentum is and what changing its direction would require.)
+\end{explobox}
+
+\subsection{Connecting It All: The Three Conservation Laws}
+
+By now you have encountered three conservation laws in classical mechanics:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Conserved quantity} & \textbf{When conserved} & \textbf{Related symmetry} \\
+\midrule
+Energy & No external energy input/output & Time translation \\
+Momentum & No external force & Space translation \\
+Angular momentum & No external torque & Rotational symmetry \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These three laws will follow us through the entire curriculum. In quantum mechanics (Journey 6), they constrain which transitions are possible. In field theory, they become the foundation of the Standard Model of particle physics.
+
+\begin{reflectionbox}
+\textbf{Final Reflection for Journey 2.}
+
+You began this journey with a simple question: why do things move the way they do? You have now developed a complete framework for answering it in the classical regime.
+
+Choose one of the following for a written reflection (aim for 2--3 pages):
+
+\begin{enumerate}[leftmargin=2em, itemsep=4pt]
+  \item \textit{The meaning of force.} In everyday language, ``force'' means an effort or a push. In Newton's mechanics, it has a very precise meaning. Describe what force actually is in Newton's framework, why the Aristotelian conception was wrong, and what this tells us about the relationship between everyday intuition and physical reality.
+
+  \item \textit{The Moon's orbit.} Walk through Newton's calculation showing that the Moon's centripetal acceleration matches the prediction from the inverse-square law. Explain in your own words why this was such a significant discovery---not just as a numerical agreement, but as a philosophical statement about the unity of physical law.
+
+  \item \textit{Symmetry and conservation.} Noether's theorem says momentum is conserved because space is uniform. Energy is conserved because time is uniform. What would it mean for space to \textit{not} be uniform? Can you imagine a universe where momentum is not conserved? What would be different about physics in such a universe?
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Closing: Journey 2}
+\addcontentsline{toc}{chapter}{Closing: Journey 2}
+\markboth{Closing: Journey 2}{}
+
+\epigraph{
+  \itshape It is not knowledge, but the act of learning, not possession but the act of getting there, which grants the greatest enjoyment.
+}{--- Carl Friedrich Gauss}
+
+Journey 2 is complete. Let us take stock.
+
+You have now built, from first principles, the complete framework of classical mechanics:
+
+\begin{itemize}[leftmargin=2em, itemsep=4pt]
+  \item \textbf{Kinematics}: position, velocity, acceleration and their relationships---including the key insight that instantaneous velocity requires a limiting process that turned out to be the derivative.
+  \item \textbf{Newton's Laws}: inertia, $F = ma$, and action-reaction---with emphasis on what force actually is (the cause of acceleration, not the cause of motion).
+  \item \textbf{Conservation laws}: momentum and energy are conserved; both are shadows of symmetries of space and time; angular momentum is conserved due to rotational symmetry.
+  \item \textbf{Universal gravitation}: the same inverse-square law governs falling bodies and celestial orbits---one of the greatest unifications in the history of science.
+\end{itemize}
+
+But classical mechanics has limits. It works beautifully for slow objects and large scales. At speeds approaching light, it fails---and special relativity is needed (Journey 6). At very small scales (electrons, photons), it also fails---and quantum mechanics is needed (Journey 6). The circumstances that forced these revisions are the subject of Journey 5.
+
+For now, notice what you have accomplished: starting from observations of falling bodies and swinging pendulums, you have built a mathematical framework that predicts the motions of planets, rockets, and billiard balls. This framework stood essentially unchallenged for 200 years, and still gives the right answers for most of engineering.
+
+\vspace{0.8cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[teal, line width=1.5pt] (0,0) -- (12,0);
+  \node[below, teal] at (6, -0.1) {\small\itshape End of Journey 2 --- Motion and Its Causes};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.6cm}
+\begin{center}
+{\large\textcolor{deep}{\textbf{Journey 3 begins where this one ends:}}}\\[6pt]
+{\itshape\textcolor{midblue}{
+We have described how objects move under forces.\\[3pt]
+But what \emph{is} a force? How does one object reach across empty space to push another?\\[3pt]
+The answer will require a new concept: the field.
+}}
+\end{center}
+
+\end{document}

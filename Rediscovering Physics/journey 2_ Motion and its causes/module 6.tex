@@ -1,0 +1,236 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds, decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Page geometry fix ──────────────────────────────────────────────────────
+\setlength{\headheight}{24pt}
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true, linkcolor=midblue, urlcolor=accent, citecolor=teal,
+  pdftitle={Discovery Physics: Journey 2 — Motion and Its Causes},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep}, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold}, #1}
+
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white}, coltitle=white, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent}, drop shadow, #1}
+
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Reflection}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=gold!8, colframe=gold!70!brown,
+  fonttitle=\bfseries\color{deep}, title={Historical Note}, #1}
+
+% ─── Problem counter ────────────────────────────────────────────────────────
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi}
+
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+% ─── Theorem environments ───────────────────────────────────────────────────
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{1}
+\setcounter{section}{5}
+
+\section{Module 2.6 — The Moon Is Falling}
+\label{sec:moon_falling}
+
+\epigraph{
+  \itshape I began to think of gravity extending to the orb of the Moon.
+}{--- Isaac Newton, recalling 1666}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+Is the Moon falling toward Earth? And is the force that holds it in orbit the same force that pulls an apple from a tree?
+\end{tcolorbox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/fig_j2_moon}
+  \caption{Left: the Moon's orbit as continuous free fall. The velocity is tangential; gravity pulls it centripetally inward. Without gravity, it would fly off in a straight line. Right: the numerical comparison showing that the Moon's centripetal acceleration agrees exactly with the inverse-square prediction from surface gravity.}
+  \label{fig:moon}
+\end{figure}
+
+\subsection{Newton's Insight}
+
+The story (probably embellished, but instructive) is that Newton saw an apple fall and asked: how far does gravity reach? Could it reach the Moon?
+
+At the Moon's distance (about 60 Earth radii), if gravity follows an inverse-square law, the gravitational acceleration should be:
+\begin{equation}
+  g_{\text{Moon}} = \frac{g_{\text{surface}}}{60^2} = \frac{\SI{9.81}{m/s^2}}{3600} \approx \SI{0.00272}{m/s^2}
+\end{equation}
+
+Now we can check: does the Moon's observed orbital motion require exactly this centripetal acceleration?
+
+\begin{explobox}
+\problem In Module 2.3, Problem 2, you computed the Moon's centripetal acceleration from its orbital data. What did you find? Compare it to the value predicted above from the inverse-square law.
+
+\problem The result should match to within the precision of the input data. Newton reportedly found that his calculation ``answered pretty nearly.'' Why was he cautious about claiming an exact match? What sources of uncertainty existed?
+
+\problem Now work backward. From the fact that the Moon's acceleration is $\SI{0.00272}{m/s^2}$ at 60 Earth radii, and the surface acceleration is $\SI{9.81}{m/s^2}$, what can you deduce about how gravity varies with distance?
+
+\problem The Sun's gravitational pull on Earth is about 180 times stronger than the Moon's. Yet the Moon dominates the tides on Earth. (Ocean tides are caused by the \textit{difference} in gravitational force across Earth's diameter.) Explain qualitatively why the Moon dominates despite the Sun being so much more massive.
+\end{explobox}
+
+\subsection{The Universal Law of Gravitation}
+
+Newton's great generalisation: the gravitational force between any two masses $M$ and $m$ separated by distance $r$ is:
+
+\begin{equation}
+  \boxed{F = \frac{GMm}{r^2}}
+\end{equation}
+
+where $G = \SI{6.674e-11}{N.m^2/kg^2}$ is the gravitational constant, measured by Henry Cavendish in 1798---more than a century after Newton formulated the law.
+
+\begin{explobox}
+\problem Calculate the gravitational force between:
+\begin{enumerate}[label=(\alph*)]
+  \item Two $\SI{1}{kg}$ masses separated by $\SI{1}{m}$ (compare to their weight)
+  \item Earth ($\SI{6.0e24}{kg}$) and the Moon ($\SI{7.3e22}{kg}$) at their actual distance
+  \item The Sun ($\SI{2.0e30}{kg}$) and Earth at $\SI{1.5e11}{m}$
+\end{enumerate}
+
+\problem At what height above Earth's surface is the gravitational acceleration exactly half of its surface value?
+
+\problem The gravitational acceleration on the surface of the Moon is $\SI{1.62}{m/s^2}$. The Moon's radius is $\SI{1.74e6}{m}$. Calculate the Moon's mass.
+
+\problem \textit{Kepler from Newton.} Show that Newton's law of gravitation, combined with $F = ma$ for circular orbits, gives Kepler's third law: $T^2 \propto r^3$.
+\end{explobox}
+
+\begin{discoverybox}
+\textbf{The unification.} The same formula---$F = GMm/r^2$---governs:
+\begin{itemize}
+  \item An apple falling 1 metre to the ground
+  \item The Moon orbiting Earth at $\SI{384000}{km}$
+  \item Earth orbiting the Sun at $\SI{150}{Gm}$
+  \item A distant galaxy bending light around its mass
+\end{itemize}
+
+This was Newton's true achievement. Not the formula itself---Hooke, Halley, and others had guessed the inverse-square form. The achievement was the \textit{proof} that this single formula, combined with $F = ma$, explains all of Kepler's laws and all terrestrial mechanics with the same mathematics.
+
+Heaven and Earth obey the same physics. This was not obvious before 1687. It has been confirmed to extraordinary precision since.
+\end{discoverybox}
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

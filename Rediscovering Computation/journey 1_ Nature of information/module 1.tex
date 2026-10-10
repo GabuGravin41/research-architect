@@ -1,0 +1,456 @@
+% ============================================================
+%  DISCOVERY CURRICULUM — Computation Journey 1, Module 1
+%  "The Nature of Information"
+%  Compile with: pdflatex module 1.tex  (run twice for references)
+% ============================================================\documentclass[12pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.8cm, bottom=2.8cm, left=3.0cm, right=2.5cm, includeheadfoot, headheight=15pt]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, trees}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=CompNavy, urlcolor=CompBlue}
+
+% ── Colours (Sleek Slate/Indigo Palette) ────────────────────
+\definecolor{CompNavy}{HTML}{0F172A}    % Slate 900
+\definecolor{CompBlue}{HTML}{2563EB}    % Blue 600
+\definecolor{CompGold}{HTML}{D97706}    % Amber 600
+\definecolor{CompLightBlue}{HTML}{F0F6FF}
+\definecolor{CompLightGold}{HTML}{FEF3C7}
+\definecolor{DarkGrey}{HTML}{334155}    % Slate 700
+\definecolor{BoxGreen}{HTML}{F0FDF4}    % Green 50
+\definecolor{SidebarGrey}{HTML}{F8FAFC} % Slate 50
+
+% ── Section formatting ───────────────────────────────────────
+\titleformat{\section}{\Large\bfseries\color{CompNavy}}{}{0em}{}[{\color{CompBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{CompBlue}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{CompGold}}{}{0em}{}
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Computation Journey 1 $\cdot$ Module 1}}
+\fancyfoot[C]{\small\color{CompBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Environments (tcolorbox Unification) ─────────────────────
+
+% Puzzle box — opening problem
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=CompNavy!5, colframe=CompNavy,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Discovery box — moment of crystallisation
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=CompLightGold, colframe=CompGold,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Name box — formal definition reveal
+\newtcolorbox{namebox}[1][]{
+  enhanced, breakable,
+  colback=CompLightBlue, colframe=CompBlue,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=BoxGreen, colframe=DarkGrey!35,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Thought provocation — inline philosophical aside
+\newtcolorbox{thought}[1][]{
+  enhanced, breakable,
+  colback=SidebarGrey, colframe=CompGold,
+  boxrule=0pt, leftrule=1.5pt,
+  sharp corners,
+  left=10pt, right=10pt, top=7pt, bottom=7pt,
+  before skip=10pt, after skip=10pt,
+  #1
+}
+
+% Problem counter
+\newcounter{problem}
+\newenvironment{problem}[1][]{%
+  \refstepcounter{problem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{CompBlue}Problem \theproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Deep problem counter
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{%
+  \refstepcounter{deepproblem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{CompNavy}$\bigstar$\ Deep Problem \thedeepproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Exercise counter
+\newcounter{exercise}
+\newenvironment{exercise}[1][]{%
+  \refstepcounter{exercise}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{CompGold}Exercise \theexercise}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{CompBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 1: NATURE OF INFORMATION}}
+
+\vspace{0.6cm}
+{\color{CompNavy}\rule{\linewidth}{2pt}}
+\vspace{0.5cm}
+
+{\Huge\bfseries\color{CompNavy}Module 1.1}\\[0.3cm]
+{\LARGE\bfseries\color{CompBlue}The Telegraph Puzzle: Signals and Representation}\\[0.4cm]
+{\color{CompGold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+Before we compute, we must represent.\\
+How do we measure the raw material of thought?}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}           & Journey 1 --- The Nature of Information \\[4pt]
+\color{DarkGrey}\textbf{Module}            & 1 of 5 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}     & Combinatorics, basic probability, real analysis limits \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & Prefix-free codes, Kraft's Inequality, Huffman coding, Entropy \\[4pt]
+\color{DarkGrey}\textbf{Format}            & 8 problems $+$ 3 solved exercises $+$ 2 deep problems \\
+\end{tabular}
+
+\vspace{1.5cm}
+{\color{CompNavy}\rule{\linewidth}{2pt}}
+\end{center}
+
+\newpage
+
+
+% ============================================================
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+% ============================================================
+
+\begin{puzzlebox}
+\textbf{The Telegraph Puzzle.}
+
+You are a telegraph operator in 1844. You can transmit only two types of electrical pulses along a copper wire: a short pulse (\textbf{0}) and a long pulse (\textbf{1}). 
+
+You want to send messages consisting of letters from a simplified 4-letter alphabet: $\Sigma = \{A, B, C, D\}$. 
+
+\begin{enumerate}[label=\textbf{\Alph*.}]
+  \item If you represent each letter with a fixed-length code ($A \mapsto 00$, $B \mapsto 01$, $C \mapsto 10$, $D \mapsto 11$), sending a sequence of letters is straightforward. The stream $00011110$ is uniquely parsed as $A-B-D-C$.
+  \item However, you observe that letter $A$ appears 70\% of the time, $B$ appears 15\%, $C$ appears 10\%, and $D$ appears only 5\%. To save time and copper wire, you want to make common letters shorter.
+  \item You propose the variable-length code:
+  \[
+    A \;\mapsto\; 0, \qquad B \;\mapsto\; 1, \qquad C \;\mapsto\; 01, \qquad D \;\mapsto\; 10.
+  \]
+\end{enumerate}
+
+\textbf{The Breakdown:} A message arrives: $010$. The receiver is confused. Is this $A-D$ ($0$ followed by $10$)? Is it $C-A$ ($01$ followed by $0$)? Or is it $A-B-A$ ($0$ followed by $1$ followed by $0$)? 
+
+\medskip
+\textbf{Core Questions:}
+\begin{itemize}
+  \item Why did the fixed-length code parse uniquely, while the shorter variable-length code failed?
+  \item How can a variable-length code be structured to be uniquely decodable without delimiters?
+  \item What is the mathematical lower bound on the average number of binary signals required to represent a source?
+\end{itemize}
+\end{puzzlebox}
+
+\bigskip
+
+% ============================================================
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+% ============================================================
+
+\subsection{Step 1: The Geometry of Unambiguous Codes}
+
+To prevent confusion, we need a code where no codeword is a "prefix" (the beginning) of another codeword. Such codes are called \textbf{prefix-free codes}.
+
+\begin{problem}[Prefix-Free Codes as Binary Trees]
+Consider a binary tree where branching left represents writing a \textbf{0} and branching right represents writing a \textbf{1}.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Map the confused code from the puzzle ($A \mapsto 0$, $B \mapsto 1$, $C \mapsto 01$, $D \mapsto 10$) onto a binary tree. Where do the letters lie? (Are some descendants of others?)
+  \item If we restrict our letters to lie \emph{only} on the leaves (end-nodes) of the tree, explain why no codeword can be a prefix of another.
+  \item Construct a leaf-only binary tree for our alphabet $\{A, B, C, D\}$. Write down the corresponding prefix-free codewords.
+\end{enumerate}
+\end{problem}
+
+\begin{center}
+\begin{tikzpicture}[level distance=1.5cm,
+  level 1/.style={sibling distance=3cm},
+  level 2/.style={sibling distance=1.5cm}]
+  \node[circle,draw] {}
+    child {node[circle,draw] {}
+      child {node[circle,draw,fill=CompLightBlue] {A} edge label={node[above left] {0}}}
+      child {node[circle,draw,fill=CompLightBlue] {B} edge label={node[above right] {1}}}
+      edge label={node[above left] {0}}
+    }
+    child {node[circle,draw] {}
+      child {node[circle,draw,fill=CompLightBlue] {C} edge label={node[above left] {0}}}
+      child {node[circle,draw,fill=CompLightBlue] {D} edge label={node[above right] {1}}}
+      edge label={node[above right] {1}}
+    };
+\end{tikzpicture}
+\end{center}
+
+\subsection{Step 2: The Kraft Inequality}
+
+Each choice of codeword length limits the availability of future codewords. If we choose a very short codeword (like $0$), we eliminate the entire left half of the tree. This structural constraint is captured by a beautiful inequality.
+
+\begin{problem}[Discovering the Constraint]
+Suppose a prefix-free binary code has codeword lengths $\ell_1, \ell_2, \ldots, \ell_n$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Let the maximum length of any codeword be $L$. Imagine a full binary tree of depth $L$, which has $2^L$ leaves. If a codeword has length $\ell_i$, how many leaves at depth $L$ are descendants of this codeword (and thus blocked from being used)?
+  \item Since the total number of leaves at depth $L$ is $2^L$, write down an inequality summing the blocked leaves for all $n$ codewords.
+  \item Divide both sides of your inequality by $2^L$. What simple, depth-independent constraint on the lengths $\ell_i$ emerges?
+\end{enumerate}
+\end{problem}
+
+\begin{discoverybox}
+\textbf{The Kraft Inequality.}
+For any prefix-free code over a binary alphabet with codeword lengths $\ell_1, \ell_2, \ldots, \ell_n$, we must have:
+\[
+  \sum_{i=1}^{n} 2^{-\ell_i} \;\le\; 1.
+\]
+Conversely, if a set of lengths satisfies this inequality, a prefix-free code with these lengths is guaranteed to exist.
+\end{discoverybox}
+
+\subsection{Step 3: Finding the Optimal Code}
+
+Now we want to find a code that minimizes the average length of a message:
+\[
+  L_{\text{avg}} \;=\; \sum_{i=1}^{n} p_i \ell_i.
+\]
+
+\begin{problem}[The Huffman Algorithm]
+Let us discover a greedy strategy to build the optimal tree.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item If you have two symbols with the lowest probabilities, where should they be placed in the binary tree relative to each other to minimize $L_{\text{avg}}$? (Should they be siblings at the maximum depth?)
+  \item Suppose we combine the two least probable symbols into a single "meta-symbol" whose probability is the sum of the two. If we find the optimal code for this smaller set, how do we get the code for the original set?
+  \item Use this method to find the optimal prefix-free code for the probabilities:
+  \[
+    p(A) = 0.70, \qquad p(B) = 0.15, \qquad p(C) = 0.10, \qquad p(D) = 0.05.
+  \]
+  Calculate its average length $L_{\text{avg}}$. Compare it to the fixed-length average of 2.0.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 4: The Fundamental Limit of Information}
+
+Can we compress the message indefinitely, or is there a hard limit? Let us use real analysis to find a lower bound on $L_{\text{avg}}$ subject to Kraft's constraint.
+
+\begin{problem}[Optimizing with Lagrange Multipliers]
+Let us treat the lengths $\ell_i$ as continuous real variables. We want to minimize $L_{\text{avg}} = \sum p_i \ell_i$ subject to the equality constraint $\sum 2^{-\ell_i} = 1$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Write the constraint as $g(\ell_1, \ldots, \ell_n) = \sum e^{-\ell_i \ln 2} - 1 = 0$. Using Lagrange multipliers, set up the Lagrangian:
+  \[
+    \mathcal{L}(\ell_1, \ldots, \ell_n, \lambda) \;=\; \sum_{i=1}^n p_i \ell_i \;+\; \lambda \left(\sum_{i=1}^n 2^{-\ell_i} - 1\right).
+  \]
+
+  \item Differentiate $\mathcal{L}$ with respect to $\ell_i$ and set it to zero. Show that the optimal lengths satisfy:
+  \[
+    \ell_i^* \;=\; -\log_2 p_i.
+  \]
+  \item Substitute these optimal lengths back into the formula for $L_{\text{avg}}$. Write down the resulting expression. This quantity is the absolute limit of information density.
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{The fractional bit paradox.}
+The optimal length $\ell_i^* = -\log_2 p_i$ is rarely an integer. For instance, if $p_i = 0.7$, then $\ell_i^* \approx 0.51$ bits. We cannot send half a pulse. This means that for a single letter, our actual average length will be slightly higher than the theoretical limit. But if we group letters into blocks (e.g., encoding pairs of letters like $AA, AB, \ldots$), the average length per letter approaches the limit.
+\end{thought}
+
+% ============================================================
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+1. **Information has a physical limit:** We cannot represent a source of data with fewer bits on average than its *entropy*, no matter how clever our coding scheme.
+2. **Prefix-free structures are trees:** The Kraft inequality reveals that coding is a resource allocation problem on a tree: choosing a short codeword blocks a large branch of possibilities.
+3. **The Optimal Code is Constructive:** The Huffman algorithm provides a simple, recursive way to find the absolute best prefix code for any known probability distribution.
+\end{discoverybox}
+
+% ============================================================
+\section{Part 4 \texorpdfstring{---}{--} Naming the Idea}
+% ============================================================
+
+\begin{namebox}
+\textbf{What mathematicians call it: Shannon Entropy.}
+
+In 1948, **Claude Shannon** (1916–2001) published *"A Mathematical Theory of Communication"*, founding the field of Information Theory. He defined the **entropy** $H(X)$ of a discrete random variable $X$ with probability distribution $P = (p_1, p_2, \ldots, p_n)$ as:
+\[
+  H(X) \;=\; -\sum_{i=1}^{n} p_i \log_2 p_i \quad \text{bits}.
+\]
+Shannon proved the **Source Coding Theorem**: the average length $L_{\text{avg}}$ of any uniquely decodable binary code for $X$ satisfies:
+\[
+  H(X) \;\le\; L_{\text{avg}} \;<\; H(X) + 1.
+\]
+The name "entropy" was suggested by mathematician John von Neumann, who noted that the mathematical form of $H(X)$ is identical to statistical entropy in thermodynamics.
+\end{namebox}
+
+\newpage
+
+% ============================================================
+\section{Part 5 \texorpdfstring{---}{--} Solved Exercises}
+% ============================================================
+
+\begin{exercise}[Entropy of a Biased Coin]
+A biased coin lands heads with probability $p$ and tails with probability $1-p$. Plot the entropy of this source as a function of $p$, and find the value of $p$ that maximizes uncertainty.
+\end{exercise}
+
+\textbf{Solution.}
+The source $X$ has two outcomes. Its entropy (known as the binary entropy function $H_b(p)$) is:
+\[
+  H_b(p) \;=\; -p \log_2 p - (1-p) \log_2 (1-p).
+\]
+To find the maximum, we differentiate $H_b(p)$ with respect to $p$ (using $\frac{d}{dp}\log_2 x = \frac{1}{x \ln 2}$):
+\[
+  \frac{d}{dp} H_b(p) \;=\; -\log_2 p - \frac{p}{p \ln 2} + \log_2(1-p) + \frac{1-p}{(1-p)\ln 2} \;=\; \log_2 \left(\frac{1-p}{p}\right).
+\]
+Setting the derivative to 0:
+\[
+  \log_2 \left(\frac{1-p}{p}\right) \;=\; 0 \implies \frac{1-p}{p} \;=\; 1 \implies 1-p \;=\; p \implies p \;=\; 0.5.
+\]
+At $p = 0.5$, $H_b(0.5) = -0.5(-1) - 0.5(-1) = 1.0$ bit. The entropy is 0 at $p=0$ and $p=1$, and is symmetric with a maximum at $p=0.5$. This matches intuition: a completely fair coin offers maximum uncertainty (1 bit of information per flip), while a double-headed coin ($p=1$) carries zero uncertainty.
+
+\begin{exercise}[Constructing a Huffman Code]
+Construct the optimal prefix-free code for the alphabet $\Sigma = \{A, B, C, D, E\}$ with probabilities:
+\[
+  p(A) = 0.4, \quad p(B) = 0.2, \quad p(C) = 0.2, \quad p(D) = 0.1, \quad p(E) = 0.1.
+\]
+Calculate its average length and verify that it satisfies the Source Coding Theorem.
+\end{exercise}
+
+\textbf{Solution.}
+1. **Combine lowest probabilities:** $D$ (0.1) and $E$ (0.1) are combined into a meta-symbol $DE$ with probability $0.2$. Our set is now $\{A: 0.4, B: 0.2, C: 0.2, DE: 0.2\}$.
+2. **Combine next lowest:** Combine $C$ (0.2) and $DE$ (0.2) into $CDE$ with probability $0.4$. Our set is now $\{A: 0.4, B: 0.2, CDE: 0.4\}$.
+3. **Combine next lowest:** Combine $B$ (0.2) and $CDE$ (0.4) into $BCDE$ with probability $0.6$. Our set is now $\{A: 0.4, BCDE: 0.6\}$.
+4. **Final combination:** Combine $A$ and $BCDE$ into the root.
+Now we assign bits from root down:
+* $A \mapsto 0$
+* $BCDE \mapsto 1$
+  * $B \mapsto 10$
+  * $CDE \mapsto 11$
+    * $C \mapsto 110$
+    * $DE \mapsto 111$
+      * $D \mapsto 1110$
+      * $E \mapsto 1111$
+
+Codeword lengths are: $\ell(A)=1$, $\ell(B)=2$, $\ell(C)=3$, $\ell(D)=4$, $\ell(E)=4$.
+Average length:
+\[
+  L_{\text{avg}} \;=\; 0.4(1) + 0.2(2) + 0.2(3) + 0.1(4) + 0.1(4) \;=\; 0.4 + 0.4 + 0.6 + 0.4 + 0.4 \;=\; 2.2 \text{ bits}.
+\]
+Now we compute the entropy $H(X)$:
+\[
+  H(X) \;=\; -0.4\log_2 0.4 - 2(0.2\log_2 0.2) - 2(0.1\log_2 0.1) \;\approx\; 0.528 + 0.929 + 0.664 \;=\; 2.121 \text{ bits}.
+\]
+Since $2.121 \le 2.2 < 3.121$, the Source Coding Theorem is satisfied.
+
+\bigskip
+
+% ============================================================
+\section{Part 6 \texorpdfstring{---}{--} Problems}
+% ============================================================
+
+\begin{problem}[Kraft Inequality Proof]
+Prove the converse of Kraft's inequality: if a set of positive integers $\ell_1, \ell_2, \ldots, \ell_n$ satisfies $\sum_{i=1}^n 2^{-\ell_i} \le 1$, then there exists a prefix-free binary code with these codeword lengths.
+\end{problem}
+
+\begin{problem}[Entropy of a Functions]
+Let $X$ be a discrete random variable, and let $g$ be a deterministic function. Prove that:
+\[
+  H(g(X)) \;\le\; H(X).
+\]
+Under what conditions does equality hold? Interpret this in terms of processing information.
+\end{problem}
+
+\bigskip
+
+% ============================================================
+\section{Part 7 \texorpdfstring{---}{--} Deep Problems}
+% ============================================================
+
+\begin{deepproblem}[Landauer's Principle and the Physics of Information]
+Information is not abstract; it must be stored in physical systems (like voltage levels, electron spins, or molecular configurations).
+In 1961, Rolf Landauer proved that erasing a bit of information must dissipate a minimum amount of heat. Let us model this physically.
+Consider a single particle in a symmetric double-well potential (representing a 1-bit memory: left well is \textbf{0}, right well is \textbf{1}), in contact with a heat bath at temperature $T$.
+\begin{enumerate}[label=(\alph*)]
+  \item Initially, the particle is in either well with equal probability (representing an unknown bit). What is the Shannon entropy of this state? What is the thermodynamic entropy $S = k_B \ln \Omega$?
+  \item "Reset to Zero" is the process of forcing the particle into the left well (\textbf{0}) regardless of where it started. Show that this process reduces the volume of accessible phase space by a factor of 2.
+  \item Since the total entropy of the universe (system + bath) cannot decrease (Second Law of Thermodynamics), show that the entropy of the heat bath must increase by at least $\Delta S_{\text{bath}} \ge k_B \ln 2$.
+  \item Prove that this erasure requires an dissipation of heat $Q$ into the bath satisfying:
+  \[
+    Q \;\ge\; k_B T \ln 2.
+  \]
+  \item Calculate this heat limit at room temperature ($T = 293$ K) in Joules. Reflect on why modern computers operate at about $10^4$ times this limit, and what physical engineering barriers prevent us from reaching it.
+\end{enumerate}
+\end{deepproblem}
+
+\bigskip
+
+% ============================================================
+\section{Part 8 \texorpdfstring{---}{--} Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On physical information:** We often think of software as completely separate from hardware. How does Landauer's Principle change your view of "abstract computation"?
+  \item **On structural limits:** In the Kraft inequality, we see that short codes "use up" code space. If a computer's memory addresses must be prefix-free, how does this limit addressable memory size?
+\end{enumerate}
+\end{reflectionbox}
+
+\vspace{1.4cm}
+\begin{center}
+{\color{CompBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 1, Module 1 --- The Nature of Information}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 1.2 --- Noisy Channels and Error Correction}}\\[6pt]
+{\color{CompBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

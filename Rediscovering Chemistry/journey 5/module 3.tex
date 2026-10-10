@@ -1,0 +1,425 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Journey 5 — forest green / amber) ────────────────────────────────
+\definecolor{JourneyColor}{HTML}{065F46}
+\definecolor{ModuleColor}{HTML}{059669}
+\definecolor{PuzzleColor}{HTML}{B45309}
+\definecolor{DiscoveryColor}{HTML}{D97706}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{4}
+\chapter[Journey 5 --- Chemical Kinetics and Dynamics]
+        {Journey Five\\[8pt]
+         \textcolor{ModuleColor}{\large Chemical Kinetics and Dynamics}}
+\setcounter{section}{2}
+
+\section{Module 5.3 --- Reaction Mechanisms}
+\label{sec:mod5.3}
+
+\subsection*{Motivation}
+
+We established in Module 5.1 that the exponents in a reaction's rate law ($R = k[\ce{A}]^x[\ce{B}]^y$) are not dictated by the coefficients of the balanced equation.
+We explored in Module 5.2 how energy barriers restrict collisions to transition states.
+Now, we combine these two principles to solve a deeper question: *how* do reactions actually happen?
+
+Most chemical reactions do not occur in a single, massive collision.
+A balanced equation like $\ce{2 H2 + O2 -> 2 H2O}$ represents the net summary of a complex multi-step pathway.
+This pathway is the **reaction mechanism**.
+This module explores how to decompose reactions into simple, individual collisions (elementary steps), identify the rate-limiting bottlenecks, and use algebraic approximations to resolve the concentration kinetics of unstable intermediates.
+
+\subsection{Elementary Steps and rate laws}
+
+An overall reaction is composed of a sequence of **elementary steps**, each representing a single microscopic collision event.
+
+\begin{puzzlebox}
+\textbf{The Vanishing Reactant Paradox.}
+
+Consider the gas-phase reaction:
+\[
+  \ce{NO2(g) + CO(g) -> NO(g) + CO2(g)}.
+\]
+If this reaction occurred in a single elementary collision, the rate law would be directly dictated by its stoichiometry: $R = k[\ce{NO2}][\ce{CO}]$.
+However, experimental measurements at temperatures below \SI{500}{K} reveal the rate law is:
+\[
+  R \;=\; k [\ce{NO2}]^2.
+\]
+The concentration of carbon monoxide ($\ce{CO}$) has completely no effect on the reaction speed, even though it is consumed in the reaction!
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Why is it physically impossible for this reaction to occur in a single step matching the experimental rate law?
+  \item An **elementary step** is a reaction whose rate law *is* directly dictated by its stoichiometry.
+        A unimolecular step $\ce{A -> Products}$ has $R = k[\ce{A}]$. A bimolecular step $\ce{A + B -> Products}$ has $R = k[\ce{A}][\ce{B}]$.
+        Explain why this direct correspondence holds for elementary steps but not for overall reactions.
+  \item Suppose the reaction proceeds via a two-step mechanism:
+        1. $\ce{NO2 + NO2 ->[k_1] NO3 + NO}$
+        2. $\ce{NO3 + CO ->[k_2] NO2 + CO2}$
+        Identify the **reaction intermediate**—a species that is produced in one step and consumed in another, and therefore does not appear in the net overall equation.
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{The Rate-Determining Step}
+
+In a multi-step pathway, the overall rate is limited by the slowest step, known as the **rate-determining step** (RDS).
+
+\begin{explobox}
+Consider a factory assembly line. If step 1 takes 10 minutes and step 2 takes 1 second, the rate of the entire line is determined entirely by the speed of step 1.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item In the two-step mechanism for the puzzle reaction:
+        1. $\ce{NO2 + NO2 ->[k_1] NO3 + NO}$ (slow)
+        2. $\ce{NO3 + CO ->[k_2] NO2 + CO2}$ (fast)
+        the first step is the rate-determining bottleneck.
+        Write down the rate law of the rate-determining step. Show that this matches the experimental rate law of the overall reaction.
+  \item Why does the concentration of $\ce{CO}$ not affect the rate? (At what point in the timeline of a single reaction path does the $\ce{CO}$ molecule get involved?)
+\end{enumerate}
+\end{explobox}
+
+\subsection{Fast Pre-Equilibrium}
+
+When the rate-determining step is preceded by a fast, reversible step, the intermediate concentration reaches a dynamic equilibrium.
+
+\begin{explobox}
+Consider the mechanism:
+1. $\ce{A + B <=> [k_1][k_{-1}] I}$ (fast equilibrium)
+2. $\ce{I ->[k_2] P}$ (slow, rate-determining)
+where I is an intermediate.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item The rate of production of products is dictated by the slow step: $R = k_2 [\ce{I}]$. Why is this rate law not useful as written? (Can we directly measure the concentration of an unstable intermediate in a test tube?)
+  \item Since step 1 is fast and reversible, the forward and reverse rates of this step are approximately equal:
+  \[
+    k_1 [\ce{A}][\ce{B}] \;\approx\; k_{-1} [\ce{I}].
+  \]
+  Solve this equation for the intermediate concentration $[\ce{I}]$.
+  \item Substitute this expression into the rate law of the rate-determining step to prove that the overall rate law is:
+  \[
+    R \;=\; \frac{k_2 k_1}{k_{-1}} [\ce{A}][\ce{B}].
+  \]
+  Identify the overall rate constant in terms of the elementary constants.
+\end{enumerate}
+\end{explobox}
+
+\subsection{The Steady-State Approximation}
+
+When we cannot assume that preceding steps reach equilibrium, we use a broader algebraic approach.
+
+\begin{explobox}
+The **Steady-State Approximation** assumes that after an initial transient startup period, the concentration of any reactive intermediate remains small and constant over time:
+\[
+  \frac{d[\ce{Intermediate}]}{dt} \;\approx\; 0.
+\]
+\problem Let us apply this to the general mechanism:
+1. $\ce{A + B ->[k_1] I}$
+2. $\ce{I ->[k_{-1}] A + B}$
+3. $\ce{I + C ->[k_2] P}$
+where I is a highly reactive intermediate.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Write the differential equation for the rate of change of $[\ce{I}]$, accounting for its production in step 1 and its consumption in steps 2 and 3:
+  \[
+    \frac{d[\ce{I}]}{dt} \;=\; k_1 [\ce{A}][\ce{B}] - k_{-1} [\ce{I}] - k_2 [\ce{I}][\ce{C}].
+  \]
+  \item Apply the steady-state approximation $\frac{d[\ce{I}]}{dt} = 0$, and solve for the steady-state concentration $[\ce{I}]_{\text{ss}}$.
+  \item The rate of production of product is $R = k_2 [\ce{I}]_{\text{ss}} [\ce{C}]$. Substitute your expression from (b) to show that the overall rate law is:
+  \[
+    R \;=\; \frac{k_1 k_2 [\ce{A}][\ce{B}][\ce{C}]}{k_{-1} + k_2 [\ce{C}]}.
+  \]
+  \item Show that in the limit $k_{-1} \gg k_2 [\ce{C}]$, this rate law reduces to the pre-equilibrium rate law derived in Section 2.3. What is the physical meaning of this limit?
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Chemical reactions occur via mechanisms composed of elementary steps. Unlike overall rate laws, the rate law of an elementary step is directly dictated by its molecular stoichiometry.
+
+\textbf{Second.} The rate-determining step acts as a kinetic bottleneck. The overall rate law of a mechanism matches the rate law of this slowest step.
+
+\textbf{Third.} If the RDS is preceded by a fast equilibrium, we can algebraically replace the unmeasurable intermediate concentration using the equilibrium condition $k_1[\ce{A}][\ce{B}] = k_{-1}[\ce{Intermediate}]$.
+
+\textbf{Fourth.} The steady-state approximation ($\frac{d[\ce{Intermediate}]}{dt} = 0$) is the general algebraic method to resolve the rate laws of arbitrary mechanisms, reducing to the pre-equilibrium limit when reverse rates dominate intermediate consumption.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Reaction mechanism terms}
+* **Elementary Reaction:** A reaction that occurs in a single collision event, passing through a single transition state.
+* **Reaction Intermediate:** A highly reactive species produced in an early step of a mechanism and consumed in a later step.
+* **Rate-Determining Step:** The slowest elementary step in a reaction mechanism that limits the overall rate.
+* **Steady-State Approximation:** The assumption that the rate of change of intermediate concentrations is zero: $\frac{d[\ce{I}]}{dt} = 0$.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Steady-State Approximation on Ozone Decomposition.}
+  
+        The decomposition of ozone:
+        \[
+          \ce{2 O3(g) -> 3 O2(g)}
+        \]
+        is believed to proceed via the following two-step mechanism:
+        1. $\ce{O3 <=> [k_1][k_{-1}] O2 + O}$ (fast)
+        2. $\ce{O3 + O ->[k_2] 2 O2}$ (slow)
+        Derive the overall rate law for the decomposition of ozone using the steady-state approximation on the oxygen atom intermediate $\ce{O}$.
+        
+        \textbf{Solution:}
+        First, we write the differential rate equation for the intermediate $\ce{O}$.
+        * $\ce{O}$ is produced by the forward reaction of step 1: rate $= k_1 [\ce{O3}]$.
+        * $\ce{O}$ is consumed by the reverse reaction of step 1: rate $= k_{-1} [\ce{O2}][\ce{O}]$.
+        * $\ce{O}$ is consumed by the forward reaction of step 2: rate $= k_2 [\ce{O3}][\ce{O}]$.
+        
+        Thus, the net rate of change of $[\ce{O}]$ is:
+        \[
+          \frac{d[\ce{O}]}{dt} \;=\; k_1 [\ce{O3}] - k_{-1} [\ce{O2}][\ce{O}] - k_2 [\ce{O3}][\ce{O}].
+        \]
+        Apply the steady-state approximation $\frac{d[\ce{O}]}{dt} \approx 0$:
+        \[
+          k_1 [\ce{O3}] - k_{-1} [\ce{O2}][\ce{O}] - k_2 [\ce{O3}][\ce{O}] \;=\; 0 \implies k_1 [\ce{O3}] \;=\; [\ce{O}] \left( k_{-1} [\ce{O2}] + k_2 [\ce{O3}] \right).
+        \]
+        Solve for the steady-state concentration $[\ce{O}]_{\text{ss}}$:
+        \[
+          [\ce{O}]_{\text{ss}} \;=\; \frac{k_1 [\ce{O3}]}{k_{-1} [\ce{O2}] + k_2 [\ce{O3}]}.
+        \]
+        The overall rate of reaction, measured by the rate of the slow step 2, is:
+        \[
+          R \;=\; k_2 [\ce{O3}][\ce{O}].
+        \]
+        Substitute the expression for $[\ce{O}]_{\text{ss}}$:
+        \[
+          R \;=\; \frac{k_1 k_2 [\ce{O3}]^2}{k_{-1} [\ce{O2}] + k_2 [\ce{O3}]}.
+        \]
+        This is the complete steady-state rate law.
+        
+  \item \textbf{Inhibition by Products.}
+  
+        For the ozone rate law derived in E1, show what the rate law reduces to under the limit $k_{-1}[\ce{O2}] \gg k_2[\ce{O3}]$. Explain the physical meaning of this limit.
+        
+        \textbf{Solution:}
+        In the limit where the reverse rate of step 1 is much faster than the forward rate of step 2 ($k_{-1}[\ce{O2}] \gg k_2[\ce{O3}]$), we can neglect the $k_2[\ce{O3}]$ term in the denominator of the steady-state rate law:
+        \[
+          R \;\approx\; \frac{k_1 k_2 [\ce{O3}]^2}{k_{-1} [\ce{O2}]}.
+        \]
+        Defining the effective rate constant $k_{\text{eff}} = \frac{k_1 k_2}{k_{-1}}$, we obtain:
+        \[
+          R \;=\; k_{\text{eff}} \frac{[\ce{O3}]^2}{[\ce{O2}]}.
+        \]
+        Physically, this limit represents a **fast pre-equilibrium** in step 1, followed by a very slow step 2.
+        Notice that the rate is inversely proportional to the concentration of the product $\ce{O2}$. This means the product $\ce{O2}$ acts as a **kinetic inhibitor**: adding oxygen gas shifts the fast pre-equilibrium backward, lowering the concentration of the reactive intermediate $\ce{O}$ and slowing the reaction.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Nitrogen Dioxide and Fluorine.}
+  
+        The gas-phase reaction of nitrogen dioxide and fluorine:
+        \[
+          \ce{2 NO2(g) + F2(g) -> 2 NO2F(g)}
+        \]
+        has the experimental rate law $R = k[\ce{NO2}][\ce{F2}]$.
+        Propose a two-step mechanism (with one slow step and one fast step) that is consistent with this rate law. Identify the intermediate.
+        
+  \item \textbf{Oxidation of Nitric Oxide.}
+  
+        The oxidation of nitric oxide:
+        \[
+          \ce{2 NO(g) + O2(g) -> 2 NO2(g)}
+        \]
+        has the experimental rate law $R = k[\ce{NO}]^2[\ce{O2}]$.
+        Consider the following mechanism involving the fast pre-equilibrium formation of a dimer intermediate $\ce{N2O2}$:
+        1. $\ce{2 NO <=> [k_1][k_{-1}] N2O2}$ (fast)
+        2. $\ce{N2O2 + O2 ->[k_2] 2 NO2}$ (slow)
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Derive the overall rate law for this mechanism, assuming step 1 is in fast pre-equilibrium.
+          \item Does this match the experimental rate law?
+          \item Explain why the rate constant of this reaction *decreases* when temperature is raised (an anomalous negative activation energy). \textit{Hint: Express the effective rate constant in terms of the equilibrium constant $K_1 = k_1/k_{-1}$, and consider how the equilibrium of the exothermic dimer formation shifts with temperature}.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{The General Steady-State Derivation.}
+  
+        Consider the general reaction mechanism:
+        \[
+          \ce{A + B <=> [k_1][k_{-1}] I}
+        \]
+        \[
+          \ce{I + C ->[k_2] P}
+        \]
+        where I is a highly reactive intermediate.
+        \begin{enumerate}[label=(\alph*)]
+          \item Derive the rate law for the production of P using the steady-state approximation on intermediate I.
+          \item Show that if $k_2 [\ce{C}] \gg k_{-1}$, the rate law simplifies to $R = k_1 [\ce{A}][\ce{B}]$. Explain the physical meaning of this limit. (Which step is rate-determining in this case?)
+        \end{enumerate}
+
+  \item \textbf{Chain Reactions: The Hydrogen-Bromine Reaction.}
+  
+        The gas-phase reaction of hydrogen and bromine:
+        \[
+          \ce{H2(g) + Br2(g) -> 2 HBr(g)}
+        \]
+        has a highly complex, non-integer rate law discovered experimentally by Max Bodenstein in 1906:
+        \[
+          R \;=\; \frac{k [\ce{H2}] [\ce{Br2}]^{3/2}}{[\ce{Br2}] + k' [\ce{HBr}]}.
+        \]
+        This reaction proceeds via a free-radical chain mechanism:
+        1. **Initiation:** $\ce{Br2 ->[k_1] 2 Br^\bullet}$
+        2. **Propagation:** $\ce{Br^\bullet + H2 ->[k_2] HBr + H^\bullet}$
+        3. **Propagation:** $\ce{H^\bullet + Br2 ->[k_3] HBr + Br^\bullet}$
+        4. **Inhibition:** $\ce{H^\bullet + HBr ->[k_4] H2 + Br^\bullet}$
+        5. **Termination:** $\ce{2 Br^\bullet ->[k_5] Br2}$
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Write down the differential equations for the rate of change of the radical intermediates $[\ce{H^\bullet}]$ and $[\ce{Br^\bullet}]$.
+          \item Apply the steady-state approximation to both intermediates ($\frac{d[\ce{H^\bullet}]}{dt} = 0$ and $\frac{d[\ce{Br^\bullet}]}{dt} = 0$) to show that:
+          \[
+            [\ce{Br^\bullet}]_{\text{ss}} \;=\; \sqrt{\frac{k_1}{k_5} [\ce{Br2}]}, \qquad [\ce{H^\bullet}]_{\text{ss}} \;=\; \frac{k_2 [\ce{H2}] \sqrt{\dfrac{k_1}{k_5}[\ce{Br2}]}}{k_3 [\ce{Br2}] + k_4 [\ce{HBr}]}.
+          \]
+          \item The rate of reaction is the rate of production of the product: $R = \frac{d[\ce{HBr}]}{dt} = k_2 [\ce{Br^\bullet}][\ce{H2}] + k_3 [\ce{H^\bullet}][\ce{Br2}] - k_4 [\ce{H^\bullet}][\ce{HBr}]$.
+                Substitute your steady-state expressions to derive the Bodenstein rate law. Identify $k$ and $k'$ in terms of the elementary rate constants.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Steady State:** The steady-state approximation assumes $\frac{d[\ce{I}]}{dt} = 0$. But $[\ce{I}]$ must start at 0 and eventually return to 0 when the reactants are exhausted. Why is this approximation valid for the vast middle portion of the reaction timescale?
+  \item **On Bodenstein's Rate Law:** The rate law for the hydrogen-bromine reaction contains a product term $[\ce{HBr}]$ in the denominator. Why does this imply that the product $\ce{HBr}$ acts as an inhibitor? What is the physical mechanism of this inhibition?
+  \item **On Symmetries:** In the dimer pre-equilibrium model for $\ce{NO}$ oxidation, the rate constant *decreases* with temperature. Why is this "negative activation energy" not a violation of the Arrhenius law for individual elementary steps?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~5.4 completes this journey by introducing **Catalysis**. We will study how catalysts provide alternative pathways with lower activation energies to speed up reactions. We will explore homogeneous and heterogeneous catalysis, and derive the Michaelis-Menten equations for enzyme kinetics.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 5, Module 5.3 --- Reaction Mechanisms}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 5.4 --- Catalysis}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

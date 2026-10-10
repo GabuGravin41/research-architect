@@ -1,0 +1,488 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.8cm, bottom=2.8cm, left=3.0cm, right=2.5cm, includeheadfoot, headheight=15pt]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue}
+
+% ── Colours ─────────────────────────────────────────────────
+\definecolor{NavyBlue}{HTML}{1E3A8A}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{D97706}
+\definecolor{LightBlue}{HTML}{EFF6FF}
+\definecolor{LightGold}{HTML}{FEF3C7}
+\definecolor{DarkGrey}{HTML}{334155}
+\definecolor{BoxGreen}{HTML}{F0FDF4}
+\definecolor{SoftRed}{HTML}{FFF1F2}
+\definecolor{SidebarGrey}{HTML}{F8FAFC}
+
+% ── Section formatting ───────────────────────────────────────
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{Gold}}{}{0em}{}
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 5 $\cdot$ Module 3}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Environments (tcolorbox Unification) ─────────────────────
+
+% Puzzle box — opening problem
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=NavyBlue!5, colframe=NavyBlue,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Discovery box — moment of crystallisation
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=LightGold, colframe=Gold,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Name box — formal definition reveal
+\newtcolorbox{namebox}[1][]{
+  enhanced, breakable,
+  colback=LightBlue, colframe=MidBlue,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=BoxGreen, colframe=DarkGrey!35,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Thought provocation — inline philosophical aside
+\newtcolorbox{thought}[1][]{
+  enhanced, breakable,
+  colback=SidebarGrey, colframe=Gold,
+  boxrule=0pt, leftrule=1.5pt,
+  sharp corners,
+  left=10pt, right=10pt, top=7pt, bottom=7pt,
+  before skip=10pt, after skip=10pt,
+  #1
+}
+
+% Problem counter
+\newcounter{problem}
+\newenvironment{problem}[1][]{%
+  \refstepcounter{problem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{MidBlue}Problem \theproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Deep problem counter
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{%
+  \refstepcounter{deepproblem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Exercise counter
+\newcounter{exercise}
+\newenvironment{exercise}[1][]{%
+  \refstepcounter{exercise}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{Gold}Exercise \theexercise}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 5: UNCERTAINTY}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 3}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Continuous Distributions and the Central Limit Theorem}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+Out of chaos, order emerges.\\[0.15cm]
+Why does arbitrary noise always resolve into a perfect bell curve?}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}           & Journey 5 --- Uncertainty \\[4pt]
+\color{DarkGrey}\textbf{Module}            & 3 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}     & Module 2 (random variables, expectation, discrete distributions) \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & Continuous variables, PDFs, Gaussian curves, LLN, CLT \\[4pt]
+\color{DarkGrey}\textbf{Format}            & 8 problems $+$ 3 deep problems $\approx$ 13 pages \\
+\end{tabular}
+\vspace{1cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+\noindent\textbf{Recap of Module 2.}
+Module~2 introduced discrete random variables, probability mass functions (PMFs), and the concepts of expectation and variance. You discovered the power of the linearity of expectation to decompose complex variables, and you explored the Bernoulli, binomial, geometric, and Poisson distributions.
+
+\medskip
+This module steps from the countable to the uncountable. In many physical setups—measuring the height of individuals, the lifetime of a radioactive nucleus, or the position of a particle—outcomes can fall anywhere in a continuous range. This requires translating our sums into integrals and discovering how the accumulation of independent noise yields the universal Gaussian curve.
+
+\newpage
+
+% ============================================================
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+% ============================================================
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle: The Galton Board.}
+
+A Galton Board (or quincunx) consists of a vertical board with rows of staggered pins. Balls are dropped from the top. Each time a ball hits a pin, it bounces either left (L) or right (R) with equal probability. At the bottom, bins collect the balls.
+* If a ball hits $n$ pins, the number of right bounces is a discrete random variable $X \sim \text{Binomial}(n, 0.5)$.
+* If we drop 10,000 balls through 100 rows of pins, the bins at the bottom collect the balls in a highly stable, smooth, symmetric bell curve.
+
+\medskip
+\textbf{Question 1.} What is the probability that a single ball lands in the exact center bin ($X = 50$)? Calculate it using the binomial formula.
+
+\textbf{Question 2.} As the number of rows $n$ grows, the probability of landing in \emph{any} specific bin shrinks toward zero. If the probability of any single point is zero, how can we mathematically define a continuous probability distribution without everything vanishing?
+
+\textbf{Question 3.} (The Mystery of the Bell Curve.) The individual steps of the ball are discrete binary bounces. Why does their accumulated sum resolve into a smooth, continuous exponential curve of the form $f(x) \propto e^{-x^2}$? Where does this specific mathematical function come from?
+\end{puzzlebox}
+
+\newpage
+
+% ============================================================
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+% ============================================================
+
+\subsection{Step 1: Continuous Random Variables}
+
+When the range of a random variable is uncountable, we replace PMFs with densities.
+
+\begin{problem}
+\label{prob:pdf_definition}
+A random variable $X : \Omega \to \mathbb{R}$ is **continuous** if there exists a non-negative function $f_X : \mathbb{R} \to \mathbb{R}$, called the \textbf{probability density function} (PDF), such that for any $a \le b$:
+\[
+  P(a \le X \le b) \;=\; \int_a^b f_X(x) \, dx.
+\]
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Explain why $P(X = x) = 0$ for any specific real number $x$. How can an event be "possible" if its probability is zero?
+  \item The \textbf{cumulative distribution function} (CDF) is $F_X(x) = P(X \le x) = \int_{-\infty}^x f_X(t) \, dt$. Using the Fundamental Theorem of Calculus, write $f_X(x)$ in terms of $F_X(x)$.
+  \item Prove that any valid PDF $f(x)$ must satisfy:
+  \[
+    \int_{-\infty}^\infty f(x) \, dx = 1.
+  \]
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 2: Continuous Expectation and Variance}
+
+We generalize our discrete averages by replacing sums with Riemann integrals.
+
+\begin{problem}
+\label{prob:cont_expectation}
+The expected value of a continuous random variable $X$ with PDF $f(x)$ is:
+\[
+  E[X] \;=\; \int_{-\infty}^\infty x \cdot f(x) \, dx.
+\]
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Let $g(X)$ be a real-valued function of $X$. Prove the **law of the unconscious statistician** (LOTUS) for the continuous case:
+  \[
+    E[g(X)] \;=\; \int_{-\infty}^\infty g(x) \cdot f(x) \, dx.
+  \]
+  \item Define variance for a continuous variable: $\text{Var}(X) = E[(X - E[X])^2]$. Prove that $\text{Var}(X) = E[X^2] - (E[X])^2$ holds exactly as in the discrete case.
+  \item Show that linearity of expectation $E[aX + bY] = aE[X] + bE[Y]$ holds for continuous variables.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 3: Famous Continuous Distributions}
+
+Certain density shapes are fundamental to modeling reality.
+
+\begin{problem}
+\label{prob:cont_distributions}
+Evaluate the expectation and variance for the following distributions:
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item **Uniform ($a, b$):** Equal density over a bounded interval: $f(x) = \frac{1}{b-a}$ for $x \in [a, b]$, and $0$ otherwise.
+  \item **Exponential ($\lambda$):** Used for modeling arrival lifetimes. $f(x) = \lambda e^{-\lambda x}$ for $x \ge 0$. Prove the continuous **memoryless property**: $P(X > s + t \mid X > s) = P(X > t)$ for all real $s, t > 0$.
+  \item **Normal ($n(\mu, \sigma^2)$):** The Gaussian bell curve:
+  \[
+    f(x) \;=\; \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}.
+  \]
+  Verify that this PDF is symmetric around $x = \mu$, and that the parameter $\sigma$ represents the horizontal distance from the center to the inflection points.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 4: The Laws of Large Numbers and the Central Limit Theorem}
+
+We now explore how order emerges from sum aggregates of arbitrary variables.
+
+\begin{problem}
+\label{prob:limit_theorems}
+Let $X_1, X_2, \ldots, X_n$ be independent and identically distributed (i.i.d.) random variables with mean $\mu$ and variance $\sigma^2$. Let $S_n = \sum_{i=1}^n X_i$ be the sum, and $A_n = S_n/n$ be the sample mean.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Calculate the expectation $E[A_n]$ and variance $\text{Var}(A_n)$. What happens to the variance of the sample mean as $n \to \infty$?
+  \item **The Weak Law of Large Numbers (WLLN):** Prove that for any $\epsilon > 0$:
+  \[
+    \lim_{n\to\infty} P(|A_n - \mu| \ge \epsilon) \;=\; 0.
+  \]
+  \textit{Hint: Use Chebyshev's Inequality, which you will prove in the solved exercises.}
+  \item **The Central Limit Theorem (CLT):** Define the normalized variable:
+  \[
+    Z_n \;=\; \frac{S_n - n\mu}{\sigma \sqrt{n}} \;=\; \frac{A_n - \mu}{\sigma / \sqrt{n}}.
+  \]
+  As $n \to \infty$, the CDF of $Z_n$ converges to the CDF of the standard normal distribution $N(0, 1)$:
+  \[
+    \lim_{n\to\infty} P(Z_n \le z) \;=\; \Phi(z) \;=\; \frac{1}{\sqrt{2\pi}} \int_{-\infty}^z e^{-t^2/2} \, dt.
+  \]
+  Explain why this theorem explains the universal occurrence of bell-shaped distributions in nature (e.g., measurement errors, physical sizes, thermal noise).
+\end{enumerate}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} In continuous probability, individual points have zero probability measure. Probability is only defined over intervals as areas under a density curve.
+
+\textbf{Second.} The exponential distribution is the unique continuous distribution that is memoryless. It models processes like radioactive decay or light bulb failures that do not wear out over time.
+
+\textbf{Third.} The Law of Large Numbers guarantees that sample averages converge to their true theoretical expectations as the sample size grows.
+
+\textbf{Fourth.} The Central Limit Theorem guarantees that the sum of a large number of independent random variables—regardless of their underlying distributions—will converge to a normal distribution. Symmetries and averages shape arbitrary chaos into Gaussian order.
+\end{discoverybox}
+
+\newpage
+
+% ============================================================
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+% ============================================================
+
+\begin{namebox}
+\textbf{Continuous Probability Densities.}
+
+Let $X$ be a continuous random variable.
+* **Density (PDF):** $f(x) \ge 0$, with $\int_{-\infty}^\infty f(x) \, dx = 1$.
+* **Distribution (CDF):** $F(x) = P(X \le x) = \int_{-\infty}^x f(t) \, dt$.
+* **Expectation:** $E[X] = \int_{-\infty}^\infty x f(x) \, dx$.
+* **Variance:** $\text{Var}(X) = E[X^2] - (E[X])^2 = \int_{-\infty}^\infty x^2 f(x) \, dx - \mu^2$.
+
+\medskip
+\textbf{Summary of Famous Continuous Distributions:}
+
+\begin{center}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Distribution} & \textbf{PDF } $f(x)$ & \textbf{Expectation } $E[X]$ & \textbf{Variance } $\text{Var}(X)$ \\
+\midrule
+Uniform($a,b$) & $\frac{1}{b-a}, \quad x \in [a,b]$ & $\frac{a+b}{2}$ & $\frac{(b-a)^2}{12}$ \\
+Exponential($\lambda$) & $\lambda e^{-\lambda x}, \quad x \ge 0$ & $\frac{1}{\lambda}$ & $\frac{1}{\lambda^2}$ \\
+Normal($\mu,\sigma^2$) & $\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ & $\mu$ & $\sigma^2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{namebox}
+
+\newpage
+
+% ============================================================
+\section{Part 5 \texorpdfstring{---}{--} Solved Exercises}
+% ============================================================
+
+\begin{exercise}[Chebyshev's Inequality]
+Let $X$ be a random variable with finite mean $\mu$ and variance $\sigma^2$. Prove **Chebyshev's Inequality**: for any $k > 0$,
+\[
+  P(|X - \mu| \ge k) \le \frac{\sigma^2}{k^2}.
+\]
+\end{exercise}
+
+\begin{proof}[Solution]
+We begin by proving **Markov's Inequality**: if $Y \ge 0$ is a non-negative random variable, then for any $c > 0$:
+\[
+  P(Y \ge c) \le \frac{E[Y]}{c}.
+\]
+Let $f(y)$ be the PDF of $Y$. Since $Y$ is non-negative:
+\[
+  E[Y] = \int_0^\infty y f(y) \, dy = \int_0^c y f(y) \, dy + \int_c^\infty y f(y) \, dy.
+\]
+Since all terms are non-negative, we can drop the first integral to get the inequality:
+\[
+  E[Y] \ge \int_c^\infty y f(y) \, dy.
+\]
+In the range of integration $[c, \infty)$, we have $y \ge c$. Thus:
+\[
+  E[Y] \ge \int_c^\infty c f(y) \, dy = c \int_c^\infty f(y) \, dy = c P(Y \ge c).
+\]
+Dividing by $c$ yields Markov's Inequality: $P(Y \ge c) \le E[Y]/c$.
+
+Now, let $Y = (X - \mu)^2$. Since $Y$ is non-negative, we can apply Markov's Inequality with $c = k^2$:
+\[
+  P\bigl((X - \mu)^2 \ge k^2\bigr) \le \frac{E[(X - \mu)^2]}{k^2}.
+\]
+Observe that $(X - \mu)^2 \ge k^2$ is equivalent to $|X - \mu| \ge k$. Since $E[(X - \mu)^2] = \sigma^2$, we obtain:
+\[
+  P(|X - \mu| \ge k) \le \frac{\sigma^2}{k^2}.
+\]
+This completes the proof.
+\end{proof}
+
+\begin{exercise}[Expectation and Variance of the Exponential Distribution]
+Derive the expected value and variance of $X \sim \text{Exponential}(\lambda)$.
+\end{exercise}
+
+\begin{proof}[Solution]
+The PDF of $X$ is $f(x) = \lambda e^{-\lambda x}$ for $x \ge 0$.
+To find the expected value:
+\[
+  E[X] = \int_0^\infty x \cdot \lambda e^{-\lambda x} \, dx.
+\]
+Use integration by parts: let $u = x$ and $dv = \lambda e^{-\lambda x} dx$, so $du = dx$ and $v = -e^{-\lambda x}$.
+\[
+  E[X] = \left[ -x e^{-\lambda x} \right]_0^\infty - \int_0^\infty (-e^{-\lambda x}) \, dx.
+\]
+The boundary term vanishes: $\lim_{x\to\infty} (-x e^{-\lambda x}) = 0$ (exponential decay dominates linear growth), and at $x=0$ it is 0.
+\[
+  E[X] = 0 + \left[ -\frac{1}{\lambda} e^{-\lambda x} \right]_0^\infty = \frac{1}{\lambda}.
+\]
+
+To find the variance, we first compute the second moment $E[X^2]$:
+\[
+  E[X^2] = \int_0^\infty x^2 \cdot \lambda e^{-\lambda x} \, dx.
+\]
+Use integration by parts: let $u = x^2$ and $dv = \lambda e^{-\lambda x} dx$, so $du = 2x dx$ and $v = -e^{-\lambda x}$.
+\[
+  E[X^2] = \left[ -x^2 e^{-\lambda x} \right]_0^\infty + 2 \int_0^\infty x e^{-\lambda x} \, dx.
+\]
+The boundary term vanishes. The remaining integral is exactly $\frac{2}{\lambda} E[X]$:
+\[
+  E[X^2] = 0 + \frac{2}{\lambda} \left( \frac{1}{\lambda} \right) = \frac{2}{\lambda^2}.
+\]
+Thus, the variance is:
+\[
+  \text{Var}(X) = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \left( \frac{1}{\lambda} \right)^2 = \frac{1}{\lambda^2}.
+\]
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Part 6 \texorpdfstring{---}{--} Problems}
+% ============================================================
+
+\begin{problem}[The Normalizing Constant of the Gaussian]
+The PDF of the standard normal distribution contains the term $\frac{1}{\sqrt{2\pi}}$ to ensure it integrates to 1.
+Prove that:
+\[
+  I \;=\; \int_{-\infty}^\infty e^{-x^2/2} \, dx \;=\; \sqrt{2\pi}.
+\]
+\textit{Hint: Write $I^2 = \left(\int_{-\infty}^\infty e^{-x^2/2} dx\right)\left(\int_{-\infty}^\infty e^{-y^2/2} dy\right) = \int_{-\infty}^\infty \int_{-\infty}^\infty e^{-(x^2+y^2)/2} dx dy$. Convert this double integral to polar coordinates ($x = r\cos\theta, y = r\sin\theta$) with area element $dx dy = r dr d\theta$.}
+\end{problem}
+
+\begin{problem}[Continuous memoryless property characterisation]
+Prove that the exponential distribution is the *only* continuous distribution supported on $[0, \infty)$ that possesses the memoryless property. \textit{Hint: Let $g(x) = P(X > x)$. Show that the memoryless property implies $g(s+t) = g(s)g(t)$ for all $s,t > 0$, and solve this Cauchy functional equation for continuous functions.}
+\end{problem}
+
+\begin{problem}[Expectation and Variance of the Continuous Uniform]
+Derive the expectation and variance of $X \sim \text{Uniform}(a,b)$.
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 7 \texorpdfstring{---}{--} Deep Problems}
+% ============================================================
+
+\begin{deepproblem}[CLT Proof via Moment Generating Functions]
+The **moment generating function** (MGF) of a random variable $X$ is defined as $M_X(t) = E[e^{tX}]$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that the Taylor series of $M_X(t)$ around $t=0$ yields the moments: $M_X(t) = 1 + E[X]t + \frac{E[X^2]}{2!}t^2 + \cdots$.
+  \item Let $Z \sim N(0,1)$ be standard normal. Show that $M_Z(t) = e^{t^2/2}$. \textit{Hint: complete the square in the exponent of the integral.}
+  \item Let $X_1, \ldots, X_n$ be i.i.d. random variables with mean $\mu=0$ and variance $\sigma^2=1$. Let $Z_n = \frac{1}{\sqrt{n}}\sum_{i=1}^n X_i$. Show that the MGF of $Z_n$ is:
+  \[
+    M_{Z_n}(t) \;=\; \left[ M_{X_1}\left( \frac{t}{\sqrt{n}} \right) \right]^n.
+  \]
+  \item Expand $M_{X_1}\left( \frac{t}{\sqrt{n}} \right)$ using Taylor series up to $O(1/n)$ terms. Take the limit as $n \to \infty$ of $\left[ 1 + \frac{t^2}{2n} + o(1/n) \right]^n$ to prove that $\lim_{n\to\infty} M_{Z_n}(t) = e^{t^2/2}$. This proves the Central Limit Theorem.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[The Dirac Delta and PDF limits]
+In physics, a point charge or mass has zero volume but finite value. The probability density of a discrete random variable $X$ taking value $x_0$ with probability 1 is represented using the **Dirac Delta function** $\delta(x - x_0)$, satisfying $\delta(x - x_0) = 0$ for $x \neq x_0$, and $\int_{-\infty}^\infty \delta(x - x_0) dx = 1$.
+\begin{enumerate}[label=(\alph*)]
+  \item If $X_n \sim N(0, \sigma_n^2)$ is a normal distribution, show that as $\sigma_n \to 0$, the PDF $f_n(x)$ behaves like $\delta(x)$.
+  \item Write the PMF of a Bernoulli random variable $Y \in \{0, 1\}$ as a continuous PDF using Dirac Deltas. Verify it integrates to 1.
+\end{enumerate}
+\end{deepproblem}
+
+\newpage
+
+% ============================================================
+\section{Part 8 \texorpdfstring{---}{--} Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Continuous vs. Discrete:** In discrete setups, we evaluate $P(X=x)$. In continuous ones, $P(X=x)=0$ and we must evaluate density areas. Does this transition reflect a fundamental limit of how we measure physical reality (which is always discrete at the quantum level)?
+  \item **On the Central Limit Theorem:** The CLT shows that when many small independent factors accumulate, they form a normal distribution. If a system is governed by multiplicative accumulation (like compounding interest), what shape of distribution do you expect to emerge? (Research the **Lognormal** distribution).
+  \item **On Symmetries:** Why is the Gaussian distribution so prevalent in mathematical and physical equations? (Consider its rotation invariance in multi-dimensional space).
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~4 introduces **Generating Functions**. We will discover how to represent integer-valued random sequences as algebraic power series, allowing us to solve complex recurrences and model random walks on grids and graphs. Symmetries in probability will meet algebraic structures.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 5, Module 3 --- Continuous Distributions and the Central Limit Theorem}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 4 --- Generating Functions and Random Walks}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

@@ -1,0 +1,1064 @@
+\documentclass[12pt, a4paper]{book}
+
+% ─── Core packages ────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=30mm, bottom=30mm,
+  inner=32mm, outer=25mm,
+  marginparwidth=18mm
+}
+
+% ─── Mathematics ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amsthm}
+
+% ─── Chemistry ────────────────────────────────────────────────────────────────
+\usepackage[version=4]{mhchem}
+
+% ─── Graphics & colour ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning,
+                calc, backgrounds, patterns, decorations.pathmorphing,
+                matrix}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% ─── Layout ───────────────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{marginnote}
+\usepackage{mdframed}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COLOUR PALETTE
+% ══════════════════════════════════════════════════════════════════════════════
+\definecolor{JourneyColor}{HTML}{065F46}   % forest green — journey headings
+\definecolor{ModuleColor}{HTML}{0F766E}    % deep teal — module headings
+\definecolor{PuzzleColor}{HTML}{B45309}    % deep amber — puzzle boxes
+\definecolor{DiscoveryColor}{HTML}{D97706} % golden amber — discovery boxes
+\definecolor{WarningColor}{HTML}{E11D48}   % coral red — "model breaks" boxes
+\definecolor{ProblemColor}{HTML}{0F766E}   % dark teal — problem sets
+\definecolor{ReflectColor}{HTML}{047857}   % green — reflection boxes
+\definecolor{HistoryColor}{HTML}{9A3412}   % brown — history notes
+\definecolor{LightBg}{HTML}{F8FAFC}        % near-white background
+
+% ══════════════════════════════════════════════════════════════════════════════
+% TCOLORBOX ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=PuzzleColor!6, colframe=PuzzleColor,
+  fonttitle=\bfseries\sffamily, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=PuzzleColor, colframe=PuzzleColor},
+  borderline west={3pt}{0pt}{PuzzleColor}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  fonttitle=\bfseries\sffamily, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor}, #1}
+
+\newtcolorbox{problembox}[1][]{
+  enhanced, breakable,
+  colback=ProblemColor!5, colframe=ProblemColor,
+  fonttitle=\bfseries\sffamily, title={Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ProblemColor, colframe=ProblemColor},
+  borderline west={3pt}{0pt}{ProblemColor}, #1}
+
+\newtcolorbox{deepbox}[1][]{
+  enhanced, breakable,
+  colback=JourneyColor!5, colframe=JourneyColor,
+  fonttitle=\bfseries\sffamily, title={Deep Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=JourneyColor, colframe=JourneyColor},
+  borderline west={4pt}{0pt}{JourneyColor}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=HistoryColor!7, colframe=HistoryColor!60,
+  fonttitle=\bfseries\sffamily\small, title={Historical Note},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=HistoryColor!80, colframe=HistoryColor}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=ReflectColor!6, colframe=ReflectColor,
+  fonttitle=\bfseries\sffamily, title={Reflection},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ReflectColor, colframe=ReflectColor},
+  borderline west={3pt}{0pt}{ReflectColor}, #1}
+
+\newtcolorbox{modelbreaks}[1][]{
+  enhanced, breakable,
+  colback=WarningColor!6, colframe=WarningColor,
+  fonttitle=\bfseries\sffamily, title={Where This Model Breaks},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=WarningColor, colframe=WarningColor},
+  borderline west={4pt}{0pt}{WarningColor}, #1}
+
+\newtcolorbox{namedconcept}[2][]{
+  enhanced,
+  colback=ModuleColor!6, colframe=ModuleColor,
+  fonttitle=\bfseries\sffamily\large, title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ModuleColor, colframe=ModuleColor}, #1}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% THEOREM ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\theoremstyle{definition}
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{question}{Question}[chapter]
+\newtheorem{experiment}{Experiment}[chapter]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECTION FORMATTING
+% ══════════════════════════════════════════════════════════════════════════════
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}
+  {10pt}{\Huge}[\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% HEADER / FOOTER
+% ══════════════════════════════════════════════════════════════════════════════
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CUSTOM COMMANDS
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\chem}[1]{\ce{#1}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\sidenote}[1]{%
+  \marginnote{\footnotesize\sffamily\textcolor{JourneyColor!70}{#1}}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% DOCUMENT
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\setcounter{chapter}{0}
+\chapter[Journey 1 --- What Is Stuff?]
+        {Journey One\\[8pt]
+         \textcolor{ModuleColor}{\large What Is Stuff?\ \ Matter and Its Patterns}}
+\setcounter{section}{3}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  MODULE 1.4 — GASES, VOLUMES, AND AVOGADRO'S BRILLIANT HYPOTHESIS
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Module 1.4 --- Gases, Volumes, and Avogadro's Brilliant Hypothesis}
+\label{sec:mod1.4}
+
+\subsection*{Motivation}
+
+At the end of Module~1.3, Dalton had the right idea
+but the wrong details.
+He assumed water was \ce{HO} and got the atomic mass of oxygen wrong.
+He had no way to determine whether a compound was \ce{HO} or \ce{H2O}
+from mass ratios alone --- because either formula is consistent
+with a 1:8 mass ratio if you choose the right atomic masses.
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=LightBg, colframe=JourneyColor!40,
+  width=0.86\textwidth, arc=3pt, fontupper=\sffamily
+]
+\centering
+\textbf{The ambiguity:}\\[6pt]
+\small
+If water is \ce{HO}, then oxygen is 8 times heavier than hydrogen.\\
+If water is \ce{H2O}, then oxygen is 16 times heavier than hydrogen.\\[6pt]
+\normalsize
+Both are consistent with the measured mass ratio H:O = 1:8.\\[4pt]
+The mass data alone cannot distinguish between them.\\
+We need a completely \emph{different kind of measurement}.
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+That different measurement came from gases.
+Gases have a remarkable property:
+their \emph{volumes}, at fixed temperature and pressure,
+combine in simple ratios --- just as their masses do.
+And those volume ratios turn out to be the key that unlocks
+the true molecular formulas.
+
+% ─── Section: The Behaviour of Gases ─────────────────────────────────────────
+\subsection{The Behaviour of Ideal Gases}
+
+Before we reach molecular formulas, we need to understand
+how gases behave --- because the volume measurements
+that unlock atomic theory all involve gases.
+
+\subsubsection{Boyle's Law: Pressure and Volume}
+
+Robert Boyle (1662) performed a simple but decisive experiment.
+He trapped a fixed amount of gas in a tube
+and systematically changed the pressure by adding mercury.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  scale=0.92
+]
+  \begin{axis}[
+    width=7cm, height=6cm,
+    xlabel={Volume $V$ (arbitrary units)},
+    ylabel={Pressure $P$ (arbitrary units)},
+    xmin=0.5, xmax=5.5,
+    ymin=0, ymax=12,
+    xtick={1,2,3,4,5},
+    ytick={2,4,6,8,10},
+    grid=both,
+    grid style={line width=0.3pt, draw=JourneyColor!20},
+    axis line style={color=JourneyColor!60},
+    tick style={color=JourneyColor!60},
+    title style={font=\sffamily\small\bfseries, color=JourneyColor},
+    title={Boyle's Law: $P \propto 1/V$},
+    label style={font=\sffamily\footnotesize}
+  ]
+    \addplot[
+      thick, color=DiscoveryColor,
+      domain=0.6:5.5, samples=80
+    ]{6/x};
+    \addplot[
+      only marks, mark=*, mark size=2pt,
+      color=JourneyColor
+    ] coordinates {
+      (1,6)(1.5,4)(2,3)(3,2)(6,1)
+    };
+  \end{axis}
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor]
+    at (5.5, 0.3) {$PV = \text{constant}$};
+\end{tikzpicture}
+\hspace{1cm}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  scale=0.92
+]
+  \begin{axis}[
+    width=7cm, height=6cm,
+    xlabel={Temperature $T$ (K)},
+    ylabel={Volume $V$ (arbitrary units)},
+    xmin=0, xmax=600,
+    ymin=0, ymax=6,
+    xtick={100,200,300,400,500},
+    grid=both,
+    grid style={line width=0.3pt, draw=JourneyColor!20},
+    axis line style={color=JourneyColor!60},
+    tick style={color=JourneyColor!60},
+    title style={font=\sffamily\small\bfseries, color=JourneyColor},
+    title={Charles's Law: $V \propto T$},
+    label style={font=\sffamily\footnotesize}
+  ]
+    \addplot[
+      thick, color=ModuleColor,
+      domain=50:580, samples=80
+    ]{x/100};
+    \addplot[
+      only marks, mark=*, mark size=2pt,
+      color=JourneyColor
+    ] coordinates {
+      (100,1)(200,2)(273,2.73)(300,3)(400,4)(500,5)
+    };
+  \end{axis}
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor]
+    at (4.5, 0.3) {$V/T = \text{constant}$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+Combining Boyle's and Charles's laws, and adding Avogadro's
+discovery (which we are about to reach), produces the
+\newterm{ideal gas law}:
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=ModuleColor!6, colframe=ModuleColor,
+  width=0.6\textwidth, arc=3pt, halign=center
+]
+\Large
+$PV = nRT$
+\end{tcolorbox}
+\end{center}
+
+where $P$ is pressure, $V$ is volume, $n$ is moles of gas,
+$T$ is temperature in kelvin, and $R$ is the universal gas constant
+($R = \SI{8.314}{\joule\per\mol\per\kelvin}$).
+
+The crucial thing to notice: at fixed $T$ and $P$,
+the volume depends \emph{only} on the number of moles ---
+not on which gas it is.
+
+\begin{center}
+\large $V = \dfrac{nRT}{P}$\quad
+$\Rightarrow$\quad equal moles of any gas occupy equal volumes.
+\end{center}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item A balloon contains \SI{2.0}{\mol} of helium at
+        \SI{25}{\degreeCelsius} and \SI{1.0}{\text{atm}}.
+        \begin{enumerate}[label=(\alph*)]
+          \item Convert \SI{25}{\degreeCelsius} to kelvin.
+          \item Calculate the volume of the balloon in litres.
+                (Use $R = \SI{0.0821}{L\cdot atm\cdot mol^{-1}\cdot K^{-1}}$.)
+          \item If the temperature drops to \SI{0}{\degreeCelsius}
+                (at constant pressure), what is the new volume?
+        \end{enumerate}
+
+  \item A gas occupies \SI{4.0}{\litre} at \SI{2.0}{\text{atm}}
+        and \SI{300}{\kelvin}.
+        \begin{enumerate}[label=(\alph*)]
+          \item How many moles of gas are present?
+          \item What pressure would compress this gas
+                to \SI{1.0}{\litre} at constant temperature?
+          \item What temperature would double the volume
+                at constant pressure?
+        \end{enumerate}
+
+  \item At standard temperature and pressure (STP:
+        \SI{0}{\degreeCelsius}, \SI{1}{\text{atm}}),
+        one mole of any ideal gas occupies \SI{22.4}{\litre}.
+        \begin{enumerate}[label=(\alph*)]
+          \item Verify this using the ideal gas law.
+          \item A gas sample at STP occupies \SI{5.60}{\litre}.
+                How many moles is this?
+                How many molecules?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Gay-Lussac's Law of Combining Volumes ──────────────────────────
+\subsection{Gay-Lussac's Discovery: Volumes React in Whole Numbers}
+
+In 1809, Joseph Louis Gay-Lussac made an observation
+that seems simple but carries enormous implications.
+
+He was studying reactions between gases and noticed that
+the volumes of reacting gases --- measured at the same
+temperature and pressure --- were always in simple
+whole-number ratios.
+
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Reaction} & \textbf{Equation} &
+\textbf{Vol.\ gas 1} & \textbf{Vol.\ gas 2} &
+\textbf{Vol.\ product} \\
+\midrule
+Hydrogen + oxygen & \ce{H2 + O2 -> H2O} &
+2 parts \ce{H2} & 1 part \ce{O2} & 2 parts steam \\
+Hydrogen + chlorine & \ce{H2 + Cl2 -> HCl} &
+1 part \ce{H2} & 1 part \ce{Cl2} & 2 parts \ce{HCl} \\
+Nitrogen + hydrogen & \ce{N2 + H2 -> NH3} &
+1 part \ce{N2} & 3 parts \ce{H2} & 2 parts \ce{NH3} \\
+Carbon monoxide + oxygen & \ce{CO + O2 -> CO2} &
+2 parts \ce{CO} & 1 part \ce{O2} & 2 parts \ce{CO2} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+This is the law of combining volumes.
+And it poses an immediate puzzle.
+
+\begin{puzzlebox}
+Look at the reaction of hydrogen and chlorine:
+\begin{center}
+1 volume \ce{H2} + 1 volume \ce{Cl2} $\longrightarrow$ 2 volumes \ce{HCl}
+\end{center}
+
+Dalton's atomic model says atoms are indivisible.
+Suppose the hydrogen and chlorine particles are single atoms
+$h$ and $c$.
+Then:
+\begin{center}
+1 particle $h$ + 1 particle $c$ $\longrightarrow$ 1 particle $hc$
+\end{center}
+
+If one particle of each produces one particle of product,
+the volume should also go from 2 parts to 1 part.
+But the experiment shows 2 parts going to \emph{2 parts}.
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item What is wrong with assuming hydrogen and chlorine
+        exist as single atoms?
+
+  \item What if hydrogen and chlorine are \emph{diatomic}
+        molecules (\ce{H2} and \ce{Cl2})?
+        Draw out the particle picture for:
+        \begin{center}
+        \ce{H2} + \ce{Cl2} $\longrightarrow$ 2 \ce{HCl}
+        \end{center}
+        How many particles go in, and how many come out?
+        Does this explain the 1:1:2 volume ratio?
+
+  \item Dalton's original theory said atoms are indivisible
+        and cannot be split.
+        But in the picture above, the \ce{H2} molecule
+        \emph{is} split: each hydrogen atom goes to a different
+        \ce{HCl} molecule.
+        Is this a contradiction?
+        What is the difference between splitting a \emph{molecule}
+        and splitting an \emph{atom}?
+\end{enumerate}
+\end{puzzlebox}
+
+\vspace{0.5em}
+
+This puzzle was not fully resolved in Gay-Lussac's time.
+Dalton himself rejected Gay-Lussac's data because it
+contradicted his assumption of indivisible single-atom gases.
+The resolution came from an Italian scientist
+who made one of the most underappreciated contributions
+in the history of chemistry.
+
+% ─── Section: Avogadro's Hypothesis ──────────────────────────────────────────
+\subsection{Avogadro's Hypothesis: Equal Volumes, Equal Numbers}
+
+In 1811, Amedeo Avogadro proposed a hypothesis so elegant
+it resolves all the contradictions at once.
+
+\begin{namedconcept}{Avogadro's Hypothesis (1811)}
+Equal volumes of all gases, at the same temperature
+and pressure, contain equal \emph{numbers of molecules}.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+This hypothesis has two radical implications hidden inside it:
+
+\textbf{First:} Gases like hydrogen, oxygen, and nitrogen
+exist not as single atoms but as \emph{diatomic molecules}
+--- \ce{H2}, \ce{O2}, \ce{N2}.
+This is necessary to make Gay-Lussac's volume ratios work.
+
+\textbf{Second:} The formula of water is \ce{H2O}, not \ce{HO}.
+This finally resolves the ambiguity that trapped Dalton.
+
+Let us see how the water formula falls out:
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  atom/.style={circle, draw, thick, minimum size=0.6cm,
+               font=\sffamily\tiny\bfseries},
+  mol/.style={draw=JourneyColor!40, fill=JourneyColor!5,
+              rounded corners=4pt, minimum height=1.2cm,
+              inner sep=4pt}
+]
+  % Title row
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+    at (0, 3.2) {Reactants};
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+    at (8.5, 3.2) {Products};
+
+  %--- Row 1: 2 H2 molecules ---
+  \node[mol, minimum width=1.6cm] (hh1) at (-2.5, 1.8) {
+    \tikz{
+      \node[atom, fill=blue!20, draw=blue!70] (a) at (0,0) {H};
+      \node[atom, fill=blue!20, draw=blue!70] (b) at (0.7,0) {H};
+      \draw[thick, blue!50] (a)--(b);
+    }
+  };
+  \node[mol, minimum width=1.6cm] (hh2) at (0.5, 1.8) {
+    \tikz{
+      \node[atom, fill=blue!20, draw=blue!70] (a) at (0,0) {H};
+      \node[atom, fill=blue!20, draw=blue!70] (b) at (0.7,0) {H};
+      \draw[thick, blue!50] (a)--(b);
+    }
+  };
+  \node[font=\sffamily\footnotesize, text=JourneyColor!70]
+    at (-1.0, 0.9) {2 volumes \ce{H2}};
+
+  %--- Plus sign ---
+  \node[font=\Large] at (2.2, 1.8) {$+$};
+
+  %--- 1 O2 molecule ---
+  \node[mol, minimum width=1.6cm] (oo) at (3.9, 1.8) {
+    \tikz{
+      \node[atom, fill=red!20, draw=red!70] (a) at (0,0) {O};
+      \node[atom, fill=red!20, draw=red!70] (b) at (0.7,0) {O};
+      \draw[thick, red!50] (a)--(b);
+      \draw[thick, red!50] ([yshift=2pt]a.center)--([yshift=2pt]b.center);
+    }
+  };
+  \node[font=\sffamily\footnotesize, text=JourneyColor!70]
+    at (3.9, 0.9) {1 volume \ce{O2}};
+
+  %--- Arrow ---
+  \draw[-{Stealth[length=7pt]}, ultra thick, color=DiscoveryColor]
+    (5.6, 1.8) -- (6.6, 1.8) node[above, midway, font=\sffamily\tiny]{react};
+
+  %--- 2 H2O molecules ---
+  \node[mol, minimum width=1.8cm] (w1) at (7.9, 1.8) {
+    \tikz{
+      \node[atom, fill=red!20, draw=red!70] (O) at (0.35,0.3) {O};
+      \node[atom, fill=blue!20, draw=blue!70] (H1) at (0,  -0.3) {H};
+      \node[atom, fill=blue!20, draw=blue!70] (H2) at (0.7,-0.3) {H};
+      \draw[thick, purple!60] (O)--(H1);
+      \draw[thick, purple!60] (O)--(H2);
+    }
+  };
+  \node[mol, minimum width=1.8cm] (w2) at (10.2, 1.8) {
+    \tikz{
+      \node[atom, fill=red!20, draw=red!70] (O) at (0.35,0.3) {O};
+      \node[atom, fill=blue!20, draw=blue!70] (H1) at (0,  -0.3) {H};
+      \node[atom, fill=blue!20, draw=blue!70] (H2) at (0.7,-0.3) {H};
+      \draw[thick, purple!60] (O)--(H1);
+      \draw[thick, purple!60] (O)--(H2);
+    }
+  };
+  \node[font=\sffamily\footnotesize, text=JourneyColor!70]
+    at (9.05, 0.9) {2 volumes \ce{H2O} (steam)};
+
+  % Volume count annotation
+  \node[font=\sffamily\footnotesize\bfseries, text=HistoryColor]
+    at (4.0, -0.1)
+    {Volumes: 2 + 1 = 3 volumes in $\longrightarrow$ 2 volumes out};
+  \node[font=\sffamily\footnotesize\itshape, text=ModuleColor]
+    at (4.0, -0.7)
+    {Each \ce{H2} contributes both H atoms to \emph{different} water molecules.
+     Therefore \ce{H2} must split.};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+This diagram reveals why the water formula \emph{must} be \ce{H2O}
+and not \ce{HO}.
+If water were \ce{HO}, one volume of hydrogen plus one volume
+of oxygen would give exactly one volume of water --- but
+experiments consistently show two volumes of hydrogen
+plus one volume of oxygen give \emph{two} volumes of steam.
+The factor of two in the product demands two hydrogen atoms per water.
+
+\begin{discoverybox}
+\textbf{What Avogadro's hypothesis fixes:}
+\begin{itemize}[nosep, leftmargin=2em]
+  \item[\checkmark] Water is \ce{H2O}, not \ce{HO}
+  \item[\checkmark] Oxygen atomic mass is 16, not 8
+  \item[\checkmark] Hydrogen, oxygen, nitrogen, chlorine are diatomic
+        (\ce{H2}, \ce{O2}, \ce{N2}, \ce{Cl2})
+  \item[\checkmark] Volume ratios in gas reactions equal mole ratios
+  \item[\checkmark] Connects microscopic (molecule count) to
+        macroscopic (volume) measurements
+\end{itemize}
+\end{discoverybox}
+
+\begin{historybox}
+\textbf{Why Avogadro Was Ignored for 50 Years}
+
+Avogadro published his hypothesis in 1811.
+It was almost completely ignored until 1860,
+when Stanislao Cannizzaro presented a systematic argument
+for it at the First International Chemical Congress in Karlsruhe.
+
+Why ignored?
+\begin{itemize}[nosep, leftmargin=2em]
+  \item Dalton actively opposed it (it contradicted his model).
+  \item The idea of diatomic molecules (\ce{H2}, \ce{O2}) seemed
+        strange --- why would two identical atoms stick together?
+  \item There was no theoretical framework to explain molecular bonding.
+  \item Chemistry in 1811 lacked international communication
+        and consensus-building mechanisms.
+\end{itemize}
+
+The Karlsruhe Congress of 1860 is one of the most important
+events in the history of chemistry.
+Within a decade, Cannizzaro's arguments produced consistent
+atomic masses, which in turn allowed Mendeleev to order
+the elements by atomic mass and discover the periodic table.
+
+The lesson: even a correct idea can take half a century
+to gain acceptance if it lacks the right theoretical
+context and the right champions.
+\end{historybox}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Use Avogadro's hypothesis and Gay-Lussac's volume ratios
+        to determine the formula of ammonia.
+        The experiment shows:
+        \begin{center}
+        1 volume \ce{N2} + 3 volumes \ce{H2} $\rightarrow$
+        2 volumes ammonia
+        \end{center}
+        \begin{enumerate}[label=(\alph*)]
+          \item If both \ce{N2} and \ce{H2} are diatomic,
+                how many nitrogen atoms and hydrogen atoms
+                are in 2 molecules of ammonia?
+          \item Therefore, how many nitrogen and hydrogen
+                atoms are in \emph{one} molecule of ammonia?
+          \item What is the molecular formula of ammonia?
+          \item Verify: does this match the known formula \ce{NH3}?
+        \end{enumerate}
+
+  \item Use the same reasoning for hydrogen chloride.
+        The experiment shows:
+        \begin{center}
+        1 volume \ce{H2} + 1 volume \ce{Cl2} $\rightarrow$
+        2 volumes \ce{HCl}
+        \end{center}
+        \begin{enumerate}[label=(\alph*)]
+          \item Why does 1 volume + 1 volume give 2 volumes
+                (not 1 volume)?
+          \item Draw the particle picture showing how
+                \ce{H2} and \ce{Cl2} split and recombine.
+          \item What does this tell us about the behaviour
+                of diatomic molecules in reactions?
+        \end{enumerate}
+
+  \item At \SI{0}{\degreeCelsius} and \SI{1}{\text{atm}}:
+        \begin{center}
+        \SI{2.0}{\litre} \ce{H2} + \SI{1.0}{\litre} \ce{O2}
+        $\rightarrow$ \SI{2.0}{\litre} steam
+        \end{center}
+        \begin{enumerate}[label=(\alph*)]
+          \item How many moles of \ce{H2} are present?
+          \item How many moles of \ce{O2}?
+          \item How many moles of steam are produced?
+          \item What is the mass of steam produced?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Stoichiometry ───────────────────────────────────────────────────
+\subsection{Stoichiometry: The Arithmetic of Reactions}
+
+With Avogadro's hypothesis in hand, we can now do
+something powerful: use a balanced chemical equation
+as a quantitative map of a reaction.
+
+The coefficients in a balanced equation tell us
+the \emph{mole ratios} in which substances react and are produced.
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=JourneyColor!6, colframe=JourneyColor,
+  width=0.88\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\ce{2H2 + O2 -> 2H2O}\\[6pt]
+\normalsize
+2 moles \ce{H2} + 1 mole \ce{O2} $\longrightarrow$ 2 moles \ce{H2O}\\
+\small
+(or 2 volumes + 1 volume $\longrightarrow$ 2 volumes, for gases at equal $T$, $P$)\\[4pt]
+\normalsize
+\SI{4.0}{\gram} \ce{H2} + \SI{32.0}{\gram} \ce{O2}
+$\longrightarrow$ \SI{36.0}{\gram} \ce{H2O}
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+This map connects moles to masses to volumes.
+The systematic procedure for using it is called
+\newterm{stoichiometry} (from the Greek for
+``element measure'').
+
+\subsubsection{The Stoichiometry Procedure}
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  box/.style={draw=JourneyColor!50, fill=JourneyColor!8,
+              rounded corners=3pt, minimum width=2.4cm,
+              minimum height=0.9cm},
+  arr/.style={-{Stealth[length=5pt]}, thick, color=ModuleColor}
+]
+  \node[box] (given) at (0,0)    {Given\\(mass or volume)};
+  \node[box] (mol1)  at (3.5,0)  {Convert to\\moles};
+  \node[box] (mol2)  at (7.0,0)  {Use mole\\ratio};
+  \node[box] (final) at (10.5,0) {Convert to\\desired units};
+
+  \draw[arr] (given) -- (mol1)
+    node[midway, above, font=\sffamily\footnotesize]{$\div M$};
+  \draw[arr] (mol1)  -- (mol2)
+    node[midway, above, font=\sffamily\footnotesize]{coefficients};
+  \draw[arr] (mol2)  -- (final)
+    node[midway, above, font=\sffamily\footnotesize]{$\times M$\\or $\times 22.4$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+\subsubsection{Worked Example: Haber Process}
+
+The Haber process synthesises ammonia from nitrogen and hydrogen:
+\begin{center}
+\ce{N2 + 3H2 -> 2NH3}
+\end{center}
+
+\textbf{Question:} What mass of ammonia is produced from
+\SI{28.0}{\gram} of nitrogen, assuming excess hydrogen?
+
+\textbf{Step 1: Moles of \ce{N2}}
+\[
+n(\ce{N2}) = \frac{\SI{28.0}{\gram}}{\SI{28.0}{\gram\per\mol}} = \SI{1.00}{\mol}
+\]
+
+\textbf{Step 2: Mole ratio}
+
+From the equation: 1 mol \ce{N2} produces 2 mol \ce{NH3}.
+\[
+n(\ce{NH3}) = 1.00 \times 2 = \SI{2.00}{\mol}
+\]
+
+\textbf{Step 3: Mass of \ce{NH3}}
+\[
+m(\ce{NH3}) = \SI{2.00}{\mol} \times \SI{17.0}{\gram\per\mol} = \SI{34.0}{\gram}
+\]
+
+\subsubsection{Limiting Reagents}
+
+In practice, reactants are rarely present in exact stoichiometric
+amounts.
+The \newterm{limiting reagent} is the reactant that runs out first
+and determines how much product forms.
+
+\textbf{Example:} \SI{10.0}{\gram} \ce{N2} reacts with
+\SI{10.0}{\gram} \ce{H2}.
+Which is limiting?
+
+\ce{N2}: $n = 10.0/28.0 = \SI{0.357}{\mol}$\\
+\ce{H2}: $n = 10.0/2.0  = \SI{5.00}{\mol}$
+
+The equation requires 3 mol \ce{H2} per mol \ce{N2}.
+For 0.357 mol \ce{N2}, we need $0.357 \times 3 = \SI{1.07}{\mol}$ \ce{H2}.
+We have \SI{5.00}{\mol} \ce{H2} --- more than enough.
+Therefore \ce{N2} is the limiting reagent.
+
+Product: $0.357 \times 2 = \SI{0.714}{\mol}\ \ce{NH3}
+= \SI{12.1}{\gram}$.
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Iron(III) oxide reacts with carbon monoxide
+        in the blast furnace:
+        \begin{center}
+        \ce{Fe2O3 + 3CO -> 2Fe + 3CO2}
+        \end{center}
+        \begin{enumerate}[label=(\alph*)]
+          \item What mass of iron is produced from
+                \SI{160}{\gram} of \ce{Fe2O3}?
+          \item What volume of \ce{CO2} (at STP) is produced
+                alongside the iron in part (a)?
+          \item If only \SI{88}{\gram} of iron is actually
+                recovered in practice, what is the
+                \newterm{percentage yield}?
+        \end{enumerate}
+
+  \item Silicon is produced by the reaction:
+        \begin{center}
+        \ce{SiO2 + 2C -> Si + 2CO}
+        \end{center}
+        \SI{60.1}{\gram} of \ce{SiO2} reacts with
+        \SI{36.0}{\gram} of carbon.
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate moles of each reactant.
+          \item Determine the limiting reagent.
+          \item Calculate the theoretical yield of silicon in grams.
+          \item The actual yield is \SI{22.4}{\gram}.
+                What is the percentage yield?
+        \end{enumerate}
+
+  \item An unknown gas \textbf{X} reacts with \ce{O2}:
+        \begin{center}
+        \ce{X + O2 -> XO2}
+        \end{center}
+        \SI{32.0}{\gram} of \textbf{X} reacts with exactly
+        \SI{32.0}{\gram} of \ce{O2}.
+        \begin{enumerate}[label=(\alph*)]
+          \item From the stoichiometry, how many moles of
+                \textbf{X} must react with each mole of \ce{O2}?
+          \item What is the molar mass of \textbf{X}?
+          \item Identify element \textbf{X}.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Connecting the Laws ────────────────────────────────────────────
+\subsection{The Complete Picture: How the Laws Connect}
+
+We can now draw the full map of Journey~1's discoveries.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\footnotesize, align=center},
+  lawbox/.style={draw=JourneyColor!60, fill=JourneyColor!8,
+                 rounded corners=4pt, minimum width=3.2cm,
+                 minimum height=0.9cm},
+  concbox/.style={draw=ModuleColor!70, fill=ModuleColor!8,
+                  rounded corners=4pt, minimum width=3.2cm,
+                  minimum height=0.9cm},
+  predbox/.style={draw=DiscoveryColor!80, fill=DiscoveryColor!8,
+                  rounded corners=4pt, minimum width=3.2cm,
+                  minimum height=0.9cm},
+  arr/.style={-{Stealth[length=4pt]}, thick, color=JourneyColor!60}
+]
+  % Empirical Laws column
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+        at (0, 4.2) {Empirical Laws};
+  \node[lawbox] (cm)  at (0, 3.2) {Conservation of mass\\(Lavoisier, 1785)};
+  \node[lawbox] (dp)  at (0, 2.0) {Definite proportions\\(Proust, 1799)};
+  \node[lawbox] (mp)  at (0, 0.8) {Multiple proportions\\(Dalton, 1803)};
+  \node[lawbox] (cv)  at (0,-0.4) {Combining volumes\\(Gay-Lussac, 1809)};
+
+  % Core Theory
+  \node[font=\sffamily\small\bfseries, color=ModuleColor]
+        at (5.5, 4.2) {Core Theory};
+  \node[concbox, minimum width=4cm, minimum height=2.2cm]
+        (at) at (5.5, 1.5)
+        {\textbf{Atomic-Molecular Theory}\\[4pt]
+         Matter = discrete atoms\\
+         Compounds = fixed atom ratios\\
+         Gases = equal vol = equal moles\\
+         Elements may be diatomic};
+
+  % Predictions column
+  \node[font=\sffamily\small\bfseries, color=DiscoveryColor!80]
+        at (11, 4.2) {Consequences};
+  \node[predbox] (f1) at (11, 3.2) {Molecular formulas\\determinable};
+  \node[predbox] (f2) at (11, 2.0) {Atomic mass scale\\self-consistent};
+  \node[predbox] (f3) at (11, 0.8) {Stoichiometry:\\quantitative prediction};
+  \node[predbox] (f4) at (11,-0.4) {Periodic pattern\\discoverable};
+
+  % Arrows in
+  \foreach \src in {cm, dp, mp, cv}
+    \draw[arr] (\src.east) -- (at.west);
+
+  % Arrows out
+  \foreach \tgt in {f1, f2, f3, f4}
+    \draw[arr] (at.east) -- (\tgt.west);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The last entry in the ``Consequences'' column --- a periodic
+pattern becomes discoverable --- is the thread that leads into
+Journey~3 (the periodic table) and eventually all of
+modern chemistry.
+
+% ─── Section: Deep Problems ───────────────────────────────────────────────────
+\subsection*{Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+
+  \item \textbf{The Cannizzaro Argument.}
+
+        At the 1860 Karlsruhe Congress, Stanislao Cannizzaro
+        argued as follows to establish a consistent atomic mass scale.
+
+        Consider a series of gaseous compounds of hydrogen.
+        For each compound, measure the molar mass (by gas density)
+        and the percentage of hydrogen by mass.
+        The mass of hydrogen per mole of compound is then
+        (molar mass) $\times$ (fraction that is hydrogen).
+
+        Here is the data for several hydrogen compounds:
+
+        \begin{center}
+        \begin{tabular}{lrr}
+        \toprule
+        Compound & Molar mass & H fraction \\
+        \midrule
+        \ce{HCl}   & \SI{36.5}{\gram\per\mol}  & 2.74\% \\
+        \ce{H2O}   & \SI{18.0}{\gram\per\mol}  & 11.11\% \\
+        \ce{NH3}   & \SI{17.0}{\gram\per\mol}  & 17.65\% \\
+        \ce{CH4}   & \SI{16.0}{\gram\per\mol}  & 25.00\% \\
+        \ce{H2}    & \SI{2.0}{\gram\per\mol}   & 100\% \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the mass of hydrogen per mole
+                of each compound.
+          \item What is the smallest value you get?
+          \item Cannizzaro argued this smallest value is
+                the mass of \emph{one hydrogen atom}.
+                Why is that a reasonable inference?
+          \item Use your answer to find the mass of a hydrogen atom.
+          \item How does this fix the atomic mass scale
+                that Dalton got wrong?
+        \end{enumerate}
+
+  \item \textbf{The Ideal Gas Law and Molecular Reality.}
+
+        The ideal gas law $PV = nRT$ is derived from the assumption
+        that gas molecules are point particles with no volume
+        and no interactions between them.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Real gases deviate from the ideal gas law at
+                high pressures and low temperatures.
+                At \emph{high pressure}, the volume of real \ce{CO2}
+                is \emph{larger} than $nRT/P$ predicts.
+                What does this suggest about the actual volume
+                of \ce{CO2} molecules?
+
+          \item At \emph{low temperatures}, real gases are harder
+                to compress than the ideal law predicts ---
+                but then suddenly liquefy.
+                What does this suggest about the forces between molecules?
+
+          \item Van der Waals modified the ideal gas law to:
+                \[
+                  \left(P + \frac{an^2}{V^2}\right)(V - nb) = nRT
+                \]
+                The term $nb$ corrects for molecular volume.
+                The term $an^2/V^2$ corrects for intermolecular
+                attractions.
+                For \ce{CO2}: $a = 3.59\,\text{L}^2\,\text{atm\,mol}^{-2}$,
+                $b = 0.0427\,\text{L\,mol}^{-1}$.
+                Calculate the pressure of \SI{1.00}{\mol} of \ce{CO2}
+                at \SI{0}{\degreeCelsius} in a \SI{1.00}{\litre} vessel,
+                using both the ideal law and van der Waals.
+                Which gives a higher pressure, and why?
+        \end{enumerate}
+
+  \item \textbf{Density of a Gas and Its Molar Mass.}
+
+        An unknown gas \textbf{Z} has a density of
+        \SI{1.96}{\gram\per\litre} at \SI{0}{\degreeCelsius}
+        and \SI{1.0}{\text{atm}}.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Using the fact that 1 mole of ideal gas
+                occupies \SI{22.4}{\litre} at STP,
+                find the molar mass of gas \textbf{Z}.
+
+          \item The gas burns in oxygen to give only \ce{CO2}
+                and \ce{H2O}, in the mass ratio
+                \ce{CO2}:\ce{H2O} = 88:36 per \SI{44}{\gram}
+                of gas burned.
+                Find the empirical formula of \textbf{Z}.
+
+          \item Does the empirical formula match the molar mass?
+                What is the molecular formula?
+
+          \item Identify \textbf{Z}.
+                (Hint: it is a common fuel.)
+        \end{enumerate}
+
+\end{enumerate}
+\end{deepbox}
+
+% ─── Reflection ───────────────────────────────────────────────────────────────
+\subsection*{Reflection}
+
+\begin{reflectionbox}
+\begin{enumerate}[label=\textbf{R\arabic*.}]
+  \item Avogadro's hypothesis was published in 1811 and ignored
+        until 1860.
+        \textbf{What conditions are necessary for a correct
+        scientific idea to be accepted?}
+        Is correctness sufficient?
+        What role do experimental confirmation,
+        theoretical context, and personal authority play?
+
+  \item The formula \ce{H2O} and the diatomic nature of \ce{H2}
+        and \ce{O2} were established from \emph{volume} measurements,
+        not mass measurements.
+        \textbf{Why could mass measurements alone not settle this?}
+        What additional type of evidence was needed, and why?
+
+  \item Stoichiometry lets us predict the outcome of a reaction
+        with precision --- but only if the reaction goes to completion
+        and only one reaction pathway is possible.
+        \textbf{In real industrial processes, neither assumption holds.}
+        What additional concepts (beyond stoichiometry) would a
+        chemical engineer need to actually design a production process?
+        (Write a hypothesis --- we will develop this in Journey~5.)
+
+  \item We built the entire Journey~1 picture from five
+        empirical laws (conservation of mass, definite proportions,
+        multiple proportions, combining volumes, Avogadro's hypothesis).
+        \textbf{Are these laws \emph{derived} from the atomic theory,
+        or does the atomic theory \emph{explain} them?}
+        Is there a difference?
+        Which direction of reasoning is more powerful for science?
+\end{enumerate}
+\end{reflectionbox}
+
+\vspace{1.5em}
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  width=0.88\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\textbf{What we invented in this module.}\\[4pt]
+We invented the idea that \emph{volume is a proxy for particle count}.
+This was Avogadro's genius: not that he proposed a new theory,
+but that he found a way to count invisible particles
+using a measurement anyone could make with a syringe and a ruler.
+With this bridge --- volume to moles to atoms ---
+the entire edifice of quantitative chemistry becomes accessible.
+Every formula in a chemistry textbook, every industrial process calculation,
+every pharmaceutical dosage, every materials synthesis protocol
+ultimately traces back to the argument made in this module:
+equal volumes of gases contain equal numbers of molecules,
+and therefore stoichiometric ratios in equations
+correspond to real particle ratios in nature.
+\end{tcolorbox}
+\end{center}
+
+\vspace{2em}
+\noindent\textcolor{JourneyColor!40}{\rule{\textwidth}{0.6pt}}
+\begin{center}
+\textit{\sffamily\small
+Module 1.4 complete.\\
+Journey~1 concludes with Module~1.5:
+\textbf{Putting It Together --- From Observation to Atomic World}.\\
+Or proceed directly to Journey~2:
+\textbf{Architecture of the Atom}.}
+\end{center}
+
+\end{document}

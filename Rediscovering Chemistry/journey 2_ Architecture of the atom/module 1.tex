@@ -1,0 +1,1069 @@
+\documentclass[12pt, a4paper]{book}
+
+% ─── Core packages ────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=30mm, bottom=30mm,
+  inner=32mm, outer=25mm,
+  marginparwidth=18mm
+}
+
+% ─── Mathematics ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amsthm}
+
+% ─── Chemistry ────────────────────────────────────────────────────────────────
+\usepackage[version=4]{mhchem}
+
+% ─── Graphics & colour ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning,
+                calc, backgrounds, decorations.pathmorphing,
+                decorations.markings, patterns, fadings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% ─── Layout ───────────────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{marginnote}
+\usepackage{caption}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{pifont}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COLOUR PALETTE
+% ══════════════════════════════════════════════════════════════════════════════
+\definecolor{JourneyColor}{HTML}{4A235A}   % deep purple for Journey 2
+\definecolor{ModuleColor}{HTML}{6C3483}    % medium purple
+\definecolor{PuzzleColor}{HTML}{1A5276}    % dark blue
+\definecolor{DiscoveryColor}{HTML}{B7950B} % amber
+\definecolor{WarningColor}{HTML}{C0392B}   % red
+\definecolor{ProblemColor}{HTML}{117A65}   % teal
+\definecolor{ReflectColor}{HTML}{1D6A39}   % green
+\definecolor{HistoryColor}{HTML}{6E2F1A}   % brown
+\definecolor{LightBg}{HTML}{F8F9FA}
+\definecolor{ElectronBlue}{HTML}{1565C0}   % for electron diagrams
+\definecolor{FieldRed}{HTML}{B71C1C}       % for field lines
+
+% ══════════════════════════════════════════════════════════════════════════════
+% TCOLORBOX ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=PuzzleColor!6, colframe=PuzzleColor,
+  fonttitle=\bfseries\sffamily, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=PuzzleColor, colframe=PuzzleColor},
+  borderline west={3pt}{0pt}{PuzzleColor}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  fonttitle=\bfseries\sffamily, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor}, #1}
+
+\newtcolorbox{problembox}[1][]{
+  enhanced, breakable,
+  colback=ProblemColor!5, colframe=ProblemColor,
+  fonttitle=\bfseries\sffamily, title={Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ProblemColor, colframe=ProblemColor},
+  borderline west={3pt}{0pt}{ProblemColor}, #1}
+
+\newtcolorbox{deepbox}[1][]{
+  enhanced, breakable,
+  colback=JourneyColor!5, colframe=JourneyColor,
+  fonttitle=\bfseries\sffamily, title={Deep Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=JourneyColor, colframe=JourneyColor},
+  borderline west={4pt}{0pt}{JourneyColor}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=HistoryColor!7, colframe=HistoryColor!60,
+  fonttitle=\bfseries\sffamily\small, title={Historical Note},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=HistoryColor!80, colframe=HistoryColor}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=ReflectColor!6, colframe=ReflectColor,
+  fonttitle=\bfseries\sffamily, title={Reflection},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ReflectColor, colframe=ReflectColor},
+  borderline west={3pt}{0pt}{ReflectColor}, #1}
+
+\newtcolorbox{modelbreaks}[1][]{
+  enhanced, breakable,
+  colback=WarningColor!6, colframe=WarningColor,
+  fonttitle=\bfseries\sffamily, title={Where This Model Breaks},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=WarningColor, colframe=WarningColor},
+  borderline west={4pt}{0pt}{WarningColor}, #1}
+
+\newtcolorbox{namedconcept}[2][]{
+  enhanced,
+  colback=ModuleColor!6, colframe=ModuleColor,
+  fonttitle=\bfseries\sffamily\large, title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ModuleColor, colframe=ModuleColor}, #1}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% THEOREM ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\theoremstyle{definition}
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{experiment}{Experiment}[chapter]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECTION FORMATTING
+% ══════════════════════════════════════════════════════════════════════════════
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}
+  {10pt}{\Huge}[\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% HEADER / FOOTER
+% ══════════════════════════════════════════════════════════════════════════════
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CUSTOM COMMANDS
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\chem}[1]{\ce{#1}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\electron}{$e^-$}
+\newcommand{\proton}{$p^+$}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% DOCUMENT
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\setcounter{chapter}{1}   % Journey 2 = Chapter 2
+
+% ─── Journey 2 opening ────────────────────────────────────────────────────────
+\chapter[Journey 2 --- Architecture of the Atom]
+        {Journey Two\\[8pt]
+         \textcolor{ModuleColor}{\large Architecture of the Atom}}
+\label{ch:journey2}
+
+\begin{tcolorbox}[
+  enhanced, colback=JourneyColor!8, colframe=JourneyColor,
+  arc=4pt, left=6mm, right=6mm, top=4mm, bottom=4mm
+]
+\sffamily\small
+\textbf{What this journey is about.}
+
+Journey~1 ended with a triumph and a mystery.
+The triumph: matter is made of atoms, each element has one type,
+and the evidence converges from five independent directions.
+The mystery: we treated atoms as featureless spheres.
+We knew their relative masses, their ratios in compounds,
+and that they could bond together.
+We knew nothing about what was \emph{inside} them.
+
+This journey descends into the atom itself.
+What we find there is far stranger than anyone expected.
+The atom is almost entirely empty space.
+It contains a tiny, dense, positively charged nucleus
+surrounded by a cloud of negatively charged electrons.
+Those electrons are not planets in fixed orbits.
+They are waves of probability.
+Their energy is not continuous but comes in discrete packets.
+
+None of this was assumed.
+All of it was \emph{forced} on physicists and chemists
+by experimental evidence they could not explain any other way.
+
+We will follow the evidence exactly as it arrived:
+first the electrons, then the nucleus, then the catastrophe
+of classical physics, then the quantum revolution.
+By the end, you will understand not just what atoms look like
+but \emph{why} they must look that way.
+\end{tcolorbox}
+
+\vspace{1em}
+
+% Journey 2 concept flow
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\footnotesize, align=center},
+  box/.style={draw=JourneyColor!50, fill=JourneyColor!7,
+              rounded corners=3pt, minimum width=2.8cm,
+              minimum height=0.8cm},
+  arr/.style={-{Stealth[length=4pt]}, thick, color=ModuleColor!70}
+]
+  \node[box] (e)   at (0,   0) {Electrons\\discovered (2.1)};
+  \node[box] (nuc) at (3.2, 0) {Nucleus\\discovered (2.2)};
+  \node[box] (cat) at (6.4, 0) {Classical physics\\fails (2.3)};
+  \node[box] (spec)at (9.6, 0) {Spectra demand\\quanta (2.4)};
+  \node[box] (bohr)at (0,  -1.8){Bohr model\\(2.5)};
+  \node[box] (wave)at (3.2,-1.8){Wave-particle\\duality (2.6)};
+  \node[box] (orb) at (6.4,-1.8){Orbitals and\\quantum numbers (2.7)};
+  \node[box, draw=DiscoveryColor, fill=DiscoveryColor!10,
+        minimum width=3.5cm]
+             (per) at (9.6,-1.8){Periodic table\\explained (J3)};
+
+  \draw[arr] (e) -- (nuc);
+  \draw[arr] (nuc) -- (cat);
+  \draw[arr] (cat) -- (spec);
+  \draw[arr] (spec) -- (bohr);
+  \draw[arr] (bohr) -- (wave);
+  \draw[arr] (wave) -- (orb);
+  \draw[arr] (orb)  -- (per);
+  \draw[arr, dashed] (spec.south) -- ++(0,-0.4) -- ++(-9.6,0) -- (bohr.north);
+\end{tikzpicture}
+\end{center}
+
+\vspace{1.5em}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  MODULE 2.1 — THE ATOM GETS STRUCTURE: THOMSON AND THE ELECTRON
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Module 2.1 --- The Atom Gets Structure: Thomson and the Electron}
+\label{sec:mod2.1}
+
+\subsection*{Motivation}
+
+Dalton's atom had no internal structure.
+It was a tiny, solid, indivisible sphere.
+The only property that distinguished one element's atoms
+from another's was mass.
+
+But chemistry kept producing puzzles that Dalton's model
+could not address.
+Why does electricity decompose compounds?
+Why does rubbing amber attract feathers?
+Why does passing electricity through gases produce light?
+
+These questions all involve \emph{charged particles}.
+Something inside the atom must carry charge.
+To find it, physicists turned to a peculiar piece of apparatus:
+the cathode ray tube.
+
+% ─── Section: The Cathode Ray Tube ───────────────────────────────────────────
+\subsection{The Cathode Ray Tube: A Window into the Atom}
+
+A cathode ray tube is a glass tube from which most of the air
+has been pumped out.
+Metal electrodes are sealed into each end.
+When a high voltage is applied, something remarkable happens:
+a faint greenish glow appears, and if a screen is placed
+inside the tube, it casts a sharp shadow.
+
+Something is travelling in straight lines from the
+negative electrode (cathode) to the positive electrode (anode).
+This something was called a \newterm{cathode ray}.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  scale=1.0
+]
+  % Tube outline
+  \draw[thick, JourneyColor!50, rounded corners=6pt]
+    (-5.5,-1.2) rectangle (5.5, 1.2);
+
+  % Cathode (left electrode)
+  \fill[JourneyColor!40] (-5.0,-0.8) rectangle (-4.6, 0.8);
+  \node[font=\sffamily\footnotesize, text=JourneyColor]
+    at (-4.8,-1.05) {Cathode $-$};
+
+  % Anode (right electrode, with hole)
+  \fill[JourneyColor!40] (4.4,-0.8) rectangle (4.8, 0.8);
+  \fill[white] (4.4,-0.15) rectangle (4.8, 0.15);
+  \node[font=\sffamily\footnotesize, text=JourneyColor]
+    at (4.6,-1.05) {Anode $+$};
+
+  % Cathode ray beam
+  \draw[-{Stealth[length=6pt]}, ultra thick, ElectronBlue!70,
+        line width=2pt]
+    (-4.5, 0) -- (4.3, 0);
+  \node[font=\sffamily\footnotesize, text=ElectronBlue]
+    at (-0.5, 0.35) {cathode ray};
+
+  % Glowing screen at right end
+  \fill[DiscoveryColor!30] (4.9,-1.1) rectangle (5.4, 1.1);
+  \fill[DiscoveryColor!80, opacity=0.6] (5.1,-0.3) circle (0.25cm);
+  \node[font=\sffamily\footnotesize, text=HistoryColor]
+    at (5.2,-1.0) {glow};
+
+  % Voltage source
+  \draw[thick, JourneyColor!50]
+    (-4.8,-1.2) -- (-4.8,-1.7) -- (4.6,-1.7) -- (4.6,-1.2);
+  \node[draw=JourneyColor!50, fill=LightBg, rounded corners=2pt,
+        font=\sffamily\footnotesize]
+    at (0,-1.7) {high voltage};
+
+  % Vacuum annotation
+  \node[font=\sffamily\footnotesize\itshape, text=JourneyColor!60]
+    at (0, 0.85) {evacuated glass tube};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The cathode ray had several strange properties that experimenters
+catalogued over decades:
+
+\begin{itemize}[leftmargin=2em]
+  \item It always travels from cathode (negative) to anode (positive),
+        regardless of which metal the electrodes are made of.
+  \item It is deflected by magnetic fields, just as a current-carrying
+        wire is.
+  \item It is deflected toward a positive plate and away from a
+        negative plate --- suggesting it carries \emph{negative charge}.
+  \item It can push a small paddle wheel placed in its path,
+        suggesting it has momentum and therefore mass.
+  \item Its properties are \emph{identical} regardless of which
+        metal the cathode is made of, or which gas is in the tube.
+\end{itemize}
+
+The last point is crucial.
+If the ray came from the metal itself, different metals
+should produce different rays.
+The fact that all metals produce the same ray suggests
+the ray comes from something \emph{universal} ---
+something present in all matter.
+
+\begin{puzzlebox}
+Before Thomson's interpretation, several hypotheses existed
+for what cathode rays actually were:
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item \textbf{Hypothesis A: Cathode rays are electromagnetic waves}
+        (like light), just at shorter wavelength.
+        \textit{Evidence for:} they travel in straight lines,
+        pass through thin foils.
+        \textit{Evidence against:} they are deflected by magnetic
+        fields (light is not); they push paddle wheels (light
+        pressure is negligible).
+
+  \item \textbf{Hypothesis B: Cathode rays are streams of charged particles.}
+        \textit{Evidence for:} deflected by electric and magnetic fields;
+        carry momentum; same charge sign regardless of cathode material.
+        \textit{Evidence against:} none, once you accept the experiment.
+
+  Consider the deflection by electric fields.
+  A positive plate is placed above the beam, a negative plate below.
+
+  \begin{enumerate}[label=(\roman*)]
+    \item Which way would the beam deflect if cathode rays
+          carry negative charge?
+    \item Which way if they carry positive charge?
+    \item Thomson observed deflection \emph{toward the positive plate}.
+          Which hypothesis does this support?
+    \item If cathode rays are electromagnetic waves (hypothesis A),
+          what would you expect when you place an electric field
+          across them?
+  \end{enumerate}
+\end{enumerate}
+\end{puzzlebox}
+
+% ─── Section: Thomson's Measurement ──────────────────────────────────────────
+\subsection{Thomson's Crucial Measurement: The Charge-to-Mass Ratio}
+
+In 1897, J.~J.~Thomson went beyond simply demonstrating that
+cathode rays are charged particles.
+He measured a specific property of those particles:
+the ratio of their charge to their mass, $e/m$.
+
+His method was elegant.
+He applied simultaneous electric and magnetic fields to the beam
+and adjusted them until the deflections cancelled ---
+meaning the electric and magnetic forces were equal and opposite.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  scale=1.0
+]
+  % Tube outline
+  \draw[thick, JourneyColor!40, rounded corners=4pt]
+    (-5,-1.4) rectangle (5.5, 1.4);
+
+  % Cathode
+  \fill[JourneyColor!40] (-4.8,-0.9) rectangle (-4.4, 0.9);
+  \node[font=\sffamily\footnotesize] at (-4.6,-1.2) {$-$};
+
+  % Anode with slit
+  \fill[JourneyColor!40] (-3.2,-0.9) rectangle (-2.8, 0.9);
+  \fill[white] (-3.2,-0.15) rectangle (-2.8, 0.15);
+
+  % Deflection plates (electric field)
+  \fill[FieldRed!30] (-1.8, 0.6) rectangle (1.8, 0.9);
+  \fill[ElectronBlue!30] (-1.8,-0.9) rectangle (1.8,-0.6);
+  \node[font=\sffamily\footnotesize, text=FieldRed]
+    at (0, 1.05) {$+$ plate (electric)};
+  \node[font=\sffamily\footnotesize, text=ElectronBlue]
+    at (0,-1.1) {$-$ plate (electric)};
+
+  % Magnetic field arrows (into page)
+  \foreach \x in {-1.4,-0.6,0.2,1.0} {
+    \node[font=\tiny, text=ModuleColor!70] at (\x, 0) {$\otimes$};
+  }
+  \node[font=\sffamily\footnotesize, text=ModuleColor]
+    at (3.2, 0.35) {$\vec{B}$ into page};
+
+  % Beam - straight (balanced forces)
+  \draw[-{Stealth[length=6pt]}, ultra thick, ElectronBlue!80,
+        line width=2pt]
+    (-4.3,0) -- (4.8, 0);
+  \node[font=\sffamily\footnotesize, text=ElectronBlue]
+    at (3.5,-0.35) {beam undeflected};
+
+  % Force annotations
+  \draw[-{Stealth}, thick, FieldRed]
+    (0.5, 0.05) -- (0.5, 0.55)
+    node[right, font=\sffamily\footnotesize, text=FieldRed]{$F_E = eE$};
+  \draw[-{Stealth}, thick, ElectronBlue!80]
+    (-0.5, 0.05) -- (-0.5,-0.45)
+    node[right, font=\sffamily\footnotesize, text=ElectronBlue]{$F_B = evB$};
+
+  % Screen
+  \fill[DiscoveryColor!25] (4.9,-1.3) rectangle (5.4, 1.3);
+  \fill[DiscoveryColor!70] (5.0,-0.15) circle (0.2cm);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+When the forces balance:
+\[
+  eE = evB \quad \Rightarrow \quad v = \frac{E}{B}
+\]
+
+Thomson then turned off the electric field and let the magnetic
+field alone deflect the beam in a circular arc of radius $r$.
+For circular motion:
+\[
+  evB = \frac{mv^2}{r} \quad \Rightarrow \quad
+  \frac{e}{m} = \frac{v}{rB} = \frac{E}{rB^2}
+\]
+
+Every measurable quantity on the right side ($E$, $r$, $B$)
+was under Thomson's control.
+By measuring the radius of curvature and knowing the fields,
+he could calculate $e/m$ directly.
+
+His result:
+\[
+  \frac{e}{m} \approx 1.76 \times 10^{11}\ \si{\coulomb\per\kilogram}
+\]
+
+This number is extraordinary.
+The largest $e/m$ ratio previously known was for
+the hydrogen ion in electrolysis:
+approximately $9.6 \times 10^7\ \si{\coulomb\per\kilogram}$.
+
+The cathode ray particle had an $e/m$ ratio
+\emph{about 1800 times larger} than the hydrogen ion.
+
+\begin{puzzlebox}
+Thomson measured $e/m \approx 1.76 \times 10^{11}\ \si{\coulomb\per\kilogram}$
+for cathode ray particles,
+compared to $e/m \approx 9.6 \times 10^7\ \si{\coulomb\per\kilogram}$
+for the hydrogen ion.
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Calculate the ratio of these two $e/m$ values.
+        By what factor does the cathode ray particle's ratio
+        exceed that of the hydrogen ion?
+
+  \item Two interpretations are possible:
+        \begin{itemize}[nosep]
+          \item The cathode ray particle has the \emph{same charge}
+                as the hydrogen ion but much smaller mass.
+          \item The cathode ray particle has the \emph{same mass}
+                as the hydrogen ion but much larger charge.
+        \end{itemize}
+        Thomson argued the first interpretation was correct.
+        What additional experimental evidence would you need
+        to distinguish between them?
+
+  \item Millikan later measured the charge of the electron
+        directly as $e = 1.602 \times 10^{-19}\ \si{\coulomb}$.
+        Use this and Thomson's $e/m$ ratio to calculate
+        the mass of the electron.
+
+  \item The mass of a hydrogen atom is
+        $1.67 \times 10^{-27}\ \si{\kilogram}$.
+        What fraction of the hydrogen atom's mass is the electron?
+        What does this tell you about where the atom's mass is?
+\end{enumerate}
+\end{puzzlebox}
+
+\vspace{0.5em}
+
+Thomson's measurement established something profound:
+there exists a particle, present in all matter,
+with a mass roughly 1/1836 that of the lightest atom.
+He called it the \newterm{electron}.
+
+\begin{namedconcept}{The Electron (Thomson, 1897)}
+The \newterm{electron} is a fundamental particle with:
+\begin{itemize}[nosep, leftmargin=2em]
+  \item Mass: $m_e = 9.109 \times 10^{-31}\ \si{\kilogram}$
+  \item Charge: $e = -1.602 \times 10^{-19}\ \si{\coulomb}$ (negative)
+  \item Present in all matter, independent of the element
+  \item About 1/1836 the mass of a hydrogen atom
+\end{itemize}
+Electrons are the carriers of electric current.
+They are the particles that are shared or transferred
+when atoms bond together.
+Their behaviour in atoms determines the
+chemical properties of every element.
+\end{namedconcept}
+
+% ─── Section: The Plum Pudding Model ─────────────────────────────────────────
+\subsection{The First Atomic Model: Plum Pudding}
+
+Atoms are electrically neutral.
+Electrons are negatively charged.
+Therefore something in the atom must carry positive charge,
+and its positive charge must exactly cancel the negative
+charge of the electrons.
+
+Thomson proposed a model:
+the atom is a sphere of uniformly distributed positive charge,
+like a pudding, with electrons embedded in it like plums
+(or raisins --- the British and American analogies differ).
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  scale=1.1
+]
+  % Positive sphere
+  \shade[ball color=FieldRed!15] (0,0) circle (1.8cm);
+  \draw[thick, FieldRed!40] (0,0) circle (1.8cm);
+  \node[font=\sffamily\footnotesize, text=FieldRed!70]
+    at (0,-0.3) {uniform positive charge};
+
+  % Electrons as dots
+  \foreach \x/\y in {
+    0.7/1.0, -0.9/0.8, 1.1/-0.4,
+    -1.2/-0.5, 0.2/-1.2, -0.4/0.4,
+    1.3/0.3, -0.6/-1.1
+  }{
+    \fill[ElectronBlue] (\x,\y) circle (0.12cm);
+    \draw[ElectronBlue!60, thick] (\x,\y) circle (0.12cm);
+  }
+
+  % Legend
+  \fill[ElectronBlue] (3.2, 0.5) circle (0.12cm);
+  \node[right, font=\sffamily\footnotesize, text=ElectronBlue]
+    at (3.35, 0.5) {electron ($e^-$)};
+  \fill[FieldRed!20] (3.2, -0.1) circle (0.3cm);
+  \draw[FieldRed!50, thick] (3.2,-0.1) circle (0.3cm);
+  \node[right, font=\sffamily\footnotesize, text=FieldRed]
+    at (3.55,-0.1) {positive charge cloud};
+
+  % Title
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+    at (0, 2.3) {Thomson's ``Plum Pudding'' Model};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The plum pudding model made specific predictions.
+Most importantly: since the positive charge is spread uniformly
+through the atom, any particle fired at the atom should
+pass through it, deflected only slightly by the weak,
+diffuse field.
+
+There should be \emph{no large-angle deflections}.
+
+This prediction was about to be tested.
+And it would be spectacularly wrong.
+
+\begin{historybox}
+\textbf{Thomson's Other Legacy: The Discovery of Isotopes}
+
+Thomson's cathode ray apparatus was later refined by Francis Aston
+into the \emph{mass spectrometer}.
+By deflecting ionised atoms in magnetic fields ---
+using the same principle Thomson used for electrons ---
+Aston could sort atoms by their mass-to-charge ratio.
+
+In 1913, when Thomson passed ionised neon through his apparatus,
+he found two distinct beams, corresponding to masses 20 and 22.
+This was the first direct evidence for \emph{isotopes}:
+atoms of the same element with different masses.
+
+The weighted average (90\% mass-20, 10\% mass-22) gives
+the observed atomic mass of $20.2$ --- exactly what was
+measured by chemical methods.
+
+This confirmed Dalton's anomaly: atoms of the same element
+are \emph{not} all identical in mass.
+\end{historybox}
+
+% ─── Section: Electrolysis and Charge Quantisation ───────────────────────────
+\subsection{Faraday's Earlier Clue: Charge Comes in Packets}
+
+Thomson's discovery of the electron did not come entirely
+from nowhere.
+Fifty years earlier, Michael Faraday had studied electrolysis
+and noticed something that, in hindsight, screamed
+``discrete charge carriers.''
+
+Faraday found two laws of electrolysis (1833):
+
+\begin{namedconcept}{Faraday's Laws of Electrolysis}
+\textbf{First law:} The mass of substance deposited at an electrode
+is proportional to the total charge passed.
+
+\textbf{Second law:} The masses of different substances deposited
+by the same charge are proportional to their
+molar masses divided by a small integer
+(their \emph{valence}).
+
+\[
+  m = \frac{Q \cdot M}{n_{\text{val}} \cdot F}
+\]
+
+where $Q$ is charge, $M$ is molar mass,
+$n_{\text{val}}$ is valence (1, 2, or 3),
+and $F = \SI{96485}{\coulomb\per\mol}$ is the Faraday constant.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+The Faraday constant represents the charge required to deposit
+one mole of a singly-charged ion.
+That it is a \emph{fixed, universal constant} is a strong
+hint that charge comes in discrete packets ---
+one packet per ion.
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item A current of \SI{2.00}{\ampere} passes through a solution
+        of copper sulfate (\ce{CuSO4}) for \SI{30.0}{\minute}.
+        Copper has molar mass \SI{63.5}{\gram\per\mol} and
+        valence 2.
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the total charge passed in coulombs.
+          \item Calculate the mass of copper deposited.
+          \item How many moles of copper were deposited?
+          \item How many copper atoms were deposited?
+        \end{enumerate}
+
+  \item Electrolysis of molten \ce{Al2O3} produces aluminium.
+        Aluminium has molar mass \SI{27.0}{\gram\per\mol}
+        and valence 3.
+        What current must flow for \SI{2.00}{\hour}
+        to deposit \SI{27.0}{\gram} of aluminium?
+
+  \item The Faraday constant $F = \SI{96485}{\coulomb\per\mol}$
+        can be interpreted as: one mole of electrons
+        carries a charge of \SI{96485}{\coulomb}.
+        \begin{enumerate}[label=(\alph*)]
+          \item Using $e = 1.602\times10^{-19}\ \si{\coulomb}$,
+                calculate the charge of one mole of electrons.
+          \item How close is this to the Faraday constant?
+          \item What does this tell us about the relationship
+                between the Faraday constant and Avogadro's number?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Millikan's Oil Drop ────────────────────────────────────────────
+\subsection{Millikan's Oil Drop: Measuring a Single Electron}
+
+Thomson knew the \emph{ratio} $e/m$ but not $e$ or $m$ separately.
+To find the actual charge on an electron,
+Robert Millikan devised a beautifully simple experiment in 1909.
+
+He sprayed fine oil droplets between two charged plates.
+As the drops fell through the air, some acquired a charge
+by friction --- picking up one, two, or a few electrons
+from the surrounding air.
+
+By adjusting the electric field between the plates,
+Millikan could make a charged droplet hover:
+the upward electric force exactly balancing gravity.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  scale=1.0
+]
+  % Plates
+  \fill[FieldRed!20] (-3.5, 1.8) rectangle (3.5, 2.2);
+  \fill[ElectronBlue!20] (-3.5,-1.8) rectangle (3.5,-2.2);
+  \node[font=\sffamily\footnotesize, text=FieldRed]
+    at (-4.2, 2.0) {$+$ plate};
+  \node[font=\sffamily\footnotesize, text=ElectronBlue]
+    at (-4.2,-2.0) {$-$ plate};
+
+  % Electric field lines
+  \foreach \x in {-2.5,-1.5,-0.5,0.5,1.5,2.5}{
+    \draw[-{Stealth[length=3pt]}, thin, FieldRed!40]
+      (\x, 1.7) -- (\x,-1.7);
+  }
+  \node[font=\sffamily\footnotesize, text=FieldRed!60]
+    at (4.0, 0) {$\vec{E}$};
+
+  % Oil drop
+  \shade[ball color=HistoryColor!40] (0,0) circle (0.22cm);
+  \node[font=\sffamily\footnotesize, text=HistoryColor]
+    at (1.2, 0) {oil drop (charged)};
+
+  % Force arrows
+  \draw[-{Stealth[length=5pt]}, ultra thick, FieldRed, line width=1.5pt]
+    (0, 0.25) -- (0, 1.1)
+    node[right, font=\sffamily\footnotesize, text=FieldRed]{$F_E = qE$};
+  \draw[-{Stealth[length=5pt]}, ultra thick, JourneyColor, line width=1.5pt]
+    (0,-0.25) -- (0,-1.1)
+    node[right, font=\sffamily\footnotesize, text=JourneyColor]{$F_g = mg$};
+
+  % Equilibrium annotation
+  \node[draw=ModuleColor!60, fill=ModuleColor!8, rounded corners=2pt,
+        font=\sffamily\footnotesize, text=ModuleColor]
+    at (0,-2.8) {hover condition: $qE = mg$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+At equilibrium: $qE = mg$, so $q = mg/E$.
+
+Millikan could measure $m$ (from the terminal velocity
+when the field was off) and knew $E$ (from the voltage
+and plate separation).
+So he could calculate $q$ --- the charge on the droplet.
+
+When he tabulated hundreds of measurements,
+a pattern emerged that was impossible to miss:
+all values of $q$ were \emph{integer multiples} of
+a single smallest value.
+
+No droplet ever had charge $1.5e$ or $2.7e$.
+Every droplet had charge $1e$, $2e$, $3e$, $4e$, \ldots
+
+\begin{namedconcept}{Quantisation of Charge}
+Electric charge is \newterm{quantised}:
+it always comes in integer multiples of the fundamental unit
+
+\[
+  e = 1.602 \times 10^{-19}\ \si{\coulomb}
+\]
+
+This is the charge of a single electron (negative)
+or proton (positive).
+No isolated particle has ever been observed
+with charge smaller than $e$.
+\end{namedconcept}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Millikan measures the following charges on oil droplets:
+        \begin{center}
+        \begin{tabular}{cc}
+        \toprule
+        Droplet & Charge (\si{\coulomb}) \\
+        \midrule
+        A & $3.204 \times 10^{-19}$ \\
+        B & $6.408 \times 10^{-19}$ \\
+        C & $1.602 \times 10^{-19}$ \\
+        D & $4.806 \times 10^{-19}$ \\
+        E & $8.010 \times 10^{-19}$ \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+        \begin{enumerate}[label=(\alph*)]
+          \item Find the largest value that divides all
+                five charges to give integer results.
+                This is the elementary charge $e$.
+          \item How many electrons does each droplet carry?
+          \item If a droplet has charge $2.4\times10^{-19}\ \si{\coulomb}$,
+                is this consistent with charge quantisation?
+                What would you conclude?
+        \end{enumerate}
+
+  \item A charged oil droplet of mass
+        $2.0 \times 10^{-15}\ \si{\kilogram}$
+        hovers between plates with electric field
+        $E = \SI{4.9e4}{\volt\per\metre}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the charge on the droplet.
+                (Use $g = \SI{9.8}{\metre\per\second\squared}$.)
+          \item How many electrons does the droplet carry?
+          \item If the electric field is doubled,
+                describe the subsequent motion of the droplet.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Where the Plum Pudding Model Stands ────────────────────────────
+\subsection{The Model at the End of Module 2.1}
+
+At the end of 1909, the atomic model looked like this:
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center}
+]
+  % Known
+  \node[draw=ModuleColor!60, fill=ModuleColor!8,
+        rounded corners=4pt, minimum width=4.5cm,
+        minimum height=0.8cm]
+        (k1) at (0, 2.0) {Atoms contain electrons};
+  \node[draw=ModuleColor!60, fill=ModuleColor!8,
+        rounded corners=4pt, minimum width=4.5cm,
+        minimum height=0.8cm]
+        (k2) at (0, 1.0) {Electron charge and mass known};
+  \node[draw=ModuleColor!60, fill=ModuleColor!8,
+        rounded corners=4pt, minimum width=4.5cm,
+        minimum height=0.8cm]
+        (k3) at (0, 0.0) {Charge is quantised};
+  \node[draw=ModuleColor!60, fill=ModuleColor!8,
+        rounded corners=4pt, minimum width=4.5cm,
+        minimum height=0.8cm]
+        (k4) at (0,-1.0) {Atom is electrically neutral};
+  \node[font=\sffamily\small\bfseries, color=ModuleColor]
+        at (0, 2.8) {Known};
+
+  % Unknown
+  \node[draw=WarningColor!60, fill=WarningColor!8,
+        rounded corners=4pt, minimum width=4.5cm,
+        minimum height=0.8cm]
+        (u1) at (7.5, 2.0) {Where is positive charge?};
+  \node[draw=WarningColor!60, fill=WarningColor!8,
+        rounded corners=4pt, minimum width=4.5cm,
+        minimum height=0.8cm]
+        (u2) at (7.5, 1.0) {How is it distributed?};
+  \node[draw=WarningColor!60, fill=WarningColor!8,
+        rounded corners=4pt, minimum width=4.5cm,
+        minimum height=0.8cm]
+        (u3) at (7.5, 0.0) {Where are electrons inside?};
+  \node[draw=WarningColor!60, fill=WarningColor!8,
+        rounded corners=4pt, minimum width=4.5cm,
+        minimum height=0.8cm]
+        (u4) at (7.5,-1.0) {What holds atom together?};
+  \node[font=\sffamily\small\bfseries, color=WarningColor]
+        at (7.5, 2.8) {Unknown};
+
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+Thomson's answer to ``where is the positive charge?''
+was the plum pudding model: spread uniformly throughout
+a sphere the size of the atom.
+
+This model is about to be tested --- and destroyed ---
+by one of the most elegant experiments in the history of science.
+
+\begin{modelbreaks}
+Thomson's plum pudding model predicts that a fast particle
+fired at an atom will pass straight through with only
+\emph{slight} deflection, because the positive charge
+is spread out and therefore weak at any one point.
+
+\textbf{The test:} Rutherford fires alpha particles
+(\ce{^4He^{2+}} nuclei, fast and heavy) at a thin gold foil.
+
+\textbf{The prediction:} Almost all pass straight through.
+Deflections of more than a few degrees should be essentially
+impossible.
+
+\textbf{What actually happened:} Module~2.2.
+\end{modelbreaks}
+
+% ─── Section: Deep Problems ───────────────────────────────────────────────────
+\subsection*{Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+
+  \item \textbf{The Thomson Experiment in Full.}
+
+        Thomson applies an electric field $E = \SI{2.0e4}{\volt\per\metre}$
+        and a magnetic field $B = \SI{1.5e-3}{\tesla}$
+        simultaneously, and the cathode ray beam is undeflected.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the speed of the electrons.
+          \item He then turns off the electric field and measures
+                a circular radius of curvature $r = \SI{0.12}{\metre}$.
+                Calculate $e/m$.
+          \item Compare your answer to the modern value
+                $e/m = 1.759 \times 10^{11}\ \si{\coulomb\per\kilogram}$.
+                What is the percentage error?
+          \item In practice, Thomson's early measurements
+                gave $e/m$ values that scattered considerably.
+                Suggest two experimental sources of uncertainty
+                that could cause this scatter.
+        \end{enumerate}
+
+  \item \textbf{Why Electrons Must Be Universal.}
+
+        Thomson found that the $e/m$ ratio of cathode ray particles
+        was identical regardless of:
+        \begin{itemize}[nosep]
+          \item the cathode metal (iron, platinum, aluminium)
+          \item the residual gas in the tube
+          \item the magnitude of the applied voltage
+        \end{itemize}
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Why does the independence from cathode material
+                suggest that electrons are a \emph{universal constituent}
+                of matter, not a product of the specific metal?
+          \item Why does the independence from applied voltage
+                matter? What would a varying $e/m$ with voltage imply?
+          \item Construct the strongest possible argument, using
+                only pre-1897 knowledge, that atoms must contain
+                something smaller than themselves that carries charge.
+                (Hints: electrolysis, sparks in gases, the production
+                of light when metals are heated.)
+          \item Today we know quarks have charges of $\pm e/3$
+                and $\pm 2e/3$.
+                Does this contradict Millikan's finding that
+                charge is quantised in units of $e$?
+                Explain carefully.
+        \end{enumerate}
+
+  \item \textbf{Forces Inside the Plum Pudding Atom.}
+
+        Thomson proposed that electrons vibrate about equilibrium
+        positions inside the positive sphere.
+        For a uniform positive sphere of radius $R$ and total
+        charge $+Ze$, the electric field \emph{inside} the sphere
+        at distance $r$ from the centre is:
+        \[
+          E(r) = \frac{Ze}{4\pi\varepsilon_0}\cdot\frac{r}{R^3}
+        \]
+        (This follows from Gauss's law, which you may look up.)
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Show that a single electron placed at distance
+                $r$ from the centre of the sphere experiences
+                a restoring force $F = -kr$ where $k$ is a constant.
+                Find $k$ in terms of the given quantities.
+          \item This is the equation of simple harmonic motion.
+                What is the angular frequency $\omega$ of oscillation?
+                (Recall $\omega = \sqrt{k/m_e}$.)
+          \item For hydrogen ($Z=1$, $R \approx 5.3\times10^{-11}$ m),
+                calculate the frequency of oscillation in Hz.
+          \item What is the wavelength of light with this frequency?
+                In what part of the electromagnetic spectrum is it?
+          \item Does this match the observed hydrogen spectrum?
+                (Hydrogen emits light at specific wavelengths:
+                656 nm, 486 nm, 434 nm, \ldots\ in the visible range.)
+                What does the mismatch suggest?
+        \end{enumerate}
+
+\end{enumerate}
+\end{deepbox}
+
+% ─── Reflection ───────────────────────────────────────────────────────────────
+\subsection*{Reflection}
+
+\begin{reflectionbox}
+\begin{enumerate}[label=\textbf{R\arabic*.}]
+  \item Thomson discovered the electron by studying something
+        that nobody knew came from atoms (cathode rays).
+        \textbf{What does this tell us about the role of
+        ``curiosity-driven'' research ---
+        studying phenomena without knowing their application ---
+        versus directed research aimed at a specific goal?}
+
+  \item The plum pudding model was a reasonable hypothesis
+        given the evidence available in 1904.
+        It was completely wrong about the distribution of
+        positive charge.
+        \textbf{What criterion should we use to judge a model:
+        whether it is ultimately correct, or whether it was
+        the best explanation of the available evidence?}
+
+  \item Charge quantisation (Millikan's result) and mass
+        conservation (Lavoisier's result) are both
+        ``conservation-and-discreteness'' results.
+        \textbf{What pattern do you notice about nature?}
+        Make a general conjecture about other conserved,
+        quantised quantities you might expect to find as
+        we go deeper into physics.
+
+  \item The electron is $1/1836$ the mass of a hydrogen atom.
+        Atoms are mostly the mass of their nuclei.
+        \textbf{What does this suggest about the relative
+        importance of electrons vs nuclei for:
+        (a) the mass of matter,
+        (b) the chemical properties of matter,
+        (c) the electrical properties of matter?}
+\end{enumerate}
+\end{reflectionbox}
+
+\vspace{1.5em}
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  width=0.88\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\textbf{What we invented in this module.}\\[4pt]
+We invented the electron --- not as a philosophical speculation
+but as a measured, quantified particle with a precise charge
+and mass.
+We also established the pattern that will recur throughout
+Journey~2: every time we think we know what the atom looks like,
+a single experiment shatters that picture.
+The cathode ray tube showed Dalton's featureless sphere
+was wrong: atoms have internal parts.
+Now we must ask: how are those parts arranged?
+Thomson's plum pudding model gives one answer.
+Rutherford is about to destroy it.
+\end{tcolorbox}
+\end{center}
+
+\vspace{2em}
+\noindent\textcolor{JourneyColor!40}{\rule{\textwidth}{0.6pt}}
+\begin{center}
+\textit{\sffamily\small
+Module 2.1 complete. Continue to Module 2.2:
+\textbf{Rutherford's Gold Foil --- The Nuclear Surprise}.}
+\end{center}
+
+\end{document}

@@ -1,0 +1,472 @@
+\documentclass[12pt, a4paper, twoside]{book}
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning, decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+
+\definecolor{deep}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{e94560}
+\definecolor{teal}{HTML}{2ec4b6}
+\definecolor{gold}{HTML}{f5a623}
+\definecolor{midblue}{HTML}{0f3460}
+\definecolor{purple}{HTML}{533483}
+\definecolor{orange}{HTML}{ff6b35}
+\definecolor{green}{HTML}{2d6a4f}
+\definecolor{lightbg}{HTML}{f7f9fc}
+\definecolor{warmbg}{HTML}{fffbf2}
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal,
+  pdftitle={Discovery Physics J6 M1}}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{realworldbox}[1][]{enhanced,breakable,colback=green!5,
+  colframe=green!70!black,fonttitle=\bfseries\color{white},coltitle=white,
+  title={In the Real World},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{1.8cm}
+
+\begin{tikzpicture}[scale=1.2]
+  % Microstates and macrostate representation
+  % Macroscopic container
+  \draw[teal, line width=2pt] (0,0) rectangle (4,3);
+  \node[teal!50, font=\large] at (2,-0.4) {Macroscopic: $P, V, T$};
+  
+  % Microscopic particles inside
+  \foreach \i in {1,...,20} {
+    \pgfmathsetseed{\i*100}
+    \pgfmathrandom{rand}
+    \let\rx=\pgfmathresult
+    \pgfmathrandom{rand}
+    \let\ry=\pgfmathresult
+    \pgfmathrandom{rand}
+    \let\vx=\pgfmathresult
+    \pgfmathrandom{rand}
+    \let\vy=\pgfmathresult
+    
+    \coordinate (p\i) at ({2 + 1.8*\rx}, {1.5 + 1.25*\ry});
+    \fill[accent] (p\i) circle (2.5pt);
+    \draw[->, gold, line width=0.8pt] (p\i) -- ++({0.4*\vx}, {0.4*\vy});
+  }
+\end{tikzpicture}
+
+\vspace{0.8cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 6}}}
+\vspace{0.3cm}
+{\fontsize{34}{40}\selectfont\bfseries Module 6.1}
+\vspace{0.3cm}
+{\fontsize{20}{26}\selectfont\textcolor{gold}{%
+Microstates and\\
+Partition Functions}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+The collective dance of $10^{23}$ particles.\\[4pt]
+How do temperature, pressure, and entropy emerge\\
+from microscopic chaos?}}
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+\tableofcontents
+
+\chapter{Microstates and Partition Functions}
+\markboth{Journey 6: Module 6.1}{}
+
+\begin{epigraph}
+{In thermodynamic equilibrium, all accessible microstates of an isolated system are equally likely. This is the bridge connecting the atomic to the macroscopic.}
+{--- The Fundamental Postulate of Statistical Mechanics}
+\end{epigraph}
+
+\section{Part 1 --- The Puzzle}
+
+\begin{puzzlebox}
+\textbf{The Container of Gas.}
+
+Consider a sealed cylinder containing exactly one mole ($N_A \approx 6.02 \times 10^{23}$ molecules) of helium gas. Thermodynamically, the state of the gas is completely characterized by three numbers: its volume $V$, its pressure $P$, and its temperature $T$. 
+* The macroscopic measurements are perfectly stable. The pressure does not fluctuate wildly; the temperature is uniform.
+* Microscopically, however, the system is in constant, violent motion. The positions and velocities of the $10^{23}$ atoms are changing trillions of times per second through collisions.
+
+\medskip
+\textbf{Question 1.} If we describe the microscopic state of the gas by specifying the coordinates $\vec{r}_i$ and momentum $\vec{p}_i$ for every single atom, how many dimensions does the configuration space (phase space) of this system have?
+
+\textbf{Question 2.} There are infinitely many microscopic configurations that yield the exact same macroscopic pressure and temperature. If the microstate is shifting continuously, why do our macroscopic instruments measure completely static values?
+
+\textbf{Question 3.} (The Bridge.) We know from mechanics how to describe a single particle. We know from thermodynamics how to describe bulk matter. But how do we mathematically connect the two? What is the microscopic definition of temperature $T$? Why does a collection of chaotic particles obey deterministic macroscopic laws?
+\end{puzzlebox}
+
+\newpage
+
+% ============================================================
+\section{Part 2 --- Exploration}
+% ============================================================
+
+\subsection{Step 1: Phase Space, Microstates, and Ensembles}
+
+To describe a system of $N$ classical particles, we map their states to a high-dimensional space.
+
+\begin{explobox}
+\problem Let a system contain $N$ point-particles in three dimensions.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item The state of the system is a single point in a $6N$-dimensional space called \textbf{phase space}, containing coordinates $(q_1, \dots, q_{3N}, p_1, \dots, p_{3N})$, where $q_i$ are coordinates and $p_i$ are momenta. If $N = 10^{23}$, why is solving the equations of motion $dq_i/dt = \partial H/\partial p_i$ completely impossible?
+  \item Suppose the system is completely isolated from the outside world. Its volume $V$, particle number $N$, and total energy $E$ are strictly constant. This setup is called the \textbf{microcanonical ensemble}.
+  Let $\Omega(E, V, N)$ be the volume of phase space representing all microscopic configurations with total energy $E$.
+  The **Fundamental Postulate of Statistical Mechanics** states: \emph{In thermodynamic equilibrium, all accessible microstates are equally likely.}
+  If a system is in equilibrium, what is the probability $P_i$ of finding it in any specific accessible microstate $i$?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Step 2: Boltzmann's Entropy}
+
+We define macroscopic entropy in terms of the number of microstates.
+
+\begin{explobox}
+\problem Ludwig Boltzmann proposed that entropy is a direct measure of microscopic degeneracy.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Let two independent systems, A and B, have phase space volumes $\Omega_A$ and $\Omega_B$. The combined system has volume $\Omega = \Omega_A \times \Omega_B$. If we want the combined entropy to be additive ($S = S_A + S_B$), what functional form must relate $S$ to $\Omega$?
+  \item This yields **Boltzmann's Entropy Formula**:
+  \[
+    S \;=\; k_B \ln \Omega,
+  \]
+  where $k_B \approx 1.38 \times 10^{-23}$ J/K is Boltzmann's constant.
+  \item We define temperature thermodynamically by $1/T = \partial S/\partial E$. If $\Omega(E)$ is the number of ways to distribute energy $E$ among $N$ particles, why does adding energy increase the number of accessible states ($\partial \Omega/\partial E > 0$), making temperature positive? What would a negative temperature mean?
+\end{enumerate}
+\end{explobox}
+
+\begin{historybox}
+\textbf{Ludwig Boltzmann (1844--1906).}
+Boltzmann's proposal that matter is composed of discrete atoms and that entropy is a statistical property of probability was met with fierce hostility by leading physicists of his day, who believed thermodynamics was a continuous, fundamental theory. The stress and depression from these academic battles contributed to Boltzmann taking his own life in 1906, just before experimental proofs of atoms (such as Einstein's analysis of Brownian motion) settled the debate forever. His famous formula $S = k \log W$ is carved on his gravestone in Vienna.
+\end{historybox}
+
+\subsection{Step 3: The Canonical Ensemble and the Boltzmann Factor}
+
+We study a system that can exchange heat with a large reservoir at temperature $T$.
+
+\begin{explobox}
+\problem Let our system of interest be in thermal contact with a massive heat reservoir. The system's energy can fluctuate, but the combined system (system + reservoir) is isolated with constant energy $E_{\text{tot}} = E_{\text{sys}} + E_{\text{res}}$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Let the system be in a specific microstate $i$ with energy $E_i$. The probability $P_i$ of this occurring is proportional to the number of microstates accessible to the *reservoir* with energy $E_{\text{tot}} - E_i$:
+  \[
+    P_i \;\propto\; \Omega_{\text{res}}(E_{\text{tot}} - E_i).
+  \]
+  Write this in terms of reservoir entropy: $\Omega_{\text{res}} = e^{S_{\text{res}}/k_B}$.
+  \item Since $E_i \ll E_{\text{tot}}$, expand $S_{\text{res}}(E_{\text{tot}} - E_i)$ as a Taylor series around $E_{\text{tot}}$ to first order. Show that:
+  \[
+    S_{\text{res}}(E_{\text{tot}} - E_i) \;\approx\; S_{\text{res}}(E_{\text{tot}}) - \frac{E_i}{T},
+  \]
+  where $1/T = \partial S_{\text{res}}/\partial E$.
+  \item Conclude that the probability of the system being in microstate $i$ is proportional to the **Boltzmann factor**:
+  \[
+    P_i \;\propto\; e^{-\beta E_i}, \qquad \text{where } \beta \;=\; \frac{1}{k_B T}.
+  \]
+\end{enumerate}
+\end{explobox}
+
+\subsection{Step 4: The Partition Function as a Thermodynamic Generator}
+
+We normalize the probabilities and discover a generating function for all thermodynamics.
+
+\begin{explobox}
+\problem To turn the proportionality of the Boltzmann factor into a probability distribution, we sum over all microstates: $P_i = \frac{1}{Z} e^{-\beta E_i}$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Show that the normalization constant is the **canonical partition function**:
+  \[
+    Z(\beta) \;=\; \sum_{i} e^{-\beta E_i}.
+  \]
+  \item The average energy $U = E[E]$ is $\sum_i E_i P_i$. Prove that $U$ can be written directly as a derivative of $Z$:
+  \[
+    U \;=\; -\frac{\partial \ln Z}{\partial \beta}.
+  \]
+  \item Let the free energy be $F = -k_B T \ln Z$. Show that the entropy of the system $S = -k_B \sum P_i \ln P_i$ (Gibbs' entropy) is related to $F$ by $F = U - TS$.
+  \item **CRITICAL INSIGHT:** Notice that $Z$ is a generating function (similar to the PGFs you built in Math Journey 5 Module 4). Knowing $Z$ as a function of temperature and volume allows you to compute *all* macroscopic thermodynamic variables by simple differentiation.
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ============================================================
+\section{Part 3 --- Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} An isolated system is modeled by the microcanonical ensemble, where all accessible microstates are equally likely. Entropy is the logarithmic measure of this degeneracy: $S = k_B \ln \Omega$.
+
+\textbf{Second.} A system in contact with a heat reservoir at temperature $T$ is modeled by the canonical ensemble. The probability of any microstate $i$ with energy $E_i$ is proportional to the Boltzmann factor: $P_i = \frac{1}{Z} e^{-\beta E_i}$.
+
+\textbf{Third.} The canonical partition function $Z = \sum e^{-\beta E_i}$ acts as an algebraic generating function. Taking derivatives of $\ln Z$ with respect to $\beta$ or volume yields the internal energy, pressure, and entropy of the system.
+
+\textbf{Fourth.} Microscopic statistical probabilities generate deterministic macroscopic properties. Thermodynamic variables are simply the expected values and moments of microstate distributions.
+\end{discoverybox}
+
+\newpage
+
+% ============================================================
+\section{Part 4 --- What This Is Called}
+% ============================================================
+
+\begin{namebox}
+\textbf{Statistical Mechanics Foundations.}
+
+* **Microstate:** A specific microscopic configuration of a system (coordinates and momenta of all particles).
+* **Macrostate:** The macroscopic state characterized by thermodynamic parameters ($P, V, T, U, S$).
+* **Boltzmann Factor:** $e^{-\beta E_i}$, representing the relative probability of a system in contact with a reservoir having energy $E_i$ (where $\beta = 1/k_B T$).
+* **Partition Function ($Z$):** The sum of Boltzmann factors over all microstates:
+  \[
+    Z \;=\; \sum_i e^{-\beta E_i}.
+  \]
+* **Thermodynamic Relations:**
+  * Average Energy: $U = -\frac{\partial \ln Z}{\partial \beta}$.
+  * Helmholtz Free Energy: $F = -k_B T \ln Z$.
+  * Entropy: $S = -\frac{\partial F}{\partial T} = k_B \ln Z + k_B T \frac{\partial \ln Z}{\partial T}$.
+  * Pressure: $P = -\frac{\partial F}{\partial V} = k_B T \frac{\partial \ln Z}{\partial V}$.
+\end{namebox}
+
+\newpage
+
+% ============================================================
+\section{Part 5 --- Solved Exercises}
+% ============================================================
+
+\begin{exercise}[The Two-State System]
+A system contains $N$ independent, non-interacting particles. Each particle can be in one of two states: a ground state with energy $0$, and an excited state with energy $\epsilon > 0$.
+1. Find the partition function $Z_1$ for a single particle.
+2. Find the total partition function $Z$ for the $N$ distinguishable particles.
+3. Calculate the average total energy $U$ as a function of temperature $T$. What are the limits of $U$ as $T \to 0$ and $T \to \infty$?
+\end{exercise}
+
+\begin{proof}[Solution]
+1. The microstates of a single particle are two states with energies $0$ and $\epsilon$. The single-particle partition function is:
+\[
+  Z_1 \;=\; e^{-\beta \cdot 0} + e^{-\beta \epsilon} \;=\; 1 + e^{-\beta \epsilon}.
+\]
+2. Since the $N$ particles are independent and distinguishable, the total partition function is the product of the single-particle partition functions:
+\[
+  Z \;=\; (Z_1)^N \;=\; (1 + e^{-\beta \epsilon})^N.
+\]
+3. The average energy $U$ is:
+\[
+  U \;=\; -\frac{\partial \ln Z}{\partial \beta} \;=\; -\frac{\partial}{\partial \beta} \left[ N \ln(1 + e^{-\beta \epsilon}) \right].
+\]
+Using the chain rule:
+\[
+  U \;=\; -N \cdot \frac{1}{1 + e^{-\beta \epsilon}} \cdot (-\epsilon e^{-\beta \epsilon}) \;=\; N \epsilon \frac{e^{-\beta \epsilon}}{1 + e^{-\beta \epsilon}} \;=\; \frac{N \epsilon}{e^{\beta \epsilon} + 1}.
+\]
+Let us examine the temperature limits:
+* As $T \to 0$, we have $\beta = \frac{1}{k_B T} \to \infty$. This implies $e^{\beta \epsilon} \to \infty$, and thus:
+\[
+  \lim_{T\to 0} U \;=\; 0.
+\]
+Physically, at absolute zero, all particles fall into their lowest energy ground state.
+* As $T \to \infty$, we have $\beta \to 0$. This implies $e^{\beta \epsilon} \to 1$, and thus:
+\[
+  \lim_{T\to \infty} U \;=\; \frac{N\epsilon}{1+1} \;=\; \frac{1}{2} N\epsilon.
+\]
+Physically, at infinite temperature, thermal energy is large enough that the particles are distributed equally between the ground and excited states (each has probability $1/2$).
+\end{proof}
+
+\begin{exercise}[Deriving the Ideal Gas Law]
+Derive the ideal gas law $PV = N k_B T$ using the partition function of $N$ independent, non-interacting, distinguishable classical particles of mass $m$ confined in a container of volume $V$.
+(Note: The single-particle partition function is $Z_1 = V \left(\frac{2\pi m}{\beta h^2}\right)^{3/2}$, where $h$ is Planck's constant, arising from integrating $e^{-\beta p^2/2m}$ over phase space).
+\end{exercise}
+
+\begin{proof}[Solution]
+The total partition function for $N$ independent, distinguishable particles is:
+\[
+  Z \;=\; (Z_1)^N \;=\; V^N \left(\frac{2\pi m}{\beta h^2}\right)^{3N/2}.
+\]
+To find the pressure $P$, we use the thermodynamic relation:
+\[
+  P \;=\; k_B T \left( \frac{\partial \ln Z}{\partial V} \right)_{T, N}.
+\]
+Let us calculate $\ln Z$:
+\[
+  \ln Z \;=\; N \ln V + \frac{3N}{2} \ln\left(\frac{2\pi m}{\beta h^2}\right).
+\]
+Now, take the partial derivative with respect to $V$, keeping $T$ (and thus $\beta$) constant:
+\[
+  \left( \frac{\partial \ln Z}{\partial V} \right)_{T, N} \;=\; \frac{N}{V} + 0 \;=\; \frac{N}{V}.
+\]
+Substitute this derivative back into the pressure formula:
+\[
+  P \;=\; k_B T \left( \frac{N}{V} \right) \implies P V \;=\; N k_B T.
+\]
+This proves the ideal gas law from microscopic partition functions. The pressure arises entirely from the volume-dependence of the accessible phase space.
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Part 6 --- Problems}
+% ============================================================
+
+\begin{problem}[Paramagnetism and Curie's Law]
+A system contains $N$ independent, non-interacting magnetic dipoles in an external magnetic field $B$. Each dipole can align either parallel to the field (state $\uparrow$, energy $-\mu B$) or anti-parallel (state $\downarrow$, energy $+\mu B$).
+\begin{enumerate}[label=(\alph*)]
+  \item Find the single-particle partition function $Z_1$. Show that it can be written as $2 \cosh(\beta \mu B)$.
+  \item Calculate the average magnetization $M = N \mu \langle s \rangle$, where $\langle s \rangle = P(\uparrow) - P(\downarrow)$ is the average spin alignment. Show that:
+  \[
+    M \;=\; N \mu \tanh(\beta \mu B).
+  \]
+  \item Plot $M$ as a function of temperature $T$. Show that at high temperatures ($k_B T \gg \mu B$), the magnetization satisfies Curie's Law: $M \propto 1/T$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[The Equipartition Theorem]
+Suppose a system has a degree of freedom $x$ (like position or momentum) that contributes a quadratic term to the system's energy: $E(x) = a x^2$ for some constant $a > 0$. The variable $x$ is continuous and can take any value in $(-\infty, \infty)$.
+Show that the expected energy contribution from this degree of freedom at temperature $T$ is:
+\[
+  \langle E \rangle \;=\; \frac{\int_{-\infty}^\infty (a x^2) e^{-\beta a x^2} \, dx}{\int_{-\infty}^\infty e^{-\beta a x^2} \, dx} \;=\; \frac{1}{2} k_B T.
+\]
+\textit{Hint: Write the integral in the numerator as $-\frac{\partial}{\partial \beta} \int_{-\infty}^\infty e^{-\beta a x^2} dx$, and use the Gaussian integral $\int_{-\infty}^\infty e^{-c x^2} dx = \sqrt{\pi/c}$.}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 7 --- Deep Problems}
+% ============================================================
+
+\begin{deepproblem}[Gibbs' Entropy and Shannon Information]
+Let a system have accessible microstates labeled $i = 1, \dots, \Omega$.
+The thermodynamic entropy is defined generally by the **Gibbs Entropy Formula**:
+\[
+  S \;=\; -k_B \sum_{i=1}^\Omega P_i \ln P_i.
+\]
+\begin{enumerate}[label=(\alph*)]
+  \item Suppose the system is isolated in equilibrium (the microcanonical ensemble). By the fundamental postulate, all microstates are equally likely: $P_i = 1/\Omega$ for all $i$. Show that under this condition, the Gibbs entropy reduces exactly to Boltzmann's entropy:
+  \[
+    S \;=\; k_B \ln \Omega.
+  \]
+  \item Compare this to **Shannon's Information Entropy** you explored in Math Journey 5 Module 1: $H = -\sum P_i \log_2 P_i$. What does this identity tell you about the physical meaning of entropy? (Explain why thermodynamic entropy is simply a measure of our missing information about the exact microstate of the system).
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[The Maxwell-Boltzmann Velocity Distribution]
+For a classical ideal gas of molecules of mass $m$ at temperature $T$, the probability of a molecule having momentum $\vec{p} = (p_x, p_y, p_z)$ is proportional to the Boltzmann factor $e^{-\beta p^2/2m}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that the probability density function for the momentum components is:
+  \[
+    f(\vec{p}) \;=\; \left(\frac{\beta}{2\pi m}\right)^{3/2} e^{-\frac{\beta (p_x^2 + p_y^2 + p_z^2)}{2m}}.
+  \]
+  \item Transition to velocity coordinates $\vec{v} = \vec{p}/m$. Show that the speed PDF $f(v)$ (where $v = |\vec{v}|$) is:
+  \[
+    f(v) \;=\; 4\pi \left(\frac{m}{2\pi k_B T}\right)^{3/2} v^2 e^{-\frac{m v^2}{2 k_B T}} \quad \text{for } v \ge 0.
+  \]
+  \textit{Hint: convert the volume element $dv_x dv_y dv_z$ to spherical shells $4\pi v^2 dv$.}
+  \item Calculate the most probable speed $v_{\text{mp}}$ (the mode of the distribution) and show that $v_{\text{mp}} = \sqrt{2 k_B T / m}$.
+\end{enumerate}
+\end{deepproblem}
+
+\newpage
+
+% ============================================================
+\section{Part 8 --- Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Emergence:** Temperature $T$ is a parameter that only makes sense for a statistical ensemble in contact with a reservoir. Why is it meaningless to talk about the "temperature" of a single isolated atom? What other everyday physical properties are emergent?
+  \item **On the Arrow of Time:** The microscopic laws of motion (Newton's laws, Schrödinger's equation) are invariant under time reversal ($t \to -t$). Yet macroscopic systems obey the Second Law of Thermodynamics (entropy never decreases). How does statistical probability reconcile microscopic reversibility with macroscopic irreversibility?
+  \item **On Information:** Is entropy a physical property of the gas itself, or is it a property of our description of the gas? If a super-intelligent observer (Maxwell's Demon) knew the exact positions and velocities of all $10^{23}$ particles, would the entropy of the gas be zero for them?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6.2 introduces **The Blackbody Crisis and Planck's Quantization**. We will see how classical statistical mechanics predicted that a cavity containing thermal light must radiate infinite energy at high frequencies—the "ultraviolet catastrophe." We will discover how Max Planck resolved this crisis by introducing energy quantization, marking the birth of quantum mechanics.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{teal}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{deep}\textit{End of Journey 6, Module 6.1 --- Microstates and Partition Functions}}\\[4pt]
+{\small\color{deep}Continue to: \textbf{Module 6.2 --- The Blackbody Crisis and Planck's Quantization}}\\[6pt]
+{\color{teal}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

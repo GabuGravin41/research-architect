@@ -1,0 +1,585 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds, decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+\setlength{\headheight}{24pt}
+
+\hypersetup{colorlinks=true, linkcolor=midblue, urlcolor=accent, citecolor=teal,
+  pdftitle={Discovery Physics: Journey 3 — Fields and the Invisible Universe},
+  pdfauthor={Discovery Institute}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}{\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}{\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\color{midblue}}{\thesubsubsection}{1em}{}
+
+% ─── Boxes ──────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold,colframe=gold},#1}
+
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue,colframe=midblue},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent,colframe=accent},drop shadow,#1}
+
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep,colframe=deep},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi}
+
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+    left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ─── Title Page ─────────────────────────────────────────────────────────────
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{2cm}
+
+\begin{tikzpicture}[scale=0.95]
+  % Field lines radiating from central source
+  \foreach \ang in {0,22.5,...,337.5}{
+    \draw[teal!60, line width=0.8pt, opacity=0.5, ->]
+      ({0.5*cos(\ang)},{0.5*sin(\ang)}) -- ({4.2*cos(\ang)},{4.2*sin(\ang)});
+  }
+  % Concentric shells (equipotentials)
+  \foreach \r/\op in {1.2/0.7, 2.0/0.5, 3.0/0.35}{
+    \draw[gold, line width=0.8pt, opacity=\op] (0,0) circle (\r cm);
+  }
+  \fill[gold] (0,0) circle (0.22cm);
+  \node[gold, font=\scriptsize] at (0,-0.5) {source};
+  % Test particles
+  \fill[accent] (2.5, 1.5) circle (0.12cm);
+  \fill[accent] (-1.8, 2.2) circle (0.10cm);
+  \fill[accent] (0.5, -2.8) circle (0.09cm);
+\end{tikzpicture}
+
+\vspace{0.4cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics}}}
+\vspace{0.3cm}
+
+{\fontsize{36}{42}\selectfont\bfseries Journey Three}
+\vspace{0.3cm}
+
+{\fontsize{22}{28}\selectfont\textcolor{gold}{Fields and the Invisible Universe}}
+\vspace{0.5cm}
+
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+
+{\fontsize{13}{18}\selectfont\textcolor{white!80}{\itshape
+How does one object reach across empty space\\[4pt]
+to push or pull another it has never touched?}}
+
+\vspace{0.5cm}
+{\fontsize{10}{14}\selectfont\textcolor{white!50}{
+Modules 3.1--3.2 \quad|\quad The Problem of Distance \& The Gravitational Field\\[4pt]
+Discovery Institute · Olympiad Programme}}
+
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+
+% ─── Journey Overview ───────────────────────────────────────────────────────
+\chapter*{Journey 3: An Overview}
+\addcontentsline{toc}{chapter}{Journey 3: An Overview}
+\markboth{Journey 3: Fields and the Invisible Universe}{}
+
+\epigraph{\itshape
+  The notion of a field can be traced to Faraday, who spoke of ``lines of force''
+  permeating space\ldots{} It is one of the great contributions to human thought.
+}{--- Richard Feynman, \textit{The Feynman Lectures on Physics}}
+
+\lettrine[lines=3,loversize=0.1]{\textcolor{accent}{A}}{t} the end of Journey 2, Newton's mechanics sat triumphant. It predicted the orbits of planets, the trajectories of cannonballs, and the rate at which a pendulum swings, all from two equations: $F = ma$ and $F = GMm/r^2$. The framework was extraordinarily powerful.
+
+But there was a crack in the foundation. Newton's law of gravity says that Earth pulls the Moon across 384,000~km of empty space---instantaneously, with no medium, no contact, no mechanism. Newton himself found this deeply unsatisfying. In a letter to Richard Bentley, he wrote:
+
+\begin{quote}
+\itshape
+``That one body may act upon another at a distance through a vacuum, without the mediation of anything else\ldots{} is to me so great an absurdity that I believe no man who has in philosophical matters a competent faculty of thinking can ever fall into it.''
+\end{quote}
+
+And yet his equation worked perfectly. So for 150 years, physicists used the formula without understanding the mechanism.
+
+The resolution came not from mathematics but from observation---and from a man with almost no formal education. Michael Faraday, a bookbinder's apprentice who taught himself physics from the books he bound, looked at the patterns made by iron filings around magnets and had a radical thought: the space between objects is not empty. It is altered---structured---by the presence of matter and charge. The lines of force he drew were not just a visual aid. They were physically real.
+
+This idea---the \textbf{field}---is one of the most important conceptual inventions in the history of science. Fields turned out to be the fundamental entities in all of modern physics. Every force we know is mediated by a field. Particles themselves, in quantum field theory, are nothing but excitations of underlying fields.
+
+Journey 3 builds this concept from the ground up: from the discomfort of action at a distance, through gravitational and electric fields, through Faraday's magnetic vision, to Maxwell's earth-shaking discovery that light itself is a field oscillation.
+
+\vspace{0.4cm}
+\textbf{The eight modules of Journey 3:}
+\begin{itemize}[leftmargin=2em,itemsep=2pt]
+  \item \textbf{3.1} --- The Problem of Action at a Distance
+  \item \textbf{3.2} --- Mapping the Gravitational Field
+  \item \textbf{3.3} --- Electric Charge and Its Patterns
+  \item \textbf{3.4} --- Faraday's Lines of Force
+  \item \textbf{3.5} --- Magnetic Fields and Moving Charges
+  \item \textbf{3.6} --- Changing Fields Create Fields
+  \item \textbf{3.7} --- Maxwell's Unification
+  \item \textbf{3.8} --- What Is a Field, Really?
+\end{itemize}
+
+\tableofcontents
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter{Fields and the Invisible Universe}
+\markboth{Journey 3: Fields and the Invisible Universe}{}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 3.1 — The Problem of Action at a Distance}
+\label{sec:action_distance}
+
+\epigraph{\itshape
+  It is inconceivable that inanimate brute matter should, without the mediation
+  of something else which is not material, operate upon and affect other matter
+  without mutual contact.
+}{--- Isaac Newton, letter to Richard Bentley, 1693}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+How does the Sun pull Earth across 150 million kilometres of empty space? There is nothing between them. No rope. No fluid. No contact. What is the mechanism?
+\end{puzzlebox}
+
+\subsection{A Problem Newton Could Not Answer}
+
+\lettrine[lines=2,loversize=0.05]{\textcolor{accent}{N}}{ewton}'s law of gravitation is one of the greatest achievements in the history of science. With a single equation, it explained the motion of the planets, the shape of tides, the trajectory of cannonballs, and the fall of an apple. Its predictive power was staggering.
+
+And yet Newton himself was deeply troubled by it. The equation says that two masses exert a force on each other---but says nothing about \textit{how}. The force appears instantaneously, with no time delay, across any distance of empty space.
+
+This is called \textbf{action at a distance}, and it bothered every careful thinker who encountered it.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_action_distance}
+\caption{Left: contact forces are easy to understand---one object physically pushes another. Right: action at a distance is philosophically troubling---two objects influence each other across empty space with no apparent mechanism. Newton could calculate the force but refused to speculate about how it worked.}
+\label{fig:action_distance}
+\end{figure}
+
+Consider how strange this really is. You push a friend: your hand makes contact with their shoulder, you compress molecules, the force propagates through physical contact. Every force you experience directly in daily life involves contact. So when we say the Sun ``pulls'' Earth, what does that mean? Something is happening in the 150 million kilometres between them. But what?
+
+\begin{explobox}
+\problem List five forces you experience in everyday life (pushing a door, sitting in a chair, etc.). For each one: does it involve direct contact or action at a distance?
+
+\problem The gravitational force between the Earth and Moon is approximately $\SI{2e20}{N}$. If this force somehow ``propagated'' at the speed of light (about $\SI{3e8}{m/s}$), how long would it take to travel from Earth to the Moon? During an eclipse, the Moon's shadow moves across Earth. Does this delay matter for the calculation of the Moon's orbit?
+
+\problem Here is a thought experiment. Suppose the Sun suddenly disappeared. According to Newton's theory, Earth would immediately fly off in a straight line---because the gravitational force vanishes instantaneously. But nothing in the universe transmits information faster than light ($\approx 8$ minutes for Earth-Sun). Does this trouble you? What would a more satisfying theory look like?
+
+\problem Ancient Greek philosophers proposed various mechanisms for action at a distance: ``effluvium'' (particles streaming from objects), ``sympathetic vibrations'' of an ether. What is wrong with each of these? What properties would a successful mechanism need to have?
+\end{explobox}
+
+\subsection{The Inverse Square Law: Where Does It Come From?}
+
+Before confronting the mechanism, let us understand the mathematical form. Why does gravity---and electricity---follow a $1/r^2$ law and not a $1/r^3$ law or a $1/r$ law?
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_inverse_square}
+\caption{Left: the geometric origin of the inverse square law. A fixed total ``flux'' spreads out over spherical shells whose area grows as $r^2$. Therefore the flux per unit area---the field strength---falls as $1/r^2$. Right: comparison of $1/r^2$ and $1/r$ falloff---the inverse square law decays much faster at large distances but is stronger at close range.}
+\label{fig:inverse_square}
+\end{figure}
+
+The answer turns out to be beautifully simple: it is a consequence of the \textit{geometry of three-dimensional space}.
+
+Imagine a source emitting something---light, gravitational influence, field lines---equally in all directions. Consider two spheres centred on the source, one at radius $r_1$ and one at radius $r_2$. The total ``flux'' (whatever is being emitted) passing through both spheres must be the same, because nothing is being created or destroyed in between.
+
+The surface area of a sphere is $4\pi r^2$. So the flux \textit{per unit area} at distance $r$ is:
+\begin{equation}
+  \text{flux density} = \frac{\text{total flux}}{4\pi r^2} \propto \frac{1}{r^2}
+\end{equation}
+
+The inverse square law is not a mysterious fact about gravity or electricity. It is \textit{geometry}. Any quantity that spreads equally in three dimensions from a point source will follow it.
+
+\begin{explobox}
+\problem The brightness of a star (power received per unit area of detector) follows the inverse square law. A star at distance $r$ has apparent brightness $B$. If you move to distance $3r$, what is the new brightness in terms of $B$?
+
+\problem Sound intensity from a point source also follows the inverse square law. If you double your distance from a speaker, by what factor does the intensity change? By what factor does the amplitude of the sound wave change? (Intensity is proportional to amplitude squared.)
+
+\problem In two-dimensional space (flat plane), a source emitting equally in all directions would spread over circles, not spheres. What law would replace the inverse square law? Why does this matter for physics in 2D versus 3D?
+
+\problem \textit{Deep question.} Gravity follows $1/r^2$ in three spatial dimensions. String theory suggests there may be extra, compact spatial dimensions too small to detect at ordinary scales. If gravity could ``leak'' into an extra dimension at very short distances, how would the force law change at those distances? What experiment could detect this? (The Eöt-Wash experiment at the University of Washington actually tests this---look it up if you can.)
+\end{explobox}
+
+\begin{discoverybox}
+\textbf{The deep connection.} The inverse square law is not a coincidence shared by gravity and electricity. Both are mediated by ``massless'' field carriers that travel at the speed of light and spread their influence equally in three spatial dimensions. This geometric origin will become clearer when we encounter field lines and Gauss's law later in this journey.
+
+In higher dimensions, the force law would be different. That the universe has three spatial dimensions is therefore encoded in the $1/r^2$ form of gravity.
+\end{discoverybox}
+
+\subsection{Toward a Resolution: The Field}
+
+The resolution to action at a distance---at least partially---came from a conceptual shift. Instead of thinking about \textit{forces between objects}, we think about \textit{fields in space}.
+
+The idea:
+
+\begin{enumerate}[leftmargin=2em,itemsep=3pt]
+  \item A massive object (or a charge) \textbf{modifies the space around it}. It creates a field.
+  \item The field exists everywhere in space, even where there is no second object to feel it.
+  \item A second object placed in this modified space \textbf{responds to the field at its location}---not directly to the source.
+\end{enumerate}
+
+This may seem like a distinction without a difference. But it is not. The field is physically real. It carries energy. It travels at finite speed. And it exists even when nothing is there to feel it.
+
+We will build this picture carefully over the next several modules.
+
+\begin{deepquestion}
+If the Sun disappeared suddenly, when would Earth ``know''? In Newton's theory: instantaneously. In a field theory: after the gravitational field disturbance travels from the Sun to Earth at the speed of light---about 8 minutes. Einstein's general relativity, which is a field theory of gravity, predicts this 8-minute delay and calls the disturbance a \textbf{gravitational wave}. The LIGO detector first observed such waves in 2015---from two black holes merging 1.3 billion light-years away.
+\end{deepquestion}
+
+\begin{reflectionbox}
+\textbf{Reflection.} In two or three paragraphs, describe in your own words why action at a distance is philosophically unsatisfying. Then explain how the concept of a field resolves (or at least partially addresses) the problem. Finally: does the field concept fully solve the problem, or does it merely shift it? (If the field is real, what \textit{is} it made of? Where does it live?)
+\end{reflectionbox}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 3.2 — Mapping the Gravitational Field}
+\label{sec:grav_field}
+
+\epigraph{\itshape
+  The field is the only reality.
+}{--- Albert Einstein}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Every point in space around a massive object has a gravitational force associated with it. How do we represent this mathematically? And what does the resulting structure look like?
+\end{puzzlebox}
+
+\subsection{From Force to Field}
+
+In Newton's formulation, gravity is a force between two objects:
+\begin{equation}
+  \vec{F} = -\frac{GMm}{r^2}\hat{r}
+\end{equation}
+where $\hat{r}$ is the unit vector pointing from the source mass $M$ to the test mass $m$, and the minus sign indicates the force is attractive (toward the source).
+
+Notice that this force depends on both the source mass $M$ and the test mass $m$. To describe ``the gravitational influence of $M$ at a given point in space''---independent of what test mass we place there---we define the \textbf{gravitational field}:
+
+\begin{equation}
+  \boxed{\bm{g}(\bm{r}) = \frac{\bm{F}}{m} = -\frac{GM}{r^2}\hat{r}}
+\end{equation}
+
+The gravitational field $\bm{g}$ is a \textbf{vector field}: at every point in space, it assigns a vector (with both magnitude and direction). The magnitude is the gravitational acceleration a test mass would experience at that point; the direction is toward the source.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_grav_field}
+\caption{Left: the gravitational field around Earth visualised as vectors at a grid of points. The arrows point toward Earth (the direction a test mass would accelerate) and grow longer closer to the surface where the field is stronger. Right: the same field represented using field lines. Lines point toward the source; their density encodes field strength.}
+\label{fig:grav_field}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_field_concept}
+\caption{The conceptual shift from ``force between two objects'' (left) to ``field as property of space'' (right). In the field picture, the source mass creates a field that exists at every point. A test mass then responds to the field at its location---independently of the source.}
+\label{fig:field_concept}
+\end{figure}
+
+\subsection{Properties of the Gravitational Field}
+
+Let us explore what this field looks like and how it behaves.
+
+\subsubsection*{Near the surface of Earth}
+
+At the surface of Earth (radius $R_E = \SI{6.37e6}{m}$, mass $M_E = \SI{5.97e24}{kg}$), the gravitational field has magnitude:
+\begin{equation}
+  g_{\text{surface}} = \frac{GM_E}{R_E^2} = \SI{9.81}{m/s^2}
+\end{equation}
+This is the familiar $g$---the gravitational field at Earth's surface is uniform (to good approximation) over small regions. Its direction is straight down.
+
+\subsubsection*{The field varies with distance}
+
+At distance $r$ from Earth's centre:
+\begin{equation}
+  g(r) = \frac{GM_E}{r^2}
+\end{equation}
+This tells us exactly how the field weakens with altitude.
+
+\begin{explobox}
+\problem Calculate the gravitational field strength at:
+\begin{enumerate}[label=(\alph*)]
+  \item The surface of Earth ($r = R_E$)
+  \item Height $R_E$ above the surface (i.e., $r = 2R_E$)
+  \item The Moon's orbital distance ($r = 60R_E$)
+  \item The distance of geostationary orbit ($r \approx 6.6R_E$)
+\end{enumerate}
+Express each as a fraction of the surface value $g_0 = \SI{9.81}{m/s^2}$.
+
+\problem An astronaut on the International Space Station (altitude $\approx \SI{400}{km}$, $r \approx 1.06R_E$) feels ``weightless.'' But the gravitational field at that altitude is about $88\%$ of its surface value. Explain the apparent contradiction. Is the astronaut truly outside gravity's influence?
+
+\problem Inside a uniform spherical shell of matter, the gravitational field is exactly zero. (This is a non-trivial result---prove it for the simpler case of a thin ring at a specific point on the axis.) What does this imply for someone living at the centre of a hollow planet?
+
+\problem On the surface of the Moon ($M = \SI{7.34e22}{kg}$, $R = \SI{1.74e6}{m}$):
+\begin{enumerate}[label=(\alph*)]
+  \item What is the surface gravitational field?
+  \item How high could you jump (vertically) if you can jump $\SI{0.5}{m}$ on Earth?
+  \item What is the escape speed from the Moon's surface?
+\end{enumerate}
+
+\problem \textit{Gravitational field inside Earth.} If Earth has uniform density $\rho$, the gravitational field at radius $r < R_E$ is:
+\begin{equation}
+  g(r) = \frac{4}{3}\pi G\rho r
+\end{equation}
+\begin{enumerate}[label=(\alph*)]
+  \item Verify this formula using the fact that only the mass \textit{inside} radius $r$ contributes, by Newton's shell theorem.
+  \item Sketch $g(r)$ for $0 \leq r \leq 3R_E$.
+  \item What happens at $r = 0$? Why does this make sense?
+  \item At what depth below Earth's surface is the gravitational field half of its surface value? (Careful: here you go \textit{inside} the Earth, so the formula above applies.)
+\end{enumerate}
+\end{explobox}
+
+\subsection{Field Lines: Faraday's Language}
+
+Vectors at a grid of points give one representation of a field. But a more elegant---and more physically illuminating---representation uses \textbf{field lines}.
+
+Field lines are curves drawn so that:
+\begin{enumerate}[leftmargin=2em,itemsep=2pt]
+  \item Their \textbf{direction} at every point is the direction of the field vector.
+  \item Their \textbf{density} (how closely spaced they are) is proportional to the field's magnitude.
+\end{enumerate}
+
+For the gravitational field around a spherical mass, field lines point radially inward (toward the mass) and are equally spaced in angle. They are more densely packed near the mass (stronger field) and more spread out far away (weaker field).
+
+\begin{explobox}
+\problem For a spherical mass, the field lines are radial. Show that the density of field lines at distance $r$ falls as $1/r^2$, consistent with the inverse square law. (Consider a bundle of $N$ field lines passing through a small solid angle $\Delta\Omega$. What area do they pass through at distance $r$? What is their areal density?)
+
+\problem Can two field lines of the same field ever cross? Explain your reasoning. (Hint: what would it mean physically if they did?)
+
+\problem Sketch the gravitational field lines for:
+\begin{enumerate}[label=(\alph*)]
+  \item A single point mass
+  \item Two equal masses separated by some distance
+  \item A point mass near a very massive wall (treat the wall as a uniform mass sheet)
+\end{enumerate}
+In which regions is the field strongest? Where might the field be zero?
+
+\problem \textit{Finding equilibrium.} Two masses $M$ and $4M$ are placed \SI{3}{m} apart. Is there a point between them (or outside them) where the gravitational field is exactly zero? Find it.
+\end{explobox}
+
+\subsection{The Gravitational Potential}
+
+Associated with every conservative field (one where the work done is path-independent) is a \textbf{potential}---a scalar field whose gradient gives the force field.
+
+For gravity:
+\begin{equation}
+  \Phi(\bm{r}) = -\frac{GM}{r}
+  \qquad\text{so that}\qquad
+  \bm{g} = -\nabla\Phi
+\end{equation}
+
+The gravitational potential energy of a mass $m$ at position $\bm{r}$ is $U = m\Phi$.
+
+\begin{explobox}
+\problem The potential at Earth's surface is $\Phi_0 = -GM_E/R_E \approx \SI{-6.25e7}{J/kg}$. What is the potential at:
+\begin{enumerate}[label=(\alph*)]
+  \item Height $R_E$ above the surface?
+  \item The Moon's orbital distance ($60R_E$)?
+  \item Infinity?
+\end{enumerate}
+
+\problem \textit{Escape speed.} A rocket must have enough kinetic energy to reach $r = \infty$ (where $\Phi = 0$). Starting from Earth's surface:
+\begin{enumerate}[label=(\alph*)]
+  \item Write the energy conservation equation.
+  \item Find the minimum launch speed (escape speed) for Earth.
+  \item Find the escape speed for the Moon.
+  \item What is the escape speed for a neutron star of mass $M = 1.4\,M_{\odot}$ and radius $\SI{10}{km}$? Compare to the speed of light.
+\end{enumerate}
+
+\problem \textit{Equipotential surfaces.} Surfaces of constant $\Phi$ are called equipotential surfaces. For a spherical mass, these are spheres. Sketch the equipotentials and field lines together for a point mass. What is the geometric relationship between them? Why must this relationship always hold?
+
+\problem \textit{A conceptual puzzle.} If you move a $\SI{1}{kg}$ mass along an equipotential surface, how much work does gravity do? What does this tell you about the direction of the gravitational force relative to the equipotential?
+\end{explobox}
+
+\subsection{Superposition: Fields Add}
+
+A crucial property of both gravitational and electric fields is \textbf{superposition}: the total field due to multiple sources is the vector sum of the fields due to each source individually.
+
+\begin{equation}
+  \bm{g}_{\text{total}} = \bm{g}_1 + \bm{g}_2 + \bm{g}_3 + \cdots
+\end{equation}
+
+This seems obvious, but it is not guaranteed. Superposition is an experimental fact that holds for gravity and electricity. It fails (in a sense) for strong gravitational fields in general relativity, where spacetime geometry is non-linear.
+
+\begin{explobox}
+\problem Three masses of $\SI{1}{kg}$ each are placed at the corners of an equilateral triangle with side length $\SI{1}{m}$. Find the gravitational field (magnitude and direction) at the centre of the triangle.
+
+\problem A uniform rod of mass $M$ and length $L$ lies along the $x$-axis from $x=0$ to $x=L$. Find the gravitational field at the point $x = -d$ (a distance $d$ to the left of the rod). (This requires integration---treat the rod as a collection of infinitesimal mass elements $dM = (M/L)\,dx'$.)
+
+\problem \textit{Why superposition matters.} The gravitational field of the Milky Way galaxy is the superposition of fields from roughly $10^{11}$ stars, gas clouds, and dark matter. Why does superposition make this problem tractable, at least in principle? What would happen to the concept of a ``galaxy's field'' if superposition did not hold?
+\end{explobox}
+
+\begin{discoverybox}
+\textbf{What we have built.} Starting from Newton's force law, we have constructed the concept of a \textbf{gravitational field}---a vector field that assigns a force-per-unit-mass to every point in space. This field:
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Exists independently of any test mass
+  \item Points toward the source and weakens as $1/r^2$
+  \item Can be visualised using field lines, whose density encodes strength
+  \item Is accompanied by a scalar potential $\Phi$
+  \item Obeys superposition: fields from multiple sources add as vectors
+\end{itemize}
+
+In the next module, we will discover that electric charges create a field with exactly the same mathematical structure---and begin to ask why.
+\end{discoverybox}
+
+\begin{historybox}
+\textbf{Henry Cavendish and the measurement of $G$.} Newton's law of gravitation contains the constant $G$, but Newton himself never measured it. He could only calculate ratios of forces. $G$ was first measured in 1798 by Henry Cavendish using a torsion balance---a dumbbell suspended by a thin fibre, with two small lead spheres attracted to two large fixed spheres. By measuring the tiny twist of the fibre, Cavendish determined the gravitational constant to within 1\% of its modern value.
+
+His original stated purpose was not to measure $G$ but to ``weigh the Earth''---knowing $g$ and $R_E$, once you know $G$ you can find $M_E = gR_E^2/G$. The experiment is one of the most delicate in the history of science. The gravitational force between the small and large spheres was about $\SI{1.7e-7}{N}$---roughly the weight of a mosquito. At the time this was the weakest force ever measured deliberately.
+\end{historybox}
+
+\begin{reflectionbox}
+\textbf{Reflection: Module 3.2.}
+
+The gravitational field concept changes how we describe nature. Instead of ``Earth pulls the Moon,'' we say ``Earth creates a field; the Moon responds to the field at its location.''
+
+Write two pages addressing:
+\begin{enumerate}[leftmargin=2em,itemsep=4pt]
+  \item \textit{What is gained} by the field description compared to the direct-force description? Give at least two concrete advantages.
+  \item \textit{What new questions} does the field concept raise? (What is the field made of? Does it have energy? Does it travel at finite speed?)
+  \item \textit{A prediction.} If the field is the real physical entity and the source mass were suddenly removed, what would happen to the field? Describe the sequence of events at points near the source versus points far away.
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Module Summary: 3.1--3.2}
+\addcontentsline{toc}{chapter}{Module Summary: 3.1--3.2}
+\markboth{Module Summary: 3.1--3.2}{}
+
+\vspace{0.3cm}
+
+\begin{tcolorbox}[enhanced, colback=deep!4, colframe=deep,
+  title={\bfseries\color{white} Key Ideas So Far in Journey 3},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+
+\textbf{Module 3.1 --- Action at a Distance}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Newton's gravity is mathematically perfect but mechanistically silent
+  \item The inverse square law arises from the geometry of 3D space---not a mysterious coincidence
+  \item The field concept offers a partial resolution: space is modified by matter; objects respond to the local field
+  \item In a full field theory (general relativity), disturbances travel at the speed of light
+\end{itemize}
+
+\vspace{6pt}
+\textbf{Module 3.2 --- The Gravitational Field}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item The gravitational field $\bm{g} = \bm{F}/m$ assigns a vector to every point in space
+  \item Field lines: direction = field direction; density = field strength; never cross
+  \item The gravitational potential $\Phi = -GM/r$ is a scalar; $\bm{g} = -\nabla\Phi$
+  \item Equipotential surfaces are perpendicular to field lines
+  \item Superposition: fields from multiple sources add as vectors
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.6cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[teal, line width=1.5pt] (0,0) -- (12,0);
+  \node[below,teal] at (6,-0.1)
+    {\small\itshape End of Modules 3.1--3.2. Next: Electric Charge and Its Patterns (Module 3.3).};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5cm}
+\begin{center}
+{\large\textcolor{deep}{\textbf{Coming next in Module 3.3:}}}\\[6pt]
+{\itshape\textcolor{midblue}{%
+Electric charge produces a field with the same $1/r^2$ structure as gravity.\\[3pt]
+But charge comes in two signs---and like signs \emph{repel}.\\[3pt]
+Why the same mathematics? Why the crucial difference?
+}}
+\end{center}
+
+\end{document}

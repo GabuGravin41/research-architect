@@ -1,0 +1,535 @@
+\documentclass[12pt, a4paper]{book}
+
+% ─── Core packages ────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=30mm, bottom=30mm,
+  inner=32mm, outer=25mm,
+  marginparwidth=18mm
+}
+
+% ─── Mathematics ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amsthm}
+
+% ─── Chemistry ────────────────────────────────────────────────────────────────
+\usepackage[version=4]{mhchem}
+
+% ─── Graphics & colour ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning,
+                calc, backgrounds, decorations.pathmorphing,
+                decorations.markings, patterns}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% ─── Layout ───────────────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{marginnote}
+\usepackage{mdframed}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COLOUR PALETTE  (identical to Module 1.1)
+% ══════════════════════════════════════════════════════════════════════════════
+\definecolor{JourneyColor}{HTML}{065F46}   % forest green — journey headings
+\definecolor{ModuleColor}{HTML}{0F766E}    % deep teal — module headings
+\definecolor{PuzzleColor}{HTML}{B45309}    % deep amber — puzzle boxes
+\definecolor{DiscoveryColor}{HTML}{D97706} % golden amber — discovery boxes
+\definecolor{WarningColor}{HTML}{E11D48}   % coral red — "model breaks" boxes
+\definecolor{ProblemColor}{HTML}{0F766E}   % dark teal — problem sets
+\definecolor{ReflectColor}{HTML}{047857}   % green — reflection boxes
+\definecolor{HistoryColor}{HTML}{9A3412}   % brown — history notes
+\definecolor{LightBg}{HTML}{F8FAFC}        % near-white background
+
+% ══════════════════════════════════════════════════════════════════════════════
+% TCOLORBOX ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=PuzzleColor!6, colframe=PuzzleColor,
+  fonttitle=\bfseries\sffamily, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=PuzzleColor, colframe=PuzzleColor},
+  borderline west={3pt}{0pt}{PuzzleColor}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  fonttitle=\bfseries\sffamily, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor}, #1}
+
+\newtcolorbox{problembox}[1][]{
+  enhanced, breakable,
+  colback=ProblemColor!5, colframe=ProblemColor,
+  fonttitle=\bfseries\sffamily, title={Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ProblemColor, colframe=ProblemColor},
+  borderline west={3pt}{0pt}{ProblemColor}, #1}
+
+\newtcolorbox{deepbox}[1][]{
+  enhanced, breakable,
+  colback=JourneyColor!5, colframe=JourneyColor,
+  fonttitle=\bfseries\sffamily, title={Deep Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=JourneyColor, colframe=JourneyColor},
+  borderline west={4pt}{0pt}{JourneyColor}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=HistoryColor!7, colframe=HistoryColor!60,
+  fonttitle=\bfseries\sffamily\small, title={Historical Note},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=HistoryColor!80, colframe=HistoryColor}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=ReflectColor!6, colframe=ReflectColor,
+  fonttitle=\bfseries\sffamily, title={Reflection},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ReflectColor, colframe=ReflectColor},
+  borderline west={3pt}{0pt}{ReflectColor}, #1}
+
+\newtcolorbox{modelbreaks}[1][]{
+  enhanced, breakable,
+  colback=WarningColor!6, colframe=WarningColor,
+  fonttitle=\bfseries\sffamily, title={Where This Model Breaks},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=WarningColor, colframe=WarningColor},
+  borderline west={4pt}{0pt}{WarningColor}, #1}
+
+\newtcolorbox{namedconcept}[2][]{
+  enhanced,
+  colback=ModuleColor!6, colframe=ModuleColor,
+  fonttitle=\bfseries\sffamily\large, title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ModuleColor, colframe=ModuleColor}, #1}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% THEOREM ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\theoremstyle{definition}
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{question}{Question}[chapter]
+\newtheorem{experiment}{Experiment}[chapter]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECTION FORMATTING
+% ══════════════════════════════════════════════════════════════════════════════
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}
+  {10pt}{\Huge}[\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% HEADER / FOOTER
+% ══════════════════════════════════════════════════════════════════════════════
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CUSTOM COMMANDS
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\chem}[1]{\ce{#1}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\sidenote}[1]{%
+  \marginnote{\footnotesize\sffamily\textcolor{JourneyColor!70}{#1}}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% DOCUMENT
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\setcounter{chapter}{0}   % Journey 1 is chapter 1
+
+% We skip the title page and TOC here — those live in the master file.
+% This file compiles standalone for review.
+
+\chapter[Journey 1 — What Is Stuff?]
+        {Journey One\\[8pt]
+         \textcolor{ModuleColor}{\large What Is Stuff?\ \ Matter and Its Patterns}}
+
+% Fast-forward to Module 1.2
+\setcounter{section}{1}   % so next \section is 1.2
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  MODULE 1.2 — BURNING, DISSOLVING, REACTING: THE FIRST CLUES
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Module 1.2 — Burning, Dissolving, Reacting: The First Clues}
+\label{sec:mod1.2}
+
+\subsection*{Motivation}
+
+In Module~1.1 we learned to classify matter:
+elements, compounds, mixtures.
+We noticed that when elements combine into a compound,
+something \emph{new} appears — a substance whose properties
+are entirely unlike its components.
+
+But we have not yet asked the hardest question:
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=LightBg, colframe=JourneyColor!40,
+  width=0.86\textwidth, arc=3pt,
+  fontupper=\sffamily
+]
+\centering
+When a chemical reaction happens,\\[4pt]
+\textbf{what is actually going on?}\\[6pt]
+\small
+When wood burns, where does the wood \emph{go}?\\
+When iron rusts, what is iron combining with?\\
+When limestone dissolves in acid, what is released?\\[4pt]
+\normalsize
+For two thousand years, these questions had no satisfying answer.\\
+Then, in the span of a single generation,\\
+careful measurement changed everything.
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+This module follows the intellectual detective story
+that led from confused guesses about fire and rust
+to one of the most powerful laws in all of science:
+\textbf{the conservation of mass}.
+
+% ─── Section: The Phlogiston Theory ──────────────────────────────────────────
+\subsection{The Theory That Ruled for a Century}
+
+Before we reach the correct answer, we must spend time with
+the \emph{wrong} one — because understanding why a wrong theory
+is compelling teaches us more about science than jumping
+directly to the truth.
+
+\subsubsection{The Phlogiston Hypothesis}
+
+In the early 18th century, the German chemist Georg Ernst Stahl
+proposed a theory that seemed to explain combustion, rusting,
+and many other reactions in a single elegant framework.
+
+His idea: every combustible substance contains a hidden substance
+called \newterm{phlogiston}.
+When something burns, it releases phlogiston into the air.
+When something rusts (which Stahl saw as a slow form of burning),
+it also releases phlogiston slowly.
+When a metal ore is heated with charcoal, the charcoal
+donates its phlogiston to the ore, restoring the metal.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  arrow/.style={-{Stealth[length=5pt]}, thick, color=HistoryColor!80}
+]
+  % Combustion row
+  \node[draw=HistoryColor!60, fill=HistoryColor!8, rounded corners=3pt,
+        minimum width=3.0cm, minimum height=0.9cm, align=center]
+        (wood) at (0,0) {Wood\\(rich in phlogiston)};
+  \draw[arrow] (wood) -- ++(3.2,0)
+    node[above, midway, font=\sffamily\footnotesize]{burns};
+  \node[draw=HistoryColor!60, fill=HistoryColor!8, rounded corners=3pt,
+        minimum width=3.0cm, minimum height=0.9cm, align=center]
+        (ash) at (4.5,0) {Ash\\(phlogiston-free)};
+  \node[draw=JourneyColor!50, fill=JourneyColor!8, rounded corners=3pt,
+        minimum width=2.4cm, minimum height=0.7cm, align=center,
+        dashed]
+        (phi) at (2.4,-1.4) {phlogiston\\released to air};
+  \draw[arrow, dashed, color=JourneyColor!60] (1.6,-0.4) -- (phi.north west);
+
+  % Rusting row
+  \node[draw=HistoryColor!60, fill=HistoryColor!8, rounded corners=3pt,
+        minimum width=3.0cm, minimum height=0.9cm, align=center]
+        (iron) at (0,-3.0) {Iron\\(contains phlogiston)};
+  \draw[arrow] (iron) -- ++(3.2,0)
+    node[above, midway, font=\sffamily\footnotesize]{rusts slowly};
+  \node[draw=HistoryColor!60, fill=HistoryColor!8, rounded corners=3pt,
+        minimum width=3.0cm, minimum height=0.9cm, align=center]
+        (rust) at (4.5,-3.0) {Iron oxide (rust)\\(phlogiston-free)};
+  \node[font=\sffamily\footnotesize\itshape, text=JourneyColor!70]
+        at (2.4,-4.0) {phlogiston slowly lost to air};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The theory was internally consistent.
+It explained why things needed air to burn
+(air absorbs phlogiston, and air saturated with phlogiston
+cannot absorb more — hence a candle dies in a closed jar).
+It explained smelting of metals from ores.
+It gave chemists a shared vocabulary.
+
+It was taught in every university in Europe for nearly a century.
+
+\begin{historybox}
+\textbf{Why Smart People Believed Phlogiston (1700s)}
+
+Georg Stahl's theory was not foolish — it was the best available
+explanation given the tools of the time.
+No one had yet invented a reliable way to collect and weigh gases.
+Reactions happened in open vessels where gases escaped unnoticed.
+
+The critical failure of phlogiston theory was that it treated
+\emph{fire} as the release of a substance,
+when fire is actually the \emph{combination} with a substance (oxygen).
+In a sense, Stahl had the direction of the arrow backwards.
+
+This type of error — getting the mechanism exactly reversed —
+appears repeatedly in the history of science.
+It is only detectable by precise, quantitative measurement.
+\end{historybox}
+
+% ─── Puzzle: the weight anomaly ──────────────────────────────────────────────
+\subsection{The Crack in the Theory: Mass Increases on Burning}
+
+The first serious blow to phlogiston theory came from a simple
+but deeply uncomfortable observation.
+
+\begin{puzzlebox}
+When you burn a piece of wood in an open container,
+the ash weighs \emph{less} than the wood.
+This fits phlogiston theory: the phlogiston was released,
+so the ash is lighter.
+
+But when you heat a piece of tin or lead in air,
+the resulting oxide (called a \emph{calx}) weighs
+\emph{more} than the original metal.
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small}]
+  % Left: wood burning
+  \node[draw=JourneyColor!50, fill=JourneyColor!8,
+        rounded corners=3pt, minimum width=3cm,
+        minimum height=0.8cm, align=center]
+        (w1) at (0,0) {Wood: \SI{100}{\gram}};
+  \draw[-{Stealth}, thick, color=DiscoveryColor]
+        (0,-0.5) -- (0,-1.5) node[midway, right]{burns in air};
+  \node[draw=JourneyColor!50, fill=JourneyColor!8,
+        rounded corners=3pt, minimum width=3cm,
+        minimum height=0.8cm, align=center]
+        (w2) at (0,-2) {Ash: \SI{5}{\gram} \quad (\emph{lighter})};
+
+  % Right: tin heating
+  \node[draw=WarningColor!60, fill=WarningColor!8,
+        rounded corners=3pt, minimum width=3cm,
+        minimum height=0.8cm, align=center]
+        (t1) at (7,0) {Tin: \SI{100}{\gram}};
+  \draw[-{Stealth}, thick, color=WarningColor]
+        (7,-0.5) -- (7,-1.5) node[midway, right]{heated in air};
+  \node[draw=WarningColor!60, fill=WarningColor!8,
+        rounded corners=3pt, minimum width=3cm,
+        minimum height=0.8cm, align=center]
+        (t2) at (7,-2) {Tin oxide: \SI{127}{\gram} \quad (\emph{heavier!})};
+
+  \node[font=\sffamily\footnotesize\itshape, text=JourneyColor!70]
+        at (0,-3) {as expected by phlogiston};
+  \node[font=\sffamily\footnotesize\bfseries\itshape, text=WarningColor]
+        at (7,-3) {NOT explained by phlogiston};
+\end{tikzpicture}
+\end{center}
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item If phlogiston is released during burning,
+        why would the product \emph{gain} mass?
+
+  \item One attempted fix: ``phlogiston has negative mass.''
+        A substance releases phlogiston, so the residue becomes heavier.
+        This is logically consistent. Is it scientifically satisfying?
+        What would you need to show to test this ``negative mass'' idea?
+
+  \item What does the mass increase of tin oxide suggest
+        about what might be \emph{added} to tin during heating?
+\end{enumerate}
+\end{puzzlebox}
+
+\vspace{0.5em}
+
+The phlogiston supporters invented increasingly desperate patches:
+negative-mass phlogiston,
+phlogiston absorbed from the air rather than released,
+and so on.
+Each patch made the theory more complex without explaining more.
+This is a classical sign that a theory is failing.
+
+% ─── Section: Lavoisier ──────────────────────────────────────────────────────
+\subsection{Lavoisier: The Power of Weighing Everything}
+
+Antoine-Laurent Lavoisier was not the first to notice
+the mass-increase anomaly.
+What made him extraordinary was his \emph{method}:
+he refused to accept any explanation that could not be
+quantitatively verified by weighing.
+
+His key insight was deceptively simple:
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  width=0.82\textwidth, arc=3pt,
+  fontupper=\sffamily\large\bfseries, halign=center
+]
+If you weigh \emph{everything} that goes into a reaction\\
+and \emph{everything} that comes out,\\[4pt]
+\normalfont\normalsize\sffamily
+including the gases, including the air,\\
+including the vapour and the smoke,\\[4pt]
+\bfseries
+the total mass does not change.
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+This sounds straightforward.
+In practice, it required Lavoisier to invent new apparatus:
+sealed vessels to capture gases,
+precision balances accurate to milligrams,
+and careful accounting of every component.
+
+\begin{historybox}
+\textbf{Lavoisier and the Burning of Phosphorus (1772)}
+
+One of Lavoisier's key early experiments:
+he burned phosphorus in a sealed glass vessel sitting in water.
+After burning, he found:
+\begin{itemize}[nosep]
+  \item The vessel was lighter than before
+        (the phosphorus had combined with some of the air).
+  \item But when the seal was broken,
+        air rushed \emph{in} — exactly enough to restore the original mass.
+  \item The product weighed more than the phosphorus.
+\end{itemize}
+
+Conclusion: phosphorus had combined with part of the air.
+The ``missing'' mass was not missing at all — it was in the air
+that had been consumed.
+
+\begin{center}
+\ce{4P + 5O2 -> P4O10}
+\end{center}
+
+This single experiment made it clear that combustion is \emph{combination}
+with something from the air — not release of something from the fuel.
+\end{historybox}
+
+% ─── Section: Oxygen ─────────────────────────────────────────────────────────
+\subsection{The Discovery of Oxygen}
+
+If burning requires combining with \emph{part} of the air,
+what is that part?
+
+Around 1774, Carl Wilhelm Scheele in Sweden and
+Joseph Priestley in England independently isolated a gas
+by heating mercury(II) oxide:
+
+\begin{center}
+\ce{2HgO_{(s)} ->[\Delta] 2Hg_{(l)} + O2_{(g)}}
+\end{center}
+
+Priestley found the gas made a candle burn brighter
+and made mice in a closed vessel survive longer.
+He called it \emph{dephlogisticated air} — air with no phlogiston,
+therefore able to absorb more from burning things.
+He was still thinking inside the phlogiston framework.
+
+Lavoisier repeated Priestley's experiment, measured everything
+carefully, and reached a different conclusion.
+He named the gas \emph{oxygène} — ``acid-former'' —
+and showed it was a distinct element
+that combined with substances during burning.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  arrow/.style={-{Stealth[length=5pt]}, thick}
+]
+  % Reactants
+  \node[draw=JourneyColor, fill=JourneyColor!8, rounded corners=3pt,
+        minimum width=2.2cm, minimum height=1cm, align=center]
+        (fuel) at (0,0) {Fuel\\(\emph{e.g.} carbon)};
+  \node[draw=ModuleColor, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=2.2cm, minimum height=1cm, align=center]
+        (oxy) at (3.5,0) {Oxygen\\from air};
+
+  % Combine arrow
+  \node at (1.75,0) {\Large $+$};
+  \draw[arrow, color=DiscoveryColor] (4.7,0) -- (6.2,0)
+    node[above, midway, font=\sffamily\footnotesize]{react};
+
+  % Product
+  \node[draw=DiscoveryColor!80, fill=DiscoveryColor!8, rounded corners=3pt,
+        minimum width=3cm, minimum height=1cm, align=center]
+        (prod) at (8,0) {Carbon dioxide\\+ heat + light};
+
+  % Mass arrows
+  \draw[arrow, color=HistoryColor, dashed]
+    (0,-0.8) -- (0,-1.8) node[below, font=\sffamily\footnotesize]{mass: $m_1$};
+  \draw[arrow, color=HistoryColor, dashed]
+    (3.5,-0.8) -- (3.5,-1.8) node[below, font=\sffamily\footnotesize]{mass: $m_2$};
+  \draw[arrow, color=HistoryColor, dashed]
+    (8,-0.8) -- (8,-1.8) node[below, font=\sffamily\footnotesize]{mass: $m_1 + m_2$};
+\end{tikzpicture}
+\end{center}
+
+The key distinction between Priestley's view and Lavoisier's view
+is not about the facts — both observed the same gas.
+It is about the \emph{framework} used to interpret the facts.
+Priestley interpreted the new gas inside phlogiston theory.
+Lavoisier built a new theory to fit the quantitative measurements.
+
+\begin{observation}
+\textbf{The lesson of Lavoisier vs Priestley:}
+Two scientists can observe the \emph{same phenomenon}
+and reach \emph{opposite conclusions} depending on
+which framework they use to interpret it.
+
+A better framework is not one that fits the current data better.
+It is one that makes \emph{more precise, testable predictions}.
+\end{observation}
+
+% ─── Section: Conservation of Mass ───────────────────────────────────────────
+\subsection{The Law of Conservation of Mass}
+
+From hundreds of carefully weighed experiments,
+Lavoisier arrived at the most fundamental quantitative law
+in chemistry.
+
+\end{document}

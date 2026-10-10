@@ -1,0 +1,489 @@
+\documentclass[12pt, a4paper, twoside]{book}
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+
+\definecolor{deep}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{e94560}
+\definecolor{teal}{HTML}{2ec4b6}
+\definecolor{gold}{HTML}{f5a623}
+\definecolor{midblue}{HTML}{0f3460}
+\definecolor{purple}{HTML}{533483}
+\definecolor{orange}{HTML}{ff6b35}
+\definecolor{green}{HTML}{2d6a4f}
+\definecolor{lightbg}{HTML}{f7f9fc}
+\definecolor{warmbg}{HTML}{fffbf2}
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{realworldbox}[1][]{enhanced,breakable,colback=green!5,
+  colframe=green!70!black,fonttitle=\bfseries\color{white},coltitle=white,
+  title={In the Real World},#1}
+\newtcolorbox{openquestion}[1][]{enhanced,breakable,colback=midblue!6,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,
+  title={Open Question --- No Known Answer},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{2cm}
+
+\begin{tikzpicture}[scale=1.0]
+  % Time arrow with entropy bars rising
+  \draw[->, white!60, line width=2pt] (-5,-0.5) -- (5,-0.5);
+  \node[white!60, font=\small] at (5.5,-0.5) {time};
+  \foreach \x/\h/\col in {-4/0.5/teal, -2/1.2/gold, 0/1.9/orange, 2/2.6/accent, 4/3.2/accent}{
+    \fill[\col!70,opacity=0.8] ({\x-0.5},0) rectangle ({\x+0.5},\h);
+    \node[\col!80,font=\scriptsize] at (\x, \h+0.25) {S};
+  }
+  \node[white!80, font=\bfseries\small] at (0,3.8) {entropy increases →};
+\end{tikzpicture}
+
+\vspace{0.3cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 4}}}
+\vspace{0.3cm}
+{\fontsize{30}{36}\selectfont\bfseries Modules 4.5, 4.6 \& 4.7}
+\vspace{0.3cm}
+{\fontsize{18}{24}\selectfont\textcolor{gold}{%
+The Arrow of Time\\[5pt]
+Engines and Efficiency\\[5pt]
+Entropy and Information}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+Why does time flow forward?\\[4pt]
+How efficient can an engine be?\\[4pt]
+And what does heat have to do with information?}}
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+\tableofcontents
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter{Time, Engines, and Information}
+\markboth{Journey 4: Modules 4.5, 4.6 \& 4.7}{}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 4.5 — The Arrow of Time}
+\label{sec:arrow_of_time}
+
+\epigraph{\itshape
+  The Second Law of Thermodynamics is responsible for the flow of time\ldots{}
+  It is the only fundamental equation that distinguishes
+  the past from the future.
+}{--- Carlo Rovelli, \textit{The Order of Time}, 2018}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Every fundamental equation of physics --- Newton's laws, Maxwell's equations, Schr\"odinger's equation --- works equally well forward and backward in time. If you filmed a billiard ball bouncing, you could not tell whether the film was playing forward or backward. Yet you know immediately, without any calculation, whether a film of a cream being poured into coffee is playing forward or backward. Why?
+\end{puzzlebox}
+
+\subsection{Time Symmetry at the Microscopic Level}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{T}}{ake} Newton's second law: $m\ddot{\bm{r}} = \bm{F}$. Replace $t$ with $-t$. Since $\ddot{\bm{r}}$ involves a second derivative, it is unchanged. The equation is identical. If a trajectory $\bm{r}(t)$ is a valid solution, then so is $\bm{r}(-t)$ --- the time-reversed motion.
+
+The same is true for Maxwell's equations, quantum mechanics, and (nearly) all of general relativity. At the fundamental level, the laws of physics do not distinguish past from future.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j4_arrow_time}
+\caption{The arrow of time in action. Left: all molecules on one side --- a highly ordered, low-entropy, extremely improbable state. Centre: partial mixing, as thermal motion begins. Right: full equilibrium --- maximum entropy, maximum disorder, maximum probability. The sequence only ever runs left to right, never right to left, not because the reverse is forbidden by any law, but because the reverse is so astronomically improbable it never occurs.}
+\label{fig:arrow_time}
+\end{figure}
+
+\subsection{Entropy and the Direction of Time}
+
+The resolution lies in initial conditions and probability. Consider the film of cream being poured into coffee:
+
+\begin{itemize}[leftmargin=2em,itemsep=3pt]
+  \item \textbf{Forward (cream disperses)}: The cream molecules start in a small region (low entropy, low probability) and spread out into the coffee (high entropy, high probability). This happens because the high-entropy states are overwhelmingly more numerous.
+  \item \textbf{Reverse (cream collects)}: All cream molecules would need to spontaneously move to the same small region simultaneously. Each molecule is individually obeying Newton's laws --- nothing physically prevents this. But the probability is $\sim10^{-10^{24}}$. It never happens.
+\end{itemize}
+
+The arrow of time is the direction in which entropy increases. The question ``why does entropy increase?'' is really the question ``why was the entropy of the early universe so low?''
+
+\begin{historybox}
+\textbf{The Loschmidt paradox (1876).} Josef Loschmidt posed this challenge to Boltzmann: if you reverse the velocities of all particles in a system that has just evolved from low entropy to high entropy, the time-reversed evolution must also be valid by Newton's laws. So the system should spontaneously decrease in entropy back to its original state. Doesn't this contradict the Second Law?
+
+Boltzmann's answer: yes, the reversed evolution is valid, but it is extraordinarily improbable. The Second Law is not a law that \textit{forbids} entropy decrease; it is a statement about probability so overwhelming that decrease never occurs in practice. The Loschmidt paradox exposes that the Second Law is fundamentally statistical, not mechanical.
+\end{historybox}
+
+\begin{explobox}
+\problem \textit{Identifying the arrow.} For each of the following physical processes, state whether it is (i) time-symmetric (the reversed film is indistinguishable from the forward film) or (ii) has a clear time direction. Justify each answer in terms of entropy.
+\begin{enumerate}[label=(\alph*)]
+  \item A planet orbiting the Sun
+  \item A ball bouncing elastically on a frictionless floor
+  \item A ball bouncing on a real floor (with friction)
+  \item A drop of ink diffusing in water
+  \item A laser pulse reflecting off a mirror
+  \item An egg falling off a table and breaking
+  \item A charged particle spiralling in a magnetic field
+\end{enumerate}
+
+\problem \textit{Why was the early universe low-entropy?} The Big Bang produced matter and energy in an extremely hot, dense state. Naively, a hot dense gas seems highly disordered --- shouldn't it have high entropy?
+
+The answer involves gravity: in the presence of gravity, a uniform distribution of matter is \textit{not} the highest-entropy state. Clumped matter (planets, stars, galaxies) has higher entropy than uniform matter, because gravity provides many more ways to arrange matter in clumped configurations.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Why does a cloud of gas with gravity spontaneously clump rather than disperse?
+  \item What is the highest-entropy state of matter in the presence of gravity?
+  \item What does this suggest about the eventual fate of the universe?
+\end{enumerate}
+
+\problem \textit{Poincar\'e recurrence.} Henri Poincar\'e proved that any bounded, finite system will eventually return arbitrarily close to its initial state --- if you wait long enough. For $N$ particles in a box, the \textbf{Poincar\'e recurrence time} is roughly $e^{N}$ in natural units.
+\begin{enumerate}[label=(\alph*)]
+  \item For $N = 100$ particles, estimate the recurrence time.
+  \item For a thimble of air ($N \approx 10^{22}$), compare the recurrence time to the age of the universe ($\approx 4\times10^{17}$ seconds).
+  \item Does Poincar\'e recurrence undermine the Second Law? Or is it consistent with the statistical interpretation?
+\end{enumerate}
+\end{explobox}
+
+\begin{deepquestion}
+The most puzzling aspect of the arrow of time is that it requires an explanation at the level of cosmology. The laws of physics are time-symmetric. The arrow of time comes from the fact that the early universe had extraordinarily low entropy. But why did it? Roger Penrose has calculated that the probability of the universe starting in a state of such low gravitational entropy by chance is $\sim 10^{-10^{123}}$. This is perhaps the deepest unanswered question in all of physics.
+\end{deepquestion}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 4.6 — Engines, Efficiency, and Limits}
+\label{sec:carnot}
+
+\epigraph{\itshape
+  The motive power of heat is independent of the agents employed to realise it;
+  its quantity is fixed solely by the temperatures of the bodies between which
+  is effected, finally, the transfer of caloric.
+}{--- Sadi Carnot, \textit{R\'eflexions sur la puissance motrice du feu}, 1824}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Every steam engine, internal combustion engine, jet engine, and nuclear power plant does the same thing: takes heat from a hot source, converts some of it to work, and dumps the rest into a cold sink. Is there a fundamental limit on how much heat can be converted to work? And if so, where does that limit come from?
+\end{puzzlebox}
+
+\subsection{Sadi Carnot and the Ideal Engine}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{S}}{adi} Carnot was 28 years old and a French military engineer when he published \textit{R\'eflexions sur la puissance motrice du feu} in 1824 --- arguably the most important single contribution to thermodynamics. He had no thermometer, no equations of state, and still believed in the caloric theory. Yet his analysis was fundamentally correct.
+
+Carnot asked: what is the maximum possible efficiency of a heat engine operating between a hot reservoir at temperature $T_H$ and a cold reservoir at temperature $T_C$?
+
+He proved that no engine can exceed the efficiency of an ideal reversible engine operating between the same temperatures, and that all reversible engines have the \textit{same} efficiency, regardless of what substance or mechanism they use. This efficiency --- the \textbf{Carnot efficiency} --- is:
+
+\begin{equation}
+  \boxed{\eta_{\rm Carnot} = 1 - \frac{T_C}{T_H}}
+\end{equation}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j4_carnot}
+\caption{Left: the structure of every heat engine. Heat $Q_H$ is absorbed from the hot reservoir; work $W$ is output; waste heat $Q_C$ is dumped into the cold reservoir. Energy conservation demands $Q_H = W + Q_C$. The Carnot efficiency gives the maximum possible ratio $W/Q_H$. Right: efficiency as a function of hot reservoir temperature, with real engine examples marked.}
+\label{fig:carnot}
+\end{figure}
+
+\subsection{Carnot's Proof: Why Reversibility Matters}
+
+The proof rests on the Second Law. Suppose an engine $X$ claimed to be more efficient than a Carnot engine $C$: $\eta_X > \eta_C$. Use engine $X$ to drive Carnot engine $C$ in reverse (as a refrigerator). The combined system would:
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Take net heat from the cold reservoir
+  \item Deliver net heat to the hot reservoir
+  \item Do no net work
+\end{itemize}
+
+This is spontaneous heat flow from cold to hot --- a violation of the Second Law. Therefore no engine can exceed Carnot efficiency.
+
+\begin{explobox}
+\problem \textit{Carnot efficiency calculations.}
+\begin{enumerate}[label=(\alph*)]
+  \item A coal power station operates between $T_H = \SI{823}{K}$ and $T_C = \SI{303}{K}$. What is the Carnot limit on its efficiency?
+  \item The actual efficiency is $38\%$. What fraction of the Carnot limit is achieved?
+  \item For $\SI{1}{GW}$ of electrical output, how much waste heat is dumped per second?
+  \item If the waste heat goes into a river raising its temperature by $\SI{3}{^\circ C}$, what is the minimum water flow rate needed (in cubic metres per second)?
+\end{enumerate}
+
+\problem \textit{The Otto cycle (car engine).} The idealised Otto cycle (four-stroke petrol engine) has efficiency:
+\begin{equation}
+  \eta_{\rm Otto} = 1 - \frac{1}{r^{\gamma-1}}
+\end{equation}
+where $r$ is the compression ratio and $\gamma = c_P/c_V \approx 1.4$ for air.
+\begin{enumerate}[label=(\alph*)]
+  \item For $r = 8$ (typical petrol engine), find the ideal Otto efficiency.
+  \item For $r = 14$ (typical diesel engine), find the ideal efficiency.
+  \item Why do diesel engines achieve better fuel economy than petrol engines of similar size?
+  \item Real car engines achieve $\approx 25\%$ thermal efficiency. Why is this so much lower than the ideal?
+\end{enumerate}
+
+\problem \textit{The heat pump.} A heat pump is a Carnot engine run in reverse: it uses work to move heat from cold outside to warm inside.
+\begin{enumerate}[label=(\alph*)]
+  \item The coefficient of performance of a heat pump is $\text{COP}_{\rm HP} = Q_H/W = T_H/(T_H - T_C)$. For $T_H = \SI{293}{K}$ (inside) and $T_C = \SI{273}{K}$ (outside on a cool day), find the COP.
+  \item For the same $\SI{1}{kW}$ of electrical power, compare the heat delivered by a heat pump vs. a direct electric heater.
+  \item At $T_C = \SI{253}{K}$ (cold winter day), recalculate the COP. Why does a heat pump become less efficient in colder weather?
+\end{enumerate}
+
+\problem \textit{Irreversibility and efficiency losses.} Real engines lose efficiency to:
+\begin{itemize}[leftmargin=1.5em,itemsep=1pt]
+  \item Friction (between pistons, bearings, etc.)
+  \item Heat leaks (conduction through the cylinder walls)
+  \item Finite-speed processes (non-quasi-static compression/expansion)
+  \item Incomplete combustion
+\end{itemize}
+\begin{enumerate}[label=(\alph*)]
+  \item Each of these increases entropy. For friction: a bearing generates $\SI{10}{W}$ of heat at a temperature of $\SI{400}{K}$. What is the rate of entropy production?
+  \item Why is a slow (quasi-static) process more efficient than a fast one? Connect to the Second Law.
+\end{enumerate}
+\end{explobox}
+
+\begin{realworldbox}
+\textbf{The efficiency frontier.}
+\begin{itemize}[leftmargin=1.5em,itemsep=3pt]
+  \item \textit{Combined-cycle gas plants}: use a gas turbine to generate electricity, then use the exhaust heat to run a steam turbine. Effective $T_H$ is higher, effective $T_C$ is lower. Efficiency reaches 60\%.
+  \item \textit{Thermoelectric generators}: convert heat directly to electricity using the Seebeck effect (no moving parts). Used in spacecraft (RTGs), campfire chargers, and waste heat recovery. Efficiency is low ($\sim5$--10\%) but highly reliable.
+  \item \textit{Fuel cells}: electrochemical devices that convert chemical energy directly to electricity, bypassing thermal conversion. Not limited by Carnot! Theoretical efficiency can exceed 90\% for hydrogen fuel cells.
+  \item \textit{Solar cells}: convert photons to electricity. Thermodynamic limit ($\sim 87\%$ at full concentration) far exceeds best real cells ($\sim 47\%$ multi-junction, $\sim 26\%$ silicon). The gap is quantum mechanical, not thermodynamic.
+\end{itemize}
+\end{realworldbox}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 4.7 — Entropy and Information}
+\label{sec:information}
+
+\epigraph{\itshape
+  My greatest concern was what to call it. I thought of calling it
+  ``information,'' but the word was overly used, so I decided to
+  call it ``uncertainty.'' Von Neumann told me, ``You should call it
+  entropy, for two reasons. In the first place your uncertainty
+  function has been used in statistical mechanics under that name.
+  In the second place, and more important, no one knows what entropy
+  really is, so in a debate you will always have the advantage.''
+}{--- Claude Shannon, recalling a conversation with John von Neumann, 1961}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Shannon entropy $H = -\sum_i p_i \log_2 p_i$ and thermodynamic entropy $S = -k_B\sum_i p_i \ln p_i$ are the same equation with different constants. Is this a coincidence, or does it reveal something deep about the connection between information, computation, and thermodynamics?
+\end{puzzlebox}
+
+\subsection{Shannon's Discovery}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{I}}{n} 1948, Claude Shannon --- an electrical engineer at Bell Labs trying to understand the fundamental limits of communication --- published ``A Mathematical Theory of Communication.'' In it, he introduced a quantity he called the \textbf{information entropy}:
+
+\begin{equation}
+  H = -\sum_i p_i \log_2 p_i \quad\text{(in bits)}
+\end{equation}
+
+where $p_i$ is the probability of the $i$-th outcome. This measures the average amount of information (in bits) conveyed by a message from a source with probability distribution $\{p_i\}$.
+
+Shannon arrived at this formula from purely communication-theoretic reasoning. He required it to satisfy:
+\begin{enumerate}[leftmargin=2em,itemsep=2pt]
+  \item Maximum when all outcomes are equally probable (maximum uncertainty)
+  \item Zero when one outcome is certain (no uncertainty, no information)
+  \item Additive for independent sources
+\end{enumerate}
+
+The only function satisfying these requirements is $H = -\sum p_i \log p_i$. The connection to Boltzmann entropy is not a coincidence --- it is the same mathematical structure capturing the same idea: counting information in a probability distribution.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j4_information}
+\caption{Left: Shannon entropy for different probability distributions. A fair coin maximises uncertainty at 1 bit; a biased coin has less uncertainty; a certain outcome has zero entropy. The connection to thermodynamic entropy ($S = k_B\ln 2\cdot H$) is not coincidence but identity. Right: Maxwell's Demon --- an intelligent being who sorts fast and slow molecules, apparently decreasing entropy for free. The resolution (Landauer 1961) is that erasing the demon's memory costs at least $k_BT\ln 2$ per bit.}
+\label{fig:information}
+\end{figure}
+
+\subsection{Maxwell's Demon: Intelligence vs. Entropy}
+
+In 1871, James Clerk Maxwell proposed a thought experiment that seemed to defeat the Second Law. A tiny demon sits at a trapdoor between two chambers of gas. When a fast molecule approaches from the right, the demon opens the door; when a slow molecule approaches from the left, it opens the door. Gradually, fast molecules accumulate on the left and slow on the right --- the left chamber heats up, the right cools down. The demon appears to decrease entropy without doing any work.
+
+For 90 years, this paradox troubled physicists. The resolution came in 1961 from Rolf Landauer.
+
+\begin{discoverybox}
+\textbf{Landauer's principle (1961).} To sort molecules, the demon must \textit{measure} each molecule and \textit{remember} the result to decide whether to open the door. Over time, the demon's memory fills. Eventually, it must \textit{erase} some memories to continue operating.
+
+The crucial insight: \textbf{erasing information is a physically irreversible process that generates entropy}. Specifically, erasing one bit of information increases entropy by at least:
+\begin{equation}
+  \Delta S_{\rm min} = k_B \ln 2 \approx \SI{9.57e-24}{J/K}
+\end{equation}
+at temperature $T$. The work dissipated is $W_{\rm min} = k_BT\ln 2$.
+
+The demon cannot sort molecules without paying this thermodynamic price in its memory. The Second Law is preserved --- not by limiting the demon's intelligence, but by recognising that information has a thermodynamic cost.
+\end{discoverybox}
+
+\begin{explobox}
+\problem \textit{Shannon entropy calculations.}
+\begin{enumerate}[label=(\alph*)]
+  \item A fair six-sided die. What is the Shannon entropy (in bits)?
+  \item A loaded die that shows 6 with probability $1/2$ and each other face with probability $1/10$. What is the entropy?
+  \item English text: the letter ``e'' appears with probability $\approx 13\%$, ``z'' with probability $\approx 0.07\%$. If each of the 26 letters were equally probable, what would the entropy per letter be? In real English, the entropy per letter is $\approx 4.1$ bits. What does the reduction imply about redundancy in English text? How does this connect to data compression?
+\end{enumerate}
+
+\problem \textit{Landauer's principle in computing.}
+\begin{enumerate}[label=(\alph*)]
+  \item At room temperature ($T = \SI{300}{K}$), what is the minimum energy dissipated per erased bit?
+  \item A modern CPU performs $\sim 10^{10}$ operations per second, with each operation involving $\sim 10^3$ bit erasures. What is the minimum thermodynamic power dissipation?
+  \item Actual CPUs dissipate $\sim\SI{100}{W}$. By what factor does this exceed the Landauer minimum? What accounts for the difference?
+  \item Some researchers claim that ``reversible computing'' --- computation that never erases information --- could approach the Landauer limit. What would be the practical challenges?
+\end{enumerate}
+
+\problem \textit{The thermodynamics of biology.} ATP synthase is a molecular motor that synthesises ATP (the cell's energy currency) by rotating a molecular turbine driven by a proton gradient. It operates at near-Carnot efficiency.
+\begin{enumerate}[label=(\alph*)]
+  \item A cell maintains a proton gradient equivalent to $\Delta\mu \approx \SI{0.5}{eV}$ across the mitochondrial membrane. Each ATP synthesis requires the passage of $\approx 3$ protons. What is the energy available per ATP?
+  \item The actual free energy stored in ATP hydrolysis is $\approx \SI{0.3}{eV}$ under cellular conditions. What is the efficiency?
+  \item ATP synthase rotates at $\sim 100$ revolutions per second and produces $\sim 100$ ATP per second. What is the mechanical power output of a single ATP synthase?
+\end{enumerate}
+\end{explobox}
+
+\begin{reflectionbox}
+\textbf{Reflection: Modules 4.5--4.7.}
+
+Write three pages on the following:
+
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+  \item \textit{Time.} The equations of physics are time-symmetric, but the universe has a clear time direction determined by increasing entropy. Does this mean time itself is not fundamental --- that it emerges from entropy? If we found a region of the universe where entropy was decreasing, would time run backward there?
+
+  \item \textit{The efficiency gap.} Every real engine falls short of the Carnot limit. Some of this gap is explained by specific irreversibilities (friction, finite speed, heat leaks). But is there a fundamental reason --- beyond mere engineering difficulty --- why we can never reach the Carnot limit with a finite-sized, finite-powered engine?
+
+  \item \textit{Information is physical.} Rolf Landauer's famous slogan is ``information is physical.'' Before Landauer, information seemed abstract --- a mathematical quantity divorced from physical reality. His principle showed that information has a thermodynamic cost. What are the philosophical implications? If information is physical, what does this say about computation, about the brain, about the concept of knowledge itself?
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Journey 4 Complete: Summary and Bridge}
+\addcontentsline{toc}{chapter}{Journey 4 Complete: Summary and Bridge}
+\markboth{Journey 4: Complete}{}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j4_synthesis}
+\caption{The architecture of thermodynamics. From the collapse of the caloric theory (top left) to the identity of physical and information entropy (top right), every module of Journey 4 builds toward the two laws that constrain all of reality: energy is conserved, and entropy never decreases. The arrow of time, the limits of engines, Maxwell's demon, and the heat death of the universe all follow from these two statements.}
+\label{fig:j4_synthesis}
+\end{figure}
+
+\begin{tcolorbox}[enhanced,colback=deep!4,colframe=deep,
+  title={\bfseries\color{white} Journey 4 at a Glance: Heat, Disorder, and the Arrow of Time},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+
+\begin{center}
+\begin{tabular}{@{}p{1.8cm}p{10.5cm}@{}}
+\toprule
+\textbf{Module} & \textbf{Core Achievement} \\
+\midrule
+4.1 & Caloric theory: elegant, predictive, wrong. Rumford's cannon demolishes it. Heat is not a substance. \\
+4.2 & Heat is molecular kinetic energy. Temperature = $\frac{3}{2}k_BT$ per molecule. Maxwell-Boltzmann distribution. \\
+4.3 & First Law: $\Delta U = Q - W$. Work, heat, internal energy. PV diagrams. Carnot efficiency. \\
+4.4 & Entropy $S = k_B\ln W$. Second Law: $dS_{\rm universe}\geq 0$. Disorder wins by overwhelming probability. \\
+4.5 & Arrow of time: entropy increase = forward direction. Microscopic laws are symmetric; the universe had low entropy at its birth. \\
+4.6 & Carnot theorem: no engine exceeds $\eta = 1-T_C/T_H$. Proof by contradiction using Second Law. \\
+4.7 & Shannon entropy = Boltzmann entropy (same equation). Maxwell's demon and Landauer's principle: information is physical. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+\textbf{The Two Laws in one breath:}\\[4pt]
+\textit{You cannot win (energy is conserved, not created). You cannot break even (entropy always increases, so some energy is always ``wasted'' as heat). And you cannot leave the game (the universe must reach maximum entropy eventually).}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+\begin{center}
+{\large\textcolor{deep}{\textbf{The Crack That Forces Journey 5:}}}\\[8pt]
+{\itshape\textcolor{midblue}{%
+Thermodynamics was built assuming absolute space and time.\\[3pt]
+Maxwell showed that light travels at $c$ in empty space.\\[3pt]
+Michelson and Morley showed that $c$ is the same for all observers.\\[3pt]
+These two facts, taken together, destroy the classical framework\\[3pt]
+of space, time, and simultaneity.\\[6pt]
+Journey 5 follows the demolition --- and what was built in its place.
+}}
+\end{center}
+
+\vspace{0.6cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[gold,line width=2pt,->] (0,0) -- (12,0);
+  \foreach \x/\lab/\col in {2/Journey 3: Fields/teal, 5/Journey 4: Entropy/gold, 8/Journey 5: Relativity/accent, 11/Journey 6: Quantum/purple}{
+    \draw[\col,line width=1pt] (\x,-0.15) -- (\x,0.15);
+    \node[below,\col,font=\small] at (\x,-0.15) {\lab};
+  }
+\end{tikzpicture}
+\end{center}
+
+\end{document}

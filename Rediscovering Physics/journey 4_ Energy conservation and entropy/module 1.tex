@@ -1,0 +1,601 @@
+\documentclass[12pt, a4paper, twoside]{book}
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning, decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+
+\definecolor{deep}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{e94560}
+\definecolor{teal}{HTML}{2ec4b6}
+\definecolor{gold}{HTML}{f5a623}
+\definecolor{midblue}{HTML}{0f3460}
+\definecolor{purple}{HTML}{533483}
+\definecolor{orange}{HTML}{ff6b35}
+\definecolor{green}{HTML}{2d6a4f}
+\definecolor{lightbg}{HTML}{f7f9fc}
+\definecolor{warmbg}{HTML}{fffbf2}
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal,
+  pdftitle={Discovery Physics J4 M4.1-4.2}}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{realworldbox}[1][]{enhanced,breakable,colback=green!5,
+  colframe=green!70!black,fonttitle=\bfseries\color{white},coltitle=white,
+  title={In the Real World},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{1.8cm}
+
+\begin{tikzpicture}[scale=1.0]
+  % Hot side: fast particles
+  \foreach \x/\y/\vx/\vy in {
+    -5.5/0.8/0.7/0.5, -4.2/1.4/-0.6/0.8, -4.8/-0.5/0.5/-0.7,
+    -3.5/0.2/-0.8/0.4, -5.0/-1.2/0.6/0.9, -3.8/-0.9/-0.5/-0.6}{
+    \fill[accent!80] (\x,\y) circle (0.12cm);
+    \draw[->,accent!60,line width=0.8pt] (\x,\y) -- ({\x+\vx},{\y+\vy});
+  }
+  \node[accent, font=\small\bfseries] at (-4.5,-1.9) {HOT: fast};
+  % Divider
+  \draw[white!40, line width=1.5pt, dashed] (0,-2.2) -- (0,2.2);
+  % Cold side: slow particles
+  \foreach \x/\y/\vx/\vy in {
+    4.5/0.6/0.2/0.1, 3.2/1.2/-0.15/0.25, 4.0/-0.4/0.18/-0.22,
+    5.2/0.1/-0.12/0.2, 3.8/-1.1/0.1/0.15, 5.0/-0.8/-0.2/-0.1}{
+    \fill[teal!70] (\x,\y) circle (0.12cm);
+    \draw[->,teal!50,line width=0.8pt] (\x,\y) -- ({\x+\vx},{\y+\vy});
+  }
+  \node[teal, font=\small\bfseries] at (4.5,-1.9) {COLD: slow};
+  % Heat flow arrow
+  \draw[->,gold,line width=2.5pt] (-1.5,0) -- (1.5,0);
+  \node[gold, font=\small] at (0,0.5) {heat};
+\end{tikzpicture}
+
+\vspace{0.3cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 4}}}
+\vspace{0.3cm}
+{\fontsize{34}{40}\selectfont\bfseries Modules 4.1 \& 4.2}
+\vspace{0.3cm}
+{\fontsize{20}{26}\selectfont\textcolor{gold}{%
+Heat as a Substance --- and Why That's Wrong\\[5pt]
+Heat as Motion}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+A cannon is bored. Water boils. A cup of tea cools.\\[4pt]
+But what, exactly, is happening?}}
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+
+\chapter*{Journey 4: An Overview}
+\addcontentsline{toc}{chapter}{Journey 4: An Overview}
+\markboth{Journey 4: Heat, Disorder, and the Arrow of Time}{}
+
+\epigraph{\itshape
+  The law that entropy always increases holds, I think, the supreme
+  position among the laws of Nature. If someone points out to you that
+  your pet theory of the universe is in disagreement with Maxwell's equations
+  --- then so much the worse for Maxwell's equations. But if it is found to
+  be contradicted by the Second Law of Thermodynamics, I can give you no hope.
+}{--- Arthur Eddington, \textit{The Nature of the Physical World}, 1928}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{E}}{very} physicist who has studied thermodynamics remembers the first time the Second Law really landed. Not as a formula, but as a statement about the universe: some things can happen and some things cannot. A broken egg does not unbreak. A cup of hot coffee does not spontaneously get hotter. An ice cube does not unmelt. Heat flows from hot to cold, never the other way, by itself.
+
+These facts are so familiar they seem trivial. But they are not. They are profound. Every other fundamental law of physics is \textit{time-symmetric}: run the equations of Newton, Maxwell, or Einstein backward, and the reversed process is equally valid. A planet can orbit a star in either direction. An electromagnetic wave can travel left or right. But heat cannot flow spontaneously from cold to hot. Time has a direction, and thermodynamics is the only fundamental theory that knows it.
+
+Journey 4 asks why. The answer turns out to involve counting --- counting the number of ways a system can arrange itself. The concept of \textbf{entropy} emerges as perhaps the most profound and far-reaching idea in all of physics. It connects heat engines to the limits of computation. It connects the arrow of time to the beginning of the universe. And it connects physics to information theory in ways that are still being worked out.
+
+\vspace{0.4cm}
+\textbf{The seven modules of Journey 4:}
+\begin{itemize}[leftmargin=2em,itemsep=2pt]
+  \item \textbf{4.1} --- Heat as a Substance: the caloric theory and its beautiful failure
+  \item \textbf{4.2} --- Heat as Motion: kinetic theory and the meaning of temperature
+  \item \textbf{4.3} --- Energy and Its Transformations: the First Law
+  \item \textbf{4.4} --- What Is Entropy? Counting arrangements
+  \item \textbf{4.5} --- The Arrow of Time
+  \item \textbf{4.6} --- Engines, Efficiency, and Limits: Carnot
+  \item \textbf{4.7} --- Entropy and Information
+\end{itemize}
+
+\tableofcontents
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter{Heat, Disorder, and the Arrow of Time}
+\markboth{Journey 4: Heat, Disorder, and the Arrow of Time}{}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 4.1 — Heat as a Substance: and Why That's Wrong}
+\label{sec:caloric}
+
+\epigraph{\itshape
+  It is hardly necessary to add, that anything which any insulated body,
+  or system of bodies, can continue to furnish without limitation,
+  cannot possibly be a material substance.
+}{--- Count Rumford, \textit{Inquiry Concerning the Source of Heat Excited by Friction}, 1798}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+You rub your hands together and they grow warm. You drill a hole in metal and it gets hot. You light a fire and heat spreads outward. What is this thing called heat? Where does it come from? Where does it go? Is it a substance --- something that objects contain and can transfer --- or is it something else entirely?
+\end{puzzlebox}
+
+\subsection{The Caloric Theory: An Elegant and Wrong Idea}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{B}}{y} the late eighteenth century, physicists had a tidy answer: heat is a fluid. Specifically, it is an invisible, weightless, self-repelling fluid called \textbf{caloric}, which flows from hot bodies to cold ones. The theory was not merely superstition --- it was a serious scientific framework with genuine explanatory power.
+
+The caloric theory explained:
+\begin{itemize}[leftmargin=2em,itemsep=2pt]
+  \item Why hot objects transfer warmth to cold ones: caloric flows from regions of high concentration to low.
+  \item Why metals feel cold to the touch: they conduct caloric away from your hand rapidly.
+  \item Why specific heats differ: different materials can hold different amounts of caloric per unit mass.
+  \item Why gases cool when they expand: the same caloric spreads over more volume, lowering its ``density.''
+\end{itemize}
+
+It was even partly quantitative. Lavoisier --- the chemist who named oxygen --- included caloric in his list of chemical elements. Carnot used the caloric model to derive (correctly, as it turned out) the efficiency of ideal heat engines. The mathematics sometimes worked even when the underlying picture was wrong.
+
+\begin{historybox}
+\textbf{Joseph Black and specific heat (1760s).} The Scottish physician Joseph Black made a precise distinction that the caloric theory enabled: the difference between \textit{temperature} and \textit{heat content}. He showed that different substances require different amounts of heat to raise their temperature by the same amount. A kilogram of water needs much more heat than a kilogram of iron to rise by 1°C. He called this the \textbf{specific heat capacity}.
+
+Black also discovered \textbf{latent heat}: the heat absorbed or released during a phase change (melting, boiling) without any change in temperature. Ice at 0°C absorbs heat while remaining at 0°C until it fully melts. This was a genuine mystery for the caloric theory: where does the caloric go if the temperature doesn't rise?
+\end{historybox}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j4_caloric_kinetic}
+\caption{Two models of heat. Left: the caloric theory --- heat is a fluid that flows from hot to cold regions, conserved like any other substance. The theory made some correct predictions and was taken seriously by major scientists. Right: the kinetic theory --- heat is the collective kinetic energy of random molecular motion. Temperature is a measure of the average speed of this motion.}
+\label{fig:caloric_kinetic}
+\end{figure}
+
+\begin{explobox}
+\problem In the caloric model, heat flows from hot to cold because caloric is ``self-repelling'' and flows toward lower concentration. In the kinetic model, heat flows from hot to cold because faster molecules collide with slower ones and transfer energy. Both predict the same direction of heat flow. Design a thought experiment or real experiment that could distinguish between these two models.
+
+\problem The caloric theory predicts that heat has mass --- caloric is a material substance, even if weightless. John Dalton, the chemist, actually tried to measure the mass of caloric by weighing objects before and after heating. He found no change. Is this decisive evidence against caloric? Or could caloric be genuinely massless?
+
+\problem Ice at 0°C has a latent heat of fusion of $L = \SI{334}{J/g}$. When 100 g of ice melts, how much heat is absorbed? Where does this energy go in the kinetic theory picture? (What happens to the molecules when ice melts to water?)
+
+\problem In the caloric picture, burning wood releases caloric that was stored in the wood. In the kinetic picture, burning is a chemical reaction that releases molecular bond energy as kinetic energy of the product molecules. Design an experiment to test which picture is more consistent with observations of combustion.
+\end{explobox}
+
+\subsection{Rumford's Cannon: The Experiment That Killed Caloric}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j4_rumford}
+\caption{Rumford's cannon-boring experiment (1798). Left: a blunt borer is rotated inside a cannon barrel submerged in a water bath. The friction continuously generates heat --- the water is brought to a boil within a few hours. Right: the caloric theory predicts that a fixed supply of caloric should eventually run out; instead, heat is generated without apparent limit, proportional to the mechanical work done.}
+\label{fig:rumford}
+\end{figure}
+
+Benjamin Thompson, Count Rumford, was an American-born military officer working in Bavaria in the 1790s. While supervising the boring of cannon barrels --- a process that generated enormous heat --- he noticed something that troubled him deeply.
+
+The standard explanation was that boring a metal released the caloric stored in the metal shavings. But Rumford used a deliberately \textit{blunt} borer that produced very few shavings and an enormous amount of heat. A blunt borer grinds without cutting; it produces almost no chips. Yet it produced more heat, not less. And it kept producing heat as long as the boring continued --- for hours, then days. There was no limit.
+
+His conclusion was inescapable: the heat was not stored in the metal. It was generated by the \textit{friction} --- the mechanical motion. And since mechanical motion can be maintained indefinitely (by a horse walking in circles), so can the heat. Heat cannot be a finite substance.
+
+\begin{explobox}
+\problem Rumford estimated the work done by the horse turning the borer and the heat produced in the water. His ``mechanical equivalent of heat'' was rough but in the right ballpark. The modern value is $\SI{1}{cal} = \SI{4.186}{J}$ (one calorie of heat = 4.186 joules of mechanical work).
+\begin{enumerate}[label=(\alph*)]
+  \item If a 500 kg horse exerts a force of $\SI{800}{N}$ walking at $\SI{1.5}{m/s}$, what is its mechanical power output?
+  \item If all this power goes into heating a 20 kg water bath, how long does it take to raise the temperature by $\SI{10}{^\circ C}$? (Specific heat of water: $c_w = \SI{4186}{J/(kg\cdot K)}$.)
+  \item Rumford's experiment ran for about 2.5 hours. Estimate how much the temperature of his 18.8 kg water bath rose.
+\end{enumerate}
+
+\problem \textit{Joule's definitive measurement (1845).} James Joule determined the mechanical equivalent of heat by stirring water with a paddle wheel driven by falling weights. A 1 kg weight falls 1 m and does $\SI{9.81}{J}$ of work.
+\begin{enumerate}[label=(\alph*)]
+  \item How many times must a 1 kg weight fall 1 m to raise the temperature of 1 kg of water by $\SI{1}{^\circ C}$?
+  \item Joule needed to measure a temperature rise of about $\SI{0.3}{^\circ C}$ to establish his result. Why did he need thermometers of extraordinary precision?
+  \item If Joule's experiment were done today with a 2 kg weight falling 2 m, 50 times, into 1.5 kg of water, what temperature rise would you expect? (Assume 90\% efficiency.)
+\end{enumerate}
+
+\problem \textit{Friction in everyday life.} A $\SI{70}{kg}$ cyclist brakes to a stop from $\SI{30}{km/h}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the initial kinetic energy?
+  \item Where does this energy go when the brakes are applied?
+  \item If the brake pads (total mass $\SI{0.1}{kg}$, specific heat $c = \SI{500}{J/(kg\cdot K)}$) absorb all the energy, what is the temperature rise?
+  \item Disc brakes on a racing car can reach $\SI{900}{^\circ C}$ in repeated heavy braking. What does this tell you about the energy involved in high-performance braking?
+\end{enumerate}
+\end{explobox}
+
+\begin{discoverybox}
+\textbf{What Rumford proved.} The caloric theory's fatal flaw was that it made heat conserved --- a fixed quantity that gets transferred but never created or destroyed. Rumford showed that heat can be created from mechanical work without limit. This meant:
+
+\begin{enumerate}[leftmargin=2em,itemsep=3pt]
+  \item Heat is not a substance.
+  \item Mechanical work can be converted into heat.
+  \item The two --- work and heat --- are different forms of the same underlying thing: \textbf{energy}.
+\end{enumerate}
+
+This insight --- that heat and work are both forms of energy, interconvertible --- is the \textbf{First Law of Thermodynamics}. It took another fifty years (Mayer, Joule, Helmholtz) to make it fully precise.
+\end{discoverybox}
+
+\subsection{Specific Heat Capacity: A Puzzle with a Beautiful Answer}
+
+Even after caloric was abandoned, its observational legacy remained valuable. The concept of \textbf{specific heat capacity} --- the heat required to raise the temperature of a unit mass by one degree --- is real and important:
+
+\begin{equation}
+  Q = mc\,\Delta T
+\end{equation}
+
+where $Q$ is heat added (joules), $m$ is mass (kg), $c$ is specific heat capacity (\si{J/(kg\cdot K)}), and $\Delta T$ is the temperature change.
+
+\begin{explobox}
+\problem Specific heat capacities (at room temperature):
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Substance & $c$ (\si{J/(kg\cdot K)}) & Relative to water \\
+\midrule
+Water (liquid) & 4186 & 1.00 \\
+Ice & 2090 & 0.50 \\
+Aluminium & 900 & 0.21 \\
+Iron & 450 & 0.11 \\
+Copper & 385 & 0.09 \\
+Lead & 128 & 0.03 \\
+Air & 1005 & 0.24 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{enumerate}[label=(\alph*)]
+  \item You add $\SI{500}{J}$ of heat to $\SI{1}{kg}$ of each substance. Rank them by final temperature rise.
+  \item Water has an unusually high specific heat. What are the practical consequences? (Think: climate regulation near oceans, cooking, the human body.)
+  \item The specific heat of a gas at constant pressure differs from that at constant volume. Why? (What extra work must be done against pressure when a gas is heated at constant pressure?)
+\end{enumerate}
+
+\problem \textit{Calorimetry.} A $\SI{200}{g}$ iron bolt at $\SI{300}{^\circ C}$ is dropped into $\SI{500}{g}$ of water at $\SI{20}{^\circ C}$ in an insulated container. Find the final equilibrium temperature. (Assume no heat loss to the container.)
+
+\problem \textit{Ocean heat capacity and climate.} The ocean covers about $71\%$ of Earth's surface to an average depth of $\SI{3700}{m}$. Water has density $\SI{1025}{kg/m^3}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Estimate the total heat capacity of the ocean.
+  \item Earth absorbs net solar energy of about $\SI{0.6}{W/m^2}$ due to greenhouse warming. What fraction of this goes into the ocean if the ocean absorbs 93\% of the extra heat?
+  \item At this rate, how long would it take to warm the ocean by $\SI{1}{^\circ C}$? Express in years. Does this help explain why ocean warming lags air temperature changes?
+\end{enumerate}
+\end{explobox}
+
+\begin{reflectionbox}
+\textbf{Reflection: Module 4.1.}
+
+The caloric theory was coherent, predictive, and held by serious scientists including Lavoisier and Carnot. Carnot even used it to derive the correct efficiency formula for heat engines --- using a wrong model to get the right answer.
+
+Write one to two pages on: \textit{What does it mean to have a scientific theory that is fundamentally wrong but makes some correct predictions? Does predictive success justify belief in a theory? What additional criteria do we need beyond predictive success?}
+
+Then: Rumford's key observation was that heat could be generated indefinitely. Yet caloric theorists had a potential response: perhaps mechanical friction \textit{unlocks} caloric that was stored in the material in a hidden form. How would you design an experiment to close this escape route?
+\end{reflectionbox}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 4.2 — Heat as Motion}
+\label{sec:kinetic_theory}
+
+\epigraph{\itshape
+  If we wish to form a mental image of what gases are, we must picture
+  to ourselves an immense number of small bodies flying about in all
+  directions with enormous velocities, colliding and rebounding constantly.
+}{--- James Clerk Maxwell, 1860}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+If heat is not a fluid but a form of motion, then what is moving, and how does its motion produce all the observable effects of heat: temperature, pressure, expansion, conduction? Can a single picture of bouncing molecules explain all of thermodynamics?
+\end{puzzlebox}
+
+\subsection{The Bold Hypothesis}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{T}}{he} kinetic theory of gases is built on a single daring hypothesis: \textbf{matter is made of atoms and molecules in constant random motion, and what we call temperature is a measure of the average kinetic energy of this motion.}
+
+This hypothesis, in the early nineteenth century, was not obviously correct. Atoms were not directly observable. The idea that a measurable macroscopic quantity like temperature could be reduced to the mechanical motions of invisible particles was bold --- almost reckless. Most chemists believed in atoms. Most physicists were sceptical.
+
+What made the kinetic theory compelling was not just that it reproduced the ideal gas law --- it made \textit{new predictions} that could be tested.
+
+\subsection{Pressure from Collisions}
+
+Consider a gas of $N$ identical molecules of mass $m$ in a cubic box of side length $L$. A molecule moving in the $x$-direction with speed $v_x$ bounces off the right wall and returns. The impulse delivered per collision is $2mv_x$, and the time between collisions with that wall is $2L/v_x$.
+
+The force from one molecule on the right wall is:
+\begin{equation}
+  F_1 = \frac{2mv_x}{2L/v_x} = \frac{mv_x^2}{L}
+\end{equation}
+
+Summing over all $N$ molecules and using $\langle v_x^2 \rangle = \langle v^2\rangle/3$ (by symmetry in 3D):
+\begin{equation}
+  P = \frac{F}{A} = \frac{Nm\langle v^2\rangle}{3V}
+\end{equation}
+
+Since average kinetic energy $\langle KE\rangle = \frac{1}{2}m\langle v^2\rangle$:
+\begin{equation}
+  \boxed{PV = \frac{2}{3}N\langle KE\rangle}
+\end{equation}
+
+\subsection{Temperature as Average Kinetic Energy}
+
+Comparing with the experimentally determined ideal gas law $PV = Nk_BT$:
+
+\begin{equation}
+  \boxed{\langle KE\rangle = \frac{3}{2}k_BT}
+\end{equation}
+
+\textbf{Temperature is the average translational kinetic energy per molecule, up to a factor of $3k_B/2$.}
+
+The Boltzmann constant $k_B = \SI{1.38e-23}{J/K}$ converts between the macroscopic temperature scale (kelvin) and molecular energy. It is one of the most fundamental constants in nature.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j4_maxwell_boltzmann}
+\caption{Left: the Maxwell-Boltzmann speed distribution for nitrogen molecules at four temperatures. Higher temperature shifts the peak to higher speed and broadens the distribution. Not all molecules travel at the same speed --- there is always a spread. Right: temperature as average kinetic energy. Hotter means faster on average.}
+\label{fig:maxwell_boltzmann}
+\end{figure}
+
+\begin{explobox}
+\problem Calculate the root-mean-square speed $v_{\rm rms} = \sqrt{3k_BT/m}$ of:
+\begin{enumerate}[label=(\alph*)]
+  \item Nitrogen molecules (N$_2$, $M = \SI{28}{g/mol}$) at room temperature ($T = \SI{300}{K}$).
+  \item Hydrogen molecules (H$_2$, $M = \SI{2}{g/mol}$) at the same temperature.
+  \item Oxygen molecules (O$_2$, $M = \SI{32}{g/mol}$) at $\SI{1000}{K}$ (flame temperature).
+  \item Compare the nitrogen speed to the speed of sound in air ($\SI{343}{m/s}$). Why are they similar?
+\end{enumerate}
+Use Avogadro's number $N_A = \SI{6.022e23}{mol^{-1}}$ and $k_B = \SI{1.38e-23}{J/K}$.
+
+\problem \textit{Equipartition of energy.} A more general statement: each quadratic degree of freedom contributes $\frac{1}{2}k_BT$ of average energy.
+\begin{enumerate}[label=(\alph*)]
+  \item A monatomic gas (e.g. helium) has 3 translational degrees of freedom. What is its average energy per atom?
+  \item A diatomic molecule (e.g. N$_2$) also has 2 rotational degrees of freedom (at room temperature). What is its average energy per molecule?
+  \item What is the molar specific heat at constant volume for each?
+  \item Experimentally, $c_v = \SI{12.5}{J/(mol\cdot K)}$ for He and $c_v \approx \SI{20.8}{J/(mol\cdot K)}$ for N$_2$. Compare with your predictions. Do they match?
+\end{enumerate}
+
+\problem \textit{Why hydrogen escapes from Earth's atmosphere.} The escape speed from Earth is $v_{\rm esc} = \SI{11.2}{km/s}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What temperature would H$_2$ need to have an rms speed equal to the escape speed?
+  \item The upper atmosphere reaches about $\SI{1000}{K}$. What fraction of H$_2$ molecules have speeds above the escape speed at this temperature? (The Maxwell-Boltzmann tail: the fraction with $v > v_{\rm esc}$ is roughly $\propto e^{-mv_{\rm esc}^2/2k_BT}$.)
+  \item Why is Mars's atmosphere so thin compared to Earth's?
+\end{enumerate}
+
+\problem \textit{Absolute zero.} The kinetic theory predicts that $\langle KE \rangle = \frac{3}{2}k_BT$. What happens at $T = 0$?
+\begin{enumerate}[label=(\alph*)]
+  \item Classically, all motion should cease at absolute zero. Why is this impossible quantum mechanically? (Hint: the uncertainty principle.)
+  \item The lowest temperature ever achieved in a laboratory is about $\SI{38}{pK}$ ($3.8 \times 10^{-11}$ K), set in 2021 using ultracold atoms. What is the rms speed of rubidium atoms ($M = \SI{85}{g/mol}$) at this temperature?
+  \item Compare this to the speed of a snail ($\approx \SI{0.001}{m/s}$). What does this tell you?
+\end{enumerate}
+\end{explobox}
+
+\subsection{The Maxwell-Boltzmann Distribution}
+
+Not all molecules in a gas have the same speed. Maxwell (1860) and Boltzmann (1872) derived the full distribution of speeds:
+
+\begin{equation}
+  f(v) = 4\pi n \left(\frac{m}{2\pi k_BT}\right)^{3/2} v^2 \exp\!\left(-\frac{mv^2}{2k_BT}\right)
+\end{equation}
+
+This is one of the triumphs of theoretical physics: derived from pure mechanics and statistics, it describes the speed distribution of gas molecules with no free parameters.
+
+Three characteristic speeds:
+\begin{align}
+  v_{\rm mp} &= \sqrt{\frac{2k_BT}{m}} \quad\text{(most probable)} \\
+  v_{\rm avg} &= \sqrt{\frac{8k_BT}{\pi m}} \quad\text{(mean)} \\
+  v_{\rm rms} &= \sqrt{\frac{3k_BT}{m}} \quad\text{(root mean square)}
+\end{align}
+
+Note $v_{\rm mp} < v_{\rm avg} < v_{\rm rms}$ --- the distribution is skewed, with a long tail at high speeds.
+
+\begin{explobox}
+\problem Show that $v_{\rm mp} : v_{\rm avg} : v_{\rm rms} = 1 : \sqrt{8/\pi} : \sqrt{3} \approx 1 : 1.128 : 1.225$.
+
+\problem \textit{Chemical reaction rates.} Only molecules with enough kinetic energy to overcome the activation energy $E_a$ can react. The fraction of molecules with energy $> E_a$ is $\propto e^{-E_a/k_BT}$ (the Boltzmann factor).
+\begin{enumerate}[label=(\alph*)]
+  \item A reaction has $E_a = \SI{50}{kJ/mol}$. By what factor does the rate increase when temperature rises from $\SI{300}{K}$ to $\SI{310}{K}$?
+  \item This is the kinetic basis of the ``Q$_{10}$ rule'' in biology: metabolic rates roughly double for every 10°C rise in temperature. Verify this for the activation energy above.
+  \item Why do chemical reactions in the refrigerator slow down? Why does a fever of 40°C make your immune system work faster?
+\end{enumerate}
+
+\problem \textit{Nuclear fusion in the Sun.} Two protons must approach close enough for the strong nuclear force to take over (distance $\sim\SI{e-15}{m}$). The electrostatic repulsion creates an energy barrier of about $\SI{0.1}{MeV}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What temperature would protons need classically to overcome this barrier?
+  \item The Sun's core temperature is about $\SI{1.5e7}{K}$. This is 1000 times lower than the classical estimate. How does fusion still occur? (Hint: quantum tunnelling + the high-speed tail of the Maxwell-Boltzmann distribution.)
+  \item This is one of the most profound applications of statistical mechanics: the Sun shines because of the tail of a probability distribution.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Heat Conduction and Fourier's Law}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j4_conduction}
+\caption{Left: heat conduction in a rod. The temperature profile evolves according to the diffusion equation $\partial T/\partial t = \alpha\,\nabla^2 T$, smoothing out sharp gradients and approaching a uniform equilibrium. Right: Newton's law of cooling --- a hot object loses heat at a rate proportional to the temperature difference with its surroundings.}
+\label{fig:conduction}
+\end{figure}
+
+Heat flows through a solid by molecular collisions --- fast-vibrating atoms at the hot end jostle their neighbours, passing on energy down the temperature gradient. Fourier's law quantifies this:
+
+\begin{equation}
+  \bm{J} = -\kappa\,\nabla T
+\end{equation}
+
+where $\bm{J}$ is the heat flux (power per unit area), $\kappa$ is the \textbf{thermal conductivity} (\si{W/(m\cdot K)}), and $\nabla T$ is the temperature gradient. Heat flows in the direction of decreasing temperature (hence the minus sign).
+
+\begin{explobox}
+\problem Thermal conductivities:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Material & $\kappa$ (\si{W/(m\cdot K)}) & Characteristic \\
+\midrule
+Diamond & 2200 & Best solid conductor \\
+Copper & 401 & Excellent \\
+Aluminium & 237 & Good \\
+Iron & 80 & Moderate \\
+Glass & 1.0 & Poor \\
+Wood & 0.15 & Insulator \\
+Air & 0.026 & Very poor \\
+Aerogel & 0.015 & Exceptional insulator \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{enumerate}[label=(\alph*)]
+  \item Why does a metal spoon in hot soup feel hotter than a wooden spoon at the same temperature? (Both are at the same temperature --- what differs?)
+  \item A double-glazed window has two glass panes ($\SI{4}{mm}$ thick, $\kappa = \SI{1.0}{W/(m\cdot K)}$) separated by a $\SI{12}{mm}$ air gap ($\kappa = \SI{0.026}{W/(m\cdot K)}$). The outer temperature is $\SI{-5}{^\circ C}$, the inner is $\SI{20}{^\circ C}$. What is the heat loss per square metre?
+  \item Why does filling the gap with argon gas ($\kappa = \SI{0.016}{W/(m\cdot K)}$) instead of air improve insulation?
+  \item Aerogel has $\kappa = \SI{0.015}{W/(m\cdot K)}$. If you use a $\SI{2}{cm}$ thick aerogel panel instead of the double-glazed window, compare the heat loss.
+\end{enumerate}
+
+\problem \textit{Building insulation and energy.} A house has $\SI{200}{m^2}$ of walls with average thickness $\SI{0.3}{m}$ and effective conductivity $\kappa = \SI{0.05}{W/(m\cdot K)}$ (well-insulated).
+\begin{enumerate}[label=(\alph*)]
+  \item What is the heat loss rate on a day when $T_{\rm inside} = \SI{20}{^\circ C}$ and $T_{\rm outside} = \SI{0}{^\circ C}$?
+  \item Over a 6-month heating season (180 days), how much energy is lost?
+  \item At an electricity cost of $\SI{0.20}{USD/kWh}$, what is the annual heating cost?
+  \item If you double the insulation thickness, what happens to the cost?
+\end{enumerate}
+
+\problem \textit{Newton's law of cooling and forensics.} A murder victim is found with a body temperature of $\SI{28}{^\circ C}$ in a room at $\SI{20}{^\circ C}$. Normal body temperature is $\SI{37}{^\circ C}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Using Newton's law of cooling $T(t) = T_{\rm room} + (T_0 - T_{\rm room})e^{-kt}$ with a cooling constant $k \approx \SI{0.1}{h^{-1}}$ for a human body, estimate the time of death.
+  \item What complications would affect this estimate in reality?
+\end{enumerate}
+\end{explobox}
+
+\begin{realworldbox}
+\textbf{Heat management in engineering.} Everything from smartphones to aircraft engines to nuclear reactors faces the same challenge: moving heat away efficiently. The fastest processors generate $\SI{100}{W/cm^2}$ --- more than the surface of the Sun. Solutions include heat pipes (phase-change cooling), liquid metal coolants, thermoelectric coolers, and in satellites, radiative cooling (the only option in vacuum). Understanding heat as molecular motion is not academic: it is the foundation of every thermal engineering problem.
+\end{realworldbox}
+
+\begin{reflectionbox}
+\textbf{Reflection: Module 4.2.}
+
+Write two pages on the following:
+
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+  \item \textit{What temperature is.} Before this module, you probably had an intuitive sense of temperature as ``how hot something is.'' Now you have a precise definition: average translational kinetic energy per molecule. Describe three ways in which the precise definition is richer than the intuitive one --- situations where the intuitive sense would mislead you.
+
+  \item \textit{The Maxwell-Boltzmann tail.} The distribution has a long tail at high speeds. This tail is responsible for: chemical reactions (the activated fraction), nuclear fusion in stars, evaporation of water (the fastest molecules escape the liquid surface), and the escape of gases from planetary atmospheres. Choose one of these and describe in detail how the tail drives the phenomenon.
+
+  \item \textit{A conceptual puzzle.} If temperature is average kinetic energy, what is the temperature of a single molecule? Can you even define it? What does this tell you about the \textit{domain of applicability} of thermodynamic concepts?
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Module Summary: 4.1--4.2}
+\addcontentsline{toc}{chapter}{Module Summary: 4.1--4.2}
+\markboth{Module Summary: 4.1--4.2}{}
+
+\begin{tcolorbox}[enhanced,colback=deep!4,colframe=deep,
+  title={\bfseries\color{white} Key Ideas: Modules 4.1--4.2},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+\textbf{Module 4.1 --- Heat as a Substance: and Why That's Wrong}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Caloric theory: heat is a conserved, weightless fluid --- elegant, predictive, \textbf{wrong}
+  \item Rumford (1798): friction generates heat without limit $\Rightarrow$ heat is not a finite substance
+  \item Joule (1845): measured $\SI{1}{cal} = \SI{4.186}{J}$ --- work and heat are both forms of energy
+  \item Specific heat: $Q = mc\,\Delta T$; water's high $c$ regulates climate and cooks our food
+  \item Latent heat: energy absorbed/released at phase boundaries with no temperature change
+\end{itemize}
+\vspace{6pt}
+\textbf{Module 4.2 --- Heat as Motion}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Temperature = average translational KE: $\langle KE \rangle = \frac{3}{2}k_BT$
+  \item Pressure from molecular collisions: $PV = Nk_BT$ derived from mechanics
+  \item Maxwell-Boltzmann distribution: $f(v) \propto v^2 e^{-mv^2/2k_BT}$
+  \item Equipartition: $\frac{1}{2}k_BT$ per quadratic degree of freedom
+  \item Fourier's law: $\bm{J} = -\kappa\nabla T$ --- heat flows down the temperature gradient
+  \item Newton's law of cooling: $dT/dt = -k(T-T_{\rm env})$
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.6cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[teal,line width=1.5pt] (0,0) -- (12,0);
+  \node[below,teal] at (6,-0.1)
+    {\small\itshape End of Modules 4.1--4.2. Next: Energy and Its Transformations (Module 4.3).};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5cm}
+\begin{center}
+{\large\textcolor{deep}{\textbf{Coming in Module 4.3:}}}\\[6pt]
+{\itshape\textcolor{midblue}{%
+Work and heat are both energy. How is energy conserved\\[3pt]
+when it transforms between mechanical, thermal, and chemical forms?\\[3pt]
+And what does it mean that some energy transformations are \emph{forbidden}?
+}}
+\end{center}
+
+\end{document}

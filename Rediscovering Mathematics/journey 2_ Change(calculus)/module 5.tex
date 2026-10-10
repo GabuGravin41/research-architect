@@ -1,0 +1,431 @@
+% ============================================================
+%  DISCOVERY CURRICULUM — Journey 2, Module 5
+%  "Differential Equations"
+%  Compile with: pdflatex J2_M5.tex  (run twice for references)
+% ============================================================
+
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm, headheight=15pt]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue}
+
+% ── Colours ─────────────────────────────────────────────────
+\definecolor{NavyBlue}{HTML}{1A3A5C}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{C8922A}
+\definecolor{LightBlue}{HTML}{EBF2FA}
+\definecolor{LightGold}{HTML}{FDF4E3}
+\definecolor{DarkGrey}{HTML}{3A3A3A}
+\definecolor{BoxGreen}{HTML}{E8F5E9}
+\definecolor{SidebarGrey}{HTML}{F5F5F5}
+
+% ── Section formatting ───────────────────────────────────────
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 2 $\cdot$ Module 5}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Environments ─────────────────────────────────────────────
+\newmdenv[
+  backgroundcolor=NavyBlue!7,
+  linecolor=NavyBlue, linewidth=2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innerleftmargin=14pt, innerrightmargin=10pt,
+  innertopmargin=10pt, innerbottommargin=10pt,
+  skipabove=14pt, skipbelow=10pt
+]{puzzlebox}
+
+\newmdenv[
+  backgroundcolor=LightGold,
+  linecolor=Gold, linewidth=2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innerleftmargin=14pt, innerrightmargin=10pt,
+  innertopmargin=10pt, innerbottommargin=10pt,
+  skipabove=14pt, skipbelow=10pt
+]{discoverybox}
+
+\newmdenv[
+  backgroundcolor=LightBlue,
+  linecolor=MidBlue, linewidth=1.5pt,
+  roundcorner=4pt,
+  innerleftmargin=14pt, innerrightmargin=10pt,
+  innertopmargin=10pt, innerbottommargin=10pt,
+  skipabove=14pt, skipbelow=10pt
+]{namebox}
+
+\newmdenv[
+  backgroundcolor=BoxGreen,
+  linecolor=DarkGrey!35, linewidth=1pt,
+  roundcorner=4pt,
+  innerleftmargin=14pt, innerrightmargin=10pt,
+  innertopmargin=10pt, innerbottommargin=10pt,
+  skipabove=14pt, skipbelow=10pt
+]{reflectionbox}
+
+\newmdenv[
+  backgroundcolor=SidebarGrey,
+  linecolor=Gold, linewidth=1.2pt,
+  leftline=true, rightline=false, topline=false, bottomline=false,
+  innerleftmargin=12pt, innerrightmargin=10pt,
+  innertopmargin=7pt, innerbottommargin=7pt,
+  skipabove=10pt, skipbelow=10pt
+]{thought}
+
+\newcounter{problem}
+\newenvironment{problem}[1][]{%
+  \refstepcounter{problem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{MidBlue}Problem \theproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{%
+  \refstepcounter{deepproblem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 2: CHANGE}}
+
+\vspace{0.6cm}
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 5}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Differential Equations}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+Physics does not tell you where things are.\\[0.15cm]
+It tells you how fast they are changing. The rest is mathematics.}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}           & Journey 2 --- Change \\[4pt]
+\color{DarkGrey}\textbf{Module}            & 5 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}     & J2 Modules 1--4 \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & ODEs, separation of variables, linear first-order, second-order, harmonic oscillator \\[4pt]
+\color{DarkGrey}\textbf{Format}            & 8 problems $+$ 3 deep problems $\approx$ 14 pages \\
+\end{tabular}
+
+\vspace{1cm}
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+
+\noindent\textbf{The language of physics.}
+Newton's laws do not say ``the ball is here.'' They say: ``the rate of change of momentum equals the applied force.'' That is a differential equation. Maxwell's equations do not describe the electric and magnetic fields directly --- they describe how those fields change in space and time. Einstein's field equations describe how spacetime curvature changes in response to matter. Schr\"{o}dinger's equation describes how a quantum state changes in time.
+
+\medskip
+In each case, the law is a differential equation. Solving it --- finding the function that satisfies it --- is the act of extracting physics from mathematics.
+
+\newpage
+
+% ============================================================
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+% ============================================================
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle.}
+
+A cup of tea at $90°\text{C}$ is placed in a room at $20°\text{C}$. Newton's Law of Cooling states that the rate at which the tea cools is proportional to the difference between the tea's temperature and the room temperature.
+
+\medskip
+\textbf{Question 1.} Write this as a differential equation for $T(t)$, the temperature of the tea at time $t$. Use $k > 0$ for the proportionality constant.
+
+\textbf{Question 2.} What is $T(0)$? What should $T(t)$ approach as $t \to \infty$? Does your equation produce this behaviour?
+
+\textbf{Question 3.} If the tea cools from $90°\text{C}$ to $70°\text{C}$ in 5 minutes, find $k$. When will it reach $40°\text{C}$?
+
+\textbf{Question 4.} Sketch $T(t)$ for $t \geq 0$. What kind of function does it look like?
+\end{puzzlebox}
+
+\begin{thought}
+\textbf{What a differential equation is.}
+A differential equation (DE) is an equation relating a function to its derivatives. It does not give you the function directly --- it gives you a rule that the function must obey at every point. Solving a DE means finding all functions that satisfy the rule. A DE usually has infinitely many solutions (a whole family), and a specific solution is selected by specifying initial conditions --- the value of the function (and possibly its derivatives) at one point. This is why physics requires both the law (DE) and initial conditions (state at $t=0$) to predict the future. The law constrains the family; the initial state selects the individual.
+\end{thought}
+
+% ============================================================
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+% ============================================================
+
+\subsection{Step 1: Separation of variables}
+
+\begin{problem}
+\label{prob:separation}
+The simplest class of ODEs separates: all $y$ terms on one side, all $x$ terms on the other.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Solve Newton's cooling equation $\frac{dT}{dt} = -k(T - T_{\text{room}})$ by substituting $u = T - T_{\text{room}}$, separating variables, and integrating both sides.
+  \item Solve $\frac{dy}{dx} = y^2$ with $y(0) = 1$. At what finite time does the solution ``blow up''? What does this mean physically for a system governed by this equation?
+  \item Solve the logistic equation $\frac{dP}{dt} = rP\!\left(1 - \frac{P}{K}\right)$ by separating variables and using partial fractions. Verify that the solution is $P(t) = \frac{K}{1 + Ae^{-rt}}$, the logistic function from Journey~1.
+  \item Solve $\frac{dy}{dx} = \frac{x}{y}$. What curve does the solution describe geometrically?
+  \item For which ODEs does separation of variables work? What structural property must the equation have?
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 2: Linear first-order ODEs}
+
+\begin{problem}
+\label{prob:linear_first}
+A linear first-order ODE has the form $y' + P(x)y = Q(x)$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item If $Q(x) = 0$ (the homogeneous case), the equation is separable. Solve $y' + P(x)y = 0$.
+  \item For the general case, multiply both sides by the \textbf{integrating factor} $\mu(x) = e^{\int P(x)\,dx}$. Show that the left side becomes $\frac{d}{dx}[\mu(x) y]$.
+  \item Use this to solve $y' + \frac{1}{x}y = x$ for $x > 0$.
+  \item A tank holds 100 litres of brine with 5 kg of salt dissolved. Fresh water flows in at 2 L/min and the mixture flows out at 2 L/min. Write and solve the DE for the amount of salt $S(t)$ at time $t$.
+  \item What happens to $S(t)$ as $t \to \infty$? Does the answer make physical sense?
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{The integrating factor idea.}
+The integrating factor $\mu(x) = e^{\int P\,dx}$ appears to come from nowhere. But it is discoverable: you want to convert $y' + Py$ into a perfect derivative $(\mu y)'$. Expanding $(\mu y)' = \mu' y + \mu y'$, you need $\mu' = \mu P$, which gives $\mu = e^{\int P\,dx}$. The method designs its own solution. This is a recurring pattern in mathematics: when a problem seems stuck, ask what structure would make it tractable, then construct that structure. The integrating factor is an instance of the general technique of \emph{reducing to a form you can solve}.
+\end{thought}
+
+\subsection{Step 3: Second-order linear ODEs}
+
+\begin{problem}
+\label{prob:second_order}
+The equation $y'' + by' + cy = 0$ with constants $b, c$ is a second-order linear homogeneous ODE.
+
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Try a solution $y = e^{rx}$. Substitute and show that $r$ must satisfy the \textbf{characteristic equation} $r^2 + br + c = 0$.
+  \item If the characteristic equation has two distinct real roots $r_1, r_2$: show that $y = Ae^{r_1 x} + Be^{r_2 x}$ is the general solution. How many free constants are there, and why?
+  \item If it has a repeated real root $r$: the general solution is $y = (A + Bx)e^{rx}$. Verify this is a solution.
+  \item If it has complex roots $r = \alpha \pm \beta i$: use Euler's formula $e^{i\theta} = \cos\theta + i\sin\theta$ to write the general solution in terms of real functions.
+  \item Solve $y'' + 4y = 0$, $y(0) = 1$, $y'(0) = 0$. What function does this produce? Recognise it.
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{Characteristic equations and linear recurrences.}
+In Module~4 of Journey~1, you solved the Fibonacci recurrence by finding roots of a characteristic equation $r^2 = r + 1$. The method for second-order ODEs is identical in structure: assume an exponential solution, substitute, and obtain a polynomial whose roots determine everything. This is not a coincidence. Differential equations are the continuous-time analogues of recurrence relations. Every technique for one has an analogue for the other. The connection between sequences (discrete) and functions (continuous) runs through all of mathematics: from difference equations to differential equations, from $z$-transforms to Laplace transforms, from combinatorics to analysis.
+\end{thought}
+
+\subsection{Step 4: The harmonic oscillator}
+
+\begin{problem}
+\label{prob:harmonic}
+A mass $m$ on a spring with spring constant $k$ satisfies \textbf{Newton's second law} $F = ma$:
+\[
+  m\ddot{x} = -kx \qquad \Longrightarrow \qquad \ddot{x} + \omega^2 x = 0, \quad \omega = \sqrt{k/m}.
+\]
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Solve the ODE. The general solution has two free constants --- determine them from $x(0) = A$ (initial displacement) and $\dot{x}(0) = 0$ (released from rest).
+  \item The solution is $x(t) = A\cos(\omega t)$. Compute $\dot{x}(t)$ and $\ddot{x}(t)$. Show that the total energy $E = \frac{1}{2}m\dot{x}^2 + \frac{1}{2}kx^2$ is constant in time.
+  \item Now add damping: $m\ddot{x} + b\dot{x} + kx = 0$ (friction proportional to velocity). Find the three qualitatively different types of motion depending on whether $b^2 - 4mk$ is positive, zero, or negative. Name them.
+  \item Add a periodic driving force: $m\ddot{x} + kx = F_0\cos(\Omega t)$. If $\Omega \neq \omega$, the solution is a sum of two oscillations. If $\Omega = \omega$ (resonance), the solution grows without bound. Describe the resonance phenomenon and give a real-world example of its destructive consequences.
+  \item The total energy in undamped free oscillation is constant. In damped oscillation, energy decreases. At what rate does energy decrease in the underdamped case? What happens to the energy?
+\end{enumerate}
+\end{problem}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=13cm, height=5.5cm,
+  axis lines=center,
+  xlabel={$t$}, ylabel={$x(t)$},
+  xmin=0, xmax=14, ymin=-1.3, ymax=1.3,
+  xtick={0,3.14,6.28,9.42,12.57},
+  xticklabels={$0$,$\pi/\omega$,$2\pi/\omega$,$3\pi/\omega$,$4\pi/\omega$},
+  ytick={-1,1},
+  tick label style={font=\small, color=DarkGrey},
+  grid=major, grid style={DarkGrey!12},
+  title={\small\color{NavyBlue}Undamped ($\gamma=0$), underdamped ($\gamma=0.15$), overdamped ($\gamma=0.8$)},
+  legend pos=north east,
+  legend style={font=\small},
+]
+% Undamped
+\addplot[NavyBlue, very thick, domain=0:14, samples=200] {cos(deg(x))};
+% Underdamped
+\addplot[Gold, thick, domain=0:14, samples=200] {e^(-0.15*x)*cos(deg(x))};
+% Overdamped (no oscillation, just decay)
+\addplot[MidBlue!60, thick, dashed, domain=0:14, samples=100] {e^(-0.8*x)*(cosh(deg(0.6*x))+1.33*sinh(deg(0.6*x)))};
+\addlegendentry{undamped}
+\addlegendentry{underdamped}
+\addlegendentry{overdamped}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{problem}
+\label{prob:systems}
+Many physical systems are described by \emph{systems} of coupled ODEs. Consider the predator-prey model (Lotka-Volterra):
+\[
+  \frac{dR}{dt} = aR - bRF, \qquad \frac{dF}{dt} = cRF - dF,
+\]
+where $R(t)$ is the rabbit population and $F(t)$ the fox population.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Interpret each term: what does $aR$ represent? What does $-bRF$ represent? What does $-dF$ represent?
+  \item Find the equilibrium points (where $dR/dt = dF/dt = 0$). There are two: one where both populations are zero, and one where both are positive.
+  \item The positive equilibrium is $R^* = d/c$, $F^* = a/b$. Explain why the equilibrium fox population depends on rabbit birth rate and vice versa.
+  \item Near the positive equilibrium, the populations oscillate. Describe qualitatively what you expect from a phase portrait (plot of $R$ vs $F$). Do the oscillations match what we observe in real predator-prey systems?
+  \item List three assumptions in the Lotka-Volterra model that are biologically unrealistic. For each, write one equation or term you would add to correct it.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:slope_fields}
+A slope field (direction field) gives a visual representation of the ODE $y' = f(x,y)$ by drawing a small arrow of slope $f(x,y)$ at each point $(x,y)$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Sketch the slope field for $y' = y$ by computing the slope at a grid of points: $(\pm 1, \pm 1), (\pm 1, 0), (0, \pm 1)$, etc.
+  \item On the same diagram, sketch a few solution curves. They should be tangent to the slope field everywhere.
+  \item Sketch the slope field for $y' = -x/y$. What shape are the solution curves?
+  \item \textbf{Euler's method}: given $y' = f(x,y)$ and initial condition $y(x_0) = y_0$, approximate the solution by taking small steps: $y_{n+1} = y_n + h\cdot f(x_n, y_n)$. Apply this to $y' = y$, $y(0) = 1$, with step size $h = 0.1$, for 10 steps. Compare with the exact solution.
+\end{enumerate}
+\end{problem}
+
+% ============================================================
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} A differential equation is a constraint on a function: it specifies not the function itself but the relationship between the function and its rates of change. Solutions form a family; initial conditions select a specific member.
+
+\textbf{Second.} Separation of variables, integrating factors, and the characteristic equation method are the three main tools for first- and second-order linear ODEs. Each works because it reduces the problem to integration.
+
+\textbf{Third.} The harmonic oscillator $\ddot{x} + \omega^2 x = 0$ is the central equation of physics. Its solutions $\cos(\omega t)$ and $\sin(\omega t)$ describe everything that oscillates: springs, pendulums, electric circuits, sound waves, light, and quantum mechanical states.
+
+\textbf{Fourth.} The characteristic equation for a second-order ODE is structurally identical to the characteristic equation for a second-order recurrence. The exponential function $e^{rx}$ is the fundamental building block of both.
+
+\medskip
+\textbf{The deep question.} You have found solutions to linear ODEs. What makes linearity so important? The key: if $y_1$ and $y_2$ are solutions to a \emph{linear} ODE, then $Ay_1 + By_2$ is also a solution. This is the \emph{superposition principle}. It is the reason that the solutions form a vector space (Journey~3 will make this precise). Does the superposition principle hold for the logistic equation? What does that tell you about the difficulty of nonlinear ODEs?
+\end{discoverybox}
+
+% ============================================================
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+% ============================================================
+
+\begin{namebox}
+\textbf{Ordinary differential equations.}
+
+An \textbf{ODE} is an equation involving a function $y(x)$ and its derivatives. The \textbf{order} is the highest derivative appearing. A \textbf{linear} ODE has the form $a_n y^{(n)} + \cdots + a_1 y' + a_0 y = f(x)$; \textbf{nonlinear} otherwise.
+
+\medskip
+\textbf{First-order separable}: $\frac{dy}{dx} = g(x)h(y)$ $\Rightarrow$ $\int\frac{dy}{h(y)} = \int g(x)\,dx$.
+
+\textbf{First-order linear}: $y' + P(x)y = Q(x)$ $\Rightarrow$ multiply by $\mu = e^{\int P\,dx}$.
+
+\textbf{Second-order linear constant-coefficient}: $y'' + by' + cy = 0$.\\
+Characteristic equation $r^2 + br + c = 0$ with roots $r_{1,2}$.\\
+--- Two real roots: $y = Ae^{r_1 x} + Be^{r_2 x}$.\\
+--- Repeated root $r$: $y = (A+Bx)e^{rx}$.\\
+--- Complex roots $\alpha\pm\beta i$: $y = e^{\alpha x}(A\cos\beta x + B\sin\beta x)$.
+\end{namebox}
+
+\begin{namebox}
+\textbf{The harmonic oscillator.}
+
+$\ddot{x} + \omega^2 x = 0$ has solutions $x(t) = A\cos(\omega t) + B\sin(\omega t)$.
+
+With damping $\ddot{x} + 2\gamma\dot{x} + \omega^2 x = 0$:
+\begin{itemize}[noitemsep, topsep=4pt]
+  \item $\gamma < \omega$: \textbf{underdamped} --- decaying oscillation
+  \item $\gamma = \omega$: \textbf{critically damped} --- fastest non-oscillatory decay
+  \item $\gamma > \omega$: \textbf{overdamped} --- slow exponential decay
+\end{itemize}
+\textbf{Resonance} occurs when driving frequency equals natural frequency $\omega$; amplitude grows without bound in an undamped system.
+\end{namebox}
+
+% ============================================================
+\section{Part 5 \texorpdfstring{---}{--} Deep Problems}
+% ============================================================
+
+\begin{deepproblem}[Existence and uniqueness]
+The \textbf{Picard-Lindel\"{o}f theorem} guarantees that if $f(x,y)$ is continuous and Lipschitz in $y$ near $(x_0, y_0)$, then the IVP $y' = f(x,y)$, $y(x_0) = y_0$ has a unique solution near $x_0$.
+\begin{enumerate}[label=(\alph*)]
+  \item The ODE $y' = y^{2/3}$, $y(0) = 0$ has two solutions: $y = 0$ and $y = (x/3)^3$. Find both. Why does this not contradict Picard-Lindel\"{o}f?
+  \item The solution to $y' = y^2$, $y(0) = 1$ blows up in finite time. Does this contradict the theorem?
+  \item Picard iteration: define $y_0(x) = y_0$ (constant), then $y_{n+1}(x) = y_0 + \int_{x_0}^x f(t, y_n(t))\,dt$. Apply this to $y' = y$, $y(0) = 1$ for 4 iterations. What sequence of functions do you obtain?
+  \item What does the Picard iteration for $y' = y$, starting from $y_0 = 1$, produce in the limit? Connect to the series for $e^x$.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[The heat equation as a limit]
+The \textbf{heat equation} $\frac{\partial u}{\partial t} = \alpha\frac{\partial^2 u}{\partial x^2}$ governs temperature $u(x,t)$ along a rod.
+\begin{enumerate}[label=(\alph*)]
+  \item This is a \emph{partial} differential equation (PDE): the unknown function depends on both $x$ and $t$. Try a \textbf{separated} solution $u(x,t) = X(x)T(t)$. Substitute and divide by $XT$ to show that $T'/\alpha T = X''/X = -\lambda$ (a constant).
+  \item Solve the two resulting ODEs. What type of function is $T(t)$? What type is $X(x)$?
+  \item For a rod of length $L$ with $u(0,t) = u(L,t) = 0$ (ends held at zero temperature), the boundary conditions force $X(x) = \sin(n\pi x/L)$ for integer $n$. Write the general separated solution.
+  \item The full solution is a superposition $u(x,t) = \sum_{n=1}^\infty B_n \sin\!\left(\frac{n\pi x}{L}\right) e^{-\alpha(n\pi/L)^2 t}$. For large $t$, which terms dominate? What does the temperature distribution approach?
+  \item The coefficients $B_n$ are determined by the initial condition $u(x,0) = f(x)$ via $B_n = \frac{2}{L}\int_0^L f(x)\sin(n\pi x/L)\,dx$. This is a \textbf{Fourier sine series}. The idea that \emph{any} initial distribution can be written as a sum of sines is the starting point of Journey~6. Does it surprise you that this is possible?
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Chaos in three coupled ODEs: the Lorenz system]
+The Lorenz system is three coupled first-order ODEs:
+\[
+  \dot{x} = \sigma(y - x), \qquad
+  \dot{y} = x(\rho - z) - y, \qquad
+  \dot{z} = xy - \beta z,
+\]
+with parameters $\sigma = 10$, $\rho = 28$, $\beta = 8/3$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find the equilibria (fixed points) of the Lorenz system by setting all three derivatives to zero. How many are there?
+  \item The system conserves no energy and is dissipative (volumes in phase space shrink). Yet for $\rho > 1$, solutions do not converge to a fixed point. What else could they do?
+  \item Lorenz discovered numerically that two solutions starting from almost identical initial conditions diverge exponentially. Starting from $(1, 1, 1)$ vs.\ $(1 + 10^{-5}, 1, 1)$: after 30 time units, the solutions look completely different. What does this imply about weather prediction?
+  \item The set of all long-run positions forms the \textbf{Lorenz attractor} --- a set of fractal dimension $\approx 2.06$, neither a surface nor a solid. Describe what ``fractal dimension'' means informally.
+  \item \textit{(Research question.)} Chaos in the Lorenz system is governed by the \textbf{Lyapunov exponent} $\lambda > 0$: nearby trajectories diverge as $e^{\lambda t}$. This sets a fundamental limit on predictability: errors double every $\sim \ln 2/\lambda$ time units. For weather, this is $\approx 5$ days. Does this mean long-range weather forecasting is fundamentally impossible, or merely practically difficult?
+\end{enumerate}
+\end{deepproblem}
+
+% ============================================================
+\section{Part 6 \texorpdfstring{---}{--} Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Your reflection task.}
+
+\begin{enumerate}
+  \item \textbf{On physics as differential equations.} You have now seen Newton's second law, Newton's cooling, logistic population growth, and the harmonic oscillator --- all as ODEs. In each case, the physical law states a \emph{local} constraint (what is happening right now, at this instant), and the solution describes the \emph{global} behaviour (what happens over all time). Write a paragraph: is this decomposition of physics into local law plus global solution illuminating, or does it obscure something about how the world works?
+
+  \item \textbf{On the superposition principle.} Linear ODEs obey superposition: sums of solutions are solutions. Nonlinear ODEs do not. The logistic equation, the Lorenz system, and the equations governing fluid turbulence are all nonlinear --- and all much harder. Is linearity an intrinsic property of certain physical systems, or is it an approximation we make because nonlinear systems are too hard to analyse?
+
+  \item \textbf{On chaos.} The Lorenz system is deterministic: the future is completely determined by the present. Yet it is unpredictable in practice. Does this distinction --- deterministic but unpredictable --- feel meaningful or hollow to you? Does it change your view of free will, or of the possibility of a ``theory of everything''?
+
+  \item \textbf{Looking ahead.} Module~6 opens the door to calculus in higher dimensions: partial derivatives, gradients, and the geometry of change in space. The heat equation in the deep problems is an example of a PDE --- a differential equation where the unknown depends on multiple variables. What new difficulties do you anticipate when calculus moves into higher dimensions?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6 closes Journey~2 by extending calculus to functions of several variables. The derivative becomes a vector (the gradient). The integral becomes a double or triple integral over a region. And new phenomena appear that have no single-variable analogue --- curl, divergence, and the theorems of Green, Stokes, and Gauss --- which will be the foundation of Journey~3's study of fields and space.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 2, Module 5 --- Differential Equations}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 6 --- Multivariable Calculus}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

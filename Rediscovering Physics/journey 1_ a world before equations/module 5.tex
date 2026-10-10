@@ -1,0 +1,285 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\setlength{\headheight}{24pt}
+\usepackage{fontenc}
+\usepackage{inputenc}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{fontawesome5}
+
+\usepackage{setspace}
+\usepackage{parskip}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=midblue,
+  urlcolor=accent,
+  citecolor=teal,
+  pdftitle={Discovery Physics: Journey 1 — The World Before Equations},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}
+  {\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+
+% Puzzle box
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep},
+  title={\faIcon{puzzle-piece}\ The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold},
+  #1
+}
+
+% Observation box
+\newtcolorbox{observebox}[1][]{
+  enhanced, breakable,
+  colback=greenbg, colframe=teal,
+  fonttitle=\bfseries\color{deep},
+  title={Observation},
+  #1
+}
+
+% Exploration/problem box
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue},
+  #1
+}
+
+% Discovery box
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white},
+  coltitle=white,
+  title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent},
+  drop shadow,
+  #1
+}
+
+% Name reveal box
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep},
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Reflection},
+  #1
+}
+
+% Margin note style
+\newtcolorbox{marginidea}{
+  enhanced,
+  colback=gold!15, colframe=gold,
+  fontupper=\small\itshape,
+  left=2mm, right=2mm, top=1mm, bottom=1mm,
+  boxrule=0.6pt
+}
+
+% Problem counter
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi%
+}
+
+% Key idea
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[
+    enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}
+  ]
+  #1
+  \end{tcolorbox}
+}
+
+% ─── Theorem-like environments ──────────────────────────────────────────────
+\newtheoremstyle{disc}
+  {8pt}{8pt}{\itshape}{}
+  {\bfseries\color{midblue}}{.}{.5em}{}
+
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Epigraph style ─────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{0}
+\setcounter{section}{4}
+
+\section{Module 1.5 — Patterns of Force and Influence}
+\label{sec:patterns_force}
+
+\epigraph{%
+  \itshape The most beautiful thing we can experience is the mysterious.%
+}{--- Albert Einstein}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+Some objects influence other objects without touching them. How far does this influence reach? What shape does it have?
+\end{tcolorbox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{figures/fig_fields}
+  \caption{Left: the magnetic field pattern around a bar magnet, visualised as field lines. Lines emerge from the north pole and enter the south pole. Their density indicates the strength of the field. Right: the combined field pattern when two magnets are brought near each other.}
+  \label{fig:magnets}
+\end{figure}
+
+\subsection{The Invisible Reaches Out}
+
+Gravity. Magnetism. Electric force. These are forces that act at a distance---they reach through empty space to push or pull objects that they are not in contact with. This is deeply strange. How does the Earth ``know'' the Moon is there? How does a magnet ``reach out'' to a nail two centimetres away?
+
+For most of history, scientists did not try to answer this question. They described the forces mathematically and left the mechanism unexamined. Newton famously wrote: \textit{``I feign no hypotheses.''} He could calculate the force of gravity with extraordinary precision; he refused to speculate about how it worked.
+
+Michael Faraday was different. He was not a mathematician---he had almost no formal education---and he could not work easily with Newton's equations. So instead he thought in pictures. He visualised the space around a magnet as filled with lines of force, and he mapped those lines with iron filings. This was not just a visualization trick. Faraday genuinely believed the lines of force were physically real structures in space.
+
+He was, in a sense, inventing the concept of a \textbf{field}---one of the most important ideas in modern physics.
+
+\subsection{Mapping Gravity}
+
+\begin{explobox}
+\problem Describe the gravitational field of the Earth as follows: at every point above Earth's surface, draw an arrow showing the direction and approximate size of the gravitational force on a 1 kg mass. What pattern do the arrows follow? Do they get longer or shorter as you go higher?
+
+\problem The gravitational force on an object of mass $m$ at distance $r$ from Earth's centre is:
+\begin{equation}
+  F = \frac{GMm}{r^2}
+\end{equation}
+where $G$ is a constant and $M$ is Earth's mass. If the force at Earth's surface (radius $R$) is $mg$, what is the force at height $R$ above the surface (i.e., at distance $2R$ from the centre)?
+
+\problem At what distance from Earth's centre is the gravitational force only $1/100$ of its surface value?
+\end{explobox}
+
+The pattern $F \propto 1/r^2$ is called an \textbf{inverse square law}. It will appear again and again throughout the curriculum---in gravity, in electric force, in light intensity. It is deeply connected to the geometry of space in three dimensions.
+
+\subsection{Mapping Magnetic Fields}
+
+\begin{explobox}
+\problem Take a bar magnet and place it under a piece of paper. Sprinkle iron filings on the paper and tap it gently. Sketch what you see in as much detail as possible.
+
+\problem Place two magnets under the paper with like poles facing each other. Sketch the pattern. Then repeat with opposite poles facing each other. How do the patterns differ?
+
+\problem Hold a compass and move it around a bar magnet. At each position, record the direction the needle points. Do these directions match the field lines you sketched with iron filings?
+
+\problem Is there a ``north'' or ``south'' pole without a corresponding opposite pole? Can you isolate a single pole by cutting a magnet in half?
+\end{explobox}
+
+The last question is profound. Every magnet you cut produces two smaller magnets, each with both poles. Unlike electric charge---where positive charges and negative charges can be separated---magnetic poles always come in pairs. We have never observed an isolated magnetic ``monopole''. Whether one exists is still an open question in physics.
+
+\subsection{Electric Force}
+
+Rub a plastic comb through your hair and bring it near small pieces of paper, or near a thin stream of water from a tap.
+
+\begin{explobox}
+\problem Describe what you observe when a charged comb is brought near (but not touching) small paper pieces. How does the effect change with distance?
+
+\problem Rub two balloons on your hair and hang them near each other. What do they do? Now rub only one balloon and bring it near the other. Different result? Why?
+
+\problem Can the electric force be shielded? (Wrap a phone in aluminium foil. Does it receive calls? What does this tell you?)
+\end{explobox}
+
+\keyidea{Both gravity and electric force follow an inverse square law---the force falls off as $1/r^2$ with distance. But there is a crucial difference: gravity is always attractive, while electric force can be either attractive (opposite charges) or repulsive (like charges). Magnetism shares this dual nature with electricity, but with the additional constraint that poles cannot be separated.}
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

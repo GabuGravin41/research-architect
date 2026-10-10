@@ -1,0 +1,416 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={History Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{5}
+\chapter[Journey 6 --- Distributed Systems and Concurrency]
+        {Journey Six\\[8pt]
+         \textcolor{ModuleColor}{\large Distributed Systems and Concurrency}}
+\setcounter{section}{0}
+
+\section{Module 6.1 --- Concurrency, Mutual Exclusion, and Locks}
+\label{sec:mod6.1}
+
+\subsection*{Motivation}
+
+We completed in Journey 5 the analysis and optimization of algorithms, proving bounds on search trees and network flows.
+All those models assumed a single thread of execution running sequentially.
+But modern processors are composed of multiple cores executing concurrently.
+We must study the physics of cooperation.
+
+When multiple threads access shared memory concurrently, execution steps interleave.
+This can cause race conditions, resulting in corrupt data.
+This module formalizes how threads coordinate access to shared state.
+We will study critical sections and mutual exclusion, formulate the four Coffman conditions for deadlocks, and explore lock-free concurrency using atomic hardware primitives like Compare-And-Swap (CAS).
+
+\subsection{The Shared Counter}
+
+We analyze how interleaved execution causes race conditions.
+
+\begin{puzzlebox}
+\textbf{The Interleaved Increment.}
+
+Suppose we have a shared variable in memory: `counter = 0`.
+We spawn two threads that run concurrently on two CPU cores. Both threads execute the same code block $10^6$ times:
+`counter = counter + 1`
+When both threads finish, we expect the value of `counter` to be exactly $2 \times 10^6$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item At the assembly level, `counter = counter + 1` is compiled into three separate physical instructions:
+        1. **Read:** Load value of `counter` from RAM into CPU register $R_0$.
+        2. **Modify:** Increment $R_0$ by 1 ($R_0 := R_0 + 1$).
+        3. **Write:** Store value of $R_0$ back to `counter` in RAM.
+        If Thread 1 and Thread 2 execute these instructions concurrently, draw a diagram showing an interleaving sequence where both threads read `counter = 0`, modify it, and write back, resulting in a final value of `1` instead of `2`.
+  \item This behavior is a **Race Condition**.
+        To prevent this, we must define the code block as a **Critical Section** and enforce **Mutual Exclusion**: only one thread can enter the critical section at a time.
+        Why does this requirement of mutual exclusion slow down execution on multi-core systems? (Think about thread waiting times).
+  \item Modern CPUs provide atomic hardware instructions, such as **Compare-And-Swap (CAS)**:
+        `CAS(address, expected_value, new_value)`
+        Explain how CAS performs the read, modify, and write steps atomically in a single clock cycle, bypassing race conditions without locking the thread.
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Mutual Exclusion: Semaphores and Mutex Locks}
+
+We formalize coordination primitives and deadlock structures.
+
+\begin{namedconcept}{Dijkstra's Semaphore}
+A \newterm{Semaphore} is an integer variable $S$ accessed through two atomic operations:
+* $P(S)$ (or wait/down):
+  \[
+    \text{while } S \le 0 \text{ do } \{ \text{busy wait} \}; \quad S := S - 1
+  \]
+* $V(S)$ (or signal/up):
+  \[
+    S := S + 1
+  \]
+A **Mutex** is a binary semaphore ($S \in \{0, 1\}$) with ownership constraints.
+\end{namedconcept}
+
+\begin{explobox}
+When threads acquire multiple locks, they can trigger a **Deadlock**, where execution gets permanently stuck.
+* **The Coffman Conditions:** A deadlock occurs if and only if four conditions hold simultaneously:
+  1. **Mutual Exclusion:** At least one resource is held in a non-shareable mode.
+  2. **Hold and Wait:** A thread holds a resource and waits for another.
+  3. **No Preemption:** Resources cannot be forcibly taken from threads.
+  4. **Circular Wait:** A closed chain of threads exists, each waiting for a resource held by the next.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Prove that if we enforce a global ordering on all locks (e.g. locks must always be acquired in increasing index order: $L_1$ before $L_2$), a deadlock can never occur.
+        *(Which of the Coffman conditions is broken by this ordering protocol?)*
+  \item Draw a resource allocation graph showing a deadlock state between two threads and two locks.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Lock-Free structures and the ABA Problem}
+
+We study concurrent data structures without locks.
+
+\begin{explobox}
+Locks force threads to sleep, incurring high operating system context-switch latency.
+Lock-free algorithms use Compare-And-Swap (CAS) to update nodes dynamically.
+* **Treiber Stack Push:**
+  \begin{verbatim}
+    void push(Node* new_node) {
+        do {
+            new_node->next = head;
+        } while (!CAS(&head, new_node->next, new_node));
+    }
+  \end{verbatim}
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Explain how the Treiber Stack loop handles the case where another thread updates `head` between the assignment `new_node->next = head` and the execution of the `CAS` instruction.
+  \item Under concurrent execution, lock-free structures suffer from the **ABA Problem**:
+        1. Thread 1 reads value $A$ at `head`, and reads `head->next` pointing to $B$.
+        2. Thread 2 pops $A$, pops $B$, and then pushes $A$ back.
+        3. Thread 1 resumes and executes `CAS(&head, A, B)`.
+        Explain why the CAS succeeds, and why this causes memory corruption if node $B$ has already been deallocated.
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Race conditions occur when concurrent threads interleave read-modify-write steps on shared memory variables.
+
+\textbf{Second.} Semaphores and Mutexes enforce mutual exclusion by blocking threads, which can lead to deadlocks if the Coffman conditions are met.
+
+\textbf{Third.} Lock-ordering protocols prevent deadlocks by breaking the Circular Wait condition.
+
+\textbf{Fourth.} Lock-free structures use atomic hardware instructions (CAS) to optimize concurrency, requiring care to prevent ABA memory corruptions.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Concurrency parameters}
+* **Race Condition:** An execution anomaly where output is dependent on the sequence or timing of concurrent threads.
+* **Critical Section:** A code block that accesses shared mutable resources.
+* **Mutual Exclusion:** The requirement that only one thread can execute a critical section at any instant.
+* **Deadlock:** A state where threads are blocked waiting for resources held by each other.
+* **Compare-And-Swap (CAS):** An atomic CPU instruction used to implement lock-free synchronization.
+* **ABA Problem:** A synchronization bug where a memory location is read as $A$, changed to $B$, and changed back to $A$, fooling a CAS check.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Interleaving Execution Race Condition.}
+  
+        Draw an interleaving execution trace showing how two threads incrementing a shared `counter` (initially 0) can result in a final value of 1.
+        
+        \textbf{Solution:}
+        Let the steps for Thread 1 be $R_1$ (read), $M_1$ (modify), $W_1$ (write).
+        Let the steps for Thread 2 be $R_2$, $M_2$, $W_2$.
+        
+        Let us trace the execution sequence:
+        1. **Step 1: $R_1$ executes.**
+           Thread 1 reads `counter = 0` from memory. Register $R_{0,\text{Thread1}} = 0$.
+        2. **Step 2: $R_2$ executes.**
+           Thread 2 reads `counter = 0` from memory. Register $R_{0,\text{Thread2}} = 0$.
+        3. **Step 3: $M_1$ executes.**
+           Thread 1 increments its register: $R_{0,\text{Thread1}} = 1$.
+        4. **Step 4: $M_2$ executes.**
+           Thread 2 increments its register: $R_{0,\text{Thread2}} = 1$.
+        5. **Step 5: $W_1$ executes.**
+           Thread 1 writes $R_{0,\text{Thread1}} = 1$ to memory. `counter` becomes 1.
+        6. **Step 6: $W_2$ executes.**
+           Thread 2 writes $R_{0,\text{Thread2}} = 1$ to memory. `counter` becomes 1.
+        
+        The program ends. The final value of `counter` is 1, even though two increments were executed.
+        
+  \item \textbf{Lock Acquisition Deadlock Trace.}
+  
+        Prove that the lock acquisition sequence:
+        * Thread 1: Acquires $L_1$, then $L_2$.
+        * Thread 2: Acquires $L_2$, then $L_1$.
+        can result in a deadlock.
+        
+        \textbf{Solution:}
+        Let us trace an interleaving where a deadlock occurs:
+        1. **Step 1:** Thread 1 requests and successfully acquires Lock $L_1$.
+        2. **Step 2:** Thread 2 requests and successfully acquires Lock $L_2$.
+        3. **Step 3:** Thread 1 requests Lock $L_2$.
+           Since Thread 2 holds $L_2$, Thread 1 blocks and waits.
+        4. **Step 4:** Thread 2 requests Lock $L_1$.
+           Since Thread 1 holds $L_1$, Thread 2 blocks and waits.
+           
+        Both threads are now permanently blocked.
+        Let us verify the **Coffman Conditions**:
+        1. *Mutual Exclusion:* Locks $L_1$ and $L_2$ can only be held by one thread at a time. (True).
+        2. *Hold and Wait:* Thread 1 holds $L_1$ and waits for $L_2$; Thread 2 holds $L_2$ and waits for $L_1$. (True).
+        3. *No Preemption:* Thread 1 cannot force Thread 2 to release $L_2$. (True).
+        4. *Circular Wait:* Thread 1 waits for Thread 2, which waits for Thread 1. (True).
+        
+        Since all 4 conditions hold, the system is deadlocked.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Dekker's Algorithm for Mutual Exclusion.}
+  
+        Dekker's algorithm was the first software-only solution to the mutual exclusion problem for two threads:
+        \begin{verbatim}
+          // Thread 0
+          wants_to_enter[0] = true;
+          while (wants_to_enter[1]) {
+              if (turn == 1) {
+                  wants_to_enter[0] = false;
+                  while (turn == 1) { /* busy wait */ }
+                  wants_to_enter[0] = true;
+              }
+          }
+          // Critical Section
+          turn = 1;
+          wants_to_enter[0] = false;
+        \end{verbatim}
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain how the flag array `wants_to_enter` and the integer `turn` ensure that Thread 0 and Thread 1 can never execute their critical sections simultaneously.
+          \item Explain how the algorithm prevents **Deadlock** (mutual blocking) and **Starvation** (where one thread is blocked forever).
+        \end{enumerate}
+
+  \item \textbf{Dining Philosophers Deadlock Prevention.}
+  
+        Five philosophers sit around a table. Between each pair of philosophers is a single chopstick.
+        To eat, a philosopher must acquire both their left and right chopsticks.
+        \begin{enumerate}[label=(\alph*)]
+          \item If every philosopher picks up their left chopstick first, show how this satisfies all 4 Coffman conditions, resulting in a deadlock.
+          \item Propose a lock-ordering protocol that breaks the Circular Wait condition to prevent deadlock.
+                *(Draw the resource allocation graph for your solution).*
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Lock-Free Atomic Stack (Treiber Stack).}
+  
+        A Treiber stack is a thread-safe stack implemented without locks using Compare-And-Swap.
+        The `pop` operation is:
+        \begin{verbatim}
+          Node* pop() {
+              Node* old_head;
+              do {
+                  old_head = head;
+                  if (old_head == NULL) return NULL;
+              } while (!CAS(&head, old_head, old_head->next));
+              return old_head;
+          }
+        \end{verbatim}
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain how the loop protects stack updates if multiple threads attempt to pop concurrently.
+          \item We analyze the **ABA Problem** under concurrent execution:
+                * Initially, the stack contains nodes $A \to B \to C$ (head points to $A$).
+                * Thread 1 reads `old_head = A`, and reads `old_head->next = B`.
+                * Thread 1 is preempted before executing the CAS.
+                * Thread 2 pops $A$, pops $B$, and then pushes $A$ back. The stack now contains $A \to C$.
+                * Thread 1 resumes and executes `CAS(&head, A, B)`.
+                Explain why this CAS succeeds. Show that the head of the stack now points to $B$, which is deallocated, causing memory corruption.
+          \item How do modern lock-free systems prevent the ABA problem? (Explain the use of tagged pointers or hazard pointers).
+        \end{enumerate}
+
+  \item \textbf{Peterson's Algorithm Correctness Proof.}
+  
+        Peterson's algorithm is a mutual exclusion algorithm for two threads ($i \in \{0, 1\}$ where $j = 1 - i$):
+        \begin{verbatim}
+          flag[i] = true;
+          turn = j;
+          while (flag[j] && turn == j) { /* busy wait */ }
+          // Critical Section
+          flag[i] = false;
+        \end{verbatim}
+        
+        Prove the correctness of Peterson's algorithm:
+        \begin{enumerate}[label=(\alph*)]
+          \item Prove **Mutual Exclusion**: Show that both threads cannot be in their critical sections simultaneously.
+                *(Hint: Prove by contradiction. Assume both are in their critical sections. Analyze the values of flag[0] and flag[1], and show that the variable `turn` must equal both 0 and 1, which is a contradiction).*
+          \item Prove **Progress**: Show that if no thread is in the critical section and a thread wants to enter, it will not be blocked.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the cost of safety:** Mutual exclusion guarantees data consistency by forcing threads to wait, sacrificing parallel execution speed. Is there a fundamental physical limit on how fast concurrent cores can coordinate without sacrificing data safety?
+  \item **On the nature of lock-freedom:** Lock-free structures prevent threads from sleeping, using CAS loops instead. In highly congested systems, these loops consume CPU cycles in busy-waiting. When is a lock-free structure actually slower than a standard lock?
+  \item **On the limits of coordination:** We saw that software-only solutions (like Dekker's or Peterson's algorithms) are complex and rely on strict sequential ordering of memory writes. On modern out-of-order processors, why do these algorithms fail unless we insert hardware **Memory Barriers**?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6.2 introduces **Memory Models, Cache Coherence, and CPU Boundaries**. Having studied how threads coordinate logically, we will study the physical hardware boundary: memory barriers, store buffers, and cache coherence protocols (MESI) that govern multi-core memory systems.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 6, Module 6.1 --- Concurrency, Mutual Exclusion, and Locks}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 6.2 --- Memory Models, Cache Coherence, and CPU Boundaries}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

@@ -1,0 +1,235 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds, decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Page geometry fix ──────────────────────────────────────────────────────
+\setlength{\headheight}{24pt}
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true, linkcolor=midblue, urlcolor=accent, citecolor=teal,
+  pdftitle={Discovery Physics: Journey 2 — Motion and Its Causes},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep}, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold}, #1}
+
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white}, coltitle=white, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent}, drop shadow, #1}
+
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Reflection}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=gold!8, colframe=gold!70!brown,
+  fonttitle=\bfseries\color{deep}, title={Historical Note}, #1}
+
+% ─── Problem counter ────────────────────────────────────────────────────────
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi}
+
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+% ─── Theorem environments ───────────────────────────────────────────────────
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{1}
+\setcounter{section}{1}
+
+\section{Module 2.2 — The Geometry of Falling}
+\label{sec:falling_geometry}
+
+\epigraph{
+  \itshape Philosophy is written in this grand book---the universe---which stands continually open to our gaze. But the book cannot be understood unless one first learns to comprehend the language in which it is written. It is written in the language of mathematics.
+}{--- Galileo Galilei}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+A falling body covers distances $1, 3, 5, 7, \ldots$ in successive equal time intervals. What mathematical structure produces this pattern, and why?
+\end{tcolorbox}
+
+\subsection{Rediscovering Uniform Acceleration}
+
+In Journey 1, you saw Galileo's data: distances in successive time intervals follow the odd numbers 1, 3, 5, 7, 9, \ldots. Now you have the mathematical language to understand why.
+
+If an object starts from rest and accelerates uniformly with acceleration $g$, its velocity at time $t$ is:
+\begin{equation}
+  v(t) = g t
+\end{equation}
+Its position (starting from $x = 0$) is:
+\begin{equation}
+  x(t) = \frac{1}{2} g t^2
+\end{equation}
+
+\begin{explobox}
+\problem Using $x(t) = \frac{1}{2}gt^2$, compute the position at times $t = 0, 1, 2, 3, 4, 5$ (using $g = 10\,\text{m/s}^2$). Compute the displacement in each successive second. Verify that these are proportional to $1, 3, 5, 7, 9$.
+
+\problem Here is a beautiful algebraic proof. The displacement in the $n$th second (from $t = n-1$ to $t = n$) is:
+\begin{equation}
+  \Delta x_n = x(n) - x(n-1) = \frac{1}{2}gn^2 - \frac{1}{2}g(n-1)^2
+\end{equation}
+Expand this. What is the result? Does it agree with the pattern?
+
+\problem A stone is dropped from a bridge. It hits the water after 3.2 seconds.
+\begin{enumerate}[label=(\alph*)]
+  \item How high is the bridge?
+  \item What is the stone's speed just before impact?
+  \item If the stone is thrown downward instead with an initial speed of $5\,\text{m/s}$, how long before it hits?
+\end{enumerate}
+
+\problem Without air resistance, a feather and a cannonball dropped from the same height hit the ground simultaneously. With air resistance, the cannonball hits first. Explain why this does not contradict the universality of gravitational acceleration.
+\end{explobox}
+
+\subsection{The Equations of Motion}
+
+For an object with constant acceleration $a$, initial velocity $u$, after time $t$:
+
+\begin{equation}
+  v = u + at \tag{i}
+\end{equation}
+\begin{equation}
+  x = ut + \frac{1}{2}at^2 \tag{ii}
+\end{equation}
+\begin{equation}
+  v^2 = u^2 + 2ax \tag{iii}
+\end{equation}
+
+\begin{explobox}
+\problem \textit{Derive} equation (iii) from equations (i) and (ii), by eliminating $t$.
+
+\problem A car accelerates from rest at $\SI{3}{m/s^2}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is its speed after $\SI{5}{s}$?
+  \item How far has it travelled in $\SI{5}{s}$?
+  \item At what time does it reach $\SI{60}{km/h}$?
+\end{enumerate}
+
+\problem A ball is thrown upward at $\SI{20}{m/s}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the maximum height?
+  \item When does it return to the starting point?
+  \item What is the velocity when it returns? What does the sign mean?
+\end{enumerate}
+
+\problem \textit{Deep question.} Equation (iii) contains no $t$. What does this mean physically? Can you think of situations where knowing the speed as a function of position (rather than time) is more useful?
+\end{explobox}
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

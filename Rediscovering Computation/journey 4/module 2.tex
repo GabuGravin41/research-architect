@@ -1,0 +1,454 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{3}
+\chapter[Journey 4 --- Programming Paradigms and Language Semantics]
+        {Journey Four\\[8pt]
+         \textcolor{ModuleColor}{\large Programming Paradigms and Language Semantics}}
+\setcounter{section}{1}
+
+\section{Module 4.2 --- Imperative Logic and Operational Semantics}
+\label{sec:mod4.2}
+
+\subsection*{Motivation}
+
+We formalized in Module 4.1 the functional computation paradigm using Alonzo Church's Lambda Calculus, studying how substitutions drive execution.
+But functional programming is only one paradigm.
+In most software, computation is driven by the **imperative** model: a sequence of commands that mutate a shared memory state.
+
+To prove that a compiler optimizing this code is correct, or to mathematically verify that a program satisfies its safety specifications, we must formalize the imperative paradigm.
+This module introduces the mathematical tools of **Operational Semantics**.
+We will define the syntax of a simple imperative language, model memory states as mathematical mappings, and formulate inference rules to describe program execution in both Big-Step (Natural) and Small-Step (Structural) semantic formats.
+
+\subsection{The State Transition}
+
+We analyze how variable updates shift memory states.
+
+\begin{puzzlebox}
+\textbf{The Summation Loop.}
+
+Consider the following simple imperative loop that calculates the sum of numbers from 1 to $N$:
+\begin{verbatim}
+  sum := 0;
+  i := 1;
+  while (i <= N) do {
+      sum := sum + i;
+      i := i + 1;
+  }
+\end{verbatim}
+We want to verify mathematically that this program always terminates and computes $\text{sum} = \frac{N(N+1)}{2}$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item We define the memory **state** $\sigma$ as a mathematical function mapping variable names to integer values: $\sigma: \text{Var} \to \mathbb{Z}$.
+        If $N = 3$, write down the initial state $\sigma_0$ (where variables `sum` and `i` are undefined).
+  \item If we execute the assignment `sum := 0` in state $\sigma_0$, it yields a new state $\sigma_1$.
+        How does the function $\sigma_1$ differ from $\sigma_0$? (We write this update as $\sigma_1 = \sigma_0[\text{sum} \mapsto 0]$).
+  \item Trace the state $\sigma$ step-by-step through each iteration of the loop for $N = 3$. Show the values of `sum` and `i` at the end of each iteration.
+  \item We say two programs are **equivalent** if, starting in any initial state, they either both loop forever, or both terminate in the exact same final state.
+        Explain why the command `x := 5; y := x` is equivalent to `x := 5; y := 5`.
+        How do we prove this equivalence mathematically for *any* starting state?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Syntax and Big-Step Semantics}
+
+We define the syntax rules and natural evaluation transitions of the WHILE language.
+
+\begin{namedconcept}{The WHILE Language Syntax}
+We define the grammar of a minimalist imperative language:
+* **Arithmetic Expressions ($a$):**
+  \[
+    a \;::=\; n \;\mid\; x \;\mid\; a_1 + a_2 \;\mid\; a_1 - a_2 \;\mid\; a_1 \times a_2
+  \]
+* **Boolean Expressions ($b$):**
+  \[
+    b \;::=\; \text{true} \;\mid\; \text{false} \;\mid\; a_1 = a_2 \;\mid\; a_1 \le a_2 \;\mid\; \neg b_1 \;\mid\; b_1 \land b_2
+  \]
+* **Commands ($c$):**
+  \[
+    c \;::=\; \text{skip} \;\mid\; x := a \;\mid\; c_1 ; c_2 \;\mid\; \text{if } b \text{ then } c_1 \text{ else } c_2 \;\mid\; \text{while } b \text{ do } c
+  \]
+\end{namedconcept}
+
+\begin{explobox}
+In **Big-Step Semantics** (Natural Semantics), we write the evaluation relation as:
+* $\langle a, \sigma \rangle \Downarrow n$ (arithmetic expression $a$ in state $\sigma$ evaluates to integer $n$).
+* $\langle c, \sigma \rangle \Downarrow \sigma'$ (executing command $c$ in state $\sigma$ terminates in final state $\sigma'$).
+We define these relations using inference rules:
+\[
+  \textbf{[Assign]} \quad \frac{\langle a, \sigma \rangle \Downarrow n}{\langle x := a, \sigma \rangle \Downarrow \sigma[x \mapsto n]}
+\]
+\[
+  \textbf{[Seq]} \quad \frac{\langle c_1, \sigma \rangle \Downarrow \sigma'' \quad \langle c_2, \sigma'' \rangle \Downarrow \sigma'}{\langle c_1 ; c_2, \sigma \rangle \Downarrow \sigma'}
+\]
+\[
+  \textbf{[While-False]} \quad \frac{\langle b, \sigma \rangle \Downarrow \text{false}}{\langle \text{while } b \text{ do } c, \sigma \rangle \Downarrow \sigma}
+\]
+\[
+  \textbf{[While-True]} \quad \frac{\langle b, \sigma \rangle \Downarrow \text{true} \quad \langle c, \sigma \rangle \Downarrow \sigma'' \quad \langle \text{while } b \text{ do } c, \sigma'' \rangle \Downarrow \sigma'}{\langle \text{while } b \text{ do } c, \sigma \rangle \Downarrow \sigma'}
+\]
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Write down the inference rules for evaluating conditional commands ($\text{if } b \text{ then } c_1 \text{ else } c_2$) under big-step semantics.
+  \item Using the rules above, draw a derivation tree showing that executing `x := 3; x := x + 1` in an empty state $\sigma_0$ terminates in state $\{x \mapsto 4\}$.
+  \item Why does a non-terminating command (like `while true do skip`) have no big-step derivation tree?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Small-Step Semantics and Equivalence}
+
+We study the step-by-step reduction of commands and prove loop unrolling equivalence.
+
+\begin{explobox}
+**Small-Step Semantics** (Structural Operational Semantics) models execution as individual computation ticks:
+\[
+  \langle c, \sigma \rangle \;\to\; \langle c', \sigma' \rangle
+\]
+representing a single transition step to an intermediate configuration.
+This allows us to track programs that loop forever or crash.
+* **Program Equivalence:** Two commands $c_1$ and $c_2$ are equivalent ($c_1 \sim c_2$) if for all states $\sigma$ and $\sigma'$:
+  \[
+    \langle c_1, \sigma \rangle \Downarrow \sigma' \;\iff\; \langle c_2, \sigma \rangle \Downarrow \sigma'.
+  \]
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Prove that the command `c; skip` is equivalent to `c` for any command `c`.
+  \item Prove that the loop `while b do c` is equivalent to the unrolled command:
+        \[
+          \text{if } b \text{ then } (c ; \text{while } b \text{ do } c) \text{ else skip}.
+        \]
+        *(Hint: Show that any big-step derivation tree for one command can be transformed into a derivation tree for the other by matching the While-True and While-False rules).*
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The state $\sigma$ represents a mathematical mapping from variables to their current values, modeling computer memory.
+
+\textbf{Second.} Big-Step Operational Semantics defines Natural transitions, mapping commands directly to their final states.
+
+\textbf{Third.} Small-Step Semantics models structural execution ticks, tracking intermediate states and non-terminating paths.
+
+\textbf{Fourth.} Program equivalence is formalized as matching transition behaviors, enabling rigorous proofs of compiler optimizations (like loop unrolling).
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Operational parameters}
+* **Operational Semantics:** A method for defining the meaning of programming languages by specifying how they execute.
+* **Big-Step Semantics:** Semantics mapping expressions or commands directly to their final evaluated values or states.
+* **Small-Step Semantics:** Semantics describing the individual step-by-step transitions of execution.
+* **Derivation Tree:** A hierarchical tree of inference rules proving the evaluation of a term.
+* **State Update ($\sigma[x \mapsto n]$):** A state function identical to $\sigma$ except that variable $x$ maps to $n$.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Evaluating Expressions in Big-Step Semantics.}
+  
+        Evaluate the arithmetic expression $x + 5$ in state $\sigma = \{x \mapsto 3\}$ step-by-step using Big-Step rules.
+        
+        \textbf{Solution:}
+        The expression is $x + 5$.
+        Under big-step semantics, the rule for addition is:
+        \[
+          \textbf{[Add]} \quad \frac{\langle a_1, \sigma \rangle \Downarrow n_1 \quad \langle a_2, \sigma \rangle \Downarrow n_2}{\langle a_1 + a_2, \sigma \rangle \Downarrow n_1 + n_2}.
+        \]
+        We split the term into $a_1 = x$ and $a_2 = 5$.
+        1. **Evaluate left operand $a_1$:**
+           The rule for variables is:
+           \[
+             \textbf{[Var]} \quad \langle x, \sigma \rangle \Downarrow \sigma(x).
+           \]
+           Since $\sigma(x) = 3$, we have:
+           \[
+             \langle x, \sigma \rangle \Downarrow 3.
+           \]
+        2. **Evaluate right operand $a_2$:**
+           The rule for integers is:
+           \[
+             \textbf{[Int]} \quad \langle n, \sigma \rangle \Downarrow n.
+           \]
+           So:
+           \[
+             \langle 5, \sigma \rangle \Downarrow 5.
+           \]
+        3. **Sum the values:**
+           Using the **[Add]** rule, we combine the branches:
+           \[
+             \frac{\langle x, \sigma \rangle \Downarrow 3 \quad \langle 5, \sigma \rangle \Downarrow 5}{\langle x + 5, \sigma \rangle \Downarrow 8}.
+           \]
+        Thus, the expression evaluates to $8$.
+        
+  \item \textbf{Proving Command Equivalence.}
+  
+        Prove that the command $x := 5 ; y := x$ is equivalent to $x := 5 ; y := 5$ using Big-Step semantic rules.
+        
+        \textbf{Solution:}
+        Let $c_1 \equiv x := 5 ; y := x$ and $c_2 \equiv x := 5 ; y := 5$.
+        To prove $c_1 \sim c_2$, we must show that for any initial state $\sigma_0$ and final state $\sigma'$, $\langle c_1, \sigma_0 \rangle \Downarrow \sigma' \iff \langle c_2, \sigma_0 \rangle \Downarrow \sigma'$.
+        
+        **Case 1: Evaluate $c_1$.**
+        Applying the **[Seq]** rule to $x := 5 ; y := x$:
+        \[
+          \frac{\langle x := 5, \sigma_0 \rangle \Downarrow \sigma_1 \quad \langle y := x, \sigma_1 \rangle \Downarrow \sigma'}{\langle x := 5 ; y := x, \sigma_0 \rangle \Downarrow \sigma'}.
+        \]
+        * The first step evaluates $x := 5$:
+          \[
+            \langle x := 5, \sigma_0 \rangle \Downarrow \sigma_0[x \mapsto 5] \;=\; \sigma_1.
+          \]
+        * The second step evaluates $y := x$ in state $\sigma_1$:
+          First, evaluate the expression $x$ in $\sigma_1$: $\langle x, \sigma_1 \rangle \Downarrow \sigma_1(x) = 5$.
+          Applying the **[Assign]** rule:
+          \[
+            \langle y := x, \sigma_1 \rangle \Downarrow \sigma_1[y \mapsto 5] \;=\; \sigma_0[x \mapsto 5][y \mapsto 5] \;=\; \sigma'.
+          \]
+        So, $\sigma' = \sigma_0[x \mapsto 5, y \mapsto 5]$.
+        
+        **Case 2: Evaluate $c_2$.**
+        Applying the **[Seq]** rule to $x := 5 ; y := 5$:
+        \[
+          \frac{\langle x := 5, \sigma_0 \rangle \Downarrow \sigma_1 \quad \langle y := 5, \sigma_1 \rangle \Downarrow \sigma''}{\langle x := 5 ; y := 5, \sigma_0 \rangle \Downarrow \sigma''}.
+        \]
+        * The first step yields $\sigma_1 = \sigma_0[x \mapsto 5]$.
+        * The second step evaluates $y := 5$ in state $\sigma_1$:
+          First, evaluate the integer 5: $\langle 5, \sigma_1 \rangle \Downarrow 5$.
+          Applying the **[Assign]** rule:
+          \[
+            \langle y := 5, \sigma_1 \rangle \Downarrow \sigma_1[y \mapsto 5] \;=\; \sigma_0[x \mapsto 5][y \mapsto 5] \;=\; \sigma''.
+          \]
+        So, $\sigma'' = \sigma_0[x \mapsto 5, y \mapsto 5]$.
+        
+        Since $\sigma' = \sigma''$ for any initial state $\sigma_0$, the two commands are equivalent ($c_1 \sim c_2$).
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Big-Step Derivation Tree.}
+  
+        Let the initial state be $\sigma_0 = \{x \mapsto 3, y \mapsto 7\}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Draw the complete Big-Step operational semantics derivation tree for the command:
+                \[
+                  x := x + 1 ; y := x \times 2.
+                \]
+          \item Specify the final state $\sigma'$.
+          \item Show the evaluation of each sub-expression at each step of the derivation.
+        \end{enumerate}
+
+  \item \textbf{Nondeterminism in Imperative Languages.}
+  
+        Suppose we extend the WHILE language by adding a nondeterministic choice command:
+        \[
+          c_1 \text{ or } c_2
+        \]
+        which executes either $c_1$ or $c_2$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Write down the two Big-Step operational rules for this command:
+                \[
+                  \textbf{[Or-Left]} \quad \frac{?}{\langle c_1 \text{ or } c_2, \sigma \rangle \Downarrow \sigma'}
+                \]
+                \[
+                  \textbf{[Or-Right]} \quad \frac{?}{\langle c_1 \text{ or } c_2, \sigma \rangle \Downarrow \sigma'}
+                \]
+          \item If we execute `x := 1 or x := 2` in state $\sigma_0$, what is the set of possible final states $\sigma'$?
+          \item Explain why the presence of nondeterminism makes the transition relation $\Downarrow$ non-functional.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Equivalence of Big-Step and Small-Step Semantics.}
+  
+        Let $\to^*$ be the reflexive transitive closure of the small-step transition relation $\to$, where $\langle c, \sigma \rangle \to^* \sigma'$ means the command reduces to a terminal configuration of state $\sigma'$.
+        We prove that big-step and small-step semantics are equivalent:
+        \[
+          \langle c, \sigma \rangle \Downarrow \sigma' \;\iff\; \langle c, \sigma \rangle \to^* \sigma'.
+        \]
+        \begin{enumerate}[label=(\alph*)]
+          \item Prove the forward direction ($\Downarrow \implies \to^*$) using induction on the height of the big-step derivation tree.
+                Specifically, show the induction step for the sequence command $c_1 ; c_2$: if $\langle c_1, \sigma \rangle \to^* \sigma''$ and $\langle c_2, \sigma'' \rangle \to^* \sigma'$, then $\langle c_1 ; c_2, \sigma \rangle \to^* \sigma'$.
+          \item In small-step semantics, non-termination is represented by an infinite chain of transitions: $\langle c, \sigma \rangle \to \langle c_1, \sigma_1 \rangle \to \langle c_2, \sigma_2 \rangle \to \dots$.
+                Define the command $c_{\text{loop}} \equiv \text{while true do skip}$.
+                Show the first three steps of the small-step transition chain for $\langle c_{\text{loop}}, \sigma \rangle$.
+          \item Why is small-step semantics preferred over big-step semantics for proving progress properties (such as "a program never crashes or gets stuck") in languages containing concurrency?
+        \end{enumerate}
+
+  \item \textbf{Axiomatic Semantics and Hoare Logic correctness.}
+  
+        Operational semantics describes *how* programs execute. **Hoare Logic** is an axiomatic semantics used to prove program correctness using triples $\{P\} \, c \, \{Q\}$, where $P$ is the precondition, $c$ is the command, and $Q$ is the postcondition.
+        * The assignment rule is: $\{P[x \mapsto a]\} \, x := a \, \{P\}$.
+        * The loop rule is:
+          \[
+            \frac{\{I \land b\} \, c \, \{I\}}{\{I\} \, \text{while } b \text{ do } c \, \{I \land \neg b\}},
+          \]
+          where $I$ is the **loop invariant** (a assertion that remains true before and after each loop iteration).
+          
+        \begin{enumerate}[label=(\alph*)]
+          \item For the summation loop:
+                \[
+                  \text{while } (i \le N) \text{ do } (\text{sum} := \text{sum} + i ; i := i + 1)
+                \]
+                Show that $I \equiv \left( \text{sum} = \frac{(i-1)i}{2} \land i \le N + 1 \right)$ is a valid loop invariant.
+          \item Prove the correctness of the loop body:
+                \[
+                  \{I \land i \le N\} \quad \text{sum} := \text{sum} + i ; i := i + 1 \quad \{I\}
+                \]
+                using the assignment and sequence rules of Hoare Logic.
+          \item Combine your results to prove the overall triple:
+                \[
+                  \{N \ge 0\} \quad \text{sum} := 0 ; i := 1 ; \text{while } (i \le N) \text{ do } \dots \quad \left\{ \text{sum} = \frac{N(N+1)}{2} \right\}.
+                \]
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Nature of State:** We modeled memory state $\sigma$ as a static mathematical function. In physical computers, state is stored as charges in capacitors (DRAM) or magnetic alignments. How does the abstraction of a mathematical function hide the physical cost (energy, latency, entropy) of reading and writing memory?
+  \item **On Big-Step vs. Small-Step:** Big-Step semantics maps inputs directly to outputs, hiding the details of execution. Small-Step exposes every intermediate step. Does this match the distinction between a "black-box" function and a physical process? When is it safe to treat a program as a black-box?
+  \item **On the Limits of Verification:** Using Hoare Logic, we can prove that a loop computes $\frac{N(N+1)}{2}$ correctly. If we can prove code correctness mathematically, why does software still contain bugs? (Think about the gap between the formal WHILE language semantics and the actual behavior of compilers, operating systems, and physical hardware).
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~4.3 introduces **Type Theory and Typed Lambda Calculus**. Having formalized how programs execute, we will study how to prevent errors *before* execution. We will study types, prove type safety (Progress and Preservation), and explore the Curry-Howard Isomorphism that bridges types to mathematical logic.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 4, Module 4.2 --- Imperative Logic and Operational Semantics}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 4.3 --- Type Theory and Typed Lambda Calculus}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

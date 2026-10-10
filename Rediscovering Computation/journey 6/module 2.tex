@@ -1,0 +1,394 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={History Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{5}
+\chapter[Journey 6 --- Distributed Systems and Concurrency]
+        {Journey Six\\[8pt]
+         \textcolor{ModuleColor}{\large Distributed Systems and Concurrency}}
+\setcounter{section}{1}
+
+\section{Module 6.2 --- Memory Models, Cache Coherence, and CPU Boundaries}
+\label{sec:mod6.2}
+
+\subsection*{Motivation}
+
+We completed in Module 6.1 the logical coordination of threads, studying semaphores, deadlocks, and lock-free Treiber stacks.
+But logical correctness is only half the battle.
+In physical computers, CPU cores do not write directly to a single shared RAM memory.
+Instead, writes pass through a complex hierarchy of local caches and hardware buffers.
+
+To optimize speed, modern CPU cores reorder memory access operations.
+This reordering breaks the assumptions of sequential program flow, introducing hardware-level race conditions.
+This module explores **Memory Models** and **Cache Coherence Protocols**.
+We will study the **MESI** protocol, analyze how store buffers and invalidation queues cause memory reordering, and learn why compilers must insert hardware **Memory Barriers (Fences)** to guarantee thread safety.
+
+\subsection{The Memory Reordering}
+
+We investigate why out-of-order execution occurs at the hardware boundary.
+
+\begin{puzzlebox}
+\textbf{The Vanishing Write.}
+
+Suppose we have two shared memory variables, $x = 0$ and $y = 0$.
+Two threads run concurrently on two different CPU cores:
+\begin{verbatim}
+  // Thread 1                  // Thread 2
+  x := 1;                      y := 1;
+  r1 := y;                     r2 := x;
+\end{verbatim}
+Here, $r_1$ and $r_2$ are local registers.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item If these instructions execute sequentially (in any interleaved order), is it possible for both $r_1$ and $r_2$ to end up equal to 0? List all possible final values for $(r_1, r_2)$ under standard sequential consistency.
+  \item If we run this code on an Intel x86 or ARM CPU, we can observe that both $r_1$ and $r_2$ end up equal to 0 in some executions.
+        Explain how this is possible. (How does a write value get delayed in a local CPU **Store Buffer** before reaching the shared cache?)
+  \item To prevent this reordering, we must insert a **Memory Barrier** (or Fence instruction):
+        ```
+          x := 1;
+          FENCE;
+          r1 := y;
+        ```
+        Explain how a Fence instruction forces the CPU to flush its store buffer before executing the read, restoring sequential consistency.
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Cache Coherence: The MESI Protocol}
+
+We study how CPU caches maintain a single, consistent state of memory.
+
+\begin{namedconcept}{The MESI Protocol States}
+Every cache line (typically 64 bytes) in a local L1/L2 cache is tagged with one of four states:
+1. **Modified (M):** The line is present only in the current cache, and is dirty (differs from main memory).
+2. **Exclusive (E):** The line is present only in the current cache, and is clean (matches main memory).
+3. **Shared (S):** The line is present in multiple caches, and is clean.
+4. **Invalid (I):** The line contains invalid data.
+\end{namedconcept}
+
+\begin{explobox}
+Cores communicate via a shared bus. When Core 1 wants to write to a cache line held in state $S$, it must broadcast an **Invalidate** message and wait for all other cores to transition their copies to state $I$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Draw the state transitions of a cache line in Core 1's cache when:
+        * Core 1 reads from an address (initially in state $I$).
+        * Core 1 writes to that address.
+  \item Waiting for invalidation acknowledgments takes hundreds of clock cycles.
+        To avoid stalling, the CPU core writes to a **Store Buffer** and immediately continues executing.
+        Why does this optimization break the assumption of a single global order of reads and writes?
+  \item What are **Invalidation Queues**, and how do they cause a core to read stale data from its cache?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Weak Memory Models and False Sharing}
+
+We analyze relaxed CPU architectures and cache performance bottlenecks.
+
+\begin{explobox}
+Different CPU architectures implement different **Memory Models**:
+* **Total Store Order (TSO):** Implemented by Intel x86. Reads can be reordered ahead of older writes to different addresses (Store-Load reordering), but writes are not reordered with other writes.
+* **Relaxed Memory Model:** Implemented by ARM. Almost all operations can be reordered (Load-Load, Load-Store, Store-Store, Store-Load) unless explicit fences are used.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Consider the message passing pattern:
+        \begin{verbatim}
+          // Thread 1 (Producer)       // Thread 2 (Consumer)
+          data := 42;                  while (ready == 0) { /* wait */ }
+          ready := 1;                  r1 := data;
+        \end{verbatim}
+        If run on an ARM CPU, explain why Thread 2 can read $r_1 = 0$ (uninitialized) even after the loop exits.
+  \item Where must write barriers (`dmb st`) and read barriers (`dmb ld`) be inserted in this message passing code to guarantee correctness?
+  \item **False Sharing:** If Thread 1 repeatedly writes to variable $A$, and Thread 2 repeatedly writes to variable $B$, and both variables reside on the *same* 64-byte cache line:
+        Explain how the MESI protocol causes this cache line to constantly bounce between the two caches in state $M$. How does this impact multi-core performance?
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Modern multi-core CPUs use cache coherence protocols (MESI) to coordinate local cache line transitions.
+
+\textbf{Second.} Hardware optimizations like store buffers and invalidation queues cause CPU memory access operations to execute out-of-order.
+
+\textbf{Third.} Out-of-order memory reorderings break Sequential Consistency, allowing relaxed reads to bypass delayed writes.
+
+\textbf{Fourth.} Compilers must insert hardware Memory Barriers (Fences) to flush store buffers and invalidation queues, preserving logical execution orders.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Hardware parameters}
+* **Cache Coherence:** The synchronization of shared memory data across multiple local CPU caches.
+* **MESI Protocol:** A cache coherence protocol defining Modified, Exclusive, Shared, and Invalid states.
+* **Sequential Consistency:** An execution model where all memory operations appear to execute in a single global sequential order.
+* **Store Buffer:** A local CPU queue that caches memory writes to bypass invalidation latency.
+* **Memory Barrier (Fence):** A CPU instruction that restricts memory reorderings across its boundary.
+* **False Sharing:** A cache line performance degradation occurring when different cores write to independent variables located on the same cache line.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{MESI Cache State Transitions.}
+  
+        Trace the MESI cache line state transitions for a shared memory address $X$ in the caches of Core 1 and Core 2 under the following sequence of events:
+        1. Core 1 reads $X$ (initially not present in any cache).
+        2. Core 2 reads $X$.
+        3. Core 1 writes to $X$.
+        4. Core 2 reads $X$.
+        
+        \textbf{Solution:}
+        * **Event 1: Core 1 reads $X$.**
+          The cache line containing $X$ is loaded from main memory. Since no other cache holds $X$, the line is placed in the **Exclusive (E)** state in Core 1's cache.
+          * Core 1: **E**, Core 2: **I** (Invalid/not present).
+          
+        * **Event 2: Core 2 reads $X$.**
+          Core 2 broadcasts a read request on the bus. Core 1 intercepts this, detects that it holds the clean line in state $E$, and shares the data. The line transitions to the **Shared (S)** state in both caches.
+          * Core 1: **S**, Core 2: **S**.
+          
+        * **Event 3: Core 1 writes to $X$.**
+          Since the line is in state $S$, Core 1 must acquire write permission. It broadcasts an *Invalidate* message on the bus. Core 2 receives this and marks its cache line as **Invalid (I)**. Core 1 updates the line locally, transitioning it to the **Modified (M)** state.
+          * Core 1: **M**, Core 2: **I**.
+          
+        * **Event 4: Core 2 reads $X$.**
+          Core 2 broadcasts a read request. Core 1 intercepts this, halts the read, writes its dirty Modified line back to main memory, and transitions its line to **Shared (S)**. Core 2 loads the updated line, placing it in the **Shared (S)** state.
+          * Core 1: **S**, Core 2: **S**.
+          
+  \item \textbf{The Need for Memory Barriers in Peterson's Lock.}
+  
+        Recall Peterson's mutual exclusion algorithm step:
+        ```
+          flag[i] = true;
+          turn = j;
+          while (flag[j] && turn == j) { /* wait */ }
+        ```
+        Explain why this algorithm fails on an Intel x86 processor unless a memory barrier is inserted between the assignment `flag[i] = true` and the read of `flag[j]`.
+        
+        \textbf{Solution:}
+        * Intel x86 implements the Total Store Order (TSO) memory model.
+        * Under TSO, reads can be reordered ahead of older writes to *different* memory addresses (Store-Load reordering).
+        * Let us analyze the execution:
+          1. Thread 0 executes `flag[0] = true`. This write is placed in Thread 0's local Store Buffer.
+          2. Thread 1 executes `flag[1] = true`. This write is placed in Thread 1's local Store Buffer.
+          3. Under TSO, the read of `flag[1]` in Thread 0's loop can bypass the write to `flag[0]` (since they are different variables).
+          4. Thread 0 reads `flag[1] = false` (as the write from Thread 1 has not cleared Thread 1's store buffer yet).
+          5. Thread 1 reads `flag[0] = false` (as the write from Thread 0 has not cleared Thread 0's store buffer yet).
+          6. Both threads exit the loop and enter the Critical Section simultaneously, violating Mutual Exclusion.
+        * **Restoring safety:** By inserting a full memory barrier (`MFENCE` on x86) after the assignments, the CPU is forced to empty its store buffer before executing the read of `flag[j]`, preventing the reordering and restoring safety.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{MESI State Transition Table.}
+  
+        Complete the state transition table for a cache line containing address $Y$, initially in state **Exclusive (E)** in Core 1's cache:
+        \begin{center}
+        \begin{tabular}{lccc}
+          \toprule
+          \textbf{Event} & \textbf{Core 1 State} & \textbf{Core 2 State} & \textbf{Bus Transaction} \\
+          \midrule
+          Initial & E & I & None \\
+          (a) Core 2 reads $Y$ & ? & ? & ? \\
+          (b) Core 1 writes to $Y$ & ? & ? & ? \\
+          (c) Core 2 writes to $Y$ & ? & ? & ? \\
+          \bottomrule
+        \end{tabular}
+        \end{center}
+        Specify the cache state ($M, E, S, I$) and bus actions (e.g. Invalidate, Read) for each step.
+
+  \item \textbf{Weak Memory Message Passing.}
+  
+        Consider the message passing pattern executed on a relaxed memory CPU (like ARM):
+        \begin{verbatim}
+          // Thread 1 (Producer)       // Thread 2 (Consumer)
+          data := 42;                  while (ready == 0) { /* wait */ }
+          ready := 1;                  r1 := data;
+        \end{verbatim}
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain how Thread 2 can read $r_1 = 0$ instead of 42. Specify the Load-Load and Store-Store reorderings that cause this failure.
+          \item Rewrite the code, inserting explicit memory barriers (e.g. `dmb st` for Store-Store barrier, `dmb ld` for Load-Load barrier) to guarantee that $r_1$ is always 42.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Dekker's Algorithm Failure under Total Store Order.}
+  
+        Recall Dekker's flag checking sequence:
+        \begin{verbatim}
+          wants_to_enter[0] = true;
+          while (wants_to_enter[1]) { /* busy wait loop */ }
+        \end{verbatim}
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Prove that under a Total Store Order (TSO) memory model, the read of `wants_to_enter[1]` can be reordered ahead of the write to `wants_to_enter[0]`.
+          \item Trace an interleaving showing how this reordering violates the mutual exclusion guarantee of Dekker's algorithm.
+          \item Show where the memory barrier must be placed, and explain how the barrier prevents the Store-Load reordering.
+        \end{enumerate}
+
+  \item \textbf{False Sharing Dynamics in Multi-Core Systems.}
+  
+        Multi-core cache systems load memory in fixed-size blocks called **Cache Lines** (typically 64 bytes).
+        Consider a struct containing two variables:
+        \begin{verbatim}
+          struct SharedData {
+              int A; // Modified by Thread 1 on Core 1
+              int B; // Modified by Thread 2 on Core 2
+          } data;
+        \end{verbatim}
+        Assume `data` is aligned to a cache line boundary, meaning both `A` and `B` reside on the same 64-byte cache line.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Trace the state transitions of the cache line containing `data` in the caches of Core 1 and Core 2 as Thread 1 repeatedly writes to `A` and Thread 2 repeatedly writes to `B` concurrently.
+                *(Use the MESI protocol to show how the line bounces between M and I states).*
+          \item Explain why this "cache line bouncing" degrades performance even though the two threads are modifying completely independent variables in code.
+          \item Propose two software strategies to eliminate false sharing in high-performance concurrent applications (e.g., using compiler attributes like `alignas(64)` or padding variables).
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Illusion of Order:** We write programs assuming sequential consistency (actions happen in program order). Modern CPUs break this illusion to optimize throughput. Is it possible to design high-performance processors that guarantee sequential consistency, or is relaxed ordering a fundamental physical requirement of scale?
+  \item **On the Complexity of Hardware:** Memory fences must be manually inserted by compiler writers or programmers to prevent out-of-order errors. Does this reveal a failure in language design, or is it a necessary consequence of exposing hardware performance directly to software?
+  \item **On the Cost of Coordination:** The MESI protocol maintains cache consistency by exchanging invalidation signals. As the number of CPU cores scales to 128 or 256, how does the overhead of these bus messages limit the scalability of shared-memory architectures?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6.3 introduces **Distributed Systems, Consensus, and Paxos**. Having studied how CPU cores coordinate memory locally, we will scale out to network boundaries: distributed nodes, Paxos/Raft consensus protocols, and the fundamental limits of the CAP Theorem.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 6, Module 6.2 --- Memory Models, Cache Coherence, and CPU Boundaries}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 6.3 --- Distributed Systems, Consensus, and Paxos}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

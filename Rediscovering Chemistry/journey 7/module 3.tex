@@ -1,0 +1,374 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Journey 7 — forest green / amber) ────────────────────────────────
+\definecolor{JourneyColor}{HTML}{065F46}
+\definecolor{ModuleColor}{HTML}{059669}
+\definecolor{PuzzleColor}{HTML}{B45309}
+\definecolor{DiscoveryColor}{HTML}{D97706}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{6}
+\chapter[Journey 7 --- Organic Chemistry: The World It Builds]
+        {Journey Seven\\[8pt]
+         \textcolor{ModuleColor}{\large Organic Chemistry: The World It Builds}}
+\setcounter{section}{2}
+
+\section{Module 7.3 --- Proteins and Molecular Machines}
+\label{sec:mod7.3}
+
+\subsection*{Motivation}
+
+We explored in Module 7.2 how weak base-pairing hydrogen bonds and aromatic stacks pack the information of DNA.
+But DNA is only a blueprint. To keep the cell alive, that information must be translated into action.
+
+The engines of this action are proteins.
+Proteins fold into highly complex 3D shapes to catalyze reactions, transport cargo, and build structures.
+Some proteins function as literal, rotating molecular machines.
+Inside mitochondria, a massive enzyme complex called **ATP Synthase** acts as a rotary generator.
+Driven by a flow of hydrogen ions (protons), a molecular shaft spins inside the enzyme at up to \SI{100}{Hz}, mechanically squeezing reactants together to synthesize ATP—the universal energy currency of life.
+This module explores how peptide bonds form the structural rails of proteins, how thermodynamic forces drive folding, and how chemical gradients are converted into mechanical rotation to power living cells.
+
+\subsection{The Rotary Motor of ATP Synthase}
+
+We investigate the mechanical engine that synthesizes the energy of life.
+
+\begin{puzzlebox}
+\textbf{The $F_0 F_1$ Generator.}
+
+The synthesis of adenosine triphosphate (ATP) from adenosine diphosphate (ADP) and inorganic phosphate ($\ce{P_i}$):
+\[
+  \ce{ADP + P_i -> ATP + H2O}
+\]
+is highly thermodynamically unfavorable, requiring a standard free energy input of $\Delta G^\circ \approx \SI{30.5}{kJ/mol}$.
+To drive this reaction, cell mitochondria maintain a proton concentration gradient across their inner membrane.
+Protons flowing back through the membrane-bound portion ($F_0$) of ATP Synthase force a central protein shaft ($\gamma$) to rotate. As the asymmetric shaft spins, it deforms the catalytic portion ($F_1$), synthesizing ATP.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item The $F_0$ rotor contains a ring of subunits with negatively charged aspartate residues. Protons enter a half-channel on one side, protonate (neutralize) the aspartate, allowing it to enter the hydrophobic membrane. On the other side, the proton is released.
+        Why would a charged (unprotonated) aspartate be unable to enter the membrane? How does this charge-neutralization drive unidirectional rotation?
+  \item The $F_1$ head consists of three catalytic $\beta$-subunits that cycle through three conformations as the shaft rotates:
+        * **Open (O):** Binds ADP and $\ce{P_i}$ weakly.
+        * **Loose (L):** Holds ADP and $\ce{P_i}$ in close proximity.
+        * **Tight (T):** Squeezes them together mechanically to form ATP.
+        Explain how mechanical rotation changes the binding constant ($K_d$) of the active sites, allowing the enzyme to synthesis ATP without adding heat.
+  \item If one full rotation of the shaft synthesizes 3 ATP molecules, how much mechanical work (in kJ/mol) must the shaft perform per rotation?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{The Peptide Bond: Planar and Rigid}
+
+We study the covalent link that builds the polypeptide chain.
+
+\begin{explobox}
+Proteins are polymers of amino acids linked by **peptide bonds** ($\ce{-CO-NH-}$), formed via condensation.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Using the resonance concepts from Journey 6 Module 3, draw the two major resonance structures for the peptide bond:
+        1. The neutral structure: $\ce{-C(=O)-N(H)-}$.
+        2. The zwitterionic structure: $\ce{-C(O^-)=N^+(H)-}$.
+  \item Explain why the zwitterionic contributor gives the carbon-nitrogen bond partial double-bond character.
+        How does this partial double bond affect the geometry and rotational freedom of the peptide backbone? (Why must the six atoms of the peptide group lie in a flat plane?)
+  \item Since the peptide bond itself is rigid, the folding of a protein depends on rotation around the single bonds adjacent to the $\alpha$-carbon: the $\phi$ (phi) bond ($\ce{N-C_\alpha}$) and the $\psi$ (psi) bond ($\ce{C_\alpha-C}$).
+        Explain why steric clash between amino acid side chains limits the allowed values of these rotation angles, restricting protein structures to specific regions (the Ramachandran plot).
+\end{enumerate}
+\end{explobox}
+
+\subsection{Thermodynamics of Protein Folding}
+
+We explore the forces that drive a disordered polypeptide chain into a single, functional 3D shape.
+
+\begin{explobox}
+The folding of a protein is a spontaneous transition: $\Delta G_{\text{folding}} < 0$.
+But folding transition forces a highly disordered, random coil into a single, highly structured conformation.
+This represents a massive decrease in the protein's conformational entropy: $\Delta S_{\text{protein}} \ll 0$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item For the overall folding free energy to be negative ($\Delta G = \Delta H - T\Delta S < 0$), what thermodynamic contributions must compensate for this massive entropy loss?
+  \item **The Hydrophobic Collapse:** Hydrophobic amino acid side chains (like leucine, phenylalanine) are grouped inside the core of the folded protein.
+        In the unfolded state, water molecules must form highly ordered, cage-like structures (clathrates) around these hydrophobic groups to maintain hydrogen bonds.
+        Explain how grouping these hydrophobic groups together inside the folded protein releases these water cages, increasing the entropy of the water ($\Delta S_{\text{water}} \gg 0$).
+        Show why the hydrophobic effect is primarily an *entropy-driven* stabilization.
+  \item Identify the electrostatic interactions (salt bridges, hydrogen bonds, and disulfide covalent cross-links) that stabilize the folded tertiary structure, contributing to the enthalpy change $\Delta H_{\text{folding}} < 0$.
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The peptide bond is a resonance hybrid with partial double-bond character, making it rigid and planar, restricting backbone rotation.
+
+\textbf{Second.} Protein folding is driven by the hydrophobic collapse (hydrophobic side chains clustering in the core), which releases ordered water cages to increase solvent entropy ($\Delta S_{\text{water}} \gg 0$), overcoming the loss of protein conformational entropy.
+
+\textbf{Third.} ATP Synthase operates as a rotary engine: a proton gradient across the membrane drives $F_0$ rotation via aspartate charge-neutralization.
+
+\textbf{Fourth.} The rotation of the asymmetric shaft deforms the catalytic $F_1$ subunits, cycling them through Open, Loose, and Tight states to synthesize ATP from ADP and phosphate.
+\\
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Protein biophysical parameters}
+* **Peptide Bond:** The planar, rigid amide linkage that polymerizes amino acids.
+* **Secondary Structure:** Local folding patterns stabilized by backbone hydrogen bonds ($\alpha$-helix and $\beta$-sheet).
+* **Tertiary Structure:** The overall 3D shape of a single polypeptide, driven by the hydrophobic collapse and stabilized by side-chain interactions.
+* **Proton-Motive Force (PMF):** The electrochemical potential energy of the proton gradient across a membrane, composed of chemical ($\Delta\text{pH}$) and electrical ($\Delta\psi$) terms.
+* **Levinthal's Paradox:** The mathematical observation that a folding protein cannot find its active conformation by random search, as the configuration space is too large. Instead, folding must follow a directed funnel path.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Thermodynamic Work of ATP Synthesis.}
+  
+        The synthesis of ATP under typical cellular conditions requires a free energy input of $\Delta G \approx \SI{50.0}{kJ/mol}$ (accounting for concentration effects, which deviate from the standard $\Delta G^\circ = \SI{30.5}{kJ/mol}$).
+        If the rotor of ATP Synthase requires exactly 10 protons to complete one full rotation, and one rotation synthesizes 3 ATP molecules, calculate the minimum energy that must be released per mole of protons flowing through the motor to make synthesis thermodynamically spontaneous.
+        
+        \textbf{Solution:}
+        First, calculate the total free energy required to synthesize 3 moles of ATP (the yield of one full rotation):
+        \[
+          \Delta G_{\text{required}} \;= \; 3 \text{ moles ATP} \times \SI{50.0}{kJ/mol} \;=\; \SI{150.0}{kJ}.
+        \]
+        This chemical synthesis is driven by the flow of 10 protons down their gradient.
+        For the overall process to be spontaneous, the free energy released by the proton flow ($\Delta G_{\text{protons}} < 0$) must be greater than or equal in magnitude to the energy required:
+        \[
+          |\Delta G_{\text{protons}}| \;\ge\; \Delta G_{\text{required}} \implies |\Delta G_{\text{protons}}| \;\ge\; \SI{150.0}{kJ}.
+        \]
+        This energy is released by the translocation of 10 moles of protons.
+        Thus, the minimum energy released per mole of protons is:
+        \[
+          \Delta G_{\text{min, per proton}} \;=\; \frac{\Delta G_{\text{required}}}{10 \text{ moles protons}} \;=\; \frac{150.0 \text{ kJ}}{10} \;=\; \SI{15.0}{kJ/mol}.
+        \]
+        Thus, each mole of protons must release at least \SI{15.0}{kJ/mol} of free energy to drive ATP synthesis.
+        
+  \item \textbf{Secondary Structure Hydrogen Bond Counts.}
+  
+        In an ideal $\alpha$-helix, the carbonyl oxygen ($\ce{C=O}$) of amino acid residue $i$ forms a hydrogen bond with the amide hydrogen ($\ce{N-H}$) of residue $i+4$.
+        Calculate the total number of stabilizing backbone hydrogen bonds in a single isolated $\alpha$-helix composed of 36 amino acid residues.
+        
+        \textbf{Solution:}
+        In a polypeptide chain of $N$ amino acid residues:
+        * Residue 1 binds to Residue $1+4 = 5$.
+        * Residue 2 binds to Residue $2+4 = 6$.
+        * In general, Residue $i$ binds to Residue $i+4$.
+        
+        The highest-numbered residue that can act as a hydrogen-bond donor (at its $\ce{C=O}$ group) is:
+        \[
+          i_{\text{max}} + 4 \;=\; N \implies i_{\text{max}} \;=\; N - 4.
+        \]
+        For $N = 36$:
+        \[
+          i_{\text{max}} \;=\; 36 - 4 \;=\; 32.
+        \]
+        Thus, residues $1$ through $32$ can form hydrogen bonds.
+        Each of these residues forms exactly one backbone hydrogen bond pointing along the helix axis.
+        Therefore, the total number of stabilizing hydrogen bonds is:
+        \[
+          \text{Number of hydrogen bonds} \;=\; 32.
+        \]
+        In general, a peptide of $N$ residues in an $\alpha$-helix is stabilized by $N-4$ hydrogen bonds.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Backbone Geometries of the $\alpha$-Helix.}
+  
+        An $\alpha$-helix has a pitch (the vertical distance per turn of the helix) of $p = \SI{5.4}{\text{\AA}}$ ($5.4 \times 10^{-10}$ m) and contains exactly 3.6 amino acid residues per turn.
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the vertical rise per amino acid residue along the helix axis.
+          \item Explain why the side chains (R groups) of the amino acids point outward from the helix cylinder rather than inward. (Consider steric strain and available space).
+          \item A membrane-bound protein crosses a cell lipid membrane of thickness \SI{30}{\text{\AA}} as a single $\alpha$-helix. Estimate the minimum number of amino acid residues required to span the membrane.
+        \end{enumerate}
+
+  \item \textbf{Aspartate Neutralization in the $F_0$ Motor.}
+  
+        The membrane-bound $c$-ring rotor of ATP Synthase contains an essential aspartic acid residue (Asp-61) on each subunit.
+        At physiological pH in the cytoplasm, the side chain of free aspartic acid is deprotonated, carrying a negative carboxylate charge ($-\ce{COO-}$).
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain why this charged state makes it thermodynamically impossible for the subunit to rotate into the hydrophobic core of the lipid membrane.
+          \item The entry half-channel is exposed to the high-proton-concentration (low pH) intermembrane space.
+                Explain how protonation converts the aspartate to its neutral carboxylic acid form ($-\ce{COOH}$), enabling it to rotate into the hydrophobic membrane.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{The Proton-Motive Force.}
+  
+        The electrochemical potential difference of protons across the mitochondrial membrane is called the **Proton-Motive Force (PMF)**:
+        \[
+          \text{PMF} \;=\; \Delta\psi - \frac{2.303 R T}{F} \Delta\text{pH},
+        \]
+        where $\Delta\psi = \psi_{\text{in}} - \psi_{\text{out}}$ is the membrane potential (in volts), $F = 96485$ C/mol is Faraday's constant, and $\Delta\text{pH} = \text{pH}_{\text{in}} - \text{pH}_{\text{out}}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item A typical mitochondrion at $T = \SI{310}{K}$ (body temperature) has a membrane potential $\Delta\psi = -\SI{0.14}{V}$ and a pH gradient $\Delta\text{pH} = 1.4$ ($\text{pH}_{\text{in}} = 7.8$, $\text{pH}_{\text{out}} = 6.4$).
+                Calculate the value of the PMF in volts. (Note: $2.303 RT/F \approx \SI{0.0615}{V}$ at \SI{310}{K}).
+          \item The free energy released when one mole of protons flows down this gradient is:
+                \[
+                  \Delta G \;=\; F \cdot \text{PMF}.
+                \]
+                Calculate the value of $\Delta G$ in kJ/mol.
+          \item If the synthesis of 3 ATP requires $\SI{150}{kJ}$ of free energy, and the motor requires 10 protons per rotation, calculate the thermodynamic efficiency $\eta$ of the ATP Synthase motor under these cell conditions:
+                \[
+                  \eta \;=\; \frac{\Delta G_{\text{ATP synthesized}}}{10 \cdot |\Delta G_{\text{proton flow}}|} \times 100\%.
+                \]
+        \end{enumerate}
+
+  \item \textbf{Levinthal's Paradox and Free-Energy Funnels.}
+  
+        Consider a small protein of 100 amino acids.
+        If we assume each amino acid residue can occupy only three distinct conformational states ($\phi, \psi$ combinations):
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the total number of possible 3D conformations for this polypeptide chain.
+          \item Suppose the protein can sample conformations at a physical molecular vibration frequency of $1.0 \times 10^{12}$ states per second (one state per picosecond).
+                Calculate the time (in seconds) required for the protein to search all possible states to find its active conformation. Compare this to the age of the universe ($\sim 4.3 \times 10^{17}$ s).
+          \item Explain how proteins resolve this paradox (Levinthal's Paradox) by folding along a directed energy landscape (a folding funnel) where local interactions stabilize intermediates, guiding the search toward the global free energy minimum.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Molecular motors:** ATP Synthase operates at nearly $90\%$ thermodynamic efficiency, far exceeding the efficiency of any macroscopic human-designed steam or gasoline engine. Why is a molecular machine operating in a viscous, thermal noise environment so efficient?
+  \item **On the Peptide Planarity:** The planarity of the peptide bond reduces the conformational search space of a folding protein by half, as the peptide bond dihedral angle is locked at $180^\circ$ (trans). How does this quantum mechanical resonance stabilization of a single bond shape the timescale of biological life?
+  \item **On Information Translation:** We have traced the curriculum from mathematical representation, through physics and chemical rates, to genetic code (DNA) and mechanical protein motors. What does this suggest about the boundaries between physics, chemistry, and biology?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking back at Journey 7.}
+You have completed the transition from structure to life:
+* **Module 7.1:** Chiral medicine, Easson-Stedman recognition, and $K_d$ thermodynamics.
+* **Module 7.2:** Base pairing specificity, phosphodiester backbones, and hydrophobic $\pi-\pi$ stacking double-helix stabilization.
+* **Module 7.3:** Rigid peptide bonds, hydrophobic collapse protein folding, and the rotary motor kinetics of ATP Synthase.
+
+This completes Journey 7. You are now ready to transition to **Chemistry Journey 8 --- Materials and Solid-State Chemistry**, or to **Computation Journey 2 --- Physical Computation (Silicon to Gate)**.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 7 --- Organic Chemistry: The World It Builds}}\\[4pt]
+{\small\color{JourneyColor}You have completed the Biophysics Track. Continue to: \textbf{Chemistry Journey 8 --- Materials and Solid-State Chemistry}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

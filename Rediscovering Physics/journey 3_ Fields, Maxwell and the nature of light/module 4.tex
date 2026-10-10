@@ -1,0 +1,567 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, patterns, decorations.markings, positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal,
+  pdftitle={Discovery Physics J3 M3.7-3.8},pdfauthor={Discovery Institute}}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{openquestion}[1][]{enhanced,breakable,
+  colback=midblue!6,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,
+  title={Open Question --- No Known Answer},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{2cm}
+
+\begin{tikzpicture}[scale=0.9]
+  % Four Maxwell equations as "pillars"
+  \draw[teal!70, line width=1pt, rounded corners=3pt] (-5.5,-1.5) rectangle (-2.9,1.5);
+  \node[teal, font=\small] at (-4.2,0) {$\nabla\cdot\mathbf{E}=\rho/\varepsilon_0$};
+  \draw[teal!70, line width=1pt, rounded corners=3pt] (-2.5,-1.5) rectangle (0.1,1.5);
+  \node[teal, font=\small] at (-1.2,0) {$\nabla\cdot\mathbf{B}=0$};
+  \draw[teal!70, line width=1pt, rounded corners=3pt] (0.5,-1.5) rectangle (3.1,1.5);
+  \node[teal, font=\small] at (1.8,0) {$\nabla\times\mathbf{E}=-\partial\mathbf{B}/\partial t$};
+  \draw[teal!70, line width=1pt, rounded corners=3pt] (3.5,-1.5) rectangle (6.1,1.5);
+  \node[teal, font=\scriptsize] at (4.8,0)
+    {$\nabla\times\mathbf{B}=\mu_0\mathbf{J}+\mu_0\varepsilon_0\partial\mathbf{E}/\partial t$};
+  % Arrow pointing to EM wave
+  \draw[gold, line width=2pt, ->] (0,1.6) -- (0,2.8);
+  \node[gold, font=\normalsize\bfseries] at (0,3.2)
+    {$c = 1/\sqrt{\mu_0\varepsilon_0}$ = speed of light};
+\end{tikzpicture}
+
+\vspace{0.5cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 3}}}
+\vspace{0.3cm}
+
+{\fontsize{30}{36}\selectfont\bfseries Modules 3.7 \& 3.8}
+\vspace{0.3cm}
+
+{\fontsize{18}{24}\selectfont\textcolor{gold}{Maxwell's Unification\\[6pt]What Is a Field, Really?}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+
+{\fontsize{11}{17}\selectfont\textcolor{white!80}{\itshape
+Four equations. One prediction.\\[4pt]
+Light is an electromagnetic wave.\\[4pt]
+And the question that breaks classical physics.}}
+
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+
+\tableofcontents
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter{Maxwell's Unification and an Unanswered Question}
+\markboth{Journey 3: Modules 3.7 \& 3.8}{}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 3.7 — Maxwell's Unification}
+\label{sec:maxwell_unification}
+
+\epigraph{\itshape
+  From a long view of the history of mankind --- seen from, say, ten thousand years
+  from now --- there can be little doubt that the most significant event of the
+  nineteenth century will be judged as Maxwell's discovery of the laws of
+  electrodynamics.
+}{--- Richard Feynman, \textit{The Character of Physical Law}, 1965}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+In 1820, electricity and magnetism were two separate subjects. By 1865, Maxwell had shown they were one. And in showing that, he accidentally proved that light --- something studied by physicists and philosophers since antiquity --- was an electromagnetic wave. How did four equations unify three entire fields of science?
+\end{puzzlebox}
+
+\subsection{The Man and the Equations}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{J}}{ames} Clerk Maxwell was born in Edinburgh in 1831. He was an unusual scientist: deeply mathematical, deeply physical, and deeply poetic in his thinking. He published his first paper at fourteen. He wrote verse alongside his physics. His contemporaries found his work difficult to read --- not because it was obscure, but because it was so original that they had no framework yet to receive it.
+
+By 1865 he had assembled, from Gauss, Faraday, Amp\`ere, and his own additions, the four equations that now bear his name. What he did was not merely collect existing results. He:
+
+\begin{enumerate}[leftmargin=2em, itemsep=3pt]
+  \item Recognised the inconsistency in Amp\`ere's law at the capacitor.
+  \item Added the displacement current term $\varepsilon_0\,\partial\bm{E}/\partial t$ to fix it.
+  \item Derived, as a consequence, that $\bm{E}$ and $\bm{B}$ satisfy a wave equation in empty space.
+  \item Computed the wave speed: $c = 1/\sqrt{\mu_0\varepsilon_0}$.
+  \item Compared it to the measured speed of light.
+  \item Concluded that light is an electromagnetic wave.
+\end{enumerate}
+
+Steps 1--5 are mathematics. Step 6 is a thunderclap.
+
+\begin{historybox}
+\textbf{Maxwell and the speed calculation.} The constants $\mu_0$ and $\varepsilon_0$ were measured in experiments involving coils, capacitors, and slow electrical oscillations --- nothing remotely related to light. The speed of light had been measured independently by R\o{}mer (1676, from Jupiter's moons), Bradley (1729, from stellar aberration), and Fizeau (1849, from a rotating cog wheel).
+
+When Maxwell computed $1/\sqrt{\mu_0\varepsilon_0}$ and compared it to Fizeau's best measurement of $c$, the agreement was within a few percent --- well within the experimental error of the time. Maxwell knew immediately what this meant. His comment in the 1865 paper is a model of scientific restraint: he said the agreement ``seems to show'' that light is an electromagnetic disturbance. He did not claim certainty. But he was right.
+
+Maxwell died in 1879 at the age of 48, before his theory was fully vindicated experimentally.
+\end{historybox}
+
+\subsection{Deriving the Wave Equation}
+
+Let us carry out Maxwell's crucial step. In empty space (no charges: $\rho = 0$, no currents: $\bm{J} = \bm{0}$), Maxwell's equations reduce to:
+
+\begin{align}
+  \nabla\cdot\bm{E} &= 0 \label{eq:div_E}\\
+  \nabla\cdot\bm{B} &= 0 \label{eq:div_B}\\
+  \nabla\times\bm{E} &= -\frac{\partial\bm{B}}{\partial t} \label{eq:curl_E}\\
+  \nabla\times\bm{B} &= \mu_0\varepsilon_0\frac{\partial\bm{E}}{\partial t} \label{eq:curl_B}
+\end{align}
+
+Take the curl of Equation~\eqref{eq:curl_E}:
+\begin{equation}
+  \nabla\times(\nabla\times\bm{E}) = -\frac{\partial}{\partial t}(\nabla\times\bm{B})
+\end{equation}
+
+Using the vector identity $\nabla\times(\nabla\times\bm{E}) = \nabla(\nabla\cdot\bm{E}) - \nabla^2\bm{E}$ and substituting Equation~\eqref{eq:div_E} ($\nabla\cdot\bm{E}=0$):
+
+\begin{equation}
+  -\nabla^2\bm{E} = -\frac{\partial}{\partial t}(\nabla\times\bm{B})
+\end{equation}
+
+Substitute Equation~\eqref{eq:curl_B}:
+
+\begin{equation}
+  \boxed{\nabla^2\bm{E} = \mu_0\varepsilon_0\frac{\partial^2\bm{E}}{\partial t^2}}
+\end{equation}
+
+This is the wave equation. Its solutions are waves propagating at speed:
+
+\begin{equation}
+  \boxed{c = \frac{1}{\sqrt{\mu_0\varepsilon_0}}
+  = \frac{1}{\sqrt{(4\pi\times10^{-7})(8.85\times10^{-12})}}
+  = \SI{2.998e8}{m/s}}
+\end{equation}
+
+An identical equation holds for $\bm{B}$. The electric and magnetic fields oscillate in phase, perpendicular to each other and to the direction of travel, each continuously regenerating the other.
+
+\begin{explobox}
+\problem Carry out the derivation of the wave equation for $\bm{B}$ (rather than $\bm{E}$). Begin by taking the curl of Equation~\eqref{eq:curl_B} and follow the same steps. Confirm that $\bm{B}$ also satisfies $\nabla^2\bm{B} = \mu_0\varepsilon_0\,\partial^2\bm{B}/\partial t^2$.
+
+\problem A plane electromagnetic wave travelling in the $+z$ direction has electric field:
+\begin{equation}
+  \bm{E} = E_0\cos(kz - \omega t)\,\hat{x}
+\end{equation}
+\begin{enumerate}[label=(\alph*)]
+  \item Substitute into the wave equation to find the relationship between $k$ (wave number) and $\omega$ (angular frequency). Express the wave speed $v = \omega/k$.
+  \item Using Faraday's law, find $\bm{B}$ for this wave.
+  \item Verify that $\bm{B}$ is perpendicular to $\bm{E}$ and to the direction of travel.
+  \item Show that $|\bm{E}|/|\bm{B}| = c$.
+\end{enumerate}
+
+\problem \textit{Energy flow.} The \textbf{Poynting vector} $\bm{S} = (\bm{E}\times\bm{B})/\mu_0$ gives the power per unit area carried by an electromagnetic wave (direction and magnitude).
+\begin{enumerate}[label=(\alph*)]
+  \item For the wave above, compute $\bm{S}$.
+  \item Show its direction is in $+\hat{z}$ (the direction of propagation).
+  \item The intensity is the time-average of $|\bm{S}|$. Show $\langle I\rangle = E_0^2/(2\mu_0 c) = E_0 B_0/(2\mu_0)$.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Hertz's Experimental Confirmation}
+
+Maxwell died in 1879, eight years before his prediction was confirmed experimentally. The confirmation came from Heinrich Hertz, a German physicist who in 1887 constructed the first radio transmitter and receiver.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_hertz}
+\caption{Hertz's 1887 experiment. Left: a spark gap transmitter --- the rapid oscillation of charge in the transmitter antenna creates oscillating electric and magnetic fields that propagate as radio waves. Right: a resonant loop detector placed some distance away. When tuned to the same frequency as the transmitter, the detector shows a tiny spark, confirming the arrival of electromagnetic waves. Hertz measured their speed: $c$.}
+\label{fig:hertz}
+\end{figure}
+
+Hertz's apparatus was brutally simple: a spark gap connected to a dipole antenna, and a resonant loop as a detector. Yet with it he proved:
+
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+  \item Electromagnetic waves exist and can be generated by oscillating currents.
+  \item They travel at the speed of light.
+  \item They reflect, refract, and can be polarised --- exactly like light.
+  \item They carry energy across empty space.
+\end{itemize}
+
+When Hertz was asked about the practical applications of his discovery, he reportedly replied: ``Nothing, I suppose.'' Within fifteen years, Marconi had used Hertz's waves to transmit signals across the Atlantic. Within fifty years, radio, television, radar, and microwave communications had transformed civilisation.
+
+\begin{explobox}
+\problem A radio transmitter broadcasts at frequency $f = \SI{100}{MHz}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the wavelength of the waves?
+  \item How long does it take for a signal to travel from Nairobi to London (approximately $\SI{6800}{km}$)?
+  \item Why do radio waves of this frequency travel around the globe (via reflection from the ionosphere) while visible light does not?
+\end{enumerate}
+
+\problem \textit{Radar.} A radar system emits pulses and detects the reflected echo.
+\begin{enumerate}[label=(\alph*)]
+  \item A pulse is emitted and its echo returns $\SI{2e-4}{s}$ later. How far away is the reflecting object?
+  \item Weather radar uses wavelengths around $\SI{10}{cm}$. Why is this effective for detecting rain droplets (size $\sim\SI{1}{mm}$) but not for imaging fine structure?
+\end{enumerate}
+
+\problem \textit{The electromagnetic spectrum.} Examine Figure~\ref{fig:em_spectrum}.
+\begin{enumerate}[label=(\alph*)]
+  \item List the bands from lowest to highest frequency.
+  \item Visible light occupies an extremely narrow band of the full spectrum. Why are human eyes sensitive to this particular band and not others? (Think about the Sun's spectrum and Earth's atmosphere.)
+  \item Gamma rays and radio waves differ in frequency by a factor of about $10^{15}$. Yet both are described by Maxwell's equations. What is physically different about them?
+\end{enumerate}
+\end{explobox}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j3_em_spectrum}
+\caption{The electromagnetic spectrum. All bands are the same phenomenon --- oscillating electric and magnetic fields --- described by Maxwell's equations. They differ only in frequency, which determines wavelength ($\lambda = c/f$), energy per photon ($E = hf$), and consequently their interaction with matter. Visible light is an extraordinarily thin slice of a vast continuum.}
+\label{fig:em_spectrum}
+\end{figure}
+
+\subsection{The Significance of Unification}
+
+\begin{discoverybox}
+\textbf{What Maxwell unified.}
+
+Before 1865, physics had three major separate domains:
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+  \item \textbf{Electrostatics}: Coulomb, Gauss --- forces between stationary charges
+  \item \textbf{Magnetostatics and electrodynamics}: \O{}rsted, Amp\`ere, Faraday --- currents, magnets, induction
+  \item \textbf{Optics}: Newton, Huygens, Young, Fresnel --- the nature and behaviour of light
+\end{itemize}
+
+After Maxwell, all three were a single subject: \textbf{electromagnetism}. Light is not a separate phenomenon. It is a self-sustaining oscillation of electric and magnetic fields, propagating through space at $c$.
+
+This was only the second great unification in physics (the first was Newton's unification of terrestrial and celestial mechanics). It would inspire further unifications:
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+  \item Electroweak unification (Glashow, Salam, Weinberg, 1967--68): electromagnetism and the weak nuclear force are one.
+  \item Grand Unified Theories (in progress): electroweak and strong force.
+  \item The ultimate goal: all four fundamental forces in one framework.
+\end{itemize}
+
+Each unification follows the same pattern as Maxwell's: find a symmetry or a consistency argument, make a mathematical modification, and watch a new phenomenon fall out.
+\end{discoverybox}
+
+\begin{explobox}
+\problem \textit{Reflection of light.} Maxwell's equations predict that when an EM wave hits the interface between two media (different $\varepsilon_0$, $\mu_0$ effectively), some of it is reflected and some transmitted. The reflection coefficient for normal incidence on glass ($n\approx1.5$) is about $4\%$.
+\begin{enumerate}[label=(\alph*)]
+  \item How much light is transmitted through a single glass surface?
+  \item A camera lens has 12 glass-air surfaces. What fraction of light gets through if there is no anti-reflection coating?
+  \item Anti-reflection coatings work by depositing a thin film that creates destructive interference between reflections from the top and bottom surfaces. What thickness should the film be? (Express in terms of $\lambda$, the wavelength in the film.)
+\end{enumerate}
+
+\problem \textit{Polarisation.} An EM wave can be \textbf{polarised} --- meaning the $\bm{E}$ field oscillates in a fixed plane. Ordinary light is unpolarised (superposition of all polarisation directions). A polarising filter transmits only one direction.
+\begin{enumerate}[label=(\alph*)]
+  \item If unpolarised light of intensity $I_0$ passes through one polariser, the transmitted intensity is $I_0/2$. Why?
+  \item A second polariser is placed at angle $\theta$ to the first. The transmitted intensity is $I_0\cos^2\theta/2$ (Malus's law). What angle gives 50\% of the original intensity? What angle gives zero?
+  \item Sunlight reflected from a horizontal surface is partially polarised. Polarising sunglasses exploit this. Which direction should the transmission axis of the lens be oriented to reduce glare?
+\end{enumerate}
+
+\problem \textit{The Doppler effect for light.} When a source of EM waves moves toward you at speed $v$, the received frequency is shifted. The relativistic Doppler formula is:
+\begin{equation}
+  f_{\rm obs} = f_{\rm source}\sqrt{\frac{1+v/c}{1-v/c}}
+\end{equation}
+\begin{enumerate}[label=(\alph*)]
+  \item A star is moving away from Earth at $v = 0.02c$. Its dominant emission line has rest wavelength $\SI{656}{nm}$ (H-alpha). What is the observed wavelength? Is this a redshift or blueshift?
+  \item The recession speed of a galaxy is inferred from this redshift. A galaxy shows $z = \Delta\lambda/\lambda = 0.5$. What is its recession speed?
+  \item Edwin Hubble (1929) discovered that distant galaxies are receding with speed proportional to their distance. What does this tell us about the history of the universe?
+\end{enumerate}
+\end{explobox}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 3.8 — What Is a Field, Really?}
+\label{sec:what_is_field}
+
+\epigraph{\itshape
+  I cannot define the real problem, therefore I suspect there's no real problem,
+  but I'm not sure there's no real problem.
+}{--- Richard Feynman, on the interpretation of quantum mechanics
+  (and equally applicable to the question of what a field \emph{is})}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Maxwell showed that electromagnetic waves propagate through empty space at speed $c$. But every other wave known in 1865 propagated through a medium: sound through air, ocean waves through water, seismic waves through rock. What does light propagate through? And what, in the deepest sense, \emph{is} a field?
+\end{puzzlebox}
+
+\subsection{The Aether: A Reasonable Hypothesis}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{I}}{t} seemed obvious in 1865. If light is a wave, there must be a medium for it to wave in. Physicists called this medium the \textbf{luminiferous aether} (from the Greek \textit{aither}, the element the ancient Greeks believed filled the heavens). The aether was supposed to fill all of space, be completely transparent to light and matter, have no mass, and be extraordinarily rigid (since light travels so fast --- and wave speed depends on the rigidity of the medium).
+
+The aether had to be simultaneously undetectable by any direct experiment and yet have extraordinary mechanical properties. It was a strange object to believe in. But the alternative --- a wave with no medium --- seemed incoherent.
+
+So physicists in the 1870s and 1880s took the aether seriously and designed experiments to detect it.
+
+\begin{historybox}
+\textbf{The Michelson-Morley Experiment (1887).} If Earth moves through the aether at its orbital speed ($v = \SI{30}{km/s}$), then light travelling in the direction of Earth's motion should travel at $c - v$ relative to Earth, and light perpendicular to the motion should travel at $c$. This would produce a measurable fringe shift in an interferometer.
+
+Albert Michelson and Edward Morley built the most sensitive interferometer of the age, mounted on a massive stone slab floating on mercury to eliminate vibrations. They looked for the expected shift. They found: \textbf{nothing}. The speed of light was the same in all directions.
+
+This result, null though it was, is one of the most consequential experiments in physics. It showed that the aether does not exist --- or at least that Earth moves through it without any detectable effect. In 1905, Einstein explained the result by postulating that the speed of light is the same for all inertial observers, independent of their motion. The aether was not needed. The consequence was special relativity.
+
+We will explore the Michelson-Morley experiment and its implications in full in Journey 5.
+\end{historybox}
+
+\subsection{Three Views of What a Field Is}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j3_what_is_field}
+\caption{Three answers to the question ``what is a field?'' across the history of physics. The aether hypothesis (left) was falsified experimentally. The classical field view (centre) works perfectly within its domain. The quantum field view (right) is our best current answer --- but it raises its own deep questions about the nature of the vacuum.}
+\label{fig:what_is_field}
+\end{figure}
+
+\subsubsection*{View 1: The Aether (1865--1905)}
+
+Fields are disturbances in a medium --- the luminiferous aether, a mechanical substance filling all space. This view is natural, intuitive, and \textbf{wrong}. The Michelson-Morley experiment and then Einstein's special relativity ruled it out definitively.
+
+\subsubsection*{View 2: The Classical Field (1905--1926)}
+
+Fields are real physical entities existing in space, independent of any medium. They carry energy, momentum, and information. They travel at finite speed. They are not ``about'' any substance. The field \emph{is} the substance.
+
+This is Faraday's original intuition, vindicated. In this view, asking ``what does the field wave in?'' is like asking ``what does space exist in?'' --- a category error. Space exists. Fields exist in space. There is no further substrate required.
+
+This view is correct for classical electromagnetism and gravity (in general relativity). It is the picture you should hold for all of Journey 3 and Journey 4.
+
+\subsubsection*{View 3: Quantum Fields (1926--present)}
+
+In quantum field theory, the ``classical field'' of View 2 is replaced by a \textbf{quantum field} --- an operator-valued function on spacetime. Its excitations are particles.
+
+The photon is not a particle that travels through the electromagnetic field. The photon \emph{is} the electromagnetic field, quantised. An electron is an excitation of the electron field. Every particle we know is an excitation of some quantum field.
+
+This is our deepest current answer. It is extraordinarily successful --- quantum electrodynamics (QED) is the most precisely tested theory in the history of science. But it raises its own questions:
+
+\begin{openquestion}
+In quantum field theory, the vacuum (empty space) is not empty. It is filled with quantum fluctuations --- zero-point energy of every quantum field. The energy density of the vacuum can be computed: it is enormous, $\sim 10^{113}$ joules per cubic metre. The observed energy density of the universe is about $10^{-9}$ joules per cubic metre. This discrepancy of $10^{122}$ is the largest known disagreement between theory and observation in all of physics. It is called the \textbf{cosmological constant problem}. Nobody knows why the vacuum energy is so small compared to what quantum field theory predicts.
+\end{openquestion}
+
+\begin{explobox}
+\problem \textit{The aether wind.} If Earth moves through the aether at $v = \SI{30}{km/s}$ (orbital speed) and light travels at $c$ relative to the aether:
+\begin{enumerate}[label=(\alph*)]
+  \item What would be the speed of light moving in the direction of Earth's motion, as measured from Earth?
+  \item What would be the speed of light moving perpendicular to Earth's motion, as measured from Earth?
+  \item In the Michelson-Morley experiment, a beam is split, sent along two arms of equal length $L$ (one parallel to, one perpendicular to, Earth's motion), and recombined. Show that the time difference between the two paths is approximately $\Delta t \approx Lv^2/c^3$ (to leading order in $v/c$). For $L = \SI{11}{m}$ and $v = \SI{30}{km/s}$, calculate $\Delta t$ and the corresponding fringe shift in units of the wavelength of visible light ($\lambda \approx \SI{590}{nm}$).
+  \item The observed fringe shift was less than $1/40$ of a fringe. What does this tell us about the existence of the aether?
+\end{enumerate}
+
+\problem \textit{Fields carry momentum.} A flashlight emits $\SI{1}{W}$ of light.
+\begin{enumerate}[label=(\alph*)]
+  \item The momentum flux of an EM wave is $p/t = I/c$ per unit area. What force (radiation pressure) does the flashlight exert on whatever it illuminates (area $\SI{0.01}{m^2}$)?
+  \item Compare this to the weight of a $\SI{1}{g}$ paperclip. Can radiation pressure be practically significant?
+  \item The IKAROS spacecraft (launched 2010) used a $\SI{200}{m^2}$ solar sail. Using the Sun's intensity at $\SI{1}{AU}$ ($\approx\SI{1360}{W/m^2}$), estimate the acceleration of a $\SI{300}{kg}$ spacecraft from radiation pressure alone.
+\end{enumerate}
+
+\problem \textit{What is the field made of?} This is a philosophical question without a clear empirical answer, but it is worth thinking carefully about.
+\begin{enumerate}[label=(\alph*)]
+  \item In the aether view, the field is a disturbance in a substance. What does it mean for a field to exist if there is no substance?
+  \item Classical fields carry energy. Quantum fields have zero-point energy even in the vacuum. If the vacuum has energy, does it have mass? (Use $E = mc^2$.) If so, would this affect the expansion of the universe? (It does --- this is dark energy.)
+  \item In QFT, a ``particle'' is a localised excitation of a field. What then is the field? Is the question ``what is the field made of?'' even well-posed, or does it presuppose a framework (substance, medium) that may not apply at the quantum level?
+\end{enumerate}
+\end{explobox}
+
+\subsection{What Journey 3 Has Built}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j3_synthesis}
+\caption{The architecture of electromagnetism, synthesised. Every concept in Journey 3 is a node in this graph. Charges create fields; fields exert forces; changing fields create each other; the self-sustaining oscillation is light. Maxwell's four equations are the compact encoding of all of it. The question of what fields fundamentally \emph{are} points forward to Journey 5 (relativity) and Journey 6 (quantum mechanics).}
+\label{fig:synthesis}
+\end{figure}
+
+Journey 3 has built, module by module, one of the great structures of human knowledge:
+
+\begin{enumerate}[leftmargin=2em, itemsep=4pt]
+  \item \textbf{3.1}: The problem of action at a distance. Newton's gravity works but offers no mechanism. Something must fill the space between objects.
+  \item \textbf{3.2}: The gravitational field --- a vector field assigning force-per-unit-mass to every point in space. Fields carry energy, obey superposition, have field lines and potentials.
+  \item \textbf{3.3}: The electric field. Same mathematical structure as gravity, but charge has two signs. Gauss's law. The $10^{36}$ strength difference.
+  \item \textbf{3.4}: Faraday's lines of force. Fields are physically real. Magnetic field lines close on themselves (no monopoles). Flux. The energy stored in fields.
+  \item \textbf{3.5}: Moving charges create magnetic fields. The force on charges and currents. Amp\`ere's law. The electric motor.
+  \item \textbf{3.6}: Changing fields create fields. Faraday's induction law. Lenz's law. Maxwell's displacement current. The four Maxwell equations.
+  \item \textbf{3.7}: The electromagnetic wave. Speed $c = 1/\sqrt{\mu_0\varepsilon_0}$. Light is an EM wave. Hertz's confirmation. The full electromagnetic spectrum.
+  \item \textbf{3.8}: The question with no complete answer: what is a field, really?
+\end{enumerate}
+
+\subsection{The Question That Breaks Classical Physics}
+
+Journey 3 ends where every great journey should end: not with a conclusion, but with a crack.
+
+Maxwell's equations are perfectly symmetric in space and time. They predict that the speed of light is $c$ --- but they do not say $c$ relative to \emph{what}. In Newtonian mechanics, speeds are relative: a ball thrown at $\SI{20}{m/s}$ on a train moving at $\SI{30}{m/s}$ travels at $\SI{50}{m/s}$ relative to the ground.
+
+Does the same apply to light? If you move toward a beam of light, does it approach you faster than $c$?
+
+Michelson and Morley said: no. The speed of light is the same regardless of the observer's motion.
+
+This single experimental result, combined with Maxwell's equations, forced Einstein to rebuild the entire framework of space and time. Journey 5 will follow that demolition.
+
+But before that, Journey 4 explores a different set of questions: what is heat, what is temperature, and why does time flow in only one direction?
+
+\begin{deepquestion}
+In Maxwell's equations, the constants $\mu_0$ and $\varepsilon_0$ appear. In special relativity, the single constant $c = 1/\sqrt{\mu_0\varepsilon_0}$ appears. In quantum mechanics, Planck's constant $\hbar$ appears. In quantum electrodynamics (QED), which unifies all three, the relevant quantity is the \textbf{fine structure constant}:
+\begin{equation}
+  \alpha = \frac{e^2}{4\pi\varepsilon_0\hbar c} \approx \frac{1}{137}
+\end{equation}
+This is a dimensionless number --- it has no units, and its value does not depend on any system of measurement. It governs the strength of the electromagnetic interaction. Why is $\alpha \approx 1/137$ and not some other value? Nobody knows. Feynman called it ``one of the greatest damn mysteries of physics.''
+\end{deepquestion}
+
+\begin{reflectionbox}
+\textbf{Final Reflection: Journey 3.}
+
+Write three to four pages on the following. This is your synthesis of the entire journey.
+
+\begin{enumerate}[leftmargin=2em, itemsep=8pt]
+  \item \textit{The architecture.} Looking at Figure~\ref{fig:synthesis}, describe in your own words the logical chain from ``charge exists'' to ``light is an EM wave.'' What is the single most surprising step in that chain?
+
+  \item \textit{The method.} Journey 3 includes: experimental observation (\O{}rsted, Faraday), mathematical synthesis (Maxwell), mathematical consistency arguments (displacement current), and experimental confirmation (Hertz). These are four distinct modes of doing physics. Describe the role each played. Was any one of them more essential than the others?
+
+  \item \textit{The unanswered question.} The module ends with three views of ``what is a field.'' None is fully satisfying. The quantum field view is our best current answer, but it produces the cosmological constant problem. What does this suggest about the relationship between mathematical success (a theory that agrees with experiment) and conceptual clarity (understanding what the theory is \emph{about})?
+
+  \item \textit{Your own question.} What is the one question raised by Journey 3 that you most want answered? Write it down precisely. Then identify which Journey in this curriculum you expect will address it --- or whether it remains open.
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Journey 3 Complete: Summary and Bridge}
+\addcontentsline{toc}{chapter}{Journey 3 Complete: Summary and Bridge}
+\markboth{Journey 3: Complete}{}
+
+\begin{tcolorbox}[enhanced,colback=deep!4,colframe=deep,
+  title={\bfseries\color{white} Journey 3 at a Glance: Fields and the Invisible Universe},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+
+\begin{tabular}{@{}p{3cm}p{10cm}@{}}
+\toprule
+\textbf{Module} & \textbf{Core Achievement} \\
+\midrule
+3.1 & Action at a distance; inverse square law from geometry; the field concept \\
+3.2 & Gravitational field $\bm{g}$; field lines; potential $\Phi$; superposition \\
+3.3 & Electric field $\bm{E}$; Coulomb's law; Gauss's law; gravity vs electricity \\
+3.4 & Faraday's lines; field rules; magnetic field lines close (no monopoles); field energy \\
+3.5 & Moving charges create $\bm{B}$; force on charges and currents; Amp\`ere's law \\
+3.6 & Faraday's law; Lenz's law; Maxwell's displacement current; four Maxwell equations \\
+3.7 & EM wave equation; $c = 1/\sqrt{\mu_0\varepsilon_0}$; Hertz's confirmation; full EM spectrum \\
+3.8 & The aether and its refutation; three views of ``what is a field''; the open question \\
+\bottomrule
+\end{tabular}
+
+\vspace{8pt}
+\textbf{The Great Result of Journey 3:}
+\begin{center}
+\large\itshape\color{midblue}
+``Electricity, magnetism, and light are all manifestations\\
+of the same phenomenon: the electromagnetic field.''
+\end{center}
+
+\vspace{4pt}
+\textbf{The Crack That Forces Journey 4:}\\
+Fields are real, carry energy, and propagate at $c$. But Maxwell's equations tell us nothing about why matter has the temperatures it does, why heat flows in one direction and not the other, or why time seems to have an arrow. These questions require an entirely different framework.
+
+\textbf{And the crack that forces Journey 5:}\\
+The speed of light $c$ is absolute. But Newtonian mechanics says velocities add. When these two statements are combined with the Michelson-Morley experiment, the entire framework of space and time must be rebuilt.
+\end{tcolorbox}
+
+\vspace{0.8cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[gold, line width=2pt, ->] (0,0) -- (12,0);
+  \node[below, gold] at (3,-0.1) {\small Journey 3: Fields};
+  \node[below, teal] at (7,-0.1) {\small Journey 4: Heat \& Entropy};
+  \node[below, accent] at (11,-0.1) {\small Journey 5: Crisis};
+  \foreach \x in {6, 10}
+    \draw[white!50, line width=1pt] (\x, -0.15) -- (\x, 0.15);
+\end{tikzpicture}
+\end{center}
+
+\end{document}

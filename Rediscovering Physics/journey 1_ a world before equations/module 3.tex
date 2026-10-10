@@ -1,0 +1,303 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\setlength{\headheight}{24pt}
+\usepackage{fontenc}
+\usepackage{inputenc}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{fontawesome5}
+
+\usepackage{setspace}
+\usepackage{parskip}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=midblue,
+  urlcolor=accent,
+  citecolor=teal,
+  pdftitle={Discovery Physics: Journey 1 — The World Before Equations},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}
+  {\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+
+% Puzzle box
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep},
+  title={\faIcon{puzzle-piece}\ The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold},
+  #1
+}
+
+% Observation box
+\newtcolorbox{observebox}[1][]{
+  enhanced, breakable,
+  colback=greenbg, colframe=teal,
+  fonttitle=\bfseries\color{deep},
+  title={Observation},
+  #1
+}
+
+% Exploration/problem box
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue},
+  #1
+}
+
+% Discovery box
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white},
+  coltitle=white,
+  title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent},
+  drop shadow,
+  #1
+}
+
+% Name reveal box
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep},
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Reflection},
+  #1
+}
+
+% Margin note style
+\newtcolorbox{marginidea}{
+  enhanced,
+  colback=gold!15, colframe=gold,
+  fontupper=\small\itshape,
+  left=2mm, right=2mm, top=1mm, bottom=1mm,
+  boxrule=0.6pt
+}
+
+% Problem counter
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi%
+}
+
+% Key idea
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[
+    enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}
+  ]
+  #1
+  \end{tcolorbox}
+}
+
+% ─── Theorem-like environments ──────────────────────────────────────────────
+\newtheoremstyle{disc}
+  {8pt}{8pt}{\itshape}{}
+  {\bfseries\color{midblue}}{.}{.5em}{}
+
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Epigraph style ─────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{0}
+\setcounter{section}{2}
+
+\section{Module 1.3 — Patterns in Light}
+\label{sec:patterns_light}
+
+\epigraph{%
+  \itshape Light is the first of painters.%
+}{--- Ralph Waldo Emerson}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+Light does several surprising things at boundaries. Can you describe them precisely enough to predict what will happen in a new situation?
+\end{tcolorbox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/fig_light}
+  \caption{Left: reflection---the angle of incidence equals the angle of reflection, measured from the normal (perpendicular) to the surface. Right: refraction---light bends toward the normal when entering a denser medium.}
+  \label{fig:light}
+\end{figure}
+
+\subsection{Observation 1: Shadows}
+
+Hold your hand in front of a wall and shine a torch at it. Look at the shadow.
+\begin{itemize}
+  \item The shadow is sharp if the light source is small (a torch with a narrow beam).
+  \item It is fuzzy if the light source is large.
+  \item Moving the torch farther away makes the shadow larger.
+\end{itemize}
+
+This tells us something: light travels in straight lines. It does not bend around obstacles (under normal conditions). Where the light is blocked, there is shadow; where it is not blocked, there is illumination. The boundary between them is determined by straight-line paths from the source.
+
+\begin{explobox}
+\problem If a torch is 50 cm from your hand, and your hand is 30 cm from the wall, by how much is the shadow larger than your hand? Can you find a general relationship?
+
+\problem Why is the shadow of a person on a cloudy day softer than on a sunny day?
+
+\problem Look at the shadow of a circular object (a coin, a cup rim) when lit by a distant light source. The shadow is circular. Now tilt the object slightly. What happens to the shadow? What does this tell you about the geometry?
+\end{explobox}
+
+\subsection{Observation 2: Reflection}
+
+When light bounces off a mirror, the angle at which it arrives equals the angle at which it leaves---both angles measured from the perpendicular (the ``normal'') to the mirror surface. See Figure~\ref{fig:light}.
+
+This is the \textbf{law of reflection}:
+\begin{equation}
+  \theta_{\text{incidence}} = \theta_{\text{reflection}}
+\end{equation}
+
+\begin{explobox}
+\problem Shine a narrow beam of light (from a torch) onto a flat mirror. Measure the incoming and outgoing angles with a protractor. Verify the law.
+
+\problem Now use two mirrors at right angles to each other. Shine a light into the corner. Where does it come back out? Does the returning beam depend on the precise angle at which you shine the light in?
+
+\problem A mirror produces a left-right reversal of an image: your right hand appears as the mirror's left hand. But it does not produce a top-bottom reversal. Why? (Think carefully before concluding this is obvious.)
+\end{explobox}
+
+\subsection{Observation 3: Refraction}
+
+When light moves from one transparent medium to another---say, from air into water---it bends. The direction changes at the boundary. This is why a straw appears bent when placed in a glass of water, and why the bottom of a swimming pool appears shallower than it is.
+
+The bending follows a precise rule. If $\theta_1$ is the angle of the incoming ray (in medium 1) and $\theta_2$ is the angle of the refracted ray (in medium 2), both measured from the normal, then:
+\begin{equation}
+  n_1 \sin\theta_1 = n_2 \sin\theta_2
+\end{equation}
+where $n_1$ and $n_2$ are constants called the \textbf{refractive indices} of the two media.
+
+You do not need to derive this now. But observe the phenomenon:
+
+\begin{explobox}
+\problem Place a coin at the bottom of an empty cup. Position your eye so the coin is just out of sight, hidden by the rim of the cup. Now slowly pour water into the cup. Describe what happens. Why?
+
+\problem A straw in a glass of water appears to bend at the water surface. At what angle does it appear to bend? Does the angle depend on the viewing direction?
+
+\problem Here is a deep question to sit with: why does light change direction when it enters a denser medium? Light slows down in denser materials. If you knew that, and you knew that light ``wants'' to reach its destination in the shortest \emph{time} (not the shortest distance), could you predict which way it would bend?
+\end{explobox}
+
+The last question in the exploration above is not a trick question. It is, in fact, exactly how the law of refraction was explained by Pierre de Fermat in 1662---more than a decade before Newton published his laws of motion. We will return to this idea of nature minimising something in Journey 4.
+
+\subsection{Observation 4: Dispersion}
+
+White light, passed through a glass prism, splits into a spectrum of colours: red, orange, yellow, green, blue, violet. Newton performed this experiment in 1666. Before him, many people believed the prism was adding colour to colourless light. Newton showed the opposite: white light already contains all colours. The prism simply separates them.
+
+How? Different colours of light are bent by different amounts when they enter the glass. Violet bends more than red. This means the refractive index $n$ is different for different colours.
+
+\begin{explobox}
+\problem On a sunny day, find a way to make a rainbow spectrum using only water---a garden hose, a glass of water with a white card, or water drops on a window. Where must the light source be? Where must you look?
+
+\problem A rainbow in the sky always appears as a circular arc. The red is always on the outside and the violet on the inside. Can you explain why, given what you know about refraction?
+
+\problem Here is a deeper question: a soap bubble shows colours (iridescence) even though it contains no prism. The colours shift as you move. Is this refraction? Something different?
+\end{explobox}
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

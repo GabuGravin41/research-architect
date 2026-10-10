@@ -1,0 +1,499 @@
+\documentclass[12pt, a4paper, twoside]{book}
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+
+\definecolor{deep}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{e94560}
+\definecolor{teal}{HTML}{2ec4b6}
+\definecolor{gold}{HTML}{f5a623}
+\definecolor{midblue}{HTML}{0f3460}
+\definecolor{purple}{HTML}{533483}
+\definecolor{orange}{HTML}{ff6b35}
+\definecolor{green}{HTML}{2d6a4f}
+\definecolor{lightbg}{HTML}{f7f9fc}
+\definecolor{warmbg}{HTML}{fffbf2}
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{realworldbox}[1][]{enhanced,breakable,colback=green!5,
+  colframe=green!70!black,fonttitle=\bfseries\color{white},coltitle=white,
+  title={In the Real World},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{2cm}
+
+\begin{tikzpicture}[scale=1.0]
+  % Energy cycle with arrow ring
+  \foreach \ang/\lab/\col in {
+    90/{\small Kinetic}/teal,
+    210/{\small Chemical}/green,
+    330/{\small Thermal}/accent}{
+    \node[\col, font=\bfseries] at ({3.2*cos(\ang)},{3.2*sin(\ang)}) {\lab};
+    \draw[->, \col!70, line width=1.5pt]
+      ({2.0*cos(\ang+30)},{2.0*sin(\ang+30)})
+      arc ({\ang+30}:{\ang+90}:2.0cm);
+  }
+  \fill[gold] (0,0) circle (0.5cm);
+  \node[deep, font=\bfseries\small] at (0,0) {E};
+  % Entropy arrow
+  \draw[->, white!50, line width=2pt, dashed]
+    (4.5,-1.5) node[right, white!70, font=\small] {disorder} -- (3.0,-0.5);
+\end{tikzpicture}
+
+\vspace{0.3cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 4}}}
+\vspace{0.3cm}
+{\fontsize{34}{40}\selectfont\bfseries Modules 4.3 \& 4.4}
+\vspace{0.3cm}
+{\fontsize{20}{26}\selectfont\textcolor{gold}{%
+Energy and Its Transformations\\[5pt]
+What Is Entropy?}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+Energy is conserved. So why can't you\\[4pt]
+un-scramble an egg?}}
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+\tableofcontents
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter{Energy, Entropy, and Why Disorder Wins}
+\markboth{Journey 4: Modules 4.3 \& 4.4}{}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 4.3 — Energy and Its Transformations}
+\label{sec:first_law}
+
+\epigraph{\itshape
+  The total amount of energy in the universe is constant.
+  Energy can be transformed from one form to another,
+  but it can never be created or destroyed.
+}{--- Hermann von Helmholtz, 1847}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+A roller-coaster climbs a hill (potential energy), screams downward (kinetic energy), brakes to a stop (heat). You eat food (chemical energy), walk upstairs (potential energy), and feel warm (thermal energy). The numbers always balance. Why? And if energy is always conserved, why do machines wear out, and why can't you run a car forever on a single tank of fuel?
+\end{puzzlebox}
+
+\subsection{The First Law of Thermodynamics}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{T}}{he} \textbf{First Law of Thermodynamics} is the generalisation of Newton's conservation of energy to include thermal phenomena:
+
+\begin{equation}
+  \boxed{\Delta U = Q - W}
+\end{equation}
+
+where $\Delta U$ is the change in the \textit{internal energy} of a system, $Q$ is the heat added to the system, and $W$ is the work done \textit{by} the system on its surroundings.
+
+The sign convention is worth memorising:
+\begin{itemize}[leftmargin=2em,itemsep=2pt]
+  \item $Q > 0$: heat flows \textit{into} the system (environment heats it)
+  \item $Q < 0$: heat flows \textit{out of} the system (it heats the environment)
+  \item $W > 0$: system does work \textit{on} surroundings (e.g., gas expands)
+  \item $W < 0$: surroundings do work \textit{on} system (e.g., gas is compressed)
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j4_energy_forms}
+\caption{Energy exists in many forms and transforms freely between them. Every arrow in this diagram represents a real, measurable transformation. The total energy is always conserved. The First Law is the statement that no matter how many transformations occur, the total in the bookkeeping never changes.}
+\label{fig:energy_forms}
+\end{figure}
+
+\subsection{Work Done by a Gas}
+
+For a gas in a cylinder with a movable piston, the work done when the gas expands by a small volume $dV$ against pressure $P$ is:
+\begin{equation}
+  dW = P\,dV \qquad\Rightarrow\qquad W = \int_{V_i}^{V_f} P\,dV
+\end{equation}
+
+Geometrically: the work is the area under the $P$-$V$ curve.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j4_pv_carnot}
+\caption{Left: different processes on a $P$-$V$ diagram. The work done by the gas equals the area under the curve: maximum for the isobaric process (constant pressure), zero for the isochoric process (constant volume). Right: the Carnot cycle --- the ideal heat engine cycle. The net work output per cycle equals the area enclosed by the four curves.}
+\label{fig:pv_carnot}
+\end{figure}
+
+\begin{explobox}
+\problem An ideal gas undergoes the following processes. For each, find the work done \textit{by} the gas and whether $Q$ is positive, negative, or zero.
+\begin{enumerate}[label=(\alph*)]
+  \item \textbf{Isothermal expansion} (constant $T$): volume doubles, starting at $P_0 = \SI{2}{atm}$, $V_0 = \SI{5}{L}$. Use $W = nRT\ln(V_f/V_i)$.
+  \item \textbf{Isobaric expansion} (constant $P$): volume doubles at constant $P = \SI{2}{atm}$.
+  \item \textbf{Isochoric heating} (constant $V$): pressure doubles at $V = \SI{5}{L}$.
+  \item \textbf{Adiabatic compression} (no heat exchange): volume halves. Is $\Delta U$ positive or negative? Does temperature rise or fall?
+\end{enumerate}
+[Note: $\SI{1}{atm} = \SI{101325}{Pa}$, $\SI{1}{L} = \SI{e-3}{m^3}$]
+
+\problem \textit{A piston-cylinder problem.} One mole of an ideal monatomic gas ($U = \frac{3}{2}nRT$) is heated at constant pressure ($P = \SI{2}{atm}$) from $T_i = \SI{300}{K}$ to $T_f = \SI{500}{K}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find $\Delta U$ (change in internal energy).
+  \item Find $W$ (work done by the gas as it expands).
+  \item Use the First Law to find $Q$ (heat added).
+  \item Why is $Q > \Delta U$? Where does the extra heat go?
+\end{enumerate}
+
+\problem \textit{Efficiency of a heat engine.} A steam power station burns coal to produce steam, which drives a turbine. The boiler temperature is $T_H = \SI{823}{K}$ and the condenser temperature is $T_C = \SI{323}{K}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the maximum possible (Carnot) efficiency?
+  \item The station produces $\SI{500}{MW}$ of electrical power. How much heat must be input from burning coal per second?
+  \item How much waste heat is dumped into cooling water per second?
+  \item Real power stations achieve about $40\%$ efficiency. How does this compare to the Carnot limit, and why might it be lower?
+\end{enumerate}
+
+\problem \textit{The human body as a heat engine.} Your body converts food (chemical energy) into work and heat.
+\begin{enumerate}[label=(\alph*)]
+  \item A person doing moderate exercise consumes about $\SI{600}{W}$ of food energy. If they are $25\%$ efficient, what is the mechanical power output and the heat released?
+  \item Why does vigorous exercise make you hot? Where does the heat come from?
+  \item Marathon runners consume about $\SI{3000}{kcal}$ ($\SI{12.6}{MJ}$). If $75\%$ of this appears as heat, and all heat must be removed by evaporation of sweat (latent heat $\SI{2260}{J/g}$), how many litres of sweat are produced?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Internal Energy and State Functions}
+
+The internal energy $U$ is a \textbf{state function} --- its value depends only on the current state of the system (temperature, pressure, volume), not on how the system got there. In contrast, $Q$ and $W$ individually depend on the path taken.
+
+\begin{discoverybox}
+\textbf{Why this matters.} Suppose you compress a gas by two different paths: (i) all at once (fast compression), or (ii) in many small steps (quasi-static). The final state is the same, so $\Delta U$ is the same. But path (i) does more work (higher pressure during compression) and generates more heat. The First Law still holds --- $Q - W = \Delta U$ for both --- but $Q$ and $W$ individually differ.
+
+This is why we say heat and work are ``modes of transfer'' of energy, not properties of the system. A system does not \textit{contain} heat any more than it contains work. It contains \textit{internal energy}.
+\end{discoverybox}
+
+\begin{explobox}
+\problem Consider taking one mole of an ideal gas from state A ($P_A = \SI{1}{atm}$, $V_A = \SI{10}{L}$) to state B ($P_B = \SI{2}{atm}$, $V_B = \SI{10}{L}$) by two different paths:
+\begin{itemize}[leftmargin=1.5em]
+  \item Path 1: isochoric heating (constant volume, from $P_A$ to $P_B$ at $V = \SI{10}{L}$)
+  \item Path 2: first compress to $V = \SI{5}{L}$ at constant $P_A$, then heat at constant volume to $P_B$
+\end{itemize}
+\begin{enumerate}[label=(\alph*)]
+  \item Calculate $\Delta U$ for each path. Are they equal? Why must they be?
+  \item Calculate $W$ for each path. Are they equal?
+  \item Calculate $Q$ for each path using the First Law. Are they equal?
+  \item Interpret: can you tell from measuring only $\Delta T$ and $\Delta P$ which path was taken?
+\end{enumerate}
+
+\problem \textit{Perpetual motion machines.} A ``perpetual motion machine of the first kind'' generates energy from nothing, violating the First Law. Analyse each of the following claimed devices and identify the hidden energy source or accounting error:
+\begin{enumerate}[label=(\alph*)]
+  \item A wheel with weights on hinges that are supposed to always fall on one side, keeping the wheel spinning indefinitely.
+  \item A device that uses electricity from solar panels to electrolyse water into hydrogen and oxygen, burns them to produce water, and uses the heat to run a steam turbine to power the electrolyser.
+  \item A box of gas that is cooled by expansion, with the cold gas then compressed back to its original volume, producing net work.
+\end{enumerate}
+\end{explobox}
+
+\begin{realworldbox}
+\textbf{Energy accounting in technology.} The First Law demands that every joule be accounted for. In practice this means:
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item \textit{Electric vehicles}: a 75 kWh battery stores the energy of about 8 litres of petrol. But EV drivetrains are $\sim90\%$ efficient vs $\sim30\%$ for combustion engines, so the effective range is similar.
+  \item \textit{Data centres}: every joule of computing power becomes heat that must be removed. Global data centres consume $\sim200$ TWh/year --- comparable to some entire countries.
+  \item \textit{LED lighting}: converts $\sim50\%$ of electrical energy to light (the rest is heat). Incandescent bulbs converted only $\sim5\%$ to light. The improvement comes from quantum mechanics, not thermodynamics.
+\end{itemize}
+\end{realworldbox}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 4.4 — What Is Entropy? Counting Arrangements}
+\label{sec:entropy}
+
+\epigraph{\itshape
+  The energy of the universe is constant.\\
+  The entropy of the universe tends to a maximum.
+}{--- Rudolf Clausius, 1865}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Energy is conserved. The First Law cannot tell you which processes are forbidden --- a ball spontaneously jumping off the floor would conserve energy perfectly. Yet it never happens. Something else is missing. What additional law governs which energy transformations are allowed, and why?
+\end{puzzlebox}
+
+\subsection{The Problem the First Law Cannot Solve}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{I}}{magine} a movie of a physical process played in reverse. A falling ball: the reversed movie shows the ball spontaneously launching itself upward --- weird, but it conserves energy perfectly. Heat flowing from cold to hot: conserves energy. Gas spontaneously collecting in one corner of a room: conserves energy. A broken cup reassembling itself: conserves energy.
+
+None of these happen. The First Law cannot explain why. Something else is needed. That something is the \textbf{Second Law of Thermodynamics}, and the quantity it introduces is \textbf{entropy}.
+
+\subsection{Entropy from Counting: Boltzmann's Insight}
+
+The deepest definition of entropy was given by Ludwig Boltzmann in 1877. It connects the thermodynamic concept (which Clausius had defined abstractly in 1865) to the statistical mechanics of molecules.
+
+Consider a gas of $N$ molecules distributed in a box. At any moment, each molecule is in some position and has some velocity --- a \textbf{microstate}. But we can only observe the gross features: total pressure, temperature, volume --- the \textbf{macrostate}. Many different microstates produce the same macrostate.
+
+\keyidea{The entropy of a macrostate is proportional to the logarithm of the number of microstates $W$ that correspond to it:
+\begin{equation}
+  \boxed{S = k_B \ln W}
+\end{equation}
+This equation is engraved on Boltzmann's tombstone in Vienna.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j4_entropy_counting}
+\caption{Entropy as counting. Eight numbered particles can be distributed between two chambers. The state with all particles on the left corresponds to only $W = 1$ microstate --- very low entropy. The equal split has $W = C(8,4) = 70$ microstates --- maximum entropy. Systems evolve toward higher entropy simply because there are more ways to be disordered than ordered.}
+\label{fig:entropy_counting}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j4_entropy_prob}
+\caption{Left: the probability of finding $k$ particles in the left chamber follows a binomial distribution peaked at $k = N/2$. Right: entropy is maximum at the most probable state. For 20 particles the spread is noticeable; for $N = 10^{23}$ molecules the peak is so sharp that the system is effectively \textit{never} found away from equilibrium.}
+\label{fig:entropy_prob}
+\end{figure}
+
+\subsection{Why Entropy Increases: Pure Combinatorics}
+
+Suppose you start with all 8 particles on the left. How likely is it that, after many random collisions, they spontaneously return to that state?
+
+\begin{equation}
+  P(\text{all left}) = \frac{1}{2^8} = \frac{1}{256} \approx 0.4\%
+\end{equation}
+
+For $N = 10^{23}$ (a thimble of air):
+\begin{equation}
+  P(\text{all left}) = \frac{1}{2^{10^{23}}} \approx 10^{-3\times10^{22}}
+\end{equation}
+
+This number is so small it is essentially zero. Not zero by physical law --- zero by probability so extreme that the age of the universe is not long enough to wait for it. The Second Law is not a law that forbids violation; it is a statement about probability so overwhelming that violation is practically impossible.
+
+\begin{explobox}
+\problem Using the binomial coefficient $W(k) = \binom{N}{k}$ for $N$ total particles and $k$ in the left chamber:
+\begin{enumerate}[label=(\alph*)]
+  \item For $N = 10$ particles, find $W$ and $S = k_B\ln W$ for $k = 0, 1, 2, 5, 9, 10$. Which is the maximum entropy state?
+  \item For $N = 100$, what is the probability of finding exactly 40 in the left and 60 in the right? Compare with the probability of the 50-50 split.
+  \item Estimate how long you would need to wait to see $N = 100$ particles all simultaneously on one side, assuming each particle changes sides $10^{9}$ times per second.
+\end{enumerate}
+
+\problem \textit{Entropy as information.} The logarithm has a beautiful property: $\ln(W_1 \cdot W_2) = \ln W_1 + \ln W_2$.
+\begin{enumerate}[label=(\alph*)]
+  \item If system A has $W_A$ microstates and system B has $W_B$ microstates, the combined system has $W_A \cdot W_B$ microstates. Show that entropy is additive: $S_{AB} = S_A + S_B$.
+  \item Why is additivity a physically desirable property for entropy? (Think: what should happen to the entropy when you combine two identical systems?)
+  \item The entropy of one mole of ideal gas (Sackur-Tetrode equation) is:
+    \begin{equation}
+      S = nR\left[\frac{5}{2} + \ln\!\left(\frac{V}{n}\left(\frac{4\pi m U}{3nh^2}\right)^{3/2}\right)\right]
+    \end{equation}
+  For fixed $n$ and $U$, how does $S$ change when the volume $V$ doubles? Why does this make intuitive sense?
+\end{enumerate}
+
+\problem \textit{Entropy and mixing.} When two different gases at the same temperature and pressure are mixed (a partition is removed), the entropy increases --- even though no heat is exchanged and no work is done.
+\begin{enumerate}[label=(\alph*)]
+  \item The entropy increase when $n_A$ moles of gas A and $n_B$ moles of gas B are mixed is $\Delta S_{\rm mix} = -R(n_A \ln x_A + n_B \ln x_B)$ where $x_A = n_A/(n_A+n_B)$ is the mole fraction. For equal amounts ($n_A = n_B = 1$ mol), what is $\Delta S_{\rm mix}$?
+  \item Why does mixing increase entropy from a counting perspective?
+  \item Why does mixing two portions of the \textit{same} gas produce no entropy increase (Gibbs paradox)?
+\end{enumerate}
+\end{explobox}
+
+\subsection{The Clausius Definition and the Second Law}
+
+Boltzmann's statistical definition connects to Clausius's original thermodynamic one. For a reversible process at temperature $T$:
+
+\begin{equation}
+  dS = \frac{dQ_{\rm rev}}{T}
+\end{equation}
+
+The entropy change of the universe is:
+\begin{equation}
+  \boxed{dS_{\rm universe} \geq 0}
+\end{equation}
+
+with equality for reversible processes and strict inequality for irreversible ones. This is the \textbf{Second Law of Thermodynamics}.
+
+\begin{namebox}
+\textbf{The Second Law in words:}
+\begin{itemize}[leftmargin=1.5em,itemsep=3pt]
+  \item \textit{Clausius (1865):} Heat cannot flow spontaneously from a colder to a hotter body.
+  \item \textit{Kelvin (1851):} No engine can convert heat entirely into work with no other effect.
+  \item \textit{Boltzmann (1877):} The total entropy of the universe never decreases.
+  \item \textit{Eddington (1927):} The arrow of time is determined by the direction of increasing entropy.
+\end{itemize}
+All four are equivalent statements of the same law.
+\end{namebox}
+
+\begin{explobox}
+\problem \textit{Clausius entropy.} A heat engine absorbs $Q_H = \SI{1000}{J}$ from a hot reservoir at $T_H = \SI{600}{K}$ and rejects $Q_C$ to a cold reservoir at $T_C = \SI{300}{K}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the maximum work output? What is the Carnot efficiency?
+  \item For a Carnot (reversible) engine, show that $\Delta S_{\rm hot reservoir} + \Delta S_{\rm cold reservoir} = 0$.
+  \item For a real (irreversible) engine that outputs only $W = \SI{300}{J}$, find $Q_C$ and compute $\Delta S_{\rm total}$. Is $\Delta S_{\rm total} > 0$? Must it be?
+\end{enumerate}
+
+\problem \textit{Entropy and phase transitions.} When $n$ moles of liquid water at temperature $T$ undergo a phase transition (boiling or melting), the entropy change is $\Delta S = nL/T$ where $L$ is the molar latent heat.
+\begin{enumerate}[label=(\alph*)]
+  \item Water boils at $\SI{373}{K}$ with molar latent heat $L_{\rm vap} = \SI{40.7}{kJ/mol}$. What is the entropy change when 1 mole of water vaporises?
+  \item Ice melts at $\SI{273}{K}$ with molar latent heat $L_{\rm fus} = \SI{6.01}{kJ/mol}$. What is the entropy change for 1 mole of ice melting?
+  \item Which is larger: the entropy change for vaporisation or for melting? Interpret this in terms of the Boltzmann definition.
+  \item The \textbf{Trouton's rule} states that for most liquids, $L_{\rm vap}/T_{\rm boil} \approx 88\,\si{J/(mol\cdot K)}$. Interpret this as a statement about the universality of gas-phase entropy.
+\end{enumerate}
+
+\problem \textit{Refrigerators and the Second Law.} A refrigerator moves heat from cold to hot --- seemingly violating the Second Law. But it uses work to do so.
+\begin{enumerate}[label=(\alph*)]
+  \item A refrigerator removes $Q_C = \SI{200}{J}$ from its interior at $T_C = \SI{4}{^\circ C}$ and dumps $Q_H$ into the room at $T_H = \SI{25}{^\circ C}$. What is the minimum work required, consistent with the Second Law?
+  \item The \textbf{coefficient of performance} is $\text{COP} = Q_C/W$. What is the maximum COP?
+  \item A real refrigerator draws $\SI{150}{W}$ of electrical power. In one hour, how much heat has it moved from the cold reservoir? How much has it dumped into the room?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Entropy in Everyday Life}
+
+\begin{realworldbox}
+\textbf{Entropy is everywhere.}
+\begin{itemize}[leftmargin=1.5em,itemsep=4pt]
+  \item \textit{Cooking}: Heat denatures proteins (unfolding them into disordered shapes) --- an irreversible increase of molecular entropy. You cannot ``uncook'' an egg.
+  \item \textit{Ageing}: Biological systems maintain order by consuming free energy. Without it (death), entropy increases and the body decomposes. Life is a local, temporary victory over disorder.
+  \item \textit{Computer science}: Erasing one bit of information increases entropy by $k_B\ln 2$ (Landauer's principle, 1961). Every computation has a thermodynamic cost.
+  \item \textit{The universe}: Shortly after the Big Bang, entropy was extraordinarily low. It has been increasing ever since. The ``heat death of the universe'' --- maximum entropy, no gradients, no work possible --- is the ultimate fate of everything.
+\end{itemize}
+\end{realworldbox}
+
+\begin{historybox}
+\textbf{Ludwig Boltzmann (1844--1906).} Boltzmann spent his career defending the atomic theory of matter when it was still controversial. He derived the statistical interpretation of entropy, showed how thermodynamics emerges from mechanics, and founded the kinetic theory of gases. Yet he was attacked bitterly by the energeticists (led by Ernst Mach and Wilhelm Ostwald), who denied the existence of atoms and considered Boltzmann's statistical mechanics metaphysical.
+
+Boltzmann's depression deepened as the attacks continued. He took his own life in 1906. Within three years, Einstein's analysis of Brownian motion and Perrin's experimental verification provided direct evidence for atoms. The debate Boltzmann had spent his life arguing was settled --- in his favour --- just after his death.
+
+His epitaph is his equation: $S = k_B \ln W$.
+\end{historybox}
+
+\begin{deepquestion}
+If the Second Law is statistical --- if it reflects probability rather than physical law --- does this mean it could be violated? In principle, yes: there is a nonzero (but absurdly small) probability that all air molecules in this room spontaneously rush to one corner, suffocating everyone. This is called a \textbf{fluctuation}. 
+
+For large systems, fluctuations are negligible. But for nanoscale systems (molecular machines, single molecules, quantum dots), fluctuations are significant. The \textbf{fluctuation theorem} (Evans et al., 1993) quantifies this: it gives the probability that a small system violates the Second Law for a short time. Nanomachines in biology --- ATP synthase, molecular motors, DNA polymerase --- routinely operate in regimes where Second Law violations are significant on short timescales. Life exploits these fluctuations.
+\end{deepquestion}
+
+\begin{reflectionbox}
+\textbf{Reflection: Modules 4.3--4.4.}
+
+Write two to three pages:
+
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+  \item \textit{Why entropy is not disorder.} Students often learn ``entropy = disorder'' but this is misleading. An ice crystal is highly ordered yet has lower entropy than liquid water. A gas dispersed through a room is disordered and has high entropy. But the correct definition is about \textit{counting microstates}, not about visual disorder. Give two examples where the ``disorder'' intuition gives the right answer and one where it misleads.
+
+  \item \textit{The asymmetry of time.} Every fundamental law of physics (Newton, Maxwell, quantum mechanics) is time-symmetric: the equations work equally well forward and backward. Only thermodynamics has an arrow. But thermodynamics is derived from the time-symmetric laws of mechanics. How can a time-symmetric theory give rise to a time-asymmetric one? (Hint: the answer involves the initial conditions of the universe.)
+
+  \item \textit{Life and entropy.} Living organisms are highly ordered, low-entropy structures. Does their existence violate the Second Law? Explain carefully why it does not, and what ``cost'' must be paid for the maintenance of biological order.
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Module Summary: 4.3--4.4}
+\addcontentsline{toc}{chapter}{Module Summary: 4.3--4.4}
+\markboth{Module Summary: 4.3--4.4}{}
+
+\begin{tcolorbox}[enhanced,colback=deep!4,colframe=deep,
+  title={\bfseries\color{white} Key Ideas: Modules 4.3--4.4},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+\textbf{Module 4.3 --- Energy and Its Transformations}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item First Law: $\Delta U = Q - W$ --- internal energy changes by heat in minus work out
+  \item Work by gas: $W = \int P\,dV$ = area under the $P$-$V$ curve
+  \item $U$ is a state function; $Q$ and $W$ individually depend on path
+  \item Carnot efficiency: $\eta_{\rm max} = 1 - T_C/T_H$ --- no engine can exceed this
+  \item Human body, power stations, and all engines are governed by the First Law
+\end{itemize}
+\vspace{6pt}
+\textbf{Module 4.4 --- What Is Entropy?}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Entropy: $S = k_B\ln W$ where $W$ = number of microstates (Boltzmann, 1877)
+  \item Clausius: $dS = dQ_{\rm rev}/T$ for reversible processes
+  \item Second Law: $dS_{\rm universe} \geq 0$ --- entropy of the universe never decreases
+  \item Entropy increases because disordered states are overwhelmingly more probable
+  \item For $N = 10^{23}$, the Second Law is violated with probability $\sim 10^{-10^{22}}$
+  \item Entropy is additive; phase transitions, mixing, and computation all involve entropy changes
+  \item Boltzmann's equation is inscribed on his tombstone
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[teal,line width=1.5pt] (0,0) -- (12,0);
+  \node[below,teal] at (6,-0.1)
+    {\small\itshape End of Modules 4.3--4.4. Next: The Arrow of Time \& Engines (Modules 4.5--4.6).};
+\end{tikzpicture}
+\end{center}
+
+\end{document}

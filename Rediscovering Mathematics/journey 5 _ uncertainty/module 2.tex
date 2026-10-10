@@ -1,0 +1,480 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.8cm, bottom=2.8cm, left=3.0cm, right=2.5cm, includeheadfoot, headheight=15pt]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue}
+
+% ── Colours ─────────────────────────────────────────────────
+\definecolor{NavyBlue}{HTML}{1E3A8A}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{D97706}
+\definecolor{LightBlue}{HTML}{EFF6FF}
+\definecolor{LightGold}{HTML}{FEF3C7}
+\definecolor{DarkGrey}{HTML}{334155}
+\definecolor{BoxGreen}{HTML}{F0FDF4}
+\definecolor{SoftRed}{HTML}{FFF1F2}
+\definecolor{SidebarGrey}{HTML}{F8FAFC}
+
+% ── Section formatting ───────────────────────────────────────
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{Gold}}{}{0em}{}
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 5 $\cdot$ Module 2}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Environments (tcolorbox Unification) ─────────────────────
+
+% Puzzle box — opening problem
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=NavyBlue!5, colframe=NavyBlue,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Discovery box — moment of crystallisation
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=LightGold, colframe=Gold,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Name box — formal definition reveal
+\newtcolorbox{namebox}[1][]{
+  enhanced, breakable,
+  colback=LightBlue, colframe=MidBlue,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=BoxGreen, colframe=DarkGrey!35,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Thought provocation — inline philosophical aside
+\newtcolorbox{thought}[1][]{
+  enhanced, breakable,
+  colback=SidebarGrey, colframe=Gold,
+  boxrule=0pt, leftrule=1.5pt,
+  sharp corners,
+  left=10pt, right=10pt, top=7pt, bottom=7pt,
+  before skip=10pt, after skip=10pt,
+  #1
+}
+
+% Problem counter
+\newcounter{problem}
+\newenvironment{problem}[1][]{%
+  \refstepcounter{problem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{MidBlue}Problem \theproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Deep problem counter
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{%
+  \refstepcounter{deepproblem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Exercise counter
+\newcounter{exercise}
+\newenvironment{exercise}[1][]{%
+  \refstepcounter{exercise}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{Gold}Exercise \theexercise}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 5: UNCERTAINTY}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 2}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Random Variables and Expectations}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+Two things can be related without one controlling the other.\\[0.15cm]
+What is the average value of a game you can play forever?}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}           & Journey 5 --- Uncertainty \\[4pt]
+\color{DarkGrey}\textbf{Module}            & 2 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}     & Module 1 (sample spaces, probability measure, counting) \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & Random variables, PMFs, CDFs, Expectation, Variance, distributions \\[4pt]
+\color{DarkGrey}\textbf{Format}            & 8 problems $+$ 3 deep problems $\approx$ 13 pages \\
+\end{tabular}
+\vspace{1cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+\noindent\textbf{Recap of Module 1.}
+Module~1 established the axiomatic foundations of probability on a sample space $\Omega$, using set-theoretic events and Kolmogorov’s axioms. You discovered how to count configurations (combinations, stars and bars, inclusion-exclusion) to evaluate uniform probabilities, and you used Bayes' Theorem to update prior beliefs based on incoming evidence.
+
+\medskip
+This module shifts from simple events to quantities. We often do not care about the entire outcome of a complex sample space, but rather a single numerical measurement derived from it—a count of successes, an accumulated financial return, or a physical spin component. This is the realm of the \emph{random variable}.
+
+\newpage
+
+% ============================================================
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+% ============================================================
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle: The St. Petersburg Paradox.}
+
+You are offered a game of chance. A fair coin is tossed repeatedly until it lands heads (H) for the first time.
+* If heads occurs on the first toss, you are paid \$2.
+* If heads occurs on the second toss, you are paid \$4.
+* If heads occurs on the third toss, you are paid \$8.
+* In general, if the first heads occurs on the $n$-th toss, you are paid $\$2^n$.
+
+\medskip
+\textbf{Question 1.} What is the probability that the first heads occurs on the $n$-th toss?
+
+\textbf{Question 2.} Let $X$ be the random payout. Calculate the weighted average of the possible payouts:
+\[
+  \sum_{n=1}^\infty (\text{Probability of heads on toss } n) \times (\text{Payout of } \$2^n).
+\]
+What is the mathematical value of this expectation?
+
+\textbf{Question 3.} Based on this result, how much money should a rational person be willing to pay as an entry fee to play this game once?
+
+\textbf{Question 4.} (The Paradox.) If you ask people, almost no one is willing to pay more than \$10 to play. Why is there such a massive gap between the mathematical value of the game and what people are actually willing to pay? Is mathematics broken, or is our definition of "value" incomplete?
+\end{puzzlebox}
+
+\newpage
+
+% ============================================================
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+% ============================================================
+
+\subsection{Step 1: Discrete Random Variables}
+
+To translate outcomes in a sample space $\Omega$ to numbers, we define a mapping.
+
+\begin{problem}
+\label{prob:rv_definition}
+Let $\Omega$ be a sample space. A \textbf{discrete random variable} $X$ is a function $X : \Omega \to \mathbb{R}$ whose range is countable.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Let $\Omega = \{\text{H, T}\}^3$ be the sample space of three independent coin tosses. Define $X(\omega)$ as the number of heads in outcome $\omega$. Write out the set of outcomes where $X = 2$. What is $P(X=2)$?
+  \item The \textbf{probability mass function} (PMF) of $X$ is $p_X(x) = P(X = x)$. Prove that for any discrete random variable $X$:
+  \[
+    \sum_{x \in \text{range}(X)} p_X(x) = 1.
+  \]
+  \item The \textbf{cumulative distribution function} (CDF) is $F_X(x) = P(X \le x)$. Plot the CDF of the number of heads in three coin tosses. Why is the CDF of a discrete random variable a step function? What are its limits as $x \to \infty$ and $x \to -\infty$?
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 2: Expected Value}
+
+We need a systematic way to calculate the "average" outcome of a random variable.
+
+\begin{problem}
+\label{prob:expectation}
+The \textbf{expected value} (or expectation) of a discrete random variable $X$ is defined as:
+\[
+  E[X] = \sum_{x} x \cdot P(X = x).
+\]
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Roll a fair six-sided die. Let $X$ be the number on the top face. Calculate $E[X]$. Why is the expected value of a die roll not an integer?
+  \item Let $X$ and $Y$ be two random variables on $\Omega$. Prove the \textbf{linearity of expectation}:
+  \[
+    E[aX + bY] = aE[X] + bE[Y]
+  \]
+  for any constants $a, b \in \mathbb{R}$. \textit{Hint: write $E[X]$ as $\sum_{\omega \in \Omega} X(\omega) P(\omega)$.}
+  \item \textbf{CRITICAL INSIGHT:} Notice that your proof in (b) did \emph{not} assume that $X$ and $Y$ are independent. Why is this property so powerful? If we toss $n$ biased coins with head probability $p$, what is the expected number of heads? (Solve using linearity, without using the binomial formula).
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{The Method of Indicators.}
+One of the most powerful techniques in combinatorics and probability is the use of \textbf{indicator random variables}. Let $I_A$ be a random variable that equals $1$ if event $A$ occurs, and $0$ otherwise. Notice that $E[I_A] = P(A)$. If we want to find the expected number of events that occur, we can write the total count as $X = \sum I_{A_i}$, and then use linearity of expectation: $E[X] = \sum P(A_i)$, even if the events are highly dependent. This completely bypasses the need to find the distribution of $X$.
+\end{thought}
+
+\subsection{Step 3: Variance and Covariance}
+
+Two random variables can have the exact same expectation but represent completely different levels of risk.
+
+\begin{problem}
+\label{prob:variance}
+To measure dispersion around the mean, we define the \textbf{variance}:
+\[
+  \text{Var}(X) = E\bigl[(X - E[X])^2\bigr].
+\]
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Prove the identity:
+  \[
+    \text{Var}(X) = E[X^2] - (E[X])^2.
+  \]
+  \item Let $Y = aX + b$. Express $\text{Var}(Y)$ in terms of $\text{Var}(X)$. Why does the constant $b$ not affect the variance?
+  \item The \textbf{covariance} of $X$ and $Y$ is $\text{Cov}(X,Y) = E[(X - E[X])(Y - E[Y])]$. Show that:
+  \[
+    \text{Var}(X + Y) = \text{Var}(X) + \text{Var}(Y) + 2\text{Cov}(X,Y).
+  \]
+  What happens to the variance of a sum if $X$ and $Y$ are independent? Prove it.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 4: Famous Discrete Distributions}
+
+Certain random configurations occur repeatedly in nature and computation.
+
+\begin{problem}
+\label{prob:distributions}
+Identify the setup, write the PMF, and calculate the expectation and variance of the following distributions:
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item **Bernoulli ($p$):** A single trial with success probability $p$.
+  \item **Binomial ($n, p$):** The number of successes in $n$ independent Bernoulli trials.
+  \item **Geometric ($p$):** The number of independent Bernoulli trials required to get the first success. Prove the \textbf{memoryless property}: $P(X > s + t \mid X > s) = P(X > t)$ for integers $s, t \ge 1$.
+  \item **Poisson ($\lambda$):** Used for counting rare events in a continuous interval. The PMF is $P(X = k) = e^{-\lambda} \frac{\lambda^k}{k!}$ for $k \ge 0$. Show that the PMF sums to 1.
+\end{enumerate}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} A random variable is not a variable with changing values—it is a deterministic function mapping the sample space $\Omega$ to the real line $\mathbb{R}$.
+
+\textbf{Second.} Linearity of expectation ($E[aX+bY] = aE[X]+bE[Y]$) holds universally, regardless of whether the variables are independent. This allows us to decompose complex expectations into simple indicator terms.
+
+\textbf{Third.} Variance measures risk or dispersion. The variance of independent sums is the sum of their variances: $\text{Var}(\sum X_i) = \sum \text{Var}(X_i)$.
+
+\textbf{Fourth.} The geometric distribution is the unique discrete distribution that is memoryless. It does not remember how many times you have failed; the probability of succeeding on the next toss is always $p$.
+\end{discoverybox}
+
+\newpage
+
+% ============================================================
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+% ============================================================
+
+\begin{namebox}
+\textbf{Expectation, Variance, and Moments.}
+
+Let $X$ be a discrete random variable with PMF $p(x) = P(X = x)$.
+* **Expectation:** $\mu = E[X] = \sum_x x \, p(x)$.
+* **Variance:** $\sigma^2 = \text{Var}(X) = E[(X - \mu)^2] = \sum_x (x - \mu)^2 p(x)$.
+* **Standard Deviation:** $\sigma = \sqrt{\text{Var}(X)}$.
+* **Moments:** The $k$-th moment of $X$ is $E[X^k] = \sum_x x^k p(x)$. The $k$-th central moment is $E[(X - \mu)^k]$.
+
+\medskip
+\textbf{Summary of Discrete Distributions:}
+
+\begin{center}
+\begin{tabular}{llcc}
+\toprule
+\textbf{Distribution} & \textbf{PMF } $p(k)$ & \textbf{Expectation } $E[X]$ & \textbf{Variance } \text{Var}(X) \\
+\midrule
+Bernoulli($p$) & $p^k(1-p)^{1-k}, \quad k \in \{0,1\}$ & $p$ & $p(1-p)$ \\
+Binomial($n,p$) & $\binom{n}{k}p^k(1-p)^{n-k}, \quad k \in \{0,\ldots,n\}$ & $np$ & $np(1-p)$ \\
+Geometric($p$) & $(1-p)^{k-1}p, \quad k \in \{1,2,\ldots\}$ & $\frac{1}{p}$ & $\frac{1-p}{p^2}$ \\
+Poisson($\lambda$) & $e^{-\lambda}\frac{\lambda^k}{k!}, \quad k \in \{0,1,\ldots\}$ & $\lambda$ & $\lambda$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{namebox}
+
+\newpage
+
+% ============================================================
+\section{Part 5 \texorpdfstring{---}{--} Solved Exercises}
+% ============================================================
+
+\begin{exercise}[The Coupon Collector's Problem]
+There are $N$ distinct coupons. Each time you buy a box of cereal, you get one coupon uniformly at random. Let $T$ be the number of boxes you must buy to collect all $N$ coupons. Calculate the expected value $E[T]$.
+\end{exercise}
+
+\begin{proof}[Solution]
+Decompose the total time $T$ into phases. Let $T_i$ be the number of boxes bought to collect the $i$-th new coupon, after having collected $i-1$ distinct coupons. The total time is:
+\[
+  T = T_1 + T_2 + \cdots + T_N.
+\]
+When we have collected $i-1$ coupons, the probability of drawing a new coupon on the next box is:
+\[
+  p_i = \frac{N - (i-1)}{N}.
+\]
+The time $T_i$ is a geometric random variable with success probability $p_i$. Therefore, the expected time for phase $i$ is:
+\[
+  E[T_i] = \frac{1}{p_i} = \frac{N}{N - i + 1}.
+\]
+Using linearity of expectation:
+\[
+  E[T] = \sum_{i=1}^N E[T_i] = \sum_{i=1}^N \frac{N}{N - i + 1} = N \sum_{j=1}^N \frac{1}{j}.
+\]
+The sum $H_N = \sum_{j=1}^N \frac{1}{j}$ is the $N$-th harmonic number. For large $N$, $H_N \approx \ln N + \gamma$, where $\gamma \approx 0.577$ is the Euler-Mascheroni constant. Thus, the expected number of boxes to collect all coupons is:
+\[
+  E[T] \approx N \ln N.
+\]
+This shows that collecting the final few coupons takes the vast majority of the time.
+\end{proof}
+
+\begin{exercise}[Variance of a Binomial Random Variable]
+Derive the variance of a Binomial($n, p$) random variable without expanding the combination formula.
+\end{exercise}
+
+\begin{proof}[Solution]
+Represent the Binomial variable $X$ as a sum of $n$ independent Bernoulli trials:
+\[
+  X = I_1 + I_2 + \cdots + I_n,
+\]
+where $I_j = 1$ if trial $j$ is a success, and $0$ otherwise.
+Since the trials are independent, the covariance between any distinct pair is zero. Therefore, the variance of the sum is the sum of the variances:
+\[
+  \text{Var}(X) = \sum_{j=1}^n \text{Var}(I_j).
+\]
+For a Bernoulli variable $I_j$:
+\[
+  E[I_j] = p, \qquad E[I_j^2] = 1^2 \cdot p + 0^2 \cdot (1-p) = p.
+\]
+So the variance is:
+\[
+  \text{Var}(I_j) = E[I_j^2] - (E[I_j])^2 = p - p^2 = p(1-p).
+\]
+Summing this over all $n$ independent trials yields:
+\[
+  \text{Var}(X) = np(1-p).
+\]
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Part 6 \texorpdfstring{---}{--} Problems}
+% ============================================================
+
+\begin{problem}[Fixed points of random permutations]
+A group of $n$ people leave their coats at a cloakroom. The attendant returns the coats completely at random. Let $X$ be the number of people who receive their own coat. Find $E[X]$. Does the answer depend on $n$?
+\end{problem}
+
+\begin{problem}[Memoryless property characterisation]
+Let $X$ be a discrete random variable taking values in $\{1, 2, \ldots\}$. Show that if $X$ has the memoryless property, then $X$ must be a geometric random variable. That is, the geometric distribution is the \emph{only} memoryless discrete distribution.
+\end{problem}
+
+\begin{problem}[The St. Petersburg Paradox and Utility]
+Daniel Bernoulli resolved the St. Petersburg Paradox by proposing that people do not maximize expected monetary wealth, but rather expected \textbf{utility} $U(w)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Suppose a person's utility of wealth $w$ is logarithmic: $U(w) = \ln w$. If their initial wealth is $w_0$, they should be willing to pay an entry fee $c$ if the expected utility after playing is at least the utility of not playing:
+  \[
+    \sum_{n=1}^\infty \frac{1}{2^n} \ln(w_0 + 2^n - c) \ge \ln(w_0).
+  \]
+  Assuming $w_0 = \$1000$ and $c = \$10$, calculate the left-hand side approximately. Show that the sum converges to a finite value.
+  \item Why does a logarithmic utility curve reflect "diminishing marginal utility of wealth"?
+\end{enumerate}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 7 \texorpdfstring{---}{--} Central Limit Theorem and Continuous Limits}
+% ============================================================
+
+\begin{deepproblem}[Wald's Identity]
+Let $X_1, X_2, \ldots$ be independent and identically distributed (i.i.d.) random variables with finite expectation $E[X]$. Let $N$ be a \textbf{stopping time}—a positive integer-valued random variable whose event $\{N = n\}$ is independent of the future trials $X_{n+1}, X_{n+2}, \ldots$. Define the random sum:
+\[
+  S_N = \sum_{i=1}^N X_i.
+\]
+Prove \textbf{Wald's Identity}:
+\[
+  E[S_N] = E[N] \cdot E[X].
+\]
+\textit{Hint: Write $S_N = \sum_{i=1}^\infty X_i I_{\{N \ge i\}}$, and use the property that $I_{\{N \ge i\}}$ depends only on $X_1, \ldots, X_{i-1}$, and is therefore independent of $X_i$.}
+\end{deepproblem}
+
+\begin{deepproblem}[The Poisson Limit of Binomials]
+In the 19th century, Sim\'{e}on Denis Poisson showed that the Poisson distribution is the limit of the Binomial distribution for rare events.
+Let $X_n \sim \text{Binomial}(n, p_n)$. Assume that as $n \to \infty$, the probability $p_n$ scales such that $n p_n \to \lambda$ (a constant).
+Prove that for any fixed $k \ge 0$:
+\[
+  \lim_{n\to\infty} P(X_n = k) = e^{-\lambda} \frac{\lambda^k}{k!}.
+\]
+\end{deepproblem}
+
+\newpage
+
+% ============================================================
+\section{Part 8 \texorpdfstring{---}{--} Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Expectation vs. Reality:** In the St. Petersburg paradox, the expectation is infinite, yet no rational agent will pay a high price to play. What does this tell you about the limits of using expected value as a decision-making tool?
+  \item **On Linearity:** Linearity of expectation is mathematically simple to prove, yet it works for dependent variables where joint probabilities are incredibly complex. Why does dependency not break linearity?
+  \item **On the Memoryless Property:** The geometric distribution assumes trials are independent. If you have flipped tails 10 times in a row, the probability of heads on the next flip is still $0.5$. How does this contrast with the psychological error known as the "Gambler's Fallacy"?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~3 moves from discrete measurements to continuous ones. We will introduce continuous random variables, probability density functions (PDFs), and the normal (Gaussian) distribution. We will discover the Law of Large Numbers and the Central Limit Theorem—explaining why normal bell curves emerge universally in nature.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 5, Module 2 --- Random Variables and Expectations}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 3 --- Continuous Distributions and the Central Limit Theorem}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

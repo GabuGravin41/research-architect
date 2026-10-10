@@ -1,0 +1,1079 @@
+\documentclass[12pt, a4paper]{book}
+
+% ─── Core packages ────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=30mm, bottom=30mm,
+  inner=32mm, outer=25mm,
+  marginparwidth=18mm
+}
+
+% ─── Mathematics ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amsthm}
+
+% ─── Chemistry ────────────────────────────────────────────────────────────────
+\usepackage[version=4]{mhchem}
+
+% ─── Graphics & colour ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning,
+                calc, backgrounds, decorations.pathmorphing,
+                decorations.markings, patterns}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% ─── Layout ───────────────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{marginnote}
+\usepackage{caption}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{pifont}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COLOUR PALETTE  (Journey 2 — deep purple)
+% ══════════════════════════════════════════════════════════════════════════════
+\definecolor{JourneyColor}{HTML}{4A235A}
+\definecolor{ModuleColor}{HTML}{6C3483}
+\definecolor{PuzzleColor}{HTML}{1A5276}
+\definecolor{DiscoveryColor}{HTML}{B7950B}
+\definecolor{WarningColor}{HTML}{C0392B}
+\definecolor{ProblemColor}{HTML}{117A65}
+\definecolor{ReflectColor}{HTML}{1D6A39}
+\definecolor{HistoryColor}{HTML}{6E2F1A}
+\definecolor{LightBg}{HTML}{F8F9FA}
+\definecolor{ElectronBlue}{HTML}{1565C0}
+\definecolor{NucleusRed}{HTML}{B71C1C}
+\definecolor{AlphaGold}{HTML}{F57F17}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% TCOLORBOX ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=PuzzleColor!6, colframe=PuzzleColor,
+  fonttitle=\bfseries\sffamily, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=PuzzleColor, colframe=PuzzleColor},
+  borderline west={3pt}{0pt}{PuzzleColor}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  fonttitle=\bfseries\sffamily, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor}, #1}
+
+\newtcolorbox{problembox}[1][]{
+  enhanced, breakable,
+  colback=ProblemColor!5, colframe=ProblemColor,
+  fonttitle=\bfseries\sffamily, title={Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ProblemColor, colframe=ProblemColor},
+  borderline west={3pt}{0pt}{ProblemColor}, #1}
+
+\newtcolorbox{deepbox}[1][]{
+  enhanced, breakable,
+  colback=JourneyColor!5, colframe=JourneyColor,
+  fonttitle=\bfseries\sffamily, title={Deep Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=JourneyColor, colframe=JourneyColor},
+  borderline west={4pt}{0pt}{JourneyColor}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=HistoryColor!7, colframe=HistoryColor!60,
+  fonttitle=\bfseries\sffamily\small, title={Historical Note},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=HistoryColor!80, colframe=HistoryColor}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=ReflectColor!6, colframe=ReflectColor,
+  fonttitle=\bfseries\sffamily, title={Reflection},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ReflectColor, colframe=ReflectColor},
+  borderline west={3pt}{0pt}{ReflectColor}, #1}
+
+\newtcolorbox{modelbreaks}[1][]{
+  enhanced, breakable,
+  colback=WarningColor!6, colframe=WarningColor,
+  fonttitle=\bfseries\sffamily, title={Where This Model Breaks},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=WarningColor, colframe=WarningColor},
+  borderline west={4pt}{0pt}{WarningColor}, #1}
+
+\newtcolorbox{namedconcept}[2][]{
+  enhanced,
+  colback=ModuleColor!6, colframe=ModuleColor,
+  fonttitle=\bfseries\sffamily\large, title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ModuleColor, colframe=ModuleColor}, #1}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% THEOREM ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\theoremstyle{definition}
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{experiment}{Experiment}[chapter]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECTION FORMATTING
+% ══════════════════════════════════════════════════════════════════════════════
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}
+  {10pt}{\Huge}[\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% HEADER / FOOTER
+% ══════════════════════════════════════════════════════════════════════════════
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CUSTOM COMMANDS
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\chem}[1]{\ce{#1}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\setcounter{chapter}{1}
+\chapter[Journey 2 --- Architecture of the Atom]
+        {Journey Two\\[8pt]
+         \textcolor{ModuleColor}{\large Architecture of the Atom}}
+\setcounter{section}{1}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  MODULE 2.2 — RUTHERFORD'S GOLD FOIL: THE NUCLEAR SURPRISE
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Module 2.2 --- Rutherford's Gold Foil: The Nuclear Surprise}
+\label{sec:mod2.2}
+
+\subsection*{Motivation}
+
+Thomson's plum pudding model made a clear, testable prediction:
+fire small, fast, massive particles through an atom,
+and they should pass straight through with only slight deflection.
+The positive charge is so diffuse in the pudding model
+that no single region of the atom can exert a large force.
+
+Ernest Rutherford, who had studied under Thomson,
+decided to test this prediction directly.
+His tool: alpha particles emitted by radioactive materials.
+His target: a thin sheet of gold foil.
+His detector: a screen coated with zinc sulfide that flashes
+when struck by an alpha particle.
+
+What followed was one of the most dramatic experiments
+in the history of science.
+
+% ─── Section: Alpha Particles ─────────────────────────────────────────────────
+\subsection{The Probe: Alpha Particles}
+
+An \newterm{alpha particle} is the nucleus of a helium atom ---
+two protons and two neutrons bound together.
+Written as \ce{^4_2He^{2+}} or simply $\alpha$.
+
+At the time of Rutherford's experiment (1909),
+the nature of alpha particles was only partially understood.
+What was known:
+\begin{itemize}[leftmargin=2em, nosep]
+  \item They are emitted by heavy radioactive atoms such as radium.
+  \item They carry a positive charge (deflected by magnetic fields).
+  \item They are relatively massive compared to electrons.
+  \item They travel at roughly 5--7\% of the speed of light.
+  \item They are stopped by a few centimetres of air or a sheet
+        of paper.
+\end{itemize}
+
+Alpha particles were ideal probes precisely because
+they are \emph{heavy} (about 8000 times the electron mass)
+and \emph{fast}.
+A massive, fast particle fired into a diffuse positive cloud
+(the plum pudding) should barely notice the cloud is there.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  scale=0.95
+]
+  % Alpha particle properties
+  \node[draw=AlphaGold!80, fill=AlphaGold!10, rounded corners=5pt,
+        minimum width=12cm, minimum height=2.2cm]
+        at (0,0) {};
+  \node[font=\sffamily\small\bfseries, color=AlphaGold!80]
+        at (0, 0.75) {Alpha Particle ($\alpha$)};
+  \node[font=\sffamily\footnotesize, text=HistoryColor]
+        at (-3.5, 0.05) {Charge: $+2e$\\$= +3.2\times10^{-19}$ C};
+  \node[font=\sffamily\footnotesize, text=HistoryColor]
+        at (0, 0.05) {Mass: $6.64\times10^{-27}$ kg\\$\approx 4$ u};
+  \node[font=\sffamily\footnotesize, text=HistoryColor]
+        at (3.5, 0.05) {Speed: $\approx 0.05c$\\$\approx 1.5\times10^7$ m/s};
+  \node[font=\sffamily\footnotesize\itshape, text=JourneyColor!60]
+        at (0,-0.65) {= helium nucleus; carries no electrons};
+\end{tikzpicture}
+\end{center}
+
+% ─── Section: The Experimental Setup ──────────────────────────────────────────
+\subsection{The Experimental Setup}
+
+Rutherford and his students Hans Geiger and Ernest Marsden
+set up the following apparatus:
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  scale=1.0
+]
+  % Lead container with radioactive source
+  \fill[JourneyColor!30] (-6.2,-0.9) rectangle (-5.2, 0.9);
+  \fill[JourneyColor!60] (-6.2,-0.9) rectangle (-5.6, 0.9);
+  \fill[AlphaGold!50] (-6.0,-0.2) circle (0.18cm);
+  \node[font=\sffamily\footnotesize, text=HistoryColor]
+    at (-5.7,-1.3) {Radium source in lead block};
+
+  % Collimating slit
+  \fill[JourneyColor!50] (-5.1,-0.8) rectangle (-4.8,-0.12);
+  \fill[JourneyColor!50] (-5.1, 0.8) rectangle (-4.8, 0.12);
+  \node[font=\sffamily\footnotesize, text=JourneyColor]
+    at (-4.95,-1.3) {collimator};
+
+  % Alpha beam
+  \draw[-{Stealth[length=5pt]}, ultra thick, AlphaGold, line width=1.5pt]
+    (-4.7, 0) -- (-1.5, 0);
+  \node[font=\sffamily\footnotesize, text=AlphaGold]
+    at (-3.2, 0.35) {$\alpha$ beam};
+
+  % Gold foil
+  \fill[DiscoveryColor!60] (-1.4,-1.5) rectangle (-1.2, 1.5);
+  \node[font=\sffamily\footnotesize, text=DiscoveryColor]
+    at (-1.3,-1.85) {gold foil (400 nm thick)};
+
+  % Most go straight through
+  \draw[-{Stealth[length=4pt]}, thick, AlphaGold!70]
+    (-1.1, 0) -- (2.8, 0)
+    node[above, font=\sffamily\footnotesize, text=AlphaGold!70]
+      {most pass straight};
+
+  % Small angle deflections
+  \draw[-{Stealth[length=4pt]}, thick, AlphaGold!60]
+    (-1.1, 0.05) -- (2.6, 0.6);
+  \draw[-{Stealth[length=4pt]}, thick, AlphaGold!60]
+    (-1.1,-0.05) -- (2.6,-0.6);
+
+  % Large angle deflection
+  \draw[-{Stealth[length=4pt]}, ultra thick, WarningColor]
+    (-1.1, 0.05) -- (-2.5, 1.2)
+    node[above left, font=\sffamily\footnotesize, text=WarningColor]
+      {large angle back-scatter!};
+
+  % ZnS detector screen (curved around)
+  \draw[thick, ModuleColor!50, dashed]
+    (3.5,-1.8) arc[start angle=-30, end angle=210, radius=3.5cm];
+  \node[font=\sffamily\footnotesize, text=ModuleColor]
+    at (2.5,-2.2) {ZnS detector screen};
+
+  % Flashes
+  \fill[DiscoveryColor!80] (3.0, 0) circle (0.08cm);
+  \fill[DiscoveryColor!80] (2.8, 0.6) circle (0.06cm);
+  \fill[DiscoveryColor!80] (2.8,-0.6) circle (0.06cm);
+  \fill[WarningColor!80] (-3.1, 1.55) circle (0.08cm);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The zinc sulfide screen could be positioned anywhere around
+the gold foil.
+Geiger and Marsden patiently counted flashes,
+sitting in the dark for hours as their eyes adjusted,
+moving the screen to different angles.
+
+% ─── Section: What They Expected ──────────────────────────────────────────────
+\subsection{The Prediction vs the Reality}
+
+\subsubsection{What the Plum Pudding Model Predicted}
+
+If positive charge is uniformly distributed through the atom,
+the maximum force on an incoming alpha particle at any point
+is weak and points in no particular direction.
+Simple calculations show:
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=PuzzleColor!6, colframe=PuzzleColor!60,
+  width=0.85\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\textbf{Plum pudding prediction:}\\[4pt]
+Almost all alpha particles pass through with deflection less than 1\textdegree.\\
+The probability of deflection greater than 90\textdegree\ is essentially zero ---\\
+less than 1 in $10^{3500}$.
+\end{tcolorbox}
+\end{center}
+
+\subsubsection{What They Actually Observed}
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=WarningColor!8, colframe=WarningColor,
+  width=0.85\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\textbf{Experimental result:}\\[4pt]
+About 1 in 8000 alpha particles was deflected by \textbf{more than 90\textdegree}.\\
+About 1 in 20000 bounced almost straight back (deflection $> 150$\textdegree).
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+Rutherford described his reaction with characteristic directness:
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=HistoryColor!8, colframe=HistoryColor!50,
+  width=0.85\textwidth, arc=3pt
+]
+\centering\sffamily\normalsize\itshape
+``It was as if you fired a 15-inch artillery shell at a piece of tissue paper\\
+and it came back and hit you.''\\[4pt]
+\normalfont\small\sffamily --- Ernest Rutherford, 1913
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+For an alpha particle to bounce backward, it must encounter
+a repulsive force far stronger than anything a diffuse
+positive cloud could provide.
+That force must come from something very small,
+very dense, and very positively charged --- concentrated
+in a tiny region, not spread through the whole atom.
+
+\begin{puzzlebox}
+Think through the physics carefully.
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item An alpha particle has charge $+2e$ and kinetic energy
+        approximately $K = \SI{7.7}{\mega\electronvolt}$
+        (about $1.23\times10^{-12}\ \si{\joule}$).
+        For the alpha particle to be deflected backward,
+        all its kinetic energy must be converted to
+        electrostatic potential energy at closest approach.
+
+        The electrostatic potential energy when two charges
+        $q_1$ and $q_2$ are separated by distance $r$ is:
+        \[
+          U = \frac{q_1 q_2}{4\pi\varepsilon_0 r}
+        \]
+        where $\frac{1}{4\pi\varepsilon_0} = 8.99\times10^9\ \si{\newton\metre\squared\per\coulomb\squared}$.
+
+        For gold ($Z = 79$), so $q_{\text{gold}} = 79e$.
+        Set $K = U$ at closest approach and solve for $r$.
+
+  \item Compare your answer from (a) to:
+        \begin{itemize}[nosep]
+          \item The radius of a gold atom: $\approx 1.44\times10^{-10}$ m
+          \item The radius of the nucleus: $\approx 7.3\times10^{-15}$ m
+        \end{itemize}
+        What does this tell you about the size of the object
+        that deflected the alpha particle?
+
+  \item If the positive charge of gold were spread uniformly
+        over a sphere of radius $1.44\times10^{-10}$ m (the atom),
+        estimate the maximum force on an alpha particle
+        passing through the surface.
+        Compare this to the force at the nuclear radius.
+        How many times stronger is the concentrated charge?
+
+  \item Rutherford observed 1 in 20000 alphas bouncing back.
+        This means 19999 in 20000 passed through.
+        What does this ratio tell us about the
+        \emph{fraction of the atom's volume} occupied
+        by the nucleus?
+\end{enumerate}
+\end{puzzlebox}
+
+% ─── Section: The Nuclear Model ───────────────────────────────────────────────
+\subsection{Rutherford's Nuclear Model of the Atom}
+
+From the scattering data, Rutherford derived a new model
+of the atom (1911).
+It was as radical as it was simple.
+
+\begin{namedconcept}{The Nuclear Model of the Atom (Rutherford, 1911)}
+\begin{itemize}[nosep, leftmargin=2em]
+  \item The atom consists of a tiny, dense, positively charged
+        \newterm{nucleus} at the centre.
+  \item The nucleus contains almost all of the atom's mass.
+  \item The nucleus is surrounded by electrons at relatively
+        large distances.
+  \item Most of the atom is \emph{empty space}.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Property & Nucleus & Atom \\
+\midrule
+Radius & $\sim 10^{-15}\ \si{\metre}$ (1 fm) &
+         $\sim 10^{-10}\ \si{\metre}$ (1 \AA) \\
+Size ratio & \multicolumn{2}{l}{nucleus/atom $\approx 10^{-5}$
+             (like a marble in a football stadium)} \\
+Mass fraction & $> 99.97\%$ & 100\% (by definition) \\
+Charge & $+Ze$ & neutral overall \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{namedconcept}
+
+\vspace{0.5em}
+
+The ``marble in a football stadium'' analogy deserves to be
+felt, not just read.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  scale=0.85
+]
+  % Atom outline - large circle
+  \draw[thick, JourneyColor!30, dashed]
+    (0,0) circle (4.5cm);
+  \node[font=\sffamily\footnotesize, text=JourneyColor!50]
+    at (3.5, 3.8) {electron cloud\\radius $\sim 10^{-10}$ m};
+
+  % Electrons scattered around
+  \foreach \angle/\r in {
+    30/3.8, 80/4.1, 140/3.9, 200/4.2,
+    250/3.7, 310/4.0, 355/3.6, 170/4.3
+  }{
+    \fill[ElectronBlue] ({\r*cos(\angle)}, {\r*sin(\angle)}) circle (0.08cm);
+  }
+
+  % Nucleus - tiny dot at centre
+  \fill[NucleusRed] (0,0) circle (0.14cm);
+  \draw[thick, NucleusRed] (0,0) circle (0.14cm);
+  \node[font=\sffamily\footnotesize, text=NucleusRed]
+    at (1.1,-0.5) {nucleus\\$\sim 10^{-15}$ m\\(not to scale!)};
+  \draw[->, thin, NucleusRed!60] (0.55,-0.35) -- (0.1,-0.05);
+
+  % Alpha trajectories
+  % Straight through (far from nucleus)
+  \draw[-{Stealth[length=4pt]}, thick, AlphaGold!60]
+    (-6.5, 3.2) -- (6.5, 3.2)
+    node[right, font=\sffamily\tiny, text=AlphaGold!70]{undeflected};
+
+  % Slight deflection
+  \draw[-{Stealth[length=4pt]}, thick, AlphaGold!70]
+    (-6.5, 1.0) .. controls (-2,0.8) and (2,0.6) .. (6.5, 0.4)
+    node[right, font=\sffamily\tiny, text=AlphaGold!70]{slight deflect};
+
+  % Large angle deflection (close to nucleus)
+  \draw[-{Stealth[length=4pt]}, ultra thick, WarningColor]
+    (-6.5,-0.3) .. controls (-1.5,-0.3) and (-0.5,0.5) ..
+    (-1.5, 2.8)
+    node[above, font=\sffamily\tiny, text=WarningColor]{large deflect};
+
+  % Scale bar annotation
+  \draw[{|}-{|}, thin, JourneyColor!40]
+    (-4.5,-5.2) -- (4.5,-5.2)
+    node[midway, below, font=\sffamily\footnotesize, text=JourneyColor!60]
+      {atom diameter $\approx 2\times10^{-10}$ m};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+This picture is startling.
+An atom is almost entirely nothing.
+If you scaled a hydrogen nucleus to the size of a marble (1 cm),
+the electron would be orbiting at a distance of about 50 metres ---
+half a football pitch away, in a stadium of empty space.
+
+% ─── Section: The Rutherford Scattering Formula ───────────────────────────────
+\subsection{The Rutherford Scattering Formula}
+
+Rutherford did not just offer a qualitative picture.
+He derived a precise mathematical formula for the fraction
+of alpha particles deflected through any given angle $\theta$,
+assuming all the positive charge is concentrated at a point:
+
+\begin{namedconcept}{Rutherford Scattering Formula}
+The fraction of alpha particles scattered through angles
+\emph{greater than} $\theta$ is:
+
+\[
+  f(\theta) = \pi n t
+  \left(\frac{Z_1 Z_2 e^2}{4K}\right)^2
+  \cot^2\!\!\left(\frac{\theta}{2}\right)
+\]
+
+where:
+\begin{itemize}[nosep, leftmargin=2em]
+  \item $n$ = number density of atoms in the foil (atoms/m$^3$)
+  \item $t$ = thickness of the foil
+  \item $Z_1 = 2$ (alpha), $Z_2 = 79$ (gold)
+  \item $K$ = kinetic energy of alpha particle
+  \item $\theta$ = scattering angle
+\end{itemize}
+
+The key feature: this formula was \emph{derived from pure
+Coulomb electrostatics} assuming a point nucleus.
+Its agreement with experiment confirmed the nuclear model.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+The agreement between Rutherford's formula and Geiger and
+Marsden's careful measurements was striking.
+Every aspect of the angular distribution fit perfectly.
+This was not an approximate agreement ---
+it was a quantitative triumph.
+
+\begin{historybox}
+\textbf{Geiger, Marsden, and the Tedium of Discovery}
+
+The gold foil experiment was largely carried out by Hans Geiger
+and Ernest Marsden (who was an undergraduate student at the time).
+They spent months in a darkened room, counting tiny flashes
+on a zinc sulfide screen through a microscope, rotating
+the detector to different angles, working in sessions that
+lasted many hours.
+
+Geiger later developed the \emph{Geiger counter} to automate
+this kind of particle detection.
+Marsden returned to New Zealand and became a physicist there.
+
+The experiment took two years of careful work.
+The theoretical analysis (Rutherford's formula) took
+Rutherford about three months to derive.
+
+This ratio --- years of careful data collection, months of
+theoretical insight --- is typical of landmark experiments
+in physics.
+\end{historybox}
+
+% ─── Section: Protons and Neutrons ────────────────────────────────────────────
+\subsection{What Is the Nucleus Made Of?}
+
+Rutherford's nuclear model established that almost all
+the atom's mass is concentrated in the nucleus.
+But what is the nucleus itself made of?
+
+\subsubsection{The Proton}
+
+Rutherford noticed in 1917 that when alpha particles
+hit nitrogen gas, a new type of particle was ejected
+with properties matching the hydrogen nucleus ---
+a single positively charged particle with mass $\approx 1$ u.
+
+\begin{center}
+\ce{^{14}_{7}N + ^{4}_{2}He -> ^{17}_{8}O + ^{1}_{1}H}
+\end{center}
+
+He called this particle the \newterm{proton}.
+Every nucleus contains protons.
+The number of protons --- the \newterm{atomic number} $Z$ ---
+determines which element the atom is.
+
+\begin{namedconcept}{The Proton}
+\begin{itemize}[nosep, leftmargin=2em]
+  \item Charge: $+e = +1.602\times10^{-19}\ \si{\coulomb}$
+  \item Mass: $m_p = 1.673\times10^{-27}\ \si{\kilogram} \approx 1$ u
+  \item The number of protons $= Z =$ atomic number
+  \item Determines the element's chemical identity
+\end{itemize}
+\end{namedconcept}
+
+\subsubsection{The Neutron: A Neutral Companion}
+
+There was a problem.
+For all elements heavier than hydrogen,
+the mass of the nucleus exceeds what the protons alone
+could account for.
+Helium has $Z = 2$ (2 protons) but mass $\approx 4$ u.
+Where does the extra mass come from?
+
+Rutherford predicted in 1920 that there must be a neutral
+particle in the nucleus with approximately the mass of a proton.
+He called it the \emph{neutron} --- but it took twelve years
+to find.
+
+In 1932, James Chadwick bombarded beryllium with alpha particles
+and detected a neutral radiation that could knock protons
+out of paraffin wax.
+Only a particle with mass comparable to a proton could
+do this; photons (light) could not.
+
+\begin{center}
+\ce{^{9}_{4}Be + ^{4}_{2}He -> ^{12}_{6}C + ^{1}_{0}n}
+\end{center}
+
+\begin{namedconcept}{The Neutron (Chadwick, 1932)}
+\begin{itemize}[nosep, leftmargin=2em]
+  \item Charge: 0 (neutral)
+  \item Mass: $m_n = 1.675\times10^{-27}\ \si{\kilogram} \approx 1$ u
+        (slightly heavier than proton)
+  \item Number of neutrons $= N = A - Z$
+        where $A$ is mass number
+  \item Provides nuclear ``glue'' --- the strong nuclear force
+        acts between neutrons and protons
+\end{itemize}
+\end{namedconcept}
+
+\subsubsection{Nuclear Notation}
+
+An atom is completely specified by two numbers:
+$Z$ (protons, determines element) and
+$A$ (mass number $=$ protons $+$ neutrons).
+
+\[
+  \ce{^{A}_{Z}X}
+\]
+
+For example:
+\begin{itemize}[nosep, leftmargin=2em]
+  \item \ce{^{1}_{1}H}: hydrogen, 1 proton, 0 neutrons
+  \item \ce{^{4}_{2}He}: helium, 2 protons, 2 neutrons
+  \item \ce{^{12}_{6}C}: carbon, 6 protons, 6 neutrons
+  \item \ce{^{238}_{92}U}: uranium, 92 protons, 146 neutrons
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  scale=1.0
+]
+  % Carbon-12 nucleus diagram
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+    at (0, 2.8) {Carbon-12 nucleus (\ce{^{12}_{6}C})};
+
+  % Draw protons and neutrons packed in nucleus
+  \foreach \x/\y/\col/\lbl in {
+    -0.4/0.4/NucleusRed/{$p^+$},
+     0.4/0.4/NucleusRed/{$p^+$},
+    -0.8/-0.1/NucleusRed/{$p^+$},
+     0.0/-0.1/NucleusRed/{$p^+$},
+     0.8/-0.1/NucleusRed/{$p^+$},
+    -0.4/-0.6/NucleusRed/{$p^+$}
+  }{
+    \shade[ball color=\col!40] (\x,\y) circle (0.28cm);
+  }
+  \foreach \x/\y in {
+    0.4/-0.6,
+   -0.0/ 0.9,
+    0.8/ 0.4,
+   -0.8/ 0.9,
+   -0.8/-0.6,
+    0.4/-0.1
+  }{
+    \shade[ball color=JourneyColor!30] (\x,\y) circle (0.28cm);
+  }
+
+  % Legend
+  \shade[ball color=NucleusRed!40] (2.4, 0.8) circle (0.22cm);
+  \node[right, font=\sffamily\footnotesize, text=NucleusRed]
+    at (2.65, 0.8) {proton ($p^+$)};
+  \shade[ball color=JourneyColor!30] (2.4, 0.1) circle (0.22cm);
+  \node[right, font=\sffamily\footnotesize, text=JourneyColor]
+    at (2.65, 0.1) {neutron ($n^0$)};
+
+  % Annotation
+  \node[font=\sffamily\footnotesize, text=JourneyColor!70]
+    at (0,-1.5) {6 protons + 6 neutrons = mass number 12};
+
+  % Surrounding electron cloud hint
+  \draw[thick, dashed, ElectronBlue!30]
+    (0,0.15) circle (1.8cm);
+  \foreach \angle in {0,60,120,180,240,300}{
+    \fill[ElectronBlue] ({1.75*cos(\angle)},{0.15+1.75*sin(\angle)})
+      circle (0.07cm);
+  }
+  \node[font=\sffamily\footnotesize, text=ElectronBlue!60]
+    at (-2.4, 1.8) {6 electrons\\(far away)};
+\end{tikzpicture}
+\end{center}
+
+% ─── Section: Isotopes Revisited ──────────────────────────────────────────────
+\subsection{Isotopes: Same Element, Different Neutrons}
+
+With the nuclear model, the concept of isotopes
+becomes completely clear.
+Isotopes of an element have the same number of protons
+(same $Z$, same element) but different numbers of neutrons
+(different $A$, different mass).
+
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+Element & Symbol & Protons ($Z$) & Neutrons ($N$) & Mass ($A$) \\
+\midrule
+Hydrogen    & \ce{^1H}   & 1 & 0 & 1 \\
+Deuterium   & \ce{^2H}   & 1 & 1 & 2 \\
+Tritium     & \ce{^3H}   & 1 & 2 & 3 \\
+\midrule
+Carbon-12   & \ce{^{12}C} & 6 & 6 & 12 \\
+Carbon-13   & \ce{^{13}C} & 6 & 7 & 13 \\
+Carbon-14   & \ce{^{14}C} & 6 & 8 & 14 \\
+\midrule
+Chlorine-35 & \ce{^{35}Cl}& 17 & 18 & 35 \\
+Chlorine-37 & \ce{^{37}Cl}& 17 & 20 & 37 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+Isotopes of the same element have \emph{identical chemical
+properties} (because chemistry is determined by electrons,
+which depends on proton number, not neutron number) but
+\emph{different nuclear properties} (stability, radioactivity).
+
+Carbon-14 is radioactive (unstable) because the neutron-to-proton
+ratio is too high.
+Carbon-12 and Carbon-13 are stable.
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Complete the following table:
+        \begin{center}
+        \begin{tabular}{lccccc}
+        \toprule
+        Symbol & $Z$ & $N$ & $A$ & Element & Electrons (neutral atom) \\
+        \midrule
+        \ce{^{16}_{8}O}  & 8  & ?  & ?  & Oxygen  & ? \\
+        \ce{^{56}_{26}Fe}& ?  & ?  & 56 & Iron    & ? \\
+        \ce{^{238}_{92}U}& ?  & ?  & ?  & Uranium & ? \\
+        \ce{^{131}_{53}I}& ?  & ?  & ?  & Iodine  & ? \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+
+  \item Natural chlorine is 75.77\% \ce{^{35}Cl} and 24.23\%
+        \ce{^{37}Cl}.
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the average atomic mass of chlorine.
+          \item Explain why both isotopes have identical chemical
+                behaviour but slightly different physical properties
+                (e.g., different boiling points of \ce{HCl} made
+                from each isotope).
+        \end{enumerate}
+
+  \item A radioactive decay series converts \ce{^{238}_{92}U}
+        to \ce{^{206}_{82}Pb} through a sequence of alpha
+        ($\alpha$) and beta ($\beta^-$) decays.
+        An alpha decay: loses \ce{^4_2He} (loses 2 protons,
+        2 neutrons).
+        A beta decay: a neutron becomes a proton (gains 1 proton,
+        loses 1 neutron).
+        \begin{enumerate}[label=(\alph*)]
+          \item How many protons and neutrons are lost overall
+                going from \ce{^{238}_{92}U} to \ce{^{206}_{82}Pb}?
+          \item How many alpha decays occurred?
+          \item How many beta decays occurred?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: The Size of the Nucleus ────────────────────────────────────────
+\subsection{Quantifying the Nuclear Scale}
+
+The nuclear model makes quantitative claims about sizes.
+These can be tested.
+
+The radius of a nucleus scales approximately as:
+\[
+  r = r_0 A^{1/3}
+\]
+where $r_0 \approx 1.2\times10^{-15}\ \si{\metre}$ (1.2 fm)
+and $A$ is the mass number.
+
+This ``$A^{1/3}$'' scaling is deeply significant:
+it means the \emph{volume} of the nucleus is proportional
+to $A$ (since $V \propto r^3 \propto A$).
+Each nucleon (proton or neutron) occupies approximately
+the same volume inside the nucleus.
+Nuclear matter has roughly constant density.
+
+\begin{namedconcept}{Nuclear Density}
+The density of nuclear matter is approximately:
+\[
+  \rho_{\text{nuclear}} \approx 2 \times 10^{17}\ \si{\kilogram\per\metre\cubed}
+\]
+This is about $2 \times 10^{14}$ times denser than water.
+A teaspoon of nuclear matter would weigh about
+$10^{11}$ kg --- about 100 million tonnes.
+\end{namedconcept}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Calculate the radius of the following nuclei
+        using $r = r_0 A^{1/3}$, $r_0 = 1.2\times10^{-15}\ \si{\metre}$:
+        \begin{enumerate}[label=(\alph*)]
+          \item \ce{^{1}H} (hydrogen)
+          \item \ce{^{4}He} (helium-4)
+          \item \ce{^{12}C} (carbon-12)
+          \item \ce{^{56}Fe} (iron-56)
+          \item \ce{^{238}U} (uranium-238)
+        \end{enumerate}
+
+  \item For carbon-12, calculate:
+        \begin{enumerate}[label=(\alph*)]
+          \item The volume of the nucleus.
+          \item The mass of the nucleus
+                (use $m \approx A \times 1.67\times10^{-27}\ \si{kg}$).
+          \item The density of the nucleus in \si{kg/m^3}.
+          \item How does this compare to the density of water
+                (\SI{1000}{kg/m^3})?
+        \end{enumerate}
+
+  \item The radius of a carbon atom is about
+        $7\times10^{-11}$ m.
+        \begin{enumerate}[label=(\alph*)]
+          \item What fraction of the atomic radius is the nuclear radius?
+          \item What fraction of the atomic \emph{volume} is the nuclear volume?
+          \item If the atom were scaled up so the nucleus
+                was the size of a tennis ball (radius 3.3 cm),
+                how far away would the electrons be?
+                Express in metres.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Where the Nuclear Model Breaks Down ─────────────────────────────
+\subsection*{Where the Nuclear Model Breaks Down}
+
+\begin{modelbreaks}
+Rutherford's nuclear model solved the scattering problem
+beautifully.
+But it immediately raised a catastrophic new question.
+
+If electrons are orbiting the nucleus like planets around
+the sun, then by classical electrodynamics, they are
+\emph{accelerating} (changing direction in circular motion).
+Any accelerating charge radiates electromagnetic energy.
+An orbiting electron should continuously lose energy,
+spiral inward, and crash into the nucleus
+in about $10^{-11}$ seconds.
+
+But atoms are stable.
+Hydrogen atoms have existed for billions of years.
+
+The classical picture of orbiting electrons is therefore
+\emph{wrong} --- but we do not yet know what to replace it with.
+This is the crisis of classical physics.
+Module~2.3 confronts it directly.
+
+A second problem: if electrons orbit at any radius
+(as in a classical planetary orbit), they should emit
+a \emph{continuous} spectrum of light as they spiral in.
+But excited atoms emit light only at specific, sharp
+wavelengths --- a \emph{line spectrum}.
+
+Both problems have the same solution: quantum mechanics.
+But that solution requires completely abandoning the
+idea of a classical trajectory.
+\end{modelbreaks}
+
+% ─── Section: Deep Problems ───────────────────────────────────────────────────
+\subsection*{Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+
+  \item \textbf{Deriving the Distance of Closest Approach.}
+
+        An alpha particle (charge $q_1 = +2e$, mass
+        $m = 6.64\times10^{-27}$ kg) is fired directly at
+        a gold nucleus (charge $q_2 = +79e$) with kinetic
+        energy $K = \SI{7.7}{\mega\electronvolt}$.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Convert \SI{7.7}{\mega\electronvolt} to joules.
+                ($\SI{1}{\electronvolt} = 1.602\times10^{-19}\ \si{\joule}$.)
+          \item At the point of closest approach (direct
+                head-on collision), all kinetic energy converts
+                to electrostatic potential energy.
+                Calculate the distance of closest approach $d$.
+          \item Compare $d$ to the atomic radius of gold
+                ($1.44\times10^{-10}$ m) and to the nuclear
+                radius ($7.3\times10^{-15}$ m).
+                Is the alpha particle probing the nucleus
+                or just its vicinity?
+          \item If the alpha particle had twice the kinetic energy,
+                how would $d$ change?
+                What does this tell us about using higher-energy
+                probes to study nuclear structure?
+        \end{enumerate}
+
+  \item \textbf{The Strong Nuclear Force.}
+
+        Protons in a nucleus are all positively charged
+        and are packed within a radius of order $10^{-15}$ m.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the electrostatic repulsive force
+                between two protons separated by
+                $r = 2\times10^{-15}$ m.
+          \item Convert this force to newtons.
+                Comment on its magnitude.
+          \item Protons clearly \emph{do} stay in the nucleus.
+                This means there must be an attractive force
+                stronger than the electrostatic repulsion at
+                this range.
+                This is the \emph{strong nuclear force}.
+                From the force calculation in (a), what can
+                you infer about the minimum strength of the
+                strong nuclear force at nuclear distances?
+          \item The strong nuclear force has a very short range ---
+                it drops to essentially zero beyond about
+                $2\times10^{-15}$ m.
+                Explain qualitatively why this means that very
+                large nuclei ($A > 200$) become unstable.
+                (Hint: what happens to the electrostatic repulsion
+                as the nucleus grows, while the strong force
+                stays short-range?)
+        \end{enumerate}
+
+  \item \textbf{Rutherford Scattering and the Limit of the Model.}
+
+        Rutherford's formula assumes the nucleus is a point charge.
+        At low energies, this is a good approximation.
+        At very high energies, alpha particles can actually
+        reach the nuclear surface and the formula breaks down.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item The nuclear radius of gold is approximately
+                $r_{\text{Au}} = 7.3\times10^{-15}$ m.
+                What kinetic energy must an alpha particle have
+                to reach this distance from the gold nucleus?
+                Express your answer in MeV.
+          \item Real high-energy scattering experiments show
+                deviations from Rutherford's formula at energies
+                above the value you calculated.
+                What does this deviation tell us?
+          \item Rutherford's formula fits perfectly at low energies,
+                implying the nucleus appears as a point charge.
+                At high energies it fails.
+                This is an example of a model having a domain
+                of validity.
+                Give two other examples from this curriculum
+                of models with limited domains of validity.
+        \end{enumerate}
+
+\end{enumerate}
+\end{deepbox}
+
+% ─── Reflection ───────────────────────────────────────────────────────────────
+\subsection*{Reflection}
+
+\begin{reflectionbox}
+\begin{enumerate}[label=\textbf{R\arabic*.}]
+  \item Rutherford's result --- 1 in 20000 alphas bouncing back ---
+        was completely unexpected.
+        \textbf{What does this episode tell us about the
+        importance of experimental anomalies in science?}
+        How should a scientist respond when data contradicts
+        a well-established model?
+
+  \item The nuclear model says atoms are mostly empty space.
+        \textbf{Why, then, does a table feel solid?}
+        If your hand and the table are both mostly empty space,
+        what is the physical origin of the force that prevents
+        them from passing through each other?
+
+  \item Thomson's plum pudding model was wrong,
+        but it was wrong \emph{in a productive way} ---
+        it made a precise prediction that Rutherford could test.
+        \textbf{A model that makes no predictions cannot be wrong.}
+        Is a non-falsifiable model useful in science?
+        Give an example from this curriculum of a non-falsifiable
+        or vague claim, and contrast it with a precise,
+        testable one.
+
+  \item We now have three subatomic particles:
+        electrons, protons, and neutrons.
+        \textbf{Which one determines:
+        (a) the element's chemical identity;
+        (b) the atom's mass;
+        (c) whether the atom is electrically neutral;
+        (d) whether the atom is radioactive?}
+        Justify each answer.
+\end{enumerate}
+\end{reflectionbox}
+
+\vspace{1.5em}
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  width=0.88\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\textbf{What we invented in this module.}\\[4pt]
+We invented the nucleus --- not by assuming it, but by firing
+projectiles at atoms and watching where they went.
+The gold foil experiment is a masterclass in
+\emph{indirect inference}: you cannot see a nucleus,
+but you can deduce its existence, size, and charge
+from the pattern of deflections.
+This technique --- scattering experiments to probe
+invisible structure --- remains the foundation of
+particle physics today.
+The LHC at CERN is, in essence, a vastly more powerful
+version of Rutherford's gold foil apparatus.\\[4pt]
+But we now face a crisis.
+The nuclear model demands that electrons orbit the nucleus ---
+and classical physics says orbiting electrons must radiate
+energy and spiral inward.
+The atom should not exist.
+That is the subject of Module~2.3.
+\end{tcolorbox}
+\end{center}
+
+\vspace{2em}
+\noindent\textcolor{JourneyColor!40}{\rule{\textwidth}{0.6pt}}
+\begin{center}
+\textit{\sffamily\small
+Module 2.2 complete. Continue to Module 2.3:\\
+\textbf{The Disaster of Classical Physics --- Why Atoms Shouldn't Exist}.}
+\end{center}
+
+\end{document}

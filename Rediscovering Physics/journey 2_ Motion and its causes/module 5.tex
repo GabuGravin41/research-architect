@@ -1,0 +1,238 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds, decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Page geometry fix ──────────────────────────────────────────────────────
+\setlength{\headheight}{24pt}
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true, linkcolor=midblue, urlcolor=accent, citecolor=teal,
+  pdftitle={Discovery Physics: Journey 2 — Motion and Its Causes},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep}, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold}, #1}
+
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white}, coltitle=white, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent}, drop shadow, #1}
+
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Reflection}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=gold!8, colframe=gold!70!brown,
+  fonttitle=\bfseries\color{deep}, title={Historical Note}, #1}
+
+% ─── Problem counter ────────────────────────────────────────────────────────
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi}
+
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+% ─── Theorem environments ───────────────────────────────────────────────────
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{1}
+\setcounter{section}{4}
+
+\section{Module 2.5 — Conservation of Momentum}
+\label{sec:momentum_conservation}
+
+\epigraph{
+  \itshape In physics, symmetry is more fundamental than substance.
+}{--- Frank Wilczek}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+When two objects interact, what quantity is always the same before and after? And why should anything be conserved at all?
+\end{tcolorbox}
+
+\subsection{Discovering Momentum}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/fig_j2_momentum}
+  \caption{Left: an elastic collision between two equal masses. The first mass stops; the second moves off with the first's velocity. Both momentum and kinetic energy are conserved. Right: momentum bars before and after confirm the total is unchanged.}
+  \label{fig:momentum}
+\end{figure}
+
+Consider two objects colliding. We want to find a quantity that remains the same before and after the collision, regardless of the details of the collision.
+
+\begin{explobox}
+\problem Two carts on a frictionless track collide. Use the data below to find a conserved quantity.
+
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+Experiment & $m_1$ & $v_{1i}$ & $m_2$ & $v_{2i}$ & $v_{1f}$, $v_{2f}$ \\
+\midrule
+1 & $\SI{1}{kg}$ & $\SI{4}{m/s}$ & $\SI{1}{kg}$ & $0$ & $0$, $\SI{4}{m/s}$ \\
+2 & $\SI{2}{kg}$ & $\SI{3}{m/s}$ & $\SI{1}{kg}$ & $0$ & $\SI{1}{m/s}$, $\SI{4}{m/s}$ \\
+3 & $\SI{1}{kg}$ & $\SI{5}{m/s}$ & $\SI{2}{kg}$ & $-\SI{1}{m/s}$ & $-\SI{1}{m/s}$, $\SI{3}{m/s}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Compute $m_1 v_{1i} + m_2 v_{2i}$ and $m_1 v_{1f} + m_2 v_{2f}$ for each experiment. What do you find?
+
+\problem Derive momentum conservation directly from Newton's third law. (Hint: during a collision, the force on object 1 from object 2 is equal and opposite to the force on object 2 from object 1. Apply $F = ma$ to both, then add the equations.)
+
+\problem A rifle of mass $\SI{3}{kg}$ fires a bullet of mass $\SI{0.01}{kg}$ at $\SI{900}{m/s}$. What is the recoil velocity of the rifle?
+\end{explobox}
+
+\begin{namebox}
+The conserved quantity is \textbf{momentum}: $\vec{p} = m\vec{v}$.
+
+The total momentum of a system of objects is conserved---remains constant---whenever the objects interact only with each other (no external forces).
+
+\textbf{Conservation of momentum} is one of the most universal laws in physics. It holds in quantum mechanics, in special relativity, in particle physics. It has never been observed to fail.
+\end{namebox}
+
+\subsection{Why Is Momentum Conserved? A Deeper Answer}
+
+The derivation from Newton's third law shows momentum is conserved in Newtonian mechanics. But this is not the deepest answer.
+
+In 1915, Emmy Noether proved one of the most beautiful theorems in all of physics:
+
+\begin{tcolorbox}[colback=purple!5, colframe=purple, fonttitle=\bfseries\color{white},
+  coltitle=white, title={Noether's Theorem (preview)}]
+Every continuous symmetry of the laws of nature corresponds to a conserved quantity.
+
+\medskip
+Specifically:
+\begin{itemize}
+  \item \textbf{Translation symmetry in space} (physics is the same everywhere) $\implies$ conservation of \textbf{momentum}
+  \item \textbf{Translation symmetry in time} (physics is the same always) $\implies$ conservation of \textbf{energy}
+  \item \textbf{Rotation symmetry} (physics is the same in all directions) $\implies$ conservation of \textbf{angular momentum}
+\end{itemize}
+\end{tcolorbox}
+
+Momentum is conserved not because of a coincidence in Newton's laws, but because \textit{space itself is the same in all locations}. If physics were different in Kenya than in Japan, momentum would not be conserved. The conservation law encodes a symmetry of the universe.
+
+You will encounter Noether's theorem properly in Mathematics Journey 4 Module 5 and Physics Journey 6 Module 4. For now, simply hold this thought: conservation laws are not accidents. They are shadows of symmetry.
+
+\begin{reflectionbox}
+\textbf{Reflection.} You have now encountered two conservation laws: conservation of momentum and (earlier) conservation of energy. Both emerged from specific problems. But Noether's theorem says they are both shadows of symmetry.
+
+Write a short paragraph: what does it mean for the universe to be ``symmetric'' in some direction? Can you think of situations where this symmetry might break down---and what would that imply for conservation laws?
+\end{reflectionbox}
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

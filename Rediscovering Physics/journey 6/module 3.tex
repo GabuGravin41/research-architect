@@ -1,0 +1,510 @@
+\documentclass[12pt, a4paper, twoside]{book}
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning, decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+
+\definecolor{deep}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{e94560}
+\definecolor{teal}{HTML}{2ec4b6}
+\definecolor{gold}{HTML}{f5a623}
+\definecolor{midblue}{HTML}{0f3460}
+\definecolor{purple}{HTML}{533483}
+\definecolor{orange}{HTML}{ff6b35}
+\definecolor{green}{HTML}{2d6a4f}
+\definecolor{lightbg}{HTML}{f7f9fc}
+\definecolor{warmbg}{HTML}{fffbf2}
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal,
+  pdftitle={Discovery Physics J6 M3}}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{realworldbox}[1][]{enhanced,breakable,colback=green!5,
+  colframe=green!70!black,fonttitle=\bfseries\color{white},coltitle=white,
+  title={In the Real World},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{1.8cm}
+
+\begin{tikzpicture}[scale=1.2]
+  % Standing wave of a particle in a 1D box
+  \draw[teal, line width=2.5pt] (0,0) -- (0,3.5);
+  \draw[teal, line width=2.5pt] (5,0) -- (5,3.5);
+  \draw[teal!40, line width=1pt] (0,0) -- (5,0);
+  
+  % n=1 mode
+  \draw[accent, line width=2pt, domain=0:5, samples=100] plot (\x, {0.8*sin(180*\x/5) + 0.5});
+  \node[accent] at (2.5, 1.5) {$\psi_1(x)$};
+  
+  % n=2 mode
+  \draw[gold, line width=2pt, domain=0:5, samples=100] plot (\x, {0.8*sin(360*\x/5) + 2.2});
+  \node[gold] at (1.25, 3.2) {$\psi_2(x)$};
+  
+  \node[teal] at (-0.5, 1.75) {$V=\infty$};
+  \node[teal] at (5.5, 1.75) {$V=\infty$};
+  \node[deep!30] at (2.5, -0.4) {Infinite Square Well};
+\end{tikzpicture}
+
+\vspace{0.8cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 6}}}
+\vspace{0.3cm}
+{\fontsize{34}{40}\selectfont\bfseries Module 6.3}
+\vspace{0.3cm}
+{\fontsize{20}{26}\selectfont\textcolor{gold}{%
+The Schrödinger\\
+Wave Equation}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+The wave nature of matter.\\[4pt]
+How do we model particles as waves, and find the discrete\\
+energy levels of atoms?}}
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+\tableofcontents
+
+\chapter{The Schrödinger Wave Equation}
+\markboth{Journey 6: Module 6.3}{}
+
+\begin{epigraph}
+{The concept of ``particles'' and ``waves'' are two different aspects of the same physical reality... Matter, which was thought to be composed of point-particles, also behaves as waves.}
+{--- Louis de Broglie}
+\end{epigraph}
+
+\section{Part 1 --- The Puzzle}
+
+\begin{puzzlebox}
+\textbf{de Broglie's Matter Waves.}
+
+By 1924, physics had established that light—traditionally understood as a wave—possesses particle-like properties. Photons carry discrete packets of energy $E = h\nu$ and momentum $p = h/\lambda$.
+* In his PhD thesis, French physicist Louis de Broglie proposed the converse: if light waves behave like particles, then physical particles (like electrons) must possess wave-like properties.
+* He proposed that a particle of momentum $p$ has an associated wavelength:
+  \[
+    \lambda \;=\; \frac{h}{p}.
+  \]
+* If an electron in a hydrogen atom behaves as a wave, it must form a stable standing wave around its circular orbit. This condition requires the circumference to be an integer number of wavelengths ($2\pi r = n\lambda$), which immediately explains Bohr's quantized angular momentum: $L = n\hbar$.
+
+\medskip
+\textbf{Question 1.} If a particle behaves like a wave, it must be described by a spatial wave function $\Psi(x, t)$. What is the physical meaning of this wave function? What is waving?
+
+\textbf{Question 2.} In classical mechanics, a wave on a string satisfies the wave equation $\frac{\partial^2 y}{\partial x^2} = \frac{1}{v^2}\frac{\partial^2 y}{\partial t^2}$. What differential equation must govern the matter wave of a massive particle subject to a potential $V(x)$?
+
+\textbf{Question 3.} (The Boundary Paradox.) Classical particles can take any continuous range of energies. How does switching to a wave description naturally force the energy levels of bound systems (like an electron in an atom or a particle in a box) to be discrete, without assuming quantization as a separate postulate?
+\end{puzzlebox}
+
+\newpage
+
+% ============================================================
+\section{Part 2 --- Exploration}
+% ============================================================
+
+\subsection{Step 1: The de Broglie Relations and Plane Waves}
+
+We represent a free particle with momentum $p$ and energy $E$ as a complex plane wave.
+
+\begin{explobox}
+\problem Let us represent a free particle moving along the $x$-axis as a complex plane wave:
+\[
+  \Psi(x, t) \;=\; A e^{i(kx - \omega t)},
+\]
+where $k = 2\pi/\lambda$ is the wave number and $\omega = 2\pi\nu$ is the angular frequency.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Using de Broglie's relation $\lambda = h/p$ and Planck's relation $E = h\nu$, write the wave vector $k$ and angular frequency $\omega$ in terms of momentum $p$ and energy $E$, using $\hbar = h/2\pi$.
+  \item Rewrite the plane wave function $\Psi(x, t)$ substituting these quantum parameters.
+  \item If we take the partial derivative of $\Psi(x, t)$ with respect to time, show that:
+  \[
+    i\hbar \frac{\partial \Psi}{\partial t} \;=\; E \Psi.
+  \]
+  \item If we take the second partial derivative with respect to space, show that:
+  \[
+    -\hbar^2 \frac{\partial^2 \Psi}{\partial x^2} \;=\; p^2 \Psi.
+  \]
+\end{enumerate}
+\end{explobox}
+
+\subsection{Step 2: Constructing the Time-Dependent Schrödinger Equation}
+
+We use classical energy conservation to guide our construction of the wave equation.
+
+\begin{explobox}
+\problem For a classical particle of mass $m$ moving in a potential $V(x)$, the total energy is the sum of kinetic and potential energy:
+\[
+  E \;=\; \frac{p^2}{2m} + V(x).
+\]
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item To construct a wave equation, we replace the physical variables $E$ and $p^2$ with the differential operations we discovered in Problem 1 acting on the wave function $\Psi(x, t)$.
+  Show that this substitution yields the **Time-Dependent Schrödinger Equation** (TDSE):
+  \[
+    i\hbar \frac{\partial \Psi}{\partial t} \;=\; -\frac{\hbar^2}{2m} \frac{\partial^2 \Psi}{\partial x^2} + V(x) \Psi.
+  \]
+  \item Define the **Hamiltonian operator**: $\hat{H} = -\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + V(x)$. Write the TDSE in terms of $\hat{H}$.
+  \item Unlike the classical wave equation which has second derivatives in time ($\partial^2 y/\partial t^2$), the Schrödinger equation is *first-order* in time. Explain why this means that if we know the wave function $\Psi(x, 0)$ at $t=0$, its future is completely determined for all $t > 0$ (meaning quantum mechanics is deterministic at the level of the wave function).
+\end{enumerate}
+\end{explobox}
+
+\subsection{Step 3: Separation of Variables and Stationary States}
+
+We seek solutions where the spatial and temporal dependencies can be separated.
+
+\begin{explobox}
+\problem Let us propose a separable solution: $\Psi(x, t) = \psi(x) \phi(t)$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Substitute this product into the TDSE and divide both sides by $\psi(x)\phi(t)$ to show that:
+  \[
+    i\hbar \frac{1}{\phi(t)} \frac{d\phi}{dt} \;=\; \frac{1}{\psi(x)} \left[ -\frac{\hbar^2}{2m} \frac{d^2 \psi}{dx^2} + V(x)\psi \right].
+  \]
+  \item Since the left side depends only on $t$ and the right side depends only on $x$, both sides must equal a constant $E$. Solve the temporal equation for $\phi(t)$ to show that:
+  \[
+    \phi(t) \;=\; e^{-i E t/\hbar}.
+  \]
+  \item Show that the spatial function $\psi(x)$ must satisfy the **Time-Independent Schrödinger Equation** (TISE):
+  \[
+    -\frac{\hbar^2}{2m} \frac{d^2 \psi}{dx^2} + V(x)\psi \;=\; E \psi.
+  \]
+  This is an eigenvalue equation: $\hat{H} \psi = E \psi$.
+\end{enumerate}
+\end{explobox}
+
+\begin{historybox}
+\textbf{Erwin Schrödinger (1887--1961).}
+In late 1925, Austrian physicist Erwin Schrödinger retreated to an alpine cabin in Arosa, Switzerland, for a winter holiday. In a burst of intense creativity, he formulated his wave equation, solved it for the hydrogen atom, and derived the correct energy levels. His theory of "Wave Mechanics" initially clashed with Werner Heisenberg's "Matrix Mechanics" (which had no wave functions), but Schrödinger soon proved the two formulations are mathematically equivalent. He was awarded the Nobel Prize in Physics in 1933.
+\end{historybox}
+
+\subsection{Step 4: The Particle in a 1D Box (Infinite Square Well)}
+
+We solve the wave equation for a particle confined in a region of length $L$.
+
+\begin{explobox}
+\problem Let the potential be $V(x) = 0$ for $0 < x < L$, and $V(x) = \infty$ otherwise. A particle of mass $m$ is trapped in this box.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Outside the box ($x < 0$ or $x > L$), the infinite potential forces the wave function to be zero: $\psi(x) = 0$.
+  \item Inside the box ($0 < x < L$), the TISE reduces to:
+  \[
+    \frac{d^2 \psi}{dx^2} \;=\; -k^2 \psi, \qquad \text{where } k \;=\; \sqrt{\frac{2mE}{\hbar^2}}.
+  \]
+  Write the general solution to this second-order differential equation.
+  \item Since the wave function must be continuous, apply the boundary conditions $\psi(0) = 0$ and $\psi(L) = 0$. Show that these boundary conditions force the wave vector to be quantized:
+  \[
+    k_n \;=\; \frac{n\pi}{L}, \qquad n \in \{1, 2, 3, \dots\}.
+  \]
+  \item Conclude that the energy levels are restricted to discrete values:
+  \[
+    E_n \;=\; \frac{n^2 \pi^2 \hbar^2}{2m L^2}.
+  \]
+  Why is $n=0$ not allowed? (What would $\psi_0(x)$ be, and what would that mean for the particle's existence?)
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ============================================================
+\section{Part 3 --- Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Massive particles exhibit wave properties with a de Broglie wavelength $\lambda = h/p$. Matter waves are represented by a complex wave function $\Psi(x, t)$.
+
+\textbf{Second.} The dynamics of this wave function are governed by the Time-Dependent Schrödinger Equation: $i\hbar \frac{\partial \Psi}{\partial t} = \hat{H} \Psi$. The equation is first-order in time, making the evolution of the wave function deterministic.
+
+\textbf{Third.} Using separation of variables, the spatial wave function $\psi(x)$ for a state of constant energy $E$ satisfies the Time-Independent Schrödinger Equation: $\hat{H}\psi = E\psi$.
+
+\textbf{Fourth.} Quantization of energy in bound systems (like a particle in a box) is not an arbitrary assumption. It is a direct mathematical consequence of boundary conditions on standing waves, exactly like the discrete resonant frequencies of a guitar string.
+\end{discoverybox}
+
+\newpage
+
+% ============================================================
+\section{Part 4 --- What This Is Called}
+% ============================================================
+
+\begin{namebox}
+\textbf{Wave Mechanics Formalism.}
+
+* **Wave Function ($\Psi(x, t)$):** A complex-valued amplitude describing the quantum state of a particle.
+* **Born Rule:** The physical interpretation of the wave function. The probability density of finding the particle at position $x$ at time $t$ is:
+  \[
+    \rho(x, t) \;=\; |\Psi(x, t)|^2 \;=\; \Psi^*(x, t)\Psi(x, t),
+  \]
+  satisfying the normalization condition $\int_{-\infty}^\infty |\Psi(x, t)|^2 dx = 1$.
+* **Time-Dependent Schrödinger Equation:**
+  \[
+    i\hbar \frac{\partial \Psi}{\partial t} \;=\; -\frac{\hbar^2}{2m} \frac{\partial^2 \Psi}{\partial x^2} + V(x)\Psi.
+  \]
+* **Time-Independent Schrödinger Equation:**
+  \[
+    -\frac{\hbar^2}{2m} \frac{d^2 \psi}{dx^2} + V(x)\psi \;=\; E \psi.
+  \]
+* **Hamiltonian Operator ($\hat{H}$):** The operator corresponding to total energy: $\hat{H} = -\frac{\hbar^2}{2m}\frac{d^2}{dx^2} + V(x)$.
+\end{namebox}
+
+\newpage
+
+% ============================================================
+\section{Part 5 --- Solved Exercises}
+% ============================================================
+
+\begin{exercise}[Normalization of the Particle in a Box]
+Normalize the spatial wave function for a particle in a 1D box of length $L$:
+\[
+  \psi_n(x) \;=\; A \sin\left(\frac{n\pi x}{L}\right) \quad \text{for } 0 < x < L.
+\]
+Find the value of the normalization constant $A$.
+\end{exercise}
+
+\begin{proof}[Solution]
+To normalize the wave function, we require the total probability of finding the particle inside the box to be 1:
+\[
+  \int_0^L |\psi_n(x)|^2 \, dx \;=\; 1.
+\]
+Substitute the sine wave function:
+\[
+  \int_0^L A^2 \sin^2\left(\frac{n\pi x}{L}\right) \, dx \;=\; 1 \implies A^2 \int_0^L \sin^2\left(\frac{n\pi x}{L}\right) \, dx \;=\; 1.
+\]
+Use the trigonometric identity $\sin^2\theta = \frac{1}{2}(1 - \cos 2\theta)$:
+\[
+  A^2 \int_0^L \frac{1}{2} \left( 1 - \cos\left(\frac{2n\pi x}{L}\right) \right) \, dx \;=\; 1.
+\]
+Evaluate the integral:
+\[
+  \frac{A^2}{2} \left[ x - \frac{L}{2n\pi} \sin\left(\frac{2n\pi x}{L}\right) \right]_0^L \;=\; 1.
+\]
+At the boundaries $x = L$ and $x = 0$, the sine term vanishes: $\sin(2n\pi) = 0$ and $\sin(0) = 0$. Thus, the expression simplifies to:
+\[
+  \frac{A^2}{2} [ L - 0 ] \;=\; 1 \implies \frac{A^2 L}{2} \;=\; 1 \implies A^2 \;=\; \frac{2}{L}.
+\]
+Choosing $A$ to be real and positive, we obtain:
+\[
+  A \;=\; \sqrt{\frac{2}{L}}.
+\]
+Thus, the normalized wave functions are $\psi_n(x) = \sqrt{\frac{2}{L}} \sin\left(\frac{n\pi x}{L}\right)$.
+\end{proof}
+
+\begin{exercise}[The Quantum Harmonic Oscillator Ground State]
+The potential for a quantum harmonic oscillator is $V(x) = \frac{1}{2} m \omega^2 x^2$.
+Show that the Gaussian wave function:
+\[
+  \psi_0(x) \;=\; C e^{-\frac{m\omega}{2\hbar} x^2}
+\]
+is a solution to the Time-Independent Schrödinger Equation, and find its energy eigenvalue $E_0$.
+\end{exercise}
+
+\begin{proof}[Solution]
+We write the TISE for the harmonic oscillator:
+\[
+  -\frac{\hbar^2}{2m} \frac{d^2 \psi_0}{dx^2} + \frac{1}{2}m\omega^2 x^2 \psi_0 \;=\; E_0 \psi_0.
+\]
+Let us calculate the first derivative of $\psi_0(x)$ with respect to $x$:
+\[
+  \frac{d\psi_0}{dx} \;=\; C \left( -\frac{m\omega}{\hbar} x \right) e^{-\frac{m\omega}{2\hbar} x^2} \;=\; -\frac{m\omega}{\hbar} x \psi_0.
+\]
+Now calculate the second derivative using the product rule:
+\[
+  \frac{d^2 \psi_0}{dx^2} \;=\; -\frac{m\omega}{\hbar} \psi_0 - \frac{m\omega}{\hbar} x \frac{d\psi_0}{dx} \;=\; -\frac{m\omega}{\hbar} \psi_0 - \frac{m\omega}{\hbar} x \left( -\frac{m\omega}{\hbar} x \psi_0 \right) \;=\; \left( -\frac{m\omega}{\hbar} + \frac{m^2\omega^2}{\hbar^2} x^2 \right) \psi_0.
+\]
+Substitute this expression into the left-hand side of the TISE:
+\[
+  -\frac{\hbar^2}{2m} \left( -\frac{m\omega}{\hbar} + \frac{m^2\omega^2}{\hbar^2} x^2 \right) \psi_0 + \frac{1}{2}m\omega^2 x^2 \psi_0 \;=\; \left( \frac{\hbar\omega}{2} - \frac{1}{2}m\omega^2 x^2 \right) \psi_0 + \frac{1}{2}m\omega^2 x^2 \psi_0.
+\]
+Observe that the terms containing $x^2$ cancel out exactly:
+\[
+  \text{LHS} \;=\; \frac{1}{2}\hbar\omega \psi_0.
+\]
+Thus, the wave function satisfies the TISE:
+\[
+  \frac{1}{2}\hbar\omega \psi_0 \;=\; E_0 \psi_0.
+\]
+This proves that the Gaussian wave function is a solution, with the energy eigenvalue:
+\[
+  E_0 \;=\; \frac{1}{2}\hbar\omega.
+\]
+This is the **zero-point energy** of the quantum harmonic oscillator. Even at absolute zero, a quantum particle cannot be completely at rest.
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Part 6 --- Problems}
+% ============================================================
+
+\begin{problem}[Expectation Values in a Box]
+By the Born rule, the probability density of a particle is $\rho(x) = |\psi(x)|^2$. The expectation value of position $x$ is:
+\[
+  \langle x \rangle \;=\; \int_{-\infty}^\infty x |\psi(x)|^2 \, dx.
+\]
+For a particle in the ground state ($n=1$) of a box of length $L$:
+\begin{enumerate}[label=(\alph*)]
+  \item Calculate the expectation value $\langle x \rangle$ using the normalized wave function.
+  \item Show that $\langle x \rangle = L/2$. Explain why this is physically intuitive.
+  \item Calculate the expectation value $\langle x^2 \rangle$. Show that it is less than $L^2/3$ (the classical uniform average).
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[The Finite Square Well and Quantum Tunneling]
+Suppose the potential barrier is finite: $V(x) = 0$ for $0 < x < L$, and $V(x) = V_0 > 0$ otherwise. We look for a bound state with energy $E < V_0$.
+\begin{enumerate}[label=(\alph*)]
+  \item Outside the box ($x < 0$ or $x > L$), the TISE is:
+  \[
+    \frac{d^2 \psi}{dx^2} \;=\; \alpha^2 \psi, \qquad \text{where } \alpha \;=\; \sqrt{\frac{2m(V_0 - E)}{\hbar^2}}.
+  \]
+  Show that the physically acceptable solution (which must not blow up at $\pm\infty$) decays exponentially: $\psi(x) \propto e^{\alpha x}$ for $x < 0$, and $\psi(x) \propto e^{-\alpha x}$ for $x > L$.
+  \item Draw the qualitative shape of the wave function $\psi(x)$.
+  \item Explain why the fact that $\psi(x) \neq 0$ outside the box means that the particle has a non-zero probability of being found in the classically forbidden region. This is the origin of **Quantum Tunneling**.
+\end{enumerate}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 7 --- Deep Problems}
+% ============================================================
+
+\begin{deepproblem}[Probability Conservation and the Continuity Equation]
+For the physical description of probability to be consistent over time, the total probability must remain 1: $\frac{d}{dt} \int_{-\infty}^\infty |\Psi(x, t)|^2 dx = 0$.
+Let $\rho(x, t) = \Psi^* \Psi$ be the probability density.
+\begin{enumerate}[label=(\alph*)]
+  \item Use the Time-Dependent Schrödinger Equation and its complex conjugate to show that:
+  \[
+    \frac{\partial \rho}{\partial t} \;=\; -\frac{\partial J}{\partial x},
+  \]
+  where $J(x, t)$ is the **probability current density**:
+  \[
+    J(x, t) \;=\; \frac{\hbar}{2m i} \left( \Psi^* \frac{\partial \Psi}{\partial x} - \Psi \frac{\partial \Psi^*}{\partial x} \right).
+  \]
+  This is the quantum continuity equation, representing the local conservation of probability.
+  \item For a plane wave $\Psi = A e^{i(kx - \omega t)}$, show that $J = |A|^2 \frac{p}{m} = \rho v$, matching the classical definition of particle current.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Deriving the Momentum Operator in Coordinate Space]
+In classical mechanics, the momentum of a particle is related to the derivative of its average position: $p = m \frac{d\langle x \rangle}{dt}$.
+Let us calculate $\frac{d\langle x \rangle}{dt}$ in quantum mechanics.
+\begin{enumerate}[label=(\alph*)]
+  \item Write $\langle x \rangle = \int x \Psi^* \Psi dx$. Differentiate with respect to $t$ under the integral:
+  \[
+    \frac{d\langle x \rangle}{dt} \;=\; \int x \frac{\partial(\Psi^* \Psi)}{\partial t} \, dx.
+  \]
+  \item Substitute $\frac{\partial(\Psi^* \Psi)}{\partial t} = -\frac{\partial J}{\partial x}$ from the continuity equation (Deep Problem 1) and use integration by parts to show that:
+  \[
+    \frac{d\langle x \rangle}{dt} \;=\; \int J(x, t) \, dx.
+  \]
+  \item Substitute the definition of $J(x, t)$ and use integration by parts again to show that:
+  \[
+    m \frac{d\langle x \rangle}{dt} \;=\; \int \Psi^* \left( -i\hbar \frac{\partial}{\partial x} \right) \Psi \, dx.
+  \]
+  This proves that the momentum operator in coordinate space is $\hat{p} = -i\hbar \frac{\partial}{\partial x}$.
+\end{enumerate}
+\end{deepproblem}
+
+\newpage
+
+% ============================================================
+\section{Part 8 --- Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Quantization:** We saw that energy levels are quantized because the boundary conditions only allow discrete standing wave frequencies. What does this tell you about the difference between classical "particles" and quantum waves?
+  \item **On Differentiability:** The Schrödinger equation is a second-order spatial differential equation, which requires the wave function $\psi(x)$ and its derivative $d\psi/dx$ to be continuous everywhere. Why does this continuity break down if the potential $V(x)$ is infinite?
+  \item **On Tunneling:** Quantum tunneling allows a particle to pass through a potential barrier higher than its total energy. If this occurred classically, a roller coaster would pass directly through a hill without having enough kinetic energy to climb it. Why does the wave nature of matter make this possible?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6.4 completes this journey by introducing **Quantum Operators and Symmetries**. We will generalize our operators (like $\hat{x}$ and $\hat{p}$), study commutators, and discover that Heisenberg's Uncertainty Principle is a fundamental property of Fourier transforms. We will conclude by showing how physical symmetries lead to conservation laws (Noether's Theorem).
+
+\vspace{1.4cm}
+\begin{center}
+{\color{teal}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{deep}\textit{End of Journey 6, Module 6.3 --- The Schrödinger Wave Equation}}\\[4pt]
+{\small\color{deep}Continue to: \textbf{Module 6.4 --- Quantum Operators and Symmetries}}\\[6pt]
+{\color{teal}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

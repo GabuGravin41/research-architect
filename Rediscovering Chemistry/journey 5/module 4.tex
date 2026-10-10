@@ -1,0 +1,421 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Journey 5 — forest green / amber) ────────────────────────────────
+\definecolor{JourneyColor}{HTML}{065F46}
+\definecolor{ModuleColor}{HTML}{059669}
+\definecolor{PuzzleColor}{HTML}{B45309}
+\definecolor{DiscoveryColor}{HTML}{D97706}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{4}
+\chapter[Journey 5 --- Chemical Kinetics and Dynamics]
+        {Journey Five\\[8pt]
+         \textcolor{ModuleColor}{\large Chemical Kinetics and Dynamics}}
+\setcounter{section}{3}
+
+\section{Module 5.4 --- Catalysis}
+\label{sec:mod5.3}
+
+\subsection*{Motivation}
+
+We explored in Module 5.2 how chemical rates depend on climbing an activation barrier $E_a$, and in Module 5.3 how multi-step mechanisms govern kinetics.
+But what if the energy barrier is too high, or a reaction mechanism is too slow? How can we speed it up?
+
+We use catalysts.
+A catalyst accelerates a reaction without being consumed in the process.
+It does not add heat, nor does it shift the thermodynamically dictated equilibrium position.
+Instead, it rewrites the mechanism itself, providing a completely new kinetic highway with a lower activation energy.
+This module explores how catalysts alter reaction energy profiles, differentiates between homogeneous and heterogeneous surface actions, and derives the Michaelis-Menten equation that governs the catalytic engines of biology: enzymes.
+
+\subsection{Rewriting the Energy Landscape}
+
+A catalyst works by opening a new pathway with a lower energetic barrier.
+
+\begin{puzzlebox}
+\textbf{The Magic Surface.}
+
+Nitric oxide ($\ce{NO}$) is a toxic gas emitted from combustion engines. In the atmosphere, it decomposes extremely slowly into nitrogen and oxygen gas:
+\[
+  \ce{2 NO(g) -> N2(g) + O2(g)}.
+\]
+The activation energy for this uncatalyzed reaction is extremely high ($E_a \approx 350$ kJ/mol).
+However, inside a car's catalytic converter, the gas passes over a solid surface of platinum, palladium, and rhodium. The reaction rate is accelerated by a factor of over $10^{12}$!
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Draw a potential energy diagram showing reaction coordinate versus energy. Plot two curves: one for the uncatalyzed reaction (single high barrier) and one for the catalyzed reaction (a multi-step path with much lower activation barriers).
+  \item Explain why lowering the activation barrier from $E_{a,\text{uncat}}$ to $E_{a,\text{cat}}$ has a massive, exponential effect on the rate constant $k$, referencing the Arrhenius equation.
+  \item A catalyst speeds up the forward reaction. Does it speed up the reverse reaction ($\ce{N2 + O2 -> 2NO}$)? Explain why the thermodynamic equilibrium constant $K_{\text{eq}}$ remains completely unchanged by the presence of a catalyst. (Consider the energy difference between reactants and products).
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Homogeneous vs. Heterogeneous Catalysis}
+
+We distinguish catalysts by whether they operate in the same physical phase as the reactants.
+
+\begin{explobox}
+* **Homogeneous Catalysis:** The catalyst is in the same phase as the reactants (e.g., liquid acid $\ce{H+(aq)}$ catalyzing the hydrolysis of an ester in water).
+* **Heterogeneous Catalysis:** The catalyst is in a different phase from the reactants (e.g., solid platinum metal catalyzing gas-phase reactions).
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Heterogeneous catalysis on a solid surface involves four consecutive steps:
+        1. **Adsorption:** Reactant molecules bind to active sites on the metal surface.
+        2. **Diffusion:** Reactants move along the surface.
+        3. **Reaction:** Reactants interact on the surface to form products.
+        4. **Desorption:** Product molecules break their bonds to the surface and escape.
+        Explain how the binding of gas-phase molecules to solid metal atoms (**chemisorption**) weakens the internal chemical bonds of the reactants, lowering the activation energy for reaction.
+  \item Why do solid catalysts often lose their efficiency if the reactant gas contains impurities like sulfur? We call this **catalyst poisoning**.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Enzyme Kinetics and the Michaelis-Menten Model}
+
+Enzymes are highly specialized protein catalysts that govern the biochemistry of living systems.
+
+\begin{explobox}
+Leonor Michaelis and Maud Menten proposed a simple mechanism for enzyme action:
+An enzyme E binds a substrate S to form an enzyme-substrate complex ES, which then reacts to release the product P and regenerate the free enzyme E:
+\[
+  \ce{E + S <=> [k_1][k_{-1}] ES ->[k_2] E + P},
+\]
+where step 2 is the rate-limiting catalytic step.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Apply the steady-state approximation to the unstable complex ES. Show that:
+  \[
+    \frac{d[\ce{ES}]}{dt} \;=\; k_1 [\ce{E}][\ce{S}] - (k_{-1} + k_2)[\ce{ES}] \;\approx\; 0.
+  \]
+  \item In a laboratory, we cannot easily measure the free enzyme concentration $[\ce{E}]$, but we do know the total initial enzyme concentration $[\ce{E}]_{\text{tot}} = [\ce{E}] + [\ce{ES}]$.
+        Substitute $[\ce{E}] = [\ce{E}]_{\text{tot}} - [\ce{ES}]$ into the steady-state equation and solve for the concentration of the complex $[\ce{ES}]$.
+  \item Prove that:
+  \[
+    [\ce{ES}] \;=\; \frac{[\ce{E}]_{\text{tot}} [\ce{S}]}{K_m + [\ce{S}]}, \qquad \text{where } K_m \;=\; \frac{k_{-1} + k_2}{k_1}.
+  \]
+  We call $K_m$ the **Michaelis constant**.
+  \item The rate of product formation is $V = \frac{d[\ce{P}]}{dt} = k_2 [\ce{ES}]$.
+        When the substrate concentration is extremely high ($[\ce{S}] \to \infty$), the enzyme is completely saturated, and the velocity reaches its maximum: $V_{\text{max}} = k_2 [\ce{E}]_{\text{tot}}$.
+        Substitute these into your expression to derive the **Michaelis-Menten Equation**:
+        \[
+          V \;=\; \frac{V_{\text{max}} [\ce{S}]}{K_m + [\ce{S}]}.
+        \]
+\end{enumerate}
+\end{explobox}
+
+\subsection{Linearizing Enzyme Kinetics}
+
+We analyze enzyme parameters using linear plots.
+
+\begin{explobox}
+The Michaelis-Menten curve is a hyperbola. To extract the parameters $V_{\text{max}}$ and $K_m$ from experimental data, we linearize the equation.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Take the reciprocal of both sides of the Michaelis-Menten equation to prove the **Lineweaver-Burk Equation**:
+  \[
+    \frac{1}{V} \;=\; \frac{K_m}{V_{\text{max}}} \frac{1}{[\ce{S}]} + \frac{1}{V_{\text{max}}}.
+  \]
+  \item Plot $1/V$ versus $1/[\ce{S}]$. Why is this plot a straight line? Identify the slope, the $y$-intercept, and the $x$-intercept.
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} A catalyst speeds up chemical reactions by providing an alternative mechanism with a lower activation energy. It does not alter the thermodynamic stability ($\Delta H$ or $\Delta G$) or shift the equilibrium position ($K_{\text{eq}}$).
+
+\textbf{Second.} Heterogeneous catalysis occurs on a solid surface through a series of steps: adsorption (which weakens reactant bonds via chemisorption), surface diffusion, reaction, and desorption.
+
+\textbf{Third.} Enzyme kinetics is governed by the Michaelis-Menten equation $V = \frac{V_{\text{max}}[\ce{S}]}{K_m + [\ce{S}]}$, derived by applying the steady-state approximation to the enzyme-substrate complex.
+
+\textbf{Fourth.} The Lineweaver-Burk equation $\frac{1}{V} = \frac{K_m}{V_{\text{max}}}\frac{1}{[\ce{S}]} + \frac{1}{V_{\text{max}}}$ linearizes hyperbolic enzyme data, enabling direct graphical extraction of $K_m$ and $V_{\text{max}}$.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Catalysis and enzyme parameters}
+* **Catalyst:** A substance that increases the rate of a chemical reaction without undergoing permanent chemical change.
+* **Chemisorption:** Chemical adsorption, where reactants form strong covalent bonds with solid surface atoms.
+* **Michaelis Constant ($K_m$):** The substrate concentration at which the reaction velocity is exactly half of its maximum value ($V = \frac{1}{2}V_{\text{max}}$). It measures enzyme-substrate affinity.
+* **Turnover Number ($k_{\text{cat}}$):** Also called $k_2$, the maximum number of substrate molecules converted to product per active site per second ($k_{\text{cat}} = V_{\text{max}} / [\ce{E}]_{\text{tot}}$).
+* **Catalytic Efficiency:** The ratio $k_{\text{cat}}/K_m$, measuring how efficiently an enzyme captures and converts substrate at low concentrations.
+* **Lineweaver-Burk Plot:** A double-reciprocal plot of $1/V$ versus $1/[\ce{S}]$. The slope is $K_m/V_{\text{max}}$, the $y$-intercept is $1/V_{\text{max}}$, and the $x$-intercept is $-1/K_m$.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Meaning of the Michaelis Constant.}
+  
+        Prove that when the substrate concentration $[\ce{S}]$ is equal to the Michaelis constant $K_m$, the reaction velocity $V$ is exactly half of the maximum velocity $V_{\text{max}}$.
+        
+        \textbf{Solution:}
+        Write down the Michaelis-Menten equation:
+        \[
+          V \;=\; \frac{V_{\text{max}} [\ce{S}]}{K_m + [\ce{S}]}.
+        \]
+        Substitute $[\ce{S}] = K_m$ into this equation:
+        \[
+          V \;=\; \frac{V_{\text{max}} K_m}{K_m + K_m} \;=\; \frac{V_{\text{max}} K_m}{2 K_m}.
+        \]
+        Since $K_m > 0$, we can cancel $K_m$ from the numerator and denominator:
+        \[
+          V \;=\; \frac{1}{2} V_{\text{max}}.
+        \]
+        This completes the proof. Thus, $K_m$ represents the substrate concentration required to reach half-maximal velocity.
+        
+  \item \textbf{Catalytic Acceleration Calculation.}
+  
+        The decomposition of hydrogen peroxide:
+        \[
+          \ce{2 H2O2(aq) -> 2 H2O(l) + O2(g)}
+        \]
+        has an uncatalyzed activation energy of $E_a = 75.0$ kJ/mol at \SI{298}{K}.
+        In the presence of iodide catalyst ($\ce{I-}$), the activation energy is lowered to $57.0$ kJ/mol.
+        In the presence of the enzyme catalase, the activation energy is lowered to $23.0$ kJ/mol.
+        Assuming the pre-exponential factor $A$ remains constant, calculate the rate acceleration factors ($k_{\text{cat}}/k_{\text{uncat}}$) for iodide and catalase at \SI{298}{K}.
+        
+        \textbf{Solution:}
+        From the Arrhenius equation, the ratio of rate constants is:
+        \[
+          \frac{k_{\text{cat}}}{k_{\text{uncat}}} \;=\; \frac{A e^{-E_{a,\text{cat}}/RT}}{A e^{-E_{a,\text{uncat}}/RT}} \;=\; e^{\frac{E_{a,\text{uncat}} - E_{a,\text{cat}}}{RT}}.
+        \]
+        Here, $R T = 8.314 \text{ J}\cdot\text{mol}^{-1}\text{K}^{-1} \times 298 \text{ K} = 2478 \text{ J/mol} = 2.478 \text{ kJ/mol}$.
+        * **For Iodide Catalyst:**
+        \[
+          \Delta E_a \;=\; 75.0 - 57.0 \;=\; 18.0 \text{ kJ/mol}.
+        \]
+        The acceleration factor is:
+        \[
+          \frac{k_{\ce{I-}}}{k_{\text{uncat}}} \;=\; e^{18.0 / 2.478} \;=\; e^{7.26} \;=\; 1.4 \times 10^3.
+        \]
+        * **For Catalase Enzyme:**
+        \[
+          \Delta E_a \;=\; 75.0 - 23.0 \;=\; 52.0 \text{ kJ/mol}.
+        \]
+        The acceleration factor is:
+        \[
+          \frac{k_{\text{catalase}}}{k_{\text{uncat}}} \;=\; e^{52.0 / 2.478} \;=\; e^{21.0} \;=\; 1.3 \times 10^9.
+        \]
+        Thus, iodide speeds up the reaction by a factor of 1,400, while catalase speeds it up by a factor of over 1.3 billion! This demonstrates the extraordinary power of biological enzymes.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Michaelis-Menten Calculations.}
+  
+        An enzyme-catalyzed reaction has a maximum velocity $V_{\text{max}} = 2.0 \times 10^{-4}$ M$\cdot$s$^{-1}$. The velocity is $1.0 \times 10^{-4}$ M$\cdot$s$^{-1}$ when the substrate concentration is $5.0 \times 10^{-5}$ M.
+        \begin{enumerate}[label=(\alph*)]
+          \item What is the value of the Michaelis constant $K_m$?
+          \item Calculate the reaction velocity when the substrate concentration is $2.0 \times 10^{-4}$ M.
+          \item If the total enzyme concentration is $[\ce{E}]_{\text{tot}} = 1.0 \times 10^{-6}$ M, calculate the turnover number $k_{\text{cat}}$, including its units.
+        \end{enumerate}
+
+  \item \textbf{Graphical Lineweaver-Burk Analysis.}
+  
+        An enzyme kinetics experiment yielded the following initial velocity data at various substrate concentrations:
+        \begin{center}
+        \begin{tabular}{cc}
+        \toprule
+        \textbf{$[\ce{S}]$ (mM)} & \textbf{$V$ ($\mu$M$\cdot$min$^{-1}$)} \\
+        \midrule
+        0.10 & 20 \\
+        0.20 & 33 \\
+        0.50 & 50 \\
+        1.00 & 60 \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the reciprocal values $1/[\ce{S}]$ and $1/V$ for each data point.
+          \item Plot $1/V$ vs. $1/[\ce{S}]$ and show that the data is linear.
+          \item Use the slope and $y$-intercept of your plot to determine $V_{\text{max}}$ and $K_m$.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Heterogeneous Kinetics: The Langmuir-Hinshelwood Mechanism.}
+  
+        In a heterogeneous gas-phase reaction on a solid metal surface, reactants A and B must adsorb to active surface sites.
+        The fraction of surface sites occupied by reactant A is given by the Langmuir adsorption isotherm:
+        \[
+          \theta_{\ce{A}} \;=\; \frac{K_{\ce{A}} P_{\ce{A}}}{1 + K_{\ce{A}} P_{\ce{A}} + K_{\ce{B}} P_{\ce{B}}},
+        \]
+        where $P_{\ce{A}}$ and $P_{\ce{B}}$ are the partial pressures, and $K_{\ce{A}}$ and $K_{\ce{B}}$ are the adsorption equilibrium constants. A similar equation holds for $\theta_{\ce{B}}$.
+        The rate of reaction is proportional to the probability of two adjacent adsorbed molecules reacting: $R = k \theta_{\ce{A}} \theta_{\ce{B}}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Write down the full rate law for $R$ in terms of partial pressures.
+          \item Show that if reactant B adsorbs extremely strongly ($K_{\ce{B}} P_{\ce{B}} \gg 1 + K_{\ce{A}} P_{\ce{A}}$), the rate law reduces to:
+          \[
+            R \;\approx\; \frac{k K_{\ce{A}} P_{\ce{A}}}{K_{\ce{B}} P_{\ce{B}}}.
+          \]
+          Explain why in this limit, increasing the pressure of reactant B actually *slows down* the reaction. This is the origin of **catalyst poisoning** by competitive adsorption.
+        \end{enumerate}
+
+  \item \textbf{Enzyme Inhibition.}
+  
+        A competitive inhibitor I binds to the active site of a free enzyme, preventing substrate binding:
+        \[
+          \ce{E + I <=> EI}, \qquad \text{with } K_i \;=\; \frac{[\ce{E}][\ce{I}]}{[\ce{EI}]}.
+        \]
+        The enzyme-substrate mechanism is:
+        \[
+          \ce{E + S <=> [k_1][k_{-1}] ES ->[k_2] E + P}.
+        \]
+        \begin{enumerate}[label=(\alph*)]
+          \item Write down the total enzyme concentration conservation equation: $[\ce{E}]_{\text{tot}} = [\ce{E}] + [\ce{ES}] + [\ce{EI}]$.
+          \item Express $[\ce{EI}]$ in terms of $[\ce{E}]$, $[\ce{I}]$, and $K_i$. Show that $[\ce{E}]_{\text{tot}} = [\ce{E}] \left( 1 + \frac{[\ce{I}]}{K_i} \right) + [\ce{ES}]$.
+          \item Apply the steady-state approximation to ES ($k_1[\ce{E}][\ce{S}] = (k_{-1} + k_2)[\ce{ES}]$).
+                Substitute the expression for $[\ce{E}]$ to prove the inhibited Michaelis-Menten equation:
+                \[
+                  V \;=\; \frac{V_{\text{max}} [\ce{S}]}{K_m \left( 1 + \dfrac{[\ce{I}]}{K_i} \right) + [\ce{S}]}.
+                \]
+          \item Explain why the competitive inhibitor increases the apparent Michaelis constant ($K_m^{\text{app}} = K_m(1 + [\ce{I}]/K_i)$) but leaves the maximum velocity $V_{\text{max}}$ unchanged. How does this shift look on a Lineweaver-Burk plot?
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Equilibrium:** A catalyst speeds up both forward and reverse reactions by the exact same factor. Why does this physical symmetry mean that a catalyst cannot change the thermodynamic feasibility ($\Delta G$) of a reaction?
+  \item **On Surface Binding:** Why must a heterogeneous catalyst bind reactants strongly enough to weaken their internal bonds, but weakly enough to allow the products to escape? What would happen if the binding was too strong? What if it was too weak?
+  \item **On Biological Control:** Competitive inhibitors are used as drugs (for example, penicillin inhibits cell wall synthesis in bacteria). Why is competitive inhibition a highly effective way to shut down a specific biochemical reaction pathway in an organism?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking back at Journey 5.}
+You have traversed the foundations of chemical kinetics and dynamics:
+* **Module 5.1:** Reaction rates, orders, and integrated rate equations.
+* **Module 5.2:** Collision theory, activation barriers, and the Arrhenius equation.
+* **Module 5.3:** Elementary steps, bottlenecks, and steady-state mechanics.
+* **Module 5.4:** Catalytic pathways, surface adsorption, and Michaelis-Menten kinetics.
+
+This completes Journey 5, providing a complete description of chemical time. You are now equipped with the physical and mathematical tools to understand chemical pathways, industrial reactors, and biological networks.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 5 --- Chemical Kinetics and Dynamics}}\\[4pt]
+{\small\color{JourneyColor}You have completed the Kinetics Track. Continue to: \textbf{Chemistry Journey 6 --- Organic Chemistry}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

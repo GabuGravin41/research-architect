@@ -1,0 +1,443 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={History Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{5}
+\chapter[Journey 6 --- Distributed Systems and Concurrency]
+        {Journey Six\\[8pt]
+         \textcolor{ModuleColor}{\large Distributed Systems and Concurrency}}
+\setcounter{section}{3}
+
+\section{Module 6.4 --- Cryptography, Secure Computation, and Zero Knowledge}
+\label{sec:mod6.4}
+
+\subsection*{Motivation}
+
+We completed in Module 6.3 the consensus protocols for distributed databases, studying Paxos, Raft, and the boundaries of the CAP Theorem.
+But coordinating database replication assumes a cooperative environment where network channels are safe and nodes are trusted.
+In physical global networks, communication occurs over compromised channels, and participants may be untrusted.
+We enter the domain of **Cryptography**.
+
+This module formalizes the mathematics of trust.
+We will study asymmetric encryption (RSA and Diffie-Hellman), digital signatures, and Public Key Infrastructure.
+Then, we will analyze **Zero-Knowledge Proofs (ZKPs)**, proving how we can verify the truth of a statement without exposing the secret itself.
+Finally, we will study **Secure Multi-Party Computation (SMPC)**, exploring how mathematical schemes like Shamir's Secret Sharing allow nodes to execute calculations on private data without decrypting it.
+
+\subsection{The Private Computation}
+
+We investigate how to compute functions on hidden inputs.
+
+\begin{puzzlebox}
+\textbf{The Millionaires Problem.}
+
+Suppose two millionaires want to know who is richer, but neither wants to disclose their exact net worth.
+* Let Alice's net worth be $x \in \mathbb{N}$ and Bob's net worth be $y \in \mathbb{N}$.
+* They want to compute the comparative function: $f(x, y) = (x > y)$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item If they use a trusted third-party auditor, the auditor reads $x$ and $y$, compares them, and announces the result.
+        Explain why this model fails if no trusted auditor exists.
+  \item How can they execute a mathematical protocol that returns only the single bit of information $(x > y)$, while leaving Alice's input $x$ completely hidden from Bob, and Bob's input $y$ completely hidden from Alice?
+  \item Now, suppose a client wants to log into a server.
+        The client knows a secret password $S$, and the server holds the hash $H(S)$.
+        How can the client prove to the server that they know $S$ without transmitting $S$ (or any information that could be used to reconstruct $S$) over a compromised network channel?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Zero-Knowledge Proofs (ZKPs)}
+
+We study the mathematical properties of interactive verification.
+
+\begin{namedconcept}{Zero-Knowledge Proof Properties}
+A \newterm{Zero-Knowledge Proof} allows a Prover ($P$) to convince a Verifier ($V$) that a statement is true, satisfying:
+1. **Completeness:** If the statement is true, an honest prover will convince an honest verifier.
+2. **Soundness:** If the statement is false, no cheating prover can convince an honest verifier (except with negligible probability).
+3. **Zero-Knowledge:** If the statement is true, the verifier learns nothing other than this fact.
+\end{namedconcept}
+
+\begin{explobox}
+We can verify NP-complete problems in zero-knowledge.
+Consider the **Graph 3-Coloring Problem** (from Journey 3 Module 3.4).
+The Prover wants to prove they know a 3-coloring of a graph $G = (V, E)$ without revealing the coloring itself.
+* **The Protocol:**
+  1. The Prover permutes the three colors (Red, Green, Blue) randomly to new colors.
+  2. The Prover locks the colored nodes in opaque boxes and commits to them.
+  3. The Verifier selects a random edge $(u, v) \in E$ and challenges the Prover to reveal their colors.
+  4. The Prover unlocks boxes $u$ and $v$. If the colors are different, the Verifier is satisfied.
+  5. The protocol is repeated $k$ times with a fresh random color permutation in each round.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Prove the **Soundness** of this protocol: if the Prover does not know a 3-coloring, show that the probability of cheating successfully in $k$ independent rounds approaches 0 as $k \to \infty$.
+  \item Why must the Prover select a *new* random color permutation in each round?
+        (What would happen if the colors were not permuted, and the verifier challenged multiple overlapping edges over several rounds?)
+  \item Why does this protocol satisfy **Zero-Knowledge**? (Why does the verifier learn zero information about the global coloring layout?)
+\end{enumerate}
+\end{explobox}
+
+\subsection{Secure Multi-Party Computation and Secret Sharing}
+
+We analyze Shamir's threshold scheme and homomorphic addition.
+
+\begin{explobox}
+**Shamir's $(t, n)$-Threshold Scheme** distributes a secret $S$ among $n$ shares such that any $t$ shares can reconstruct $S$, but any $t-1$ shares learn zero information.
+* **The Setup:**
+  To share secret $S \in \mathbb{F}_p$, we choose a random polynomial $f(x)$ of degree $t-1$:
+  \[
+    f(x) \;=\; a_{t-1} x^{t-1} + \dots + a_1 x + S \pmod p
+  \]
+  where coefficients $a_i$ are chosen uniformly at random.
+  The shares are the points $D_i = (i, f(i))$ for $i = 1, \dots, n$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Given $t$ shares, we reconstruct the polynomial using **Lagrange Interpolation**:
+        \[
+          f(x) \;=\; \sum_{i=1}^t y_i \cdot \ell_i(x) \pmod p, \quad \ell_i(x) \;=\; \prod_{j \neq i} \frac{x - x_j}{x_i - x_j}.
+        \]
+        Show that evaluating $f(0)$ yields the secret $S$.
+  \item Prove that any $t-1$ shares yield zero information about the secret $S$. (Why can any value in $\mathbb{F}_p$ serve as the secret for a unique polynomial of degree $t-1$ passing through these $t-1$ points?)
+  \item **Homomorphic Addition:** Suppose Alice holds secret $S_1$ shared via polynomial $f(x)$, and Bob holds secret $S_2$ shared via polynomial $g(x)$.
+        Show that if nodes add their shares locally ($f(i) + g(i)$), the resulting values are valid shares of the sum $S_1 + S_2$ under the polynomial $h(x) = f(x) + g(x)$.
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Asymmetric cryptography uses one-way mathematical functions (like discrete logarithms) to establish secure channels and digital signatures.
+
+\textbf{Second.} Zero-Knowledge Proofs allow provers to demonstrate knowledge of secrets (like NP-complete graph colorings) while preserving privacy.
+
+\textbf{Third.} Shamir's $(t, n)$-threshold scheme uses random polynomials to secure secrets, allowing reconstruction via Lagrange interpolation.
+
+\textbf{Fourth.} Secure Multi-Party Computation uses homomorphic properties to calculate additions and multiplications directly on encrypted shares.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Cryptographic parameters}
+* **Asymmetric Cryptography:** Encryption schemes utilizing public keys for encryption and private keys for decryption.
+* **Digital Signature:** A cryptographic mechanism used to verify the authenticity and integrity of a digital message.
+* **Zero-Knowledge Proof:** A protocol enabling verification of a statement's truth without exposing the underlying secret.
+* **Secret Sharing:** A method for distributing a secret among a group of participants, each holding a share.
+* **Lagrange Interpolation:** A formula used to reconstruct a polynomial from a set of coordinate points.
+* **Garbled Circuits:** A cryptographic framework for secure multi-party computation of boolean circuits.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Diffie-Hellman Key Exchange.}
+  
+        Trace the Diffie-Hellman key exchange step-by-step using the prime $p = 23$ and generator $g = 5$.
+        Choose Alice's private key $a = 6$ and Bob's private key $b = 15$. Find the shared secret.
+        
+        \textbf{Solution:}
+        1. **Compute Alice's public key $A$:**
+           Alice computes $A = g^a \bmod p$:
+           \[
+             A \;=\; 5^6 \bmod 23.
+           \]
+           * $5^2 = 25 \equiv 2 \bmod 23$.
+           * $5^4 \equiv 2^2 = 4 \bmod 23$.
+           * $5^6 = 5^4 \cdot 5^2 \equiv 4 \cdot 2 = 8 \bmod 23$.
+           So Alice's public key is $A = 8$.
+           
+        2. **Compute Bob's public key $B$:**
+           Bob computes $B = g^b \bmod p$:
+           \[
+             B \;=\; 5^{15} \bmod 23.
+           \]
+           * $5^8 \equiv 4^2 = 16 \equiv -7 \bmod 23$.
+           * $5^{14} = 5^8 \cdot 5^6 \equiv (-7) \cdot 8 = -56 \equiv 13 \bmod 23$.
+           * $5^{15} = 5^{14} \cdot 5 \equiv 13 \cdot 5 = 65 \equiv 19 \bmod 23$.
+           So Bob's public key is $B = 19$.
+           
+        3. **Compute the shared secret $K$:**
+           * Alice computes $K = B^a \bmod p$:
+             \[
+               K \;=\; 19^6 \bmod 23.
+             \]
+             * $19 \equiv -4 \bmod 23$.
+             * $19^2 \equiv (-4)^2 = 16 \equiv -7 \bmod 23$.
+             * $19^4 \equiv (-7)^2 = 49 \equiv 3 \bmod 23$.
+             * $19^6 = 19^4 \cdot 19^2 \equiv 3 \cdot (-7) = -21 \equiv 2 \bmod 23$.
+             So Alice finds the secret $K = 2$.
+           * Bob computes $K = A^b \bmod p$:
+             \[
+               K \;=\; 8^{15} \bmod 23.
+             \]
+             * $8^2 = 64 \equiv 18 \equiv -5 \bmod 23$.
+             * $8^4 \equiv (-5)^2 = 25 \equiv 2 \bmod 23$.
+             * $8^8 \equiv 2^2 = 4 \bmod 23$.
+             * $8^{12} = 8^8 \cdot 8^4 \equiv 4 \cdot 2 = 8 \bmod 23$.
+             * $8^{14} = 8^{12} \cdot 8^2 \equiv 8 \cdot (-5) = -40 \equiv 6 \bmod 23$.
+             * $8^{15} = 8^{14} \cdot 8 \equiv 6 \cdot 8 = 48 \equiv 2 \bmod 23$.
+             So Bob finds the secret $K = 2$.
+        Both find the identical shared secret $K = 2$.
+        
+  \item \textbf{Lagrange Interpolation for Secret Sharing.}
+  
+        Let $p = 11$. We have a $(2, 3)$-threshold scheme.
+        We are given two shares: $D_1 = (1, 8)$ and $D_2 = (2, 4)$.
+        Reconstruct the secret $S = f(0)$ using Lagrange Interpolation.
+        
+        \textbf{Solution:}
+        The formula for the linear polynomial $f(x)$ passing through $(x_1, y_1) = (1, 8)$ and $(x_2, y_2) = (2, 4)$ evaluated at $x = 0$ is:
+        \[
+          f(0) \;=\; y_1 \cdot \ell_1(0) + y_2 \cdot \ell_2(0) \pmod{11}.
+        \]
+        1. **Compute Lagrange basis coefficients at $x = 0$:**
+           \[
+             \ell_1(0) \;=\; \frac{0 - x_2}{x_1 - x_2} \;=\; \frac{0 - 2}{1 - 2} \;=\; \frac{-2}{-1} \;=\; 2 \pmod{11}.
+           \]
+           \[
+             \ell_2(0) \;=\; \frac{0 - x_1}{x_2 - x_1} \;=\; \frac{0 - 1}{2 - 1} \;=\; \frac{-1}{1} \;=\; -1 \equiv 10 \pmod{11}.
+           \]
+        2. **Sum the components:**
+           \[
+             f(0) \;=\; 8 \cdot 2 + 4 \cdot 10 \pmod{11}
+           \]
+           \[
+             f(0) \;=\; 16 + 40 \;=\; 56 \pmod{11}.
+           \]
+           Evaluating modulo 11:
+           \[
+             56 \;=\; 5 \cdot 11 + 1 \;\equiv\; 1 \pmod{11}.
+           \]
+        The reconstructed secret is $S = 1$.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{The RSA Cryptosystem.}
+  
+        Let the primes for an RSA setup be $p = 3$ and $q = 11$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Compute the modulus $n = p \times q$ and Euler's totient $\phi(n) = (p-1)(q-1)$.
+          \item Choose the public exponent $e = 3$. Find the private exponent $d$ such that $e \times d \equiv 1 \bmod \phi(n)$.
+          \item Encrypt the message $m = 7$ to find the ciphertext $c = m^e \bmod n$.
+          \item Decrypt the ciphertext $c$ using the private key $d$ ($m' = c^d \bmod n$) and show that it recovers the original message $m = 7$.
+        \end{enumerate}
+
+  \item \textbf{Zero-Knowledge Graph 3-Coloring Proof.}
+  
+        We wish to verify the Graph 3-Coloring ZKP protocol.
+        Suppose a graph $G$ has $|E| = 10$ edges.
+        \begin{enumerate}[label=(\alph*)]
+          \item If a Prover does not know a valid 3-coloring, they must color the graph with at least one edge whose endpoints have the same color.
+                What is the probability that the Verifier selects this incorrect edge in a single random query?
+                Conclude the probability that the cheating Prover survives a single round.
+          \item Calculate the probability that the cheating Prover survives $k = 50$ independent rounds.
+          \item Explain why the protocol satisfies **Completeness** (if the Prover knows a coloring, what is their chance of passing?) and **Zero-Knowledge** (why does the Verifier learn nothing about the global coloring layout?).
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Shamir's (3, 4)-Threshold Secret Sharing Reconstruction.}
+  
+        Consider a $(3, 4)$-threshold secret sharing scheme over the finite field $\mathbb{F}_{17}$.
+        The secret $S$ is shared using a quadratic polynomial:
+        \[
+          f(x) \;=\; a_2 x^2 + a_1 x + S \pmod{17}.
+        \]
+        We are given three shares:
+        * Share 1: $D_1 = (1, 8)$
+        * Share 2: $D_2 = (2, 7)$
+        * Share 3: $D_3 = (3, 10)$
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Write down the formulas for the three Lagrange basis polynomials evaluated at $x = 0$:
+                \[
+                  \ell_1(0) \;=\; \frac{(0-x_2)(0-x_3)}{(x_1-x_2)(x_1-x_3)} \pmod{17}
+                \]
+                \[
+                  \ell_2(0) \;=\; \frac{(0-x_1)(0-x_3)}{(x_2-x_1)(x_2-x_3)} \pmod{17}
+                \]
+                \[
+                  \ell_3(0) \;=\; \frac{(0-x_1)(0-x_2)}{(x_3-x_1)(x_3-x_2)} \pmod{17}
+                \]
+          \item Compute the numeric values of $\ell_1(0), \ell_2(0), \ell_3(0)$ modulo 17.
+                *(Remember to use modular inverse operations, e.g. $1/a \equiv a^{-1} \bmod 17$).*
+          \item Reconstruct the polynomial value $f(0)$ to find the secret $S$.
+        \end{enumerate}
+
+  \item \textbf{Yao's Garbled Circuits for Private Computation.}
+  
+        Yao's Garbled Circuits is a framework for Secure Multi-Party Computation of any boolean circuit.
+        Let Alice hold input $x \in \{0, 1\}$ and Bob hold input $y \in \{0, 1\}$.
+        They want to compute the logical AND gate: $z = x \land y$ without revealing their inputs.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Alice (the Garbler) assigns two random 128-bit cryptographic keys (labels) to each wire in the circuit:
+                * Wire $X$ (Alice's input): $X_0, X_1$.
+                * Wire $Y$ (Bob's input): $Y_0, Y_1$.
+                * Wire $Z$ (Output): $Z_0, Z_1$.
+                Alice encrypts the truth table of the AND gate.
+                For example, the output label $Z_0$ is encrypted using keys $X_0$ and $Y_0$:
+                \[
+                  E_{X_0}\left( E_{Y_0}(Z_0) \right).
+                \]
+                List the encryptions for the remaining three rows of the truth table.
+          \item Alice permutes the four encrypted rows randomly (garbling) and sends them to Bob.
+                She also sends her own input label (e.g. $X_1$ if $x=1$).
+                To evaluate, Bob needs his own input label (e.g. $Y_0$ if $y=0$).
+                Explain how Bob obtains $Y_0$ from Alice using **Oblivious Transfer**.
+                *(Why does this protocol prevent Alice from knowing Bob's input $y$, and prevent Bob from learning the other wire key $Y_1$?)*
+          \item Explain why Bob can only decrypt a single row of the garbled table, and why he learns zero information about Alice's input $x$ or the values of any intermediate wires.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the nature of proof:** Historically, a mathematical proof was a sequence of logical deductions that verified *why* a statement is true, revealing all steps. Zero-knowledge proofs show that we can verify *that* a statement is true without revealing *why*. How does this alter the classical definition of mathematical knowledge?
+  \item **On the politics of encryption:** Cryptography allows individuals to secure data with absolute mathematical privacy, resistant to any external authority. How does the mathematical safety of asymmetric encryption shift the balance of power between citizens and states?
+  \item **On the limits of privacy:** Using secure multi-party computation, we can compute functions on private data, enabling collaborative computation without data disclosure. Does this technology resolve the conflict between data utility and individual privacy, or does it introduce new coordination complexities?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking back at Journey 6.}
+You have traversed the boundaries of distributed systems, concurrency, and trust:
+* **Module 6.1:** Concurrency, mutual exclusion, semaphores, deadlocks, and Compare-And-Swap.
+* **Module 6.2:** Cache coherence (MESI), store buffers, weak memory models, and memory barriers.
+* **Module 6.3:** The CAP Theorem, FLP impossibility, Paxos consensus, and Raft replication.
+* **Module 6.4:** Asymmetric encryption, Zero-Knowledge Proofs, and Shamir's Secret Sharing.
+
+This completes Journey 6, providing the complete theoretical and practical foundation of distributed computing and security.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 6 --- Distributed Systems, Concurrency, and Trust}}\\[4pt]
+{\small\color{JourneyColor}\textbf{Congratulations. You have completed the entire Computation Track curriculum.}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

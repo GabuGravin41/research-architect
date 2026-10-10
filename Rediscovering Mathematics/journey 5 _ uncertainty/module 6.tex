@@ -1,0 +1,474 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.8cm, bottom=2.8cm, left=3.0cm, right=2.5cm, includeheadfoot, headheight=15pt]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue}
+
+% ── Colours ─────────────────────────────────────────────────
+\definecolor{NavyBlue}{HTML}{1E3A8A}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{D97706}
+\definecolor{LightBlue}{HTML}{EFF6FF}
+\definecolor{LightGold}{HTML}{FEF3C7}
+\definecolor{DarkGrey}{HTML}{334155}
+\definecolor{BoxGreen}{HTML}{F0FDF4}
+\definecolor{SoftRed}{HTML}{FFF1F2}
+\definecolor{SidebarGrey}{HTML}{F8FAFC}
+
+% ── Section formatting ───────────────────────────────────────
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{Gold}}{}{0em}{}
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 5 $\cdot$ Module 6}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Environments (tcolorbox Unification) ─────────────────────
+
+% Puzzle box — opening problem
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=NavyBlue!5, colframe=NavyBlue,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Discovery box — moment of crystallisation
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=LightGold, colframe=Gold,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Name box — formal definition reveal
+\newtcolorbox{namebox}[1][]{
+  enhanced, breakable,
+  colback=LightBlue, colframe=MidBlue,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=BoxGreen, colframe=DarkGrey!35,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Thought provocation — inline philosophical aside
+\newtcolorbox{thought}[1][]{
+  enhanced, breakable,
+  colback=SidebarGrey, colframe=Gold,
+  boxrule=0pt, leftrule=1.5pt,
+  sharp corners,
+  left=10pt, right=10pt, top=7pt, bottom=7pt,
+  before skip=10pt, after skip=10pt,
+  #1
+}
+
+% Problem counter
+\newcounter{problem}
+\newenvironment{problem}[1][]{%
+  \refstepcounter{problem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{MidBlue}Problem \theproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Deep problem counter
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{%
+  \refstepcounter{deepproblem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Exercise counter
+\newcounter{exercise}
+\newenvironment{exercise}[1][]{%
+  \refstepcounter{exercise}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{Gold}Exercise \theexercise}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 5: UNCERTAINTY}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 6}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Bayesian Inference and Stochastic Processes}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+From discrete steps to continuous flow.\\[0.15cm]
+How do we model continuous uncertainty, and update our beliefs about it?}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}           & Journey 5 --- Uncertainty \\[4pt]
+\color{DarkGrey}\textbf{Module}            & 6 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}     & Module 5 (Markov chains); Module 3 (continuous variables, CLT) \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & Poisson processes, Brownian motion, continuous Bayes, conjugate priors \\[4pt]
+\color{DarkGrey}\textbf{Format}            & 8 problems $+$ 3 deep problems $\approx$ 13 pages \\
+\end{tabular}
+\vspace{1cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+\noindent\textbf{Recap of Module 5.}
+Module~5 generalized random walks to Markov chains, where transition probabilities depend on the current state. You modeled system dynamics using stochastic transition matrices, solved linear equations for stationary distributions, and explored detailed balance and convergence in ergodic chains.
+
+\medskip
+This final module of Journey 5 bridges probability, calculus, and scientific inference. We scale our systems to continuous time, creating **stochastic processes** like the Poisson process (modeling discrete arrivals) and Brownian motion (modeling continuous physical diffusion). Simultaneously, we translate Bayes' Theorem to continuous parameter densities, discovering how conjugate priors allow us to analytically update our models as continuous evidence arrives.
+
+\newpage
+
+% ============================================================
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+% ============================================================
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle: Radioactive Decay.}
+
+A sample of radioactive material contains billions of unstable atoms. Each atom has a tiny, constant probability of decaying in any given second. The decays occur independently of one another.
+* We place a Geiger counter next to the sample. It registers discrete clicks over time.
+* The time between consecutive clicks is a random variable.
+* The total number of clicks in an hour is a random variable.
+
+\medskip
+\textbf{Question 1.} Let $T_1$ be the time from the start of the experiment until the first click. Let $T_2$ be the time between the first and second clicks. If the material does not notice how long it has been sitting there, what continuous distribution must model $T_1$ and $T_2$?
+
+\textbf{Question 2.} Let $N_t$ be the number of decays registered in the interval $[0, t]$. As the number of atoms is massive and the individual probability of decay is tiny, what discrete distribution must model $N_t$? (Recall your limits from Module 2).
+
+\textbf{Question 3.} (The Inference Problem.) Suppose you do not know the true decay rate $\lambda$ of the material. You observe 15 clicks in the first 10 seconds. How do you construct a continuous probability distribution over all possible values of $\lambda$ to represent your state of knowledge? As more clicks arrive, how does this distribution update and narrow?
+\end{puzzlebox}
+
+\newpage
+
+% ============================================================
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+% ============================================================
+
+\subsection{Step 1: The Poisson Process}
+
+We model independent events arriving randomly in continuous time.
+
+\begin{problem}
+\label{prob:poisson_process}
+A **Poisson Process** with rate $\lambda > 0$ is a continuous-time stochastic process $N_t$ representing the number of events in $[0, t]$, satisfying:
+1. $N_0 = 0$.
+2. The number of events in disjoint intervals are independent.
+3. The distribution of events in $[s, s+t]$ depends only on the length $t$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Let $P(N_t = k) = e^{-\lambda t} \frac{(\lambda t)^k}{k!}$. Verify that the expected number of arrivals in $[0, t]$ is $E[N_t] = \lambda t$.
+  \item Let $T_1$ be the time of the first arrival. Observe that $\{T_1 > t\}$ is the exact same event as $\{N_t = 0\}$ (no arrivals in $[0, t]$). Use this to prove that the CDF of $T_1$ is $F_{T_1}(t) = 1 - e^{-\lambda t}$, showing that $T_1 \sim \text{Exponential}(\lambda)$.
+  \item Show that the time between any two consecutive arrivals is independent and identically distributed as $\text{Exponential}(\lambda)$.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 2: Brownian Motion (Wiener Process)}
+
+We scale random walks to the continuous limit to model physical diffusion.
+
+\begin{problem}
+\label{prob:brownian_motion}
+A continuous-time stochastic process $W_t$ is a standard **Brownian Motion** (or Wiener process) if:
+1. $W_0 = 0$.
+2. It has independent increments: for $t_1 < t_2 < t_3$, the increment $W_{t_3} - W_{t_2}$ is independent of $W_{t_2} - W_{t_1}$.
+3. The increments are normally distributed: $W_t - W_s \sim N(0, t-s)$ for $t > s$.
+4. The path $t \mapsto W_t$ is continuous with probability 1.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item What is the expectation $E[W_t]$? What is the variance $\text{Var}(W_t)$?
+  \item Let $s < t$. Calculate the covariance $\text{Cov}(W_s, W_t)$. \textit{Hint: Write $W_t = W_s + (W_t - W_s)$ and use independence of increments.}
+  \item Why is Brownian motion a continuous-time analogue of the random walks studied in Module 4?
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 3: Continuous Bayesian Inference}
+
+We extend Bayes' Theorem to model continuous parameter distributions.
+
+\begin{problem}
+\label{prob:continuous_bayes}
+Let $\theta \in \Theta$ be a continuous parameter we wish to estimate, and let $D$ be observed data.
+The **Continuous Bayes' Theorem** is:
+\[
+  f(\theta \mid D) \;=\; \frac{f(D \mid \theta) f(\theta)}{\int_\Theta f(D \mid \theta') f(\theta') \, d\theta'},
+\]
+where $f(\theta)$ is the **prior PDF**, $f(D \mid \theta)$ is the **likelihood function**, and $f(\theta \mid D)$ is the **posterior PDF**.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Explain why the denominator acts as a normalizing constant. Why can we write the relation as $f(\theta \mid D) \propto f(D \mid \theta) f(\theta)$?
+  \item Suppose a coin has success probability $p \in [0, 1]$. Our prior on $p$ is uniform: $f(p) = 1$. We flip the coin once and get heads (H). Write down the likelihood $f(\text{H} \mid p)$. Calculate the posterior PDF $f(p \mid \text{H})$ and plot it.
+  \item What is the most likely value of $p$ (the mode of the posterior) after seeing one heads? What is the expected value $E[p \mid \text{H}]$?
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 4: Conjugate Priors}
+
+If the prior and posterior belong to the same family of distributions, the prior is **conjugate** to the likelihood.
+
+\begin{problem}
+\label{prob:conjugate_priors}
+We explore two classic conjugate models.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item **Beta-Binomial Conjugacy:** The Beta($\alpha, \beta$) distribution has PDF $f(p) \propto p^{\alpha-1}(1-p)^{\beta-1}$ for $p \in [0, 1]$.
+  Suppose we observe $k$ successes in $n$ independent Bernoulli trials. Show that if the prior on $p$ is $\text{Beta}(\alpha, \beta)$, the posterior distribution is $\text{Beta}(\alpha + k, \, \beta + n - k)$.
+  \item Let $\alpha = \beta = 1$ (the uniform prior). We observe 8 heads in 10 tosses. What are the posterior parameters? What is the expected value of $p$?
+  \item **Gamma-Poisson Conjugacy:** The Gamma($\alpha, \beta$) distribution has PDF $f(\lambda) \propto \lambda^{\alpha-1} e^{-\beta \lambda}$ for $\lambda \ge 0$.
+  Suppose we observe $k$ arrivals in a unit interval from a Poisson process with rate $\lambda$. Show that if the prior on $\lambda$ is $\text{Gamma}(\alpha, \beta)$, the posterior is $\text{Gamma}(\alpha + k, \, \beta + 1)$.
+\end{enumerate}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The Poisson process models independent, uniform-rate arrivals in continuous time. Clicks follow a Poisson distribution, while inter-arrival times are independent exponentials.
+
+\textbf{Second.} Brownian motion is the continuous-time limit of a scaled random walk. Its increments are independent and normally distributed with variance scaling linearly with time.
+
+\textbf{Third.} Continuous Bayesian inference updates a prior PDF into a posterior PDF by multiplying by the likelihood: $f(\theta \mid D) \propto f(D \mid \theta) f(\theta)$.
+
+\textbf{Fourth.} Conjugate priors allow us to calculate posterior distributions analytically by simple parameter updates ($\alpha \to \alpha + \text{data}$), avoiding the need to evaluate complex integration denominators.
+\end{discoverybox}
+
+\newpage
+
+% ============================================================
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+% ============================================================
+
+\begin{namebox}
+\textbf{Stochastic Processes and Inference.}
+
+* **Poisson Process ($N_t$):** Arrivals with rate $\lambda$. $N_t \sim \text{Poisson}(\lambda t)$, inter-arrival times $T_i \sim \text{Exponential}(\lambda)$.
+* **Brownian Motion ($W_t$):** Standard Wiener process. $W_0 = 0$, $W_t - W_s \sim N(0, t-s)$, and $\text{Cov}(W_s, W_t) = \min(s, t)$.
+* **Posterior PDF:** $f(\theta \mid D) = \frac{f(D \mid \theta) f(\theta)}{\int f(D \mid \theta') f(\theta') d\theta'}$.
+* **Beta Distribution:** Conjugate to Binomial. $f(p) = \frac{1}{\text{B}(\alpha, \beta)} p^{\alpha-1}(1-p)^{\beta-1}$, with mean $\frac{\alpha}{\alpha+\beta}$.
+* **Gamma Distribution:** Conjugate to Poisson. $f(\lambda) = \frac{\beta^\alpha}{\Gamma(\alpha)} \lambda^{\alpha-1} e^{-\beta \lambda}$, with mean $\frac{\alpha}{\beta}$.
+\end{namebox}
+
+\newpage
+
+% ============================================================
+\section{Part 5 \texorpdfstring{---}{--} Solved Exercises}
+% ============================================================
+
+\begin{exercise}[Beta-Binomial Posterior Derivation]
+Derive the posterior distribution for a success probability $p$ with prior $\text{Beta}(\alpha, \beta)$ after observing $k$ successes and $n-k$ failures in $n$ independent trials.
+\end{exercise}
+
+\begin{proof}[Solution]
+The prior PDF for $p \in [0, 1]$ is:
+\[
+  f(p) \;=\; C_1 \cdot p^{\alpha-1} (1-p)^{\beta-1},
+\]
+where $C_1 = 1/\text{B}(\alpha, \beta)$ is a normalizing constant independent of $p$.
+The likelihood of observing $k$ successes in $n$ independent trials, given $p$, is modeled by the Binomial PMF:
+\[
+  L(p) \;=\; P(D \mid p) \;=\; \binom{n}{k} p^k (1-p)^{n-k}.
+\]
+Using Bayes' Theorem, the posterior PDF is:
+\[
+  f(p \mid D) \;\propto\; L(p) \cdot f(p) \;=\; \left[ \binom{n}{k} p^k (1-p)^{n-k} \right] \cdot \left[ C_1 \cdot p^{\alpha-1} (1-p)^{\beta-1} \right].
+\]
+Combine the terms by grouping the powers of $p$ and $(1-p)$:
+\[
+  f(p \mid D) \;\propto\; p^{(\alpha + k) - 1} (1-p)^{(\beta + n - k) - 1}.
+\]
+Observe that this functional form, $p^{A-1}(1-p)^{B-1}$, is precisely the kernel of a Beta distribution with parameters:
+\[
+  \alpha' \;=\; \alpha + k, \qquad \beta' \;=\; \beta + n - k.
+\]
+Since any valid probability density must integrate to 1, the normalizing constant is uniquely determined by the Beta function. Thus, the posterior distribution is:
+\[
+  p \mid D \;\sim\; \text{Beta}(\alpha + k, \, \beta + n - k).
+\]
+This completes the derivation.
+\end{proof}
+
+\begin{exercise}[Covariance of Brownian Motion]
+Prove that for standard Brownian motion $W_t$, the covariance of its values at two times $s$ and $t$ is:
+\[
+  \text{Cov}(W_s, W_t) \;=\; \min(s, t).
+\]
+\end{exercise}
+
+\begin{proof}[Solution]
+Without loss of generality, assume $s \le t$.
+We write $W_t$ as the sum of $W_s$ and the increment between $s$ and $t$:
+\[
+  W_t \;=\; W_s + (W_t - W_s).
+\]
+The covariance is defined as:
+\[
+  \text{Cov}(W_s, W_t) \;=\; E[W_s W_t] - E[W_s]E[W_t].
+\]
+Recall that for standard Brownian motion, $E[W_t] = 0$ for all $t \ge 0$. Thus, $E[W_s]E[W_t] = 0$, and the covariance simplifies to:
+\[
+  \text{Cov}(W_s, W_t) \;=\; E[W_s W_t] \;=\; E\bigl[ W_s \bigl( W_s + (W_t - W_s) \bigr) \bigr].
+\]
+Expand the expectation using linearity:
+\[
+  \text{Cov}(W_s, W_t) \;=\; E[W_s^2] + E[W_s(W_t - W_s)].
+\]
+By definition, standard Brownian motion has independent increments. Because the interval $[s, t]$ is disjoint from $[0, s]$, the increment $W_t - W_s$ is completely independent of the value $W_s - W_0 = W_s$. Therefore:
+\[
+  E[W_s(W_t - W_s)] \;=\; E[W_s] \cdot E[W_t - W_s] \;=\; 0 \cdot 0 \;=\; 0.
+\]
+The variance of $W_s$ is $E[W_s^2] - (E[W_s])^2 = E[W_s^2]$. Since $W_s \sim N(0, s)$, we have $E[W_s^2] = s$.
+Substituting these values back:
+\[
+  \text{Cov}(W_s, W_t) \;=\; s + 0 \;=\; s.
+\]
+As $s = \min(s, t)$ under our assumption, the result holds generally: $\text{Cov}(W_s, W_t) = \min(s, t)$.
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Part 6 \texorpdfstring{---}{--} Problems}
+% ============================================================
+
+\begin{problem}[Gamma-Poisson Conjugacy]
+Let $\lambda > 0$ be the arrival rate of a Poisson process. Suppose our prior on $\lambda$ is $\text{Gamma}(\alpha, \beta)$ with PDF:
+\[
+  f(\lambda) \;=\; \frac{\beta^\alpha}{\Gamma(\alpha)} \lambda^{\alpha-1} e^{-\beta \lambda} \quad \text{for } \lambda \ge 0.
+\]
+We observe $k$ arrivals in a unit time interval. Show that the posterior PDF $f(\lambda \mid k)$ is $\text{Gamma}(\alpha + k, \, \beta + 1)$.
+\end{problem}
+
+\begin{problem}[The Poisson Process Arrival Times]
+Let $N_t$ be a Poisson process with rate $\lambda$. Let $S_n$ be the arrival time of the $n$-th event, so $S_n = \sum_{i=1}^n T_i$ where $T_i \sim \text{Exponential}(\lambda)$ are independent.
+\begin{enumerate}[label=(\alph*)]
+  \item Using PGFs or direct integration, show that the PDF of $S_n$ (which is a Gamma/Erlang distribution) is:
+  \[
+    f_{S_n}(t) \;=\; \lambda e^{-\lambda t} \frac{(\lambda t)^{n-1}}{(n-1)!} \quad \text{for } t \ge 0.
+  \]
+  \item Show that $P(N_t \ge n) = P(S_n \le t)$. Verify this relation by integrating $f_{S_n}(t)$.
+\end{enumerate}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 7 \texorpdfstring{---}{--} Deep Problems}
+% ============================================================
+
+\begin{deepproblem}[The Scaling Limit of Random Walks]
+We derive Brownian motion as the limit of a discrete random walk. Let $\Delta t$ be a small time step, and $\Delta x$ be a small spatial step. Let $X_1, X_2, \ldots$ be i.i.d. steps with $P(X_i = \Delta x) = 1/2$ and $P(X_i = -\Delta x) = 1/2$. The position at time $t = n \Delta t$ is $S_t = \sum_{i=1}^n X_i$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that $E[S_t] = 0$ and $\text{Var}(S_t) = n (\Delta x)^2 = \frac{t}{\Delta t} (\Delta x)^2$.
+  \item To obtain a non-zero, finite variance in the limit as $\Delta t \to 0$, we must scale the spatial step such that:
+  \[
+    \Delta x \;=\; \sigma \sqrt{\Delta t}
+  \]
+  for some constant $\sigma > 0$. Show that under this scaling, $\text{Var}(S_t) = \sigma^2 t$ for all $t$.
+  \item Use the Central Limit Theorem to prove that as $\Delta t \to 0$, the distribution of $S_t$ converges to $N(0, \sigma^2 t)$. This proves that random walks scale to Brownian motion.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Bayesian Conjugacy and the Normal Distribution]
+Suppose we have normal data $X \sim N(\mu, \sigma^2)$ with known variance $\sigma^2$, and a normal prior for the mean:
+\[
+  \mu \;\sim\; N(\mu_0, \sigma_0^2).
+\]
+We observe a single sample $x$. Show that the posterior distribution of $\mu$ given $x$ is also normal:
+\[
+  \mu \mid x \;\sim\; N(\mu_1, \sigma_1^2),
+\]
+where the parameters satisfy:
+\[
+  \frac{1}{\sigma_1^2} \;=\; \frac{1}{\sigma_0^2} + \frac{1}{\sigma^2} \qquad \text{and} \qquad \mu_1 \;=\; \sigma_1^2 \left( \frac{\mu_0}{\sigma_0^2} + \frac{x}{\sigma^2} \right).
+\]
+Interpret: "precisions (inverse variances) add, and the posterior mean is a precision-weighted average of the prior mean and the data."
+\end{deepproblem}
+
+\newpage
+
+% ============================================================
+\section{Part 8 \texorpdfstring{---}{--} Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Scaling of Space and Time:** In deriving Brownian motion, we had to scale space as the square root of time: $\Delta x = \sigma \sqrt{\Delta t}$. Why does this square-root scaling reflect the fact that random walks diffuse outwards, rather than flowing linearly like a stream?
+  \item **On Bayesian Learning:** In Normal conjugacy, the posterior precision is the sum of prior precision and data precision. Does this match your intuitive view of how learning works: the more certain you are initially, the more evidence is needed to change your mind?
+  \item **On Stochastic Limits:** Brownian motion path curves are continuous everywhere but differentiable *nowhere* with probability 1. How does this mathematical property reflect the physical reality of a pollen grain being bombarded by molecules?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking back at Journey 5.}
+You have built the complete mathematical foundations of uncertainty:
+* **Module 1:** Probability axioms, sample spaces, and counting.
+* **Module 2:** Discrete random variables, expectation, and variance.
+* **Module 3:** Continuous distributions and the Central Limit Theorem.
+* **Module 4:** Probability generating functions and random walk recurrence.
+* **Module 5:** Markov chains, transition matrices, and detailed balance.
+* **Module 6:** Continuous stochastic processes and Bayesian conjugacy.
+
+This mathematical machinery is now yours. You will use it as a foothold to explore the statistical foundations of physics (thermodynamics and quantum frontiers), chemical kinetics, and computational complexity in the journeys ahead.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 5 --- Uncertainty}}\\[4pt]
+{\small\color{DarkGrey}You have completed the Uncertainty Track. Continue to: \textbf{Journey 6 --- Statistical Mechanics}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

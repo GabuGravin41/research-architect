@@ -1,0 +1,751 @@
+\documentclass[12pt, a4paper]{book}
+
+% ─── Core packages ────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=30mm, bottom=30mm,
+  inner=32mm, outer=25mm,
+  marginparwidth=18mm
+}
+
+% ─── Mathematics ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amsthm}
+
+% ─── Chemistry ────────────────────────────────────────────────────────────────
+\usepackage[version=4]{mhchem}
+
+% ─── Graphics & colour ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning,
+                calc, backgrounds, decorations.pathmorphing,
+                decorations.markings, patterns}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% ─── Layout ───────────────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{marginnote}
+\usepackage{mdframed}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COLOUR PALETTE  (identical to Module 1.1)
+% ══════════════════════════════════════════════════════════════════════════════
+\definecolor{JourneyColor}{HTML}{065F46}   % forest green — journey headings
+\definecolor{ModuleColor}{HTML}{0F766E}    % deep teal — module headings
+\definecolor{PuzzleColor}{HTML}{B45309}    % deep amber — puzzle boxes
+\definecolor{DiscoveryColor}{HTML}{D97706} % golden amber — discovery boxes
+\definecolor{WarningColor}{HTML}{E11D48}   % coral red — "model breaks" boxes
+\definecolor{ProblemColor}{HTML}{0F766E}   % dark teal — problem sets
+\definecolor{ReflectColor}{HTML}{047857}   % green — reflection boxes
+\definecolor{HistoryColor}{HTML}{9A3412}   % brown — history notes
+\definecolor{LightBg}{HTML}{F8FAFC}        % near-white background
+
+% ══════════════════════════════════════════════════════════════════════════════
+% TCOLORBOX ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=PuzzleColor!6, colframe=PuzzleColor,
+  fonttitle=\bfseries\sffamily, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=PuzzleColor, colframe=PuzzleColor},
+  borderline west={3pt}{0pt}{PuzzleColor}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  fonttitle=\bfseries\sffamily, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor}, #1}
+
+\newtcolorbox{problembox}[1][]{
+  enhanced, breakable,
+  colback=ProblemColor!5, colframe=ProblemColor,
+  fonttitle=\bfseries\sffamily, title={Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ProblemColor, colframe=ProblemColor},
+  borderline west={3pt}{0pt}{ProblemColor}, #1}
+
+\newtcolorbox{deepbox}[1][]{
+  enhanced, breakable,
+  colback=JourneyColor!5, colframe=JourneyColor,
+  fonttitle=\bfseries\sffamily, title={Deep Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=JourneyColor, colframe=JourneyColor},
+  borderline west={4pt}{0pt}{JourneyColor}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=HistoryColor!7, colframe=HistoryColor!60,
+  fonttitle=\bfseries\sffamily\small, title={Historical Note},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=HistoryColor!80, colframe=HistoryColor}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=ReflectColor!6, colframe=ReflectColor,
+  fonttitle=\bfseries\sffamily, title={Reflection},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ReflectColor, colframe=ReflectColor},
+  borderline west={3pt}{0pt}{ReflectColor}, #1}
+
+\newtcolorbox{modelbreaks}[1][]{
+  enhanced, breakable,
+  colback=WarningColor!6, colframe=WarningColor,
+  fonttitle=\bfseries\sffamily, title={Where This Model Breaks},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=WarningColor, colframe=WarningColor},
+  borderline west={4pt}{0pt}{WarningColor}, #1}
+
+\newtcolorbox{namedconcept}[2][]{
+  enhanced,
+  colback=ModuleColor!6, colframe=ModuleColor,
+  fonttitle=\bfseries\sffamily\large, title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ModuleColor, colframe=ModuleColor}, #1}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% THEOREM ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\theoremstyle{definition}
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{question}{Question}[chapter]
+\newtheorem{experiment}{Experiment}[chapter]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECTION FORMATTING
+% ══════════════════════════════════════════════════════════════════════════════
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}
+  {10pt}{\Huge}[\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% HEADER / FOOTER
+% ══════════════════════════════════════════════════════════════════════════════
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CUSTOM COMMANDS
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\chem}[1]{\ce{#1}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\sidenote}[1]{%
+  \marginnote{\footnotesize\sffamily\textcolor{JourneyColor!70}{#1}}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% DOCUMENT
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\begin{namedconcept}{Law of Conservation of Mass}
+In any chemical reaction,
+the total mass of the reactants equals
+the total mass of the products.
+
+\begin{center}
+\Large
+$m_{\text{reactants}} = m_{\text{products}}$
+\end{center}
+
+Mass is neither created nor destroyed in chemical reactions.
+It is \emph{rearranged}.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+This law sounds almost trivial today.
+In 1785 it was a revolution.
+It transformed chemistry from a qualitative art
+into a quantitative science.
+
+For the first time, chemists could \emph{predict}:
+if you know the masses of all ingredients,
+you know the total mass of all products.
+You cannot get something from nothing.
+You cannot make mass disappear.
+
+\subsubsection{Applying the Law: Worked Examples}
+
+\textbf{Example 1.} Iron reacts with sulfur to form iron(II) sulfide:
+\begin{center}
+\ce{Fe + S -> FeS}
+\end{center}
+A student mixes \SI{5.60}{\gram} of iron with excess sulfur
+and heats strongly.
+After reaction, the product weighs \SI{8.80}{\gram}.
+
+How much sulfur was consumed?
+
+\vspace{0.3em}
+\textit{Solution.}
+By conservation of mass, mass of sulfur consumed
+$= \SI{8.80}{\gram} - \SI{5.60}{\gram} = \SI{3.20}{\gram}$.
+
+\vspace{0.5em}
+
+\textbf{Example 2.} Magnesium burns in air:
+\begin{center}
+\ce{2Mg + O2 -> 2MgO}
+\end{center}
+\SI{12.0}{\gram} of magnesium produces \SI{20.0}{\gram} of magnesium oxide.
+
+How much oxygen was consumed?
+What fraction of the product by mass is oxygen?
+
+\vspace{0.3em}
+\textit{Solution.}
+Oxygen consumed $= \SI{20.0}{\gram} - \SI{12.0}{\gram} = \SI{8.0}{\gram}$.\\
+Fraction that is oxygen $= 8.0/20.0 = 0.40$ (i.e.\ \SI{40}{\percent} by mass).
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Calcium carbonate decomposes when heated:
+        \begin{center}
+        \ce{CaCO3 ->[\Delta] CaO + CO2}
+        \end{center}
+        \SI{50.0}{\gram} of \ce{CaCO3} produces \SI{28.0}{\gram} of \ce{CaO}.
+        \begin{enumerate}[label=(\alph*)]
+          \item What mass of \ce{CO2} was produced?
+          \item Where did this \ce{CO2} go if the reaction happened in an open crucible?
+          \item If a student only weighed the solid before and after
+                (not capturing the gas), would they conclude mass was not conserved?
+                What does this tell us about Lavoisier's methodology?
+        \end{enumerate}
+
+  \item Hydrogen gas burns in oxygen:
+        \begin{center}
+        \ce{2H2 + O2 -> 2H2O}
+        \end{center}
+        \SI{4.0}{\gram} of hydrogen completely reacts with oxygen.
+        \begin{enumerate}[label=(\alph*)]
+          \item Use conservation of mass to find the mass
+                of water produced, given that \SI{32.0}{\gram} of \ce{O2} reacted.
+          \item What is the mass ratio of hydrogen to oxygen in water?
+          \item Would you expect this ratio to change if you used
+                water from a different source?
+        \end{enumerate}
+
+  \item A sealed container holds \SI{10.0}{\gram} of wood and air.
+        The wood burns completely inside the sealed container.
+        The container is not opened.
+        \begin{enumerate}[label=(\alph*)]
+          \item What is the total mass of everything in the container
+                after burning?
+          \item If you then open the container, could the total mass change?
+                Under what conditions?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: What Reactions Are ─────────────────────────────────────────────
+\subsection{What a Reaction Actually Is: Rearrangement}
+
+The law of conservation of mass tells us something profound about
+the nature of chemical reactions.
+
+If mass is conserved, then reactions do not create or destroy matter.
+They \emph{rearrange} it.
+The atoms present before the reaction are the same atoms
+present after — just connected differently.
+
+This is a deep conceptual shift.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  atom/.style={circle, minimum size=0.7cm, font=\sffamily\footnotesize\bfseries}
+]
+  % Before reaction: H2 + Cl2
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+        at (-1, 1.8) {Before:};
+
+  % H2 molecule
+  \node[atom, draw=blue!70, fill=blue!20] (h1) at (1.0, 1.8) {H};
+  \node[atom, draw=blue!70, fill=blue!20] (h2) at (2.0, 1.8) {H};
+  \draw[thick, blue!70] (h1) -- (h2);
+
+  \node at (3.2, 1.8) {\large $+$};
+
+  % Cl2 molecule
+  \node[atom, draw=green!60!black, fill=green!20] (cl1) at (4.4, 1.8) {Cl};
+  \node[atom, draw=green!60!black, fill=green!20] (cl2) at (5.4, 1.8) {Cl};
+  \draw[thick, green!60!black] (cl1) -- (cl2);
+
+  % Arrow
+  \draw[-{Stealth[length=6pt]}, ultra thick, color=DiscoveryColor]
+        (3.2, 0.9) -- (3.2, 0.1) node[midway, right]{react};
+
+  % After reaction: 2 HCl
+  \node[font=\sffamily\small\bfseries, color=JourneyColor]
+        at (-1, -0.5) {After:};
+
+  \node[atom, draw=blue!70, fill=blue!20] (h1b) at (1.0, -0.5) {H};
+  \node[atom, draw=green!60!black, fill=green!20] (cl1b) at (2.0, -0.5) {Cl};
+  \draw[thick, purple] (h1b) -- (cl1b);
+
+  \node at (3.2, -0.5) {\large $+$};
+
+  \node[atom, draw=blue!70, fill=blue!20] (h2b) at (4.4, -0.5) {H};
+  \node[atom, draw=green!60!black, fill=green!20] (cl2b) at (5.4, -0.5) {Cl};
+  \draw[thick, purple] (h2b) -- (cl2b);
+
+  % Annotation
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor]
+        at (3.2, -1.6) {Same atoms. New connections.};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+This picture — atoms rearranging during reactions —
+is not proven yet.
+We have only established that mass is conserved.
+But the rearrangement picture is the \emph{simplest hypothesis}
+consistent with that fact.
+
+We will confirm and deepen this picture dramatically
+in Module~1.4, when we examine the ratios by mass
+in which elements always combine.
+
+% ─── Section: Types of Chemical Reaction ─────────────────────────────────────
+\subsection{A First Classification of Reactions}
+
+Now that we understand reactions as rearrangements,
+we can start to classify them by the type of rearrangement.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  box/.style={draw=JourneyColor!60, fill=JourneyColor!8,
+              rounded corners=3pt, minimum width=3.4cm,
+              minimum height=1.2cm},
+  subbox/.style={draw=ModuleColor!50, fill=ModuleColor!6,
+                 rounded corners=2pt, minimum width=3.0cm,
+                 minimum height=0.9cm},
+  arr/.style={-{Stealth[length=4pt]}, thick, color=JourneyColor!70}
+]
+  \node[box, minimum width=4.5cm, minimum height=1cm]
+        (react) at (0,0) {\textbf{Types of Chemical Reaction}};
+
+  \node[subbox] (comb) at (-5.5,-2.2)
+        {Combination\\$A + B \to AB$};
+  \node[subbox] (decomp) at (-2,-2.2)
+        {Decomposition\\$AB \to A + B$};
+  \node[subbox] (displ) at (2,-2.2)
+        {Single displacement\\$A + BC \to AC + B$};
+  \node[subbox] (dd) at (5.5,-2.2)
+        {Double displacement\\$AB + CD \to AD + CB$};
+
+  \foreach \mynode in {comb, decomp, displ, dd}
+    \draw[arr] (react) -- (\mynode);
+
+  % Examples below each
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor]
+        at (-5.5,-3.4) {\ce{2H2 + O2 -> 2H2O}};
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor]
+        at (-2,-3.4) {\ce{2HgO -> 2Hg + O2}};
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor]
+        at (2,-3.4) {\ce{Zn + 2HCl -> ZnCl2 + H2}};
+  \node[font=\sffamily\footnotesize\itshape, text=HistoryColor]
+        at (5.5,-3.4) {\ce{NaCl + AgNO3 -> AgCl + NaNO3}};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+Each type has a characteristic pattern.
+In a combination reaction, two simpler things join.
+In decomposition, one thing breaks apart.
+In displacement, one element displaces another from a compound.
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Classify each reaction as combination, decomposition,
+        single displacement, or double displacement:
+        \begin{enumerate}[label=(\alph*)]
+          \item \ce{2Na + Cl2 -> 2NaCl}
+          \item \ce{CaCO3 -> CaO + CO2}
+          \item \ce{Fe + CuSO4 -> FeSO4 + Cu}
+          \item \ce{H2SO4 + 2KOH -> K2SO4 + 2H2O}
+          \item \ce{N2 + 3H2 -> 2NH3}
+        \end{enumerate}
+
+  \item The reaction \ce{Fe + CuSO4 -> FeSO4 + Cu}
+        shows iron displacing copper from solution.
+        If you placed a strip of copper metal into iron sulfate solution,
+        would you expect the reverse reaction?
+        \begin{enumerate}[label=(\alph*)]
+          \item Try to predict the answer from what you know.
+          \item What does your answer suggest about the
+                relative ``reactivity'' of iron and copper?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Balancing Equations ────────────────────────────────────────────
+\subsection{Balancing Equations: The Bookkeeping of Conservation}
+
+If atoms are rearranged but never created or destroyed,
+then every chemical equation must \emph{balance}:
+the number of each type of atom must be the same on both sides.
+
+This is not just a mathematical exercise.
+It is a direct consequence of the law of conservation of mass,
+applied at the level of individual atoms.
+
+\subsubsection{The Method}
+
+Consider the combustion of methane (natural gas):
+
+\begin{center}
+\ce{CH4 + O2 -> CO2 + H2O} \quad (unbalanced)
+\end{center}
+
+Count atoms on each side:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Atom & Left side & Right side \\
+\midrule
+C & 1 & 1 \\
+H & 4 & 2 \\
+O & 2 & 3 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Hydrogen and oxygen are unbalanced.
+We adjust coefficients (never subscripts — changing subscripts
+changes the \emph{substance} itself):
+
+\begin{center}
+\ce{CH4 + 2O2 -> CO2 + 2H2O} \quad (balanced)
+\end{center}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Atom & Left side & Right side \\
+\midrule
+C & 1 & 1 \checkmark \\
+H & 4 & 4 \checkmark \\
+O & 4 & 4 \checkmark \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+\begin{problembox}
+Balance the following equations.
+Show your atom-counting table for each.
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item \ce{H2 + O2 -> H2O}
+  \item \ce{Fe + O2 -> Fe2O3}
+  \item \ce{Al + HCl -> AlCl3 + H2}
+  \item \ce{C3H8 + O2 -> CO2 + H2O} \quad (propane combustion)
+  \item \ce{KMnO4 + HCl -> KCl + MnCl2 + H2O + Cl2}
+        \quad (this one is harder — try systematically)
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Energy in Reactions ────────────────────────────────────────────
+\subsection{A First Look at Energy: Why Reactions Happen}
+
+Conservation of mass tells us \emph{what} is rearranged.
+It does not tell us \emph{why} rearrangements happen,
+or why some reactions release heat and others absorb it.
+
+We can observe:
+
+\begin{itemize}[leftmargin=2em]
+  \item Burning wood releases heat (and light):
+        the reaction is \newterm{exothermic}.
+  \item Dissolving ammonium nitrate in water cools the solution:
+        the reaction is \newterm{endothermic}.
+  \item Some reactions need a spark or heat to begin
+        (like combustion), but once started, sustain themselves.
+  \item Other reactions happen spontaneously at room temperature.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  scale=0.95
+]
+  % Exothermic energy diagram
+  \begin{scope}[xshift=0cm]
+    \node[font=\sffamily\small\bfseries, color=JourneyColor]
+          at (2, 2.8) {Exothermic Reaction};
+    \draw[thick, color=JourneyColor!40, ->] (0,0) -- (4.2,0)
+          node[right, font=\sffamily\footnotesize]{reaction progress};
+    \draw[thick, color=JourneyColor!40, ->] (0,0) -- (0,2.8)
+          node[above, font=\sffamily\footnotesize]{energy};
+
+    % Energy profile curve
+    \draw[ultra thick, color=DiscoveryColor, rounded corners=8pt]
+          (0.3, 1.8) -- (1.2, 1.8) -- (2.0, 2.5) -- (3.0, 0.7) -- (3.8, 0.7);
+
+    % Labels
+    \draw[dashed, color=JourneyColor!50] (0.3, 1.8) -- (-0.05, 1.8)
+          node[left, font=\sffamily\footnotesize]{reactants};
+    \draw[dashed, color=JourneyColor!50] (3.8, 0.7) -- (4.05, 0.7)
+          node[right, font=\sffamily\footnotesize]{products};
+
+    % Arrow showing energy released
+    \draw[{Stealth}-{Stealth}, color=WarningColor, thick]
+          (3.95, 0.7) -- (3.95, 1.8)
+          node[midway, right, font=\sffamily\footnotesize,
+               text=WarningColor]{$\Delta H < 0$ heat released};
+
+    % Activation energy
+    \draw[{Stealth}-{Stealth}, color=ModuleColor, thick]
+          (0.15, 1.8) -- (0.15, 2.5)
+          node[midway, left, font=\sffamily\footnotesize,
+               text=ModuleColor, align=right]{activation\\energy};
+  \end{scope}
+
+  % Endothermic energy diagram
+  \begin{scope}[xshift=6.5cm]
+    \node[font=\sffamily\small\bfseries, color=JourneyColor]
+          at (2, 2.8) {Endothermic Reaction};
+    \draw[thick, color=JourneyColor!40, ->] (0,0) -- (4.2,0)
+          node[right, font=\sffamily\footnotesize]{reaction progress};
+    \draw[thick, color=JourneyColor!40, ->] (0,0) -- (0,2.8)
+          node[above, font=\sffamily\footnotesize]{energy};
+
+    % Energy profile curve
+    \draw[ultra thick, color=PuzzleColor, rounded corners=8pt]
+          (0.3, 0.7) -- (1.2, 0.7) -- (2.0, 2.2) -- (3.0, 1.8) -- (3.8, 1.8);
+
+    % Labels
+    \draw[dashed, color=JourneyColor!50] (0.3, 0.7) -- (-0.05, 0.7)
+          node[left, font=\sffamily\footnotesize]{reactants};
+    \draw[dashed, color=JourneyColor!50] (3.8, 1.8) -- (4.05, 1.8)
+          node[right, font=\sffamily\footnotesize]{products};
+
+    % Arrow showing energy absorbed
+    \draw[{Stealth}-{Stealth}, color=PuzzleColor, thick]
+          (3.95, 0.7) -- (3.95, 1.8)
+          node[midway, right, font=\sffamily\footnotesize,
+               text=PuzzleColor]{$\Delta H > 0$ heat absorbed};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+Why do exothermic reactions exist at all?
+Why should rearranging atoms release energy?
+This question has a deep answer we will develop fully in Journey~5
+when we study thermodynamics.
+For now, the intuition is this:
+some arrangements of atoms are more \emph{stable} (lower energy)
+than others.
+When atoms rearrange from a higher-energy to a lower-energy
+arrangement, the difference is released as heat.
+
+\begin{puzzlebox}
+Consider the reaction:
+\begin{center}
+\ce{C + O2 -> CO2} \quad ($\Delta H = \SI{-393.5}{\kilo\joule\per\mol}$, exothermic)
+\end{center}
+
+\begin{enumerate}[label=(\alph*)]
+  \item The reverse reaction (\ce{CO2 -> C + O2}) would absorb the same
+        amount of energy. Does this reaction happen spontaneously?
+        Why or why not?
+  \item Coal is mostly carbon. Burning coal in a power station
+        releases energy. Where was that energy stored originally?
+        (Think about how coal was formed.)
+  \item Diamonds are also pure carbon. They do not burn spontaneously
+        at room temperature, even though the reaction is strongly
+        exothermic. What does this tell you about the relationship
+        between \emph{thermodynamic favourability} (products are
+        lower energy) and \emph{whether a reaction actually happens}?
+\end{enumerate}
+\end{puzzlebox}
+
+% ─── Section: Deep problems ───────────────────────────────────────────────────
+\subsection*{Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+
+  \item \textbf{The Phlogiston Autopsy.}\\
+        Phlogiston theory explained combustion, rusting, and
+        smelting coherently within one framework —
+        and was believed by some of the best scientists in Europe
+        for nearly a century.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item List three pieces of experimental evidence
+                that phlogiston theory could \emph{not} explain
+                without adding ad hoc modifications.
+          \item Lavoisier did not prove phlogiston didn't exist.
+                He showed a different framework explained more,
+                more simply.
+                What is the philosophical principle here?
+                (Look up \emph{Occam's razor} and \emph{parsimony}.)
+          \item Is it possible that our current model of atoms
+                is also wrong in some important way?
+                What would it take to replace it?
+        \end{enumerate}
+
+  \item \textbf{Mass Conservation and Nuclear Reactions.}\\
+        In a chemical reaction, mass is conserved.
+        But in a nuclear reaction — such as the fusion of hydrogen
+        in the Sun — mass is \emph{not} conserved: a tiny amount
+        of mass is converted to enormous energy, following
+        $E = mc^2$.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Why does mass conservation hold for chemical reactions
+                but not nuclear ones?
+                (Hint: what is the origin of chemical energy
+                vs nuclear energy?)
+          \item When coal burns and releases heat,
+                does the total mass of reactants exactly equal
+                the total mass of products, or is there a tiny discrepancy?
+                Estimate the discrepancy for \SI{1}{\kilo\gram} of coal
+                releasing approximately \SI{3e7}{\joule}.\\
+                (Use $E = mc^2$ with $c = 3\times10^8\ \si{\metre\per\second}$.)
+          \item Is the discrepancy in (b) measurable with any
+                realistic balance?
+                What does this tell us about why
+                ``mass is conserved in chemical reactions''
+                is an excellent approximation even if
+                not strictly exact?
+        \end{enumerate}
+
+  \item \textbf{Designing the Crucial Experiment.}\\
+        Imagine it is 1770.
+        You have a precise balance and glassware.
+        You suspect phlogiston theory is wrong,
+        but you cannot appeal to atomic theory
+        (which hasn't been invented yet).
+
+        Design a series of three experiments that would,
+        together, make a compelling quantitative case against
+        phlogiston theory and in favour of Lavoisier's oxygen theory.
+
+        For each experiment, state:
+        \begin{itemize}[nosep]
+          \item What you would do
+          \item What measurements you would take
+          \item What result phlogiston theory predicts
+          \item What oxygen theory predicts
+          \item Why the result would distinguish the two theories
+        \end{itemize}
+
+\end{enumerate}
+\end{deepbox}
+
+% ─── Reflection ──────────────────────────────────────────────────────────────
+\subsection*{Reflection}
+
+\begin{reflectionbox}
+\begin{enumerate}[label=\textbf{R\arabic*.}]
+  \item We started this module with a wrong theory (phlogiston)
+        that explained much of what was observed.
+        \textbf{What made Lavoisier's approach different
+        from his predecessors — not in the facts he observed,
+        but in the way he approached experiments?}
+
+  \item The law of conservation of mass was derived from
+        macroscopic measurements (weighing substances).
+        We have not yet mentioned atoms.
+        \textbf{What additional hypothesis is needed to go
+        from ``mass is conserved'' to ``atoms are rearranged''?}
+        Is that hypothesis proven by the weighing experiments?
+
+  \item When we draw an energy diagram for a reaction,
+        we show reactants and products at different energy levels.
+        \textbf{What is this ``energy'' actually stored in?}
+        (Write your current best guess. You will revisit this
+        in Journey~4 when we study chemical bonds.)
+
+  \item In 1774, Priestley discovered oxygen but called it
+        ``dephlogisticated air.''
+        Lavoisier later named it correctly and built
+        a new theory around it.
+        \textbf{What does this tell us about the relationship
+        between experimental discovery and theoretical interpretation?}
+        Is discovering a new substance the same as understanding it?
+\end{enumerate}
+\end{reflectionbox}
+
+\vspace{1.5em}
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  width=0.88\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\textbf{What we invented in this module.}\\[4pt]
+We invented the habit of \emph{weighing everything}.
+Lavoisier's revolution was not primarily intellectual — it was methodological.
+He insisted that no explanation was acceptable
+unless it accounted for every gram that went in and every gram that came out.
+That habit — quantitative accountability — is the foundation
+of modern experimental science.
+We also named one of the deepest empirical laws in chemistry:
+mass is conserved.
+Atoms were not yet necessary to say this.
+But as we will discover in Module~1.4,
+the conservation of mass
+\emph{demands} that something like atoms must exist.
+\end{tcolorbox}
+\end{center}
+
+\vspace{2em}
+\noindent\textcolor{JourneyColor!40}{\rule{\textwidth}{0.6pt}}
+\begin{center}
+\textit{\sffamily\small
+Module 1.2 complete. Continue to Module 1.3:
+\textbf{Elements and Compounds --- The First Classification}.}
+\end{center}
+
+\end{document}

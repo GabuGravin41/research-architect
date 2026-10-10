@@ -1,0 +1,367 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\setlength{\headheight}{24pt}
+\usepackage{fontenc}
+\usepackage{inputenc}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{fontawesome5}
+
+\usepackage{setspace}
+\usepackage{parskip}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=midblue,
+  urlcolor=accent,
+  citecolor=teal,
+  pdftitle={Discovery Physics: Journey 1 — The World Before Equations},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}
+  {\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+
+% Puzzle box
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep},
+  title={\faIcon{puzzle-piece}\ The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold},
+  #1
+}
+
+% Observation box
+\newtcolorbox{observebox}[1][]{
+  enhanced, breakable,
+  colback=greenbg, colframe=teal,
+  fonttitle=\bfseries\color{deep},
+  title={Observation},
+  #1
+}
+
+% Exploration/problem box
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue},
+  #1
+}
+
+% Discovery box
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white},
+  coltitle=white,
+  title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent},
+  drop shadow,
+  #1
+}
+
+% Name reveal box
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep},
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Reflection},
+  #1
+}
+
+% Margin note style
+\newtcolorbox{marginidea}{
+  enhanced,
+  colback=gold!15, colframe=gold,
+  fontupper=\small\itshape,
+  left=2mm, right=2mm, top=1mm, bottom=1mm,
+  boxrule=0.6pt
+}
+
+% Problem counter
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi%
+}
+
+% Key idea
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[
+    enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}
+  ]
+  #1
+  \end{tcolorbox}
+}
+
+% ─── Theorem-like environments ──────────────────────────────────────────────
+\newtheoremstyle{disc}
+  {8pt}{8pt}{\itshape}{}
+  {\bfseries\color{midblue}}{.}{.5em}{}
+
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Epigraph style ─────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{0}
+\setcounter{section}{1}
+
+\section{Module 1.2 — Patterns in Motion}
+\label{sec:patterns_motion}
+
+\epigraph{%
+  \itshape Nature uses as little as possible of anything.%
+}{--- Johannes Kepler}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+What stays constant when something moves? What changes? Is there a pattern, and is it always the same?
+\end{tcolorbox}
+
+\subsection{Introduction}
+
+Motion is everywhere. The motion of a thrown stone, of a swinging lamp, of the blood in your veins, of the planets. Humans have watched moving things for as long as there have been humans. But watching is not the same as seeing the pattern.
+
+This module is about finding the pattern---or rather, about discovering that there is a pattern to find. This discovery is not obvious. For much of human history, people believed that each type of motion had its own separate cause and description. Celestial motion (planets, stars) was governed by different rules from terrestrial motion (falling stones, rolling carts). The idea that the same mathematical relationship could describe a falling apple and the orbit of the moon is one of the deepest unifications in the history of thought.
+
+You will approach that unification gradually. For now: let us look at what things actually do.
+
+\subsection{The Pendulum: A Pattern Hiding in Plain Sight}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/fig_pendulum}
+  \caption{Left: the period of a pendulum as a function of release angle. For small angles, the period is nearly constant---a striking and non-obvious fact. Right: the geometry of pendulum motion.}
+  \label{fig:pendulum}
+\end{figure}
+
+A pendulum is a weight attached to a fixed point by a string or rod, free to swing back and forth. It is one of the most-studied objects in the history of physics---for good reason. It is simple enough to observe easily, and it contains enough hidden structure to reveal deep principles.
+
+\begin{explobox}
+\problem Make a pendulum using a weight (a key, a coin, a small stone) tied to a string of about 1 metre. Make it swing.
+
+\begin{enumerate}[label=(\alph*)]
+  \item Does the time for one complete swing (back and forth) depend on how hard you push it?
+  \item Does it depend on the mass of the weight?
+  \item Does it depend on the length of the string?
+\end{enumerate}
+Measure the period (time for one full swing) for at least three different conditions. Record your results.
+
+\problem Based on your measurements: which of these variables \emph{actually} affects the period? Is the relationship what you expected?
+\end{explobox}
+
+You should find something surprising: the period does not depend on how far you pull the pendulum back (for moderate angles), and it does not depend on the mass of the weight. It depends only on the length of the string.
+
+\begin{discoverybox}
+When you change the amplitude (how far you pull it), the pendulum swings faster when it has further to go, but travels a longer path---and these effects cancel precisely. The result is a period that stays constant. This is called \textbf{isochronism} (from Greek: \textit{isos}, equal; \textit{chronos}, time).
+
+This is not obvious. It took Galileo---according to legend, watching a chandelier swinging during a church service---to notice and then verify it.
+\end{discoverybox}
+
+\subsection{Falling Bodies: Galileo's Shock}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{figures/fig_galileo}
+  \caption{Left: two objects of very different mass fall identically---distance grows as the square of time, for both. Right: the data table reveals the key pattern. Look at the intervals between successive measurements.}
+  \label{fig:galileo}
+\end{figure}
+
+We have mentioned Galileo already. Let us look at his work on falling bodies in more detail, because it contains one of the most important patterns in all of physics.
+
+Galileo could not measure time very precisely (accurate clocks did not yet exist), so he was clever: he rolled balls down inclined planes rather than letting them fall freely. This slowed the motion enough to be measurable with his water-clock (a vessel with a hole, measuring time by the volume of water that flowed through).
+
+Here is the data he found (approximately):
+
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+\textbf{Time} & \textbf{Distance rolled} & \textbf{Interval} \\
+\midrule
+1 unit & 1 & --- \\
+2 units & 4 & 3 \\
+3 units & 9 & 5 \\
+4 units & 16 & 7 \\
+5 units & 25 & 9 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{explobox}
+\problem Look at the ``interval'' column---the distance covered in each successive time unit. What pattern do you see?
+
+\problem The distances are 1, 4, 9, 16, 25. What is the relationship between these numbers and the time values 1, 2, 3, 4, 5?
+
+\problem If the pattern continues, how far will the ball have rolled after 6 time units? After 10?
+\end{explobox}
+
+The intervals are the odd numbers: 1, 3, 5, 7, 9, \ldots. The total distances are perfect squares: $1^2, 2^2, 3^2, 4^2, 5^2$. In other words:
+\begin{equation}
+  d = k t^2 \quad \text{for some constant } k
+\end{equation}
+
+This is the signature of what we will later call \textbf{uniform acceleration}---a constant rate of change of speed. The ball speeds up at the same rate throughout its motion.
+
+\keyidea{The distance covered by a uniformly accelerating object grows as the \emph{square} of the elapsed time. The intervals of distance in successive equal time periods follow the sequence of odd numbers: 1, 3, 5, 7, 9, \ldots}
+
+\subsection{What Else Follows This Pattern?}
+
+\begin{explobox}
+\problem A stone is dropped from a bridge. Using the relationship $d = \frac{1}{2}gt^2$ where $g \approx 10\,\text{m/s}^2$:
+
+\begin{enumerate}[label=(\alph*)]
+  \item If you hear the splash after 3 seconds, how high is the bridge?
+  \item If the bridge is 80 metres high, how long before you hear the splash?
+  \item What is the stone's speed just before it hits the water? (Hint: think about the average speed over the last second.)
+\end{enumerate}
+
+\problem Two balls are dropped simultaneously from the same height: a tennis ball and a football. Which lands first? Try to answer before experimenting, then test it. Is the result what you expected?
+
+\problem Now drop both balls from a great height. At the top of a building if possible, or at least 3 metres. Does your answer change? Why or why not?
+\end{explobox}
+
+\subsection{Circular Motion: A Pattern in the Sky}
+
+A planet moves around the Sun. The Moon moves around Earth. These are circular (more precisely, elliptical) paths. What pattern governs them?
+
+Kepler, working from Tycho Brahe's meticulous observations, found three patterns (though we will not verify all of them here):
+
+\begin{principle}[Kepler's Third Law---the pattern]
+The square of a planet's orbital period is proportional to the cube of its average distance from the Sun.
+\end{principle}
+
+In symbols: if $T$ is the period and $r$ is the average orbital radius,
+\begin{equation}
+  T^2 \propto r^3
+\end{equation}
+
+\begin{explobox}
+\problem Use the data below to verify Kepler's pattern.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Planet} & \textbf{Period $T$ (Earth years)} & \textbf{Distance $r$ (AU)} \\
+\midrule
+Mercury & 0.241 & 0.387 \\
+Venus   & 0.615 & 0.723 \\
+Earth   & 1.000 & 1.000 \\
+Mars    & 1.881 & 1.524 \\
+Jupiter & 11.86 & 5.203 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Compute $T^2$ and $r^3$ for each planet. Are they proportional? What is the ratio $T^2/r^3$?
+
+\problem Does the pattern hold for Jupiter? What does this suggest about whether it is a coincidence or a law?
+\end{explobox}
+
+\begin{reflectionbox}
+\textbf{Reflection.} In this module you have found that falling bodies follow $d \propto t^2$, pendulums have a period depending only on length, and planets obey $T^2 \propto r^3$. What is common to all of these? All are simple mathematical relationships hiding in apparently complicated behaviour. Write one paragraph on what this suggests about the relationship between mathematics and the physical world.
+\end{reflectionbox}
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

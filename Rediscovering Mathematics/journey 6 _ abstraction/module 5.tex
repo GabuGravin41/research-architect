@@ -1,0 +1,328 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=30mm, outer=30mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage[colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue, citecolor=NavyBlue]{hyperref}
+
+% ── Colours (Journey 6 — navy blue / gold) ────────────────────────────────────
+\definecolor{NavyBlue}{HTML}{1E3A8A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{B45309}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{LightBlue}{HTML}{EFF6FF}
+\definecolor{LightGold}{HTML}{FEF3C7}
+\definecolor{LightGreen}{HTML}{ECFDF5}
+
+% ── Custom Environments (No TColorBox for Math style) ─────────────────────────
+\newenvironment{puzzlebox}
+  {\par\medskip\fillcolorbox{LightGold}{PuzzleColor}{The Puzzle}}
+  {\par\medskip}
+
+\newenvironment{discoverybox}
+  {\par\medskip\fillcolorbox{LightGreen}{DiscoveryColor}{Discovery}}
+  {\par\medskip}
+
+\newenvironment{namedconcept}[1]
+  {\par\medskip\fillcolorbox{LightBlue}{NavyBlue}{#1}}
+  {\par\medskip}
+
+\newenvironment{reflectionbox}
+  {\par\medskip\fillcolorbox{LightBlue}{ReflectColor}{Reflection}}
+  {\par\medskip}
+
+\newcommand{\fillcolorbox}[3]{%
+  \noindent
+  \filldrawbox{#1}{#2}{\textbf{\sffamily\color{white}#3}}\par\nobreak\vspace{4pt}
+}
+
+\newcommand{\filldrawbox}[3]{%
+  \colorbox{#1}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+    \vspace{4pt}\noindent\hspace{4pt}#3\vspace{4pt}%
+  }}%
+}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{NavyBlue}}
+  {\thesection}{1em}{}[\color{NavyBlue!40}{\titlerule[1.5pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{ModuleColor}}{\thesubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily\color{NavyBlue}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\sffamily\color{ModuleColor}\textit{Journey 6 $\cdot$ Module 5}}
+\fancyfoot[C]{\small\color{NavyBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{ModuleColor}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 6: ABSTRACTION}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2.5pt}}\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 5}\\[0.3cm]
+{\LARGE\bfseries\color{ModuleColor}Group Representation Theory}\\[0.4cm]
+{\color{PuzzleColor}\rule{0.4\linewidth}{1.5pt}}\\[0.4cm]
+{\large\itshape\color{NavyBlue!80}
+Abstract groups study symmetry through operations on sets.\\[0.15cm]
+Representations linearize symmetry operations into matrix operations.\\[0.15cm]
+Characters compress these matrices to capture the essential algebra.}
+
+\vspace{1.4cm}
+\begin{tabular}{rl}
+\textbf{Journey}         & Journey 6 --- Abstraction \\[4pt]
+\textbf{Module}          & 5 of 5 \\[4pt]
+\textbf{Prerequisites}   & Module 6.1 (groups), Journey 3 (linear algebra) \\[4pt]
+\textbf{You will discover} & Representations, invariant subspaces, Maschke's Theorem, Schur's Lemma, characters \\[4pt]
+\end{tabular}
+\end{center}
+
+\newpage
+
+% ─── Section: The Puzzle ─────────────────────────────────────────────────────
+\section{Part 1 --- The Puzzle}
+
+\begin{puzzlebox}
+\textbf{The Symmetry of a Triangle by Matrices}
+
+Consider the equilateral triangle centered at the origin of $\mathbb{R}^2$. The dihedral group $D_3$ represents its symmetries: 3 rotations ($e, r, r^2$) and 3 reflections ($s, sr, sr^2$).
+
+\medskip
+\textbf{Question 1.} Choose a basis for $\mathbb{R}^2$. Write the $2\times 2$ matrices representing the rotation $r$ (by \ang{120} counterclockwise) and the reflection $s$ (across the $x$-axis).
+
+\textbf{Question 2.} Let $\rho(g)$ denote the matrix representing the symmetry operation $g \in D_3$. Show that:
+\[
+  \rho(g_1 g_2) \;=\; \rho(g_1)\rho(g_2) \quad \text{for all } g_1, g_2 \in D_3.
+\]
+This means the mapping $\rho: D_3 \to \text{GL}_2(\mathbb{R})$ is a group homomorphism.
+
+\textbf{Question 3.} Now consider the sum of the diagonal entries (the trace) of these matrices: $\chi(g) = \text{Tr}(\rho(g))$. Calculate $\chi(e), \chi(r),$ and $\chi(s)$. Show that $\chi(s r) = \chi(sr^2) = \chi(s)$. Why is the trace of conjugate elements always equal?
+\end{puzzlebox}
+
+\newpage
+
+% ─── Section: Exploration ────────────────────────────────────────────────────
+\section{Part 2 --- Exploration}
+
+\subsection{Step 1: Representations and Reducibility}
+
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item A \newterm{representation} of a group $G$ on a vector space $V$ (over $\mathbb{C}$) is a group homomorphism $\rho: G \to \text{GL}(V)$.
+        Let $W \subset V$ be a subspace. We say $W$ is an \newterm{invariant subspace} (or $G$-subspace) if:
+        \[
+          \rho(g)w \in W \quad \text{for all } g \in G, w \in W.
+        \]
+        \begin{enumerate}[label=(\alph*)]
+          \item Show that $\{0\}$ and $V$ are always invariant subspaces.
+          \item We say a representation is \newterm{irreducible} (an irrep) if it has no invariant subspaces other than $\{0\}$ and $V$.
+                Consider the representation of $D_3$ on $\mathbb{R}^3$ by permuting coordinates: $\rho(g)$ permutes the basis vectors $(e_1, e_2, e_3)$. Show that the subspace $W = \text{span}\{(1,1,1)\}$ is an invariant subspace.
+          \item Show that the orthogonal complement $W^\perp = \{(x,y,z) \in \mathbb{R}^3 : x+y+z = 0\}$ is also an invariant subspace.
+                Why does this show that the permutation representation is reducible?
+        \end{enumerate}
+\end{enumerate}
+
+\subsection{Step 2: Maschke's Theorem and Projection Operators}
+
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Maschke's Theorem} states that if $G$ is a finite group and $W$ is an invariant subspace of a representation $V$ over $\mathbb{C}$, then there exists a complementary invariant subspace $U$ such that $V = W \oplus U$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Let $p: V \to W$ be a projection operator onto $W$ (not necessarily G-invariant).
+                Define the averaged operator:
+                \[
+                  \tilde{p}(v) \;=\; \frac{1}{|G|} \sum_{g \in G} \rho(g)^{-1} p(\rho(g)v).
+                \]
+                Prove that $\tilde{p}$ is a $G$-invariant projection map, i.e., $\tilde{p}(\rho(g)v) = \rho(g)\tilde{p}(v)$ and $\tilde{p}^2 = \tilde{p}$.
+          \item Let $U = \text{kernel}(\tilde{p})$. Prove that $U$ is an invariant subspace of $V$ and that $V = W \oplus U$.
+                Why does this average-over-the-group technique require $G$ to be finite?
+        \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{Schur's Lemma and Orthogonality}
+
+Let $V$ and $W$ be irreducible representations of a group $G$ over $\mathbb{C}$. Schur's Lemma states:
+\begin{enumerate}
+  \item If $\phi: V \to W$ is a linear map satisfying $\phi \circ \rho_V(g) = \rho_W(g) \circ \phi$ for all $g \in G$ (a G-equivariant map), then either $\phi = 0$ or $\phi$ is an isomorphism.
+  \item If $V = W$, then $\phi = \lambda I$ for some scalar $\lambda \in \mathbb{C}$.
+\end{enumerate}
+
+This simple lemma has massive algebraic consequences. It implies the **Great Orthogonality Theorem** for matrix representations, and leads directly to the orthogonality of characters:
+\[
+  \langle \chi_V, \chi_W \rangle \;=\; \frac{1}{|G|} \sum_{g \in G} \overline{\chi_V(g)}\chi_W(g) \;=\; \begin{cases}
+    1 & \text{if } V \cong W, \\
+    0 & \text{if } V \not\cong W.
+  \end{cases}
+\]
+Characters compress the full matrix representations into single numbers, allowing us to decompose any representation into its irreducible constituents by simple inner products.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: What This Is Called ────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Representation Theory Definitions}
+\begin{itemize}
+  \item \important{G-Module:} An alternative language for group representations: a vector space $V$ equipped with a linear action of the group algebra $\mathbb{C}[G]$.
+  \item \important{Character ($\chi$):} The trace function of a representation, $\chi(g) = \text{Tr}(\rho(g))$. It is a class function (constant on conjugacy classes).
+  \item \important{Regular Representation:} The representation of $G$ acting on the vector space $\mathbb{C}[G]$ by left multiplication. Every irreducible representation appears in the regular representation with multiplicity equal to its dimension.
+  \item \important{Character Table:} A square table listing the characters of all irreducible representations (rows) across all conjugacy classes of the group (columns).
+\end{itemize}
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{enumerate}[label=\textbf{S\arabic*.}]
+  \item \textbf{Constructing the Character Table of $S_3$.}
+  
+        The symmetric group $S_3$ has 6 elements split into 3 conjugacy classes: the identity class $[(1)]$, the transposition class $[(12)]$ (size 3), and the 3-cycle class $[(123)]$ (size 2).
+        \begin{enumerate}
+          \item Identify the two 1D representations of $S_3$.
+          \item Use the regular representation identity $|G| = \sum d_i^2$ to find the dimension of the remaining irreducible representation.
+          \item Construct the complete character table.
+        \end{enumerate}
+        
+        \textbf{Solution:}
+        \begin{enumerate}
+          \item Every group has the **trivial representation** $\chi_1(g) = 1$ for all $g$.
+                The symmetric group also has the **sign representation** $\chi_2(g) = \text{sgn}(g)$, which is $1$ for even permutations and $-1$ for odd permutations.
+          \item The identity $|G| = \sum d_i^2$ states $6 = 1^2 + 1^2 + d_3^2 \implies d_3^2 = 4 \implies d_3 = 2$.
+                So there is one 2D irrep $\rho_3$ (the 2D geometric representation from the triangle).
+          \item Character orthogonality states that the rows must be orthogonal with weight equal to the size of the conjugacy classes.
+                Let $\chi_3 = (2, a, b)$ for class sizes $(1, 3, 2)$.
+                Orthogonality with $\chi_1$:
+                \[
+                  1(2)(1) + 3(a)(1) + 2(b)(1) \;=\; 0 \implies 2 + 3a + 2b \;=\; 0.
+                \]
+                Orthogonality with $\chi_2$:
+                \[
+                  1(2)(1) + 3(a)(-1) + 2(b)(1) \;=\; 0 \implies 2 - 3a + 2b \;=\; 0.
+                \]
+                Solving these equations yields $a = 0$ and $b = -1$.
+                
+                Thus, the character table of $S_3$ is:
+                \begin{center}
+                \begin{tabular}{rccc}
+                  \toprule
+                  Conjugacy class & $[(1)]$ & $[(12)]$ & $[(123)]$ \\
+                  Class size      & 1       & 3        & 2 \\
+                  \midrule
+                  $\chi_1$ (trivial) & 1       & 1        & 1 \\
+                  $\chi_2$ (sign)    & 1       & -1       & 1 \\
+                  $\chi_3$ (2D)      & 2       & 0        & -1 \\
+                  \bottomrule
+                \end{tabular}
+                \end{center}
+        \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Representations of Cyclic Groups.}
+  
+        Consider the cyclic group $C_n = \langle g : g^n = e\rangle$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Since $C_n$ is abelian, prove that all its irreducible representations over $\mathbb{C}$ must be 1-dimensional. (Hint: use Schur's Lemma).
+          \item Show that there are $n$ distinct irreducible representations, given by $\rho_k(g) = \omega^k$ for $k = 0, 1, \dots, n-1$, where $\omega = e^{i 2\pi/n}$.
+          \item Verify the character orthogonality relations for these representations.
+        \end{enumerate}
+
+  \item \textbf{Decomposing a Reducible Representation.}
+  
+        A representation $V$ has character $\chi_V = (5, 1, 2)$ over the conjugacy classes of $S_3$ (with class sizes 1, 3, 2).
+        Decompose $V$ into a direct sum of irreducible representations $V \cong a V_1 \oplus b V_2 \oplus c V_3$ using the inner product:
+        \[
+          a \;=\; \langle \chi_V, \chi_1 \rangle, \quad b \;=\; \langle \chi_V, \chi_2 \rangle, \quad c \;=\; \langle \chi_V, \chi_3 \rangle.
+        \]
+\end{enumerate}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Schur's Lemma for Lie Groups and Quantum Operators.}
+  
+        In quantum mechanics, physical states reside in an infinite-dimensional Hilbert space. Continuous symmetries (like rotation) are represented by Lie groups.
+        \begin{enumerate}[label=(\alph*)]
+          \item Let $J_x, J_y, J_z$ be the generators of the rotation group $\text{SO}(3)$ (the angular momentum operators). They satisfy the commutation relations $[J_i, J_j] = i\hbar \epsilon_{ijk} J_k$.
+                Define the Casimir operator $J^2 = J_x^2 + J_y^2 + J_z^2$.
+                Prove that $J^2$ commutes with all three generators $J_i$.
+          \item By Schur's Lemma, since $J^2$ commutes with the continuous group action, it must act as a scalar on any irreducible representation space.
+                Why does this explain why states in quantum mechanics are labeled by definite total angular momentum eigenvalues $J^2 |j, m\rangle = j(j+1)\hbar^2 |j, m\rangle$?
+          \item Connect this algebraic theorem to Noether's Theorem: why is the quantum label (the eigenvalue) a direct consequence of representation theory?
+        \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+\begin{enumerate}
+  \item **Why Linearization Works:** Group representation theory translates the non-linear, discrete structures of groups into the linear structures of vector spaces. Why is linear algebra so mathematically privileged that we must force all other branches of algebra (like groups) into its language to study them deeply?
+  \item **Symmetry and Particle Physics:** In the Standard Model, elementary particles (quarks, leptons) are not defined by their shapes or sizes, but by the irreducible representations of the gauge groups $\text{SU}(3) \times \text{SU}(2) \times \text{U}(1)$ under which they transform. Does this mean a particle is nothing more than a vector in a representation space of the universe's symmetry group?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking back at the Pure Mathematics Track.}
+You have completed the Pure Mathematics Track of the Discovery Curriculum.
+* **Journey 1:** Mathematical Representation and proof.
+* **Journey 2:** Differential and integral calculus.
+* **Journey 3:** Vector spaces and linear structures.
+* **Journey 4:** Fields, space, and variational principles.
+* **Journey 5:** Probability, generating functions, and uncertainty.
+* **Journey 6:** Abstract algebra, categories, and group representations.
+
+You have built the complete axiomatic foundation of modern mathematical physics. You are now prepared to proceed to **Computation Journey 2 --- Physical Computation (Silicon to Gate)**.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{NavyBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{NavyBlue}\textit{End of Journey 6 --- Abstraction}}\\[4pt]
+{\small\color{NavyBlue}You have completed the Pure Mathematics Track. Continue to: \textbf{Computation Journey 2 --- Physical Computation (Silicon to Gate)}}\\[6pt]
+{\color{NavyBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

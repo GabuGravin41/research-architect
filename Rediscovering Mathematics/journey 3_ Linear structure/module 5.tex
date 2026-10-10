@@ -1,0 +1,289 @@
+% ============================================================
+%  DISCOVERY CURRICULUM — Journey 3, Module 5
+%  "Adjoints and the Spectral Theorem"
+%  Compile with: pdflatex J3_M5.tex  (run twice)
+% ============================================================
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=2.8cm,right=2.8cm,headheight=15pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue}
+
+\definecolor{NavyBlue}{HTML}{1A3A5C}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{C8922A}
+\definecolor{LightBlue}{HTML}{EBF2FA}
+\definecolor{LightGold}{HTML}{FDF4E3}
+\definecolor{DarkGrey}{HTML}{3A3A3A}
+\definecolor{BoxGreen}{HTML}{E8F5E9}
+\definecolor{SidebarGrey}{HTML}{F5F5F5}
+
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 3 $\cdot$ Module 5}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newmdenv[backgroundcolor=NavyBlue!7,linecolor=NavyBlue,linewidth=2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{puzzlebox}
+\newmdenv[backgroundcolor=LightGold,linecolor=Gold,linewidth=2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{discoverybox}
+\newmdenv[backgroundcolor=LightBlue,linecolor=MidBlue,linewidth=1.5pt,roundcorner=4pt,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{namebox}
+\newmdenv[backgroundcolor=BoxGreen,linecolor=DarkGrey!35,linewidth=1pt,roundcorner=4pt,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{reflectionbox}
+\newmdenv[backgroundcolor=SidebarGrey,linecolor=Gold,linewidth=1.2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=12pt,innerrightmargin=10pt,innertopmargin=7pt,innerbottommargin=7pt,skipabove=10pt,skipbelow=10pt]{thought}
+
+\newcounter{problem}
+\newenvironment{problem}[1][]{\refstepcounter{problem}\par\vspace{6pt}\noindent\textbf{\color{MidBlue}Problem \theproblem}\ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip}{\par\vspace{4pt}}
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{\refstepcounter{deepproblem}\par\vspace{6pt}\noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}\ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip}{\par\vspace{4pt}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 3: LINEAR STRUCTURE}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 5}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Adjoints and the Spectral Theorem}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+The adjoint of an operator is its mirror image\\[0.15cm]
+through the inner product. Self-adjoint maps are their own mirrors.}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}         & Journey 3 --- Linear Structure \\[4pt]
+\color{DarkGrey}\textbf{Module}          & 5 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}   & J3 Modules 1--4 \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & Adjoint operators, self-adjoint/normal/unitary maps, full spectral theorem, functional calculus \\[4pt]
+\color{DarkGrey}\textbf{Format}          & 7 problems $+$ 3 deep problems $\approx$ 13 pages \\
+\end{tabular}
+\vspace{1cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+\noindent\textbf{The meaning of the adjoint.}
+In Module~3 you discovered that symmetric matrices ($A = A^T$) have real eigenvalues and orthogonal eigenvectors. In Module~4 you saw that the inner product gives geometry to a vector space. Now we ask: what does ``symmetric'' mean for an abstract linear map on an inner product space --- not for a matrix, but for the map itself? The answer is the \emph{adjoint} $T^*$, defined without reference to any matrix or basis. The condition $T = T^*$ (self-adjoint) is the abstract version of $A = A^T$.
+
+\newpage
+
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle.}
+
+For a matrix $A$, the transpose satisfies $\langle A\mathbf{u},\mathbf{v}\rangle = \langle\mathbf{u},A^T\mathbf{v}\rangle$ for all $\mathbf{u},\mathbf{v}$.
+
+\medskip
+\textbf{Question 1.} Verify this identity for $A = \begin{pmatrix}1&2\\3&4\end{pmatrix}$ and $\mathbf{u}=(1,0)^T$, $\mathbf{v}=(0,1)^T$.
+
+\textbf{Question 2.} This identity uses only the inner product --- not the specific form of $A^T$. Define: the \textbf{adjoint} $T^*$ of a linear map $T:V\to V$ is the unique map satisfying $\langle T\mathbf{u},\mathbf{v}\rangle = \langle\mathbf{u},T^*\mathbf{v}\rangle$ for all $\mathbf{u},\mathbf{v}\in V$. What must the adjoint of differentiation $D = d/dx$ be, on the space of smooth functions on $[0,1]$ with $\langle f,g\rangle = \int_0^1 fg$? Try integrating by parts.
+
+\textbf{Question 3.} Is differentiation self-adjoint ($D = D^*$)? What boundary conditions would make it so?
+\end{puzzlebox}
+
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+
+\subsection{Step 1: The adjoint}
+
+\begin{problem}
+\label{prob:adjoint_def}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Show the adjoint is unique: if both $T^*$ and $S$ satisfy $\langle T\mathbf{u},\mathbf{v}\rangle = \langle\mathbf{u},S\mathbf{v}\rangle$ for all $\mathbf{u},\mathbf{v}$, then $S = T^*$.
+  \item Prove: $(T^*)^* = T$, $(\alpha T)^* = \bar\alpha T^*$, $(S+T)^* = S^*+T^*$, $(ST)^* = T^*S^*$.
+  \item In a finite-dimensional real inner product space with orthonormal basis, show the matrix of $T^*$ is the transpose of the matrix of $T$.
+  \item On $L^2[0,1]$, compute the adjoint of the multiplication operator $M_f: g\mapsto f\cdot g$ for a fixed $f\in C[0,1]$. Is $M_f$ self-adjoint?
+  \item The \textbf{shift operator} $S:(a_1,a_2,a_3,\ldots)\mapsto(0,a_1,a_2,\ldots)$ on $\ell^2$. Find $S^*$ explicitly. Is $S$ invertible? Is $S^*$? Is $S^*S = I$? Is $SS^* = I$?
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{Integration by parts as adjoint.}
+The adjoint of differentiation $D = d/dx$ on $L^2[0,1]$ satisfies $\langle Df,g\rangle = \int_0^1 f'g\,dx$. Integrating by parts: $= [fg]_0^1 - \int_0^1 fg'\,dx = [fg]_0^1 - \langle f,Dg\rangle$. So $D^* = -D$ plus boundary terms. On the full real line (no boundary), or with periodic boundary conditions, $D^* = -D$: differentiation is \emph{anti-self-adjoint}. The operator $-i\frac{d}{dx}$ is then self-adjoint --- and this is precisely the quantum mechanical momentum operator. The physics requirement that momentum is observable (real eigenvalues) forces the factor of $i$.
+\end{thought}
+
+\subsection{Step 2: Classes of operators}
+
+\begin{problem}
+\label{prob:classes}
+Define: $T$ is \textbf{self-adjoint} if $T=T^*$; \textbf{normal} if $TT^*=T^*T$; \textbf{unitary} if $TT^*=T^*T=I$.
+
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Show every self-adjoint operator is normal. Show every unitary operator is normal. Give an example of a normal operator that is neither self-adjoint nor unitary.
+  \item A unitary operator preserves inner products: $\langle U\mathbf{u},U\mathbf{v}\rangle = \langle\mathbf{u},\mathbf{v}\rangle$. Prove this. What does it say geometrically?
+  \item Rotation matrices in $\mathbb{R}^2$ are orthogonal ($Q^TQ=I$, the real analogue of unitary). Show the eigenvalues of a rotation by angle $\theta\neq 0,\pi$ are complex. Why does a rotation have no real eigenvectors?
+  \item The operator $T = \begin{pmatrix}2&1\\-1&2\end{pmatrix}$ is not symmetric. Compute $TT^T$ and $T^TT$. Is $T$ normal? Find its eigenvalues and check they are complex.
+  \item Prove: an operator is normal if and only if $\|T\mathbf{v}\| = \|T^*\mathbf{v}\|$ for all $\mathbf{v}$.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 3: The Spectral Theorem in full generality}
+
+\begin{problem}
+\label{prob:spectral_full}
+\textbf{Spectral theorem for normal operators (finite-dimensional, real):}
+$T$ is normal if and only if $V$ has an orthonormal basis of eigenvectors of $T$.
+
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Verify the spectral theorem for $T = \begin{pmatrix}3&1\\1&3\end{pmatrix}$ (self-adjoint): find an orthonormal eigenbasis explicitly.
+  \item Verify for $T = \begin{pmatrix}0&-1\\1&0\end{pmatrix}$ (skew-symmetric, $T^*=-T$): the eigenvalues are $\pm i$ and over $\mathbb{C}$ there is an orthonormal eigenbasis. Why does this fail over $\mathbb{R}$?
+  \item \textbf{Spectral decomposition.} If $T$ has orthonormal eigenvectors $\{\mathbf{q}_i\}$ with eigenvalues $\{\lambda_i\}$, write $T = \sum_i\lambda_i\mathbf{q}_i\mathbf{q}_i^T$ (outer products). Verify this for the matrix in (a).
+  \item The spectral decomposition $T = \sum_i\lambda_i P_i$ (where $P_i$ is the projection onto the $i$-th eigenspace) is the \textbf{spectral resolution of the identity}: $I = \sum_i P_i$, $T = \sum_i\lambda_i P_i$, $T^k = \sum_i\lambda_i^k P_i$ for any $k$.
+  \item Use the spectral resolution to compute $e^T$ for $T = \begin{pmatrix}3&1\\1&3\end{pmatrix}$. Check using the series definition.
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{The spectral theorem as decomposition into pure components.}
+The spectral decomposition $T = \sum_i\lambda_i P_i$ says: the action of $T$ decomposes into independent scaling operations in orthogonal subspaces. $P_i$ projects onto the $i$-th eigenspace and $T$ scales that subspace by $\lambda_i$. Nothing mixes between the eigenspaces. This is the mathematical expression of the physical idea that a system decomposes into independent modes. For the Hamiltonian of a quantum system, the spectral decomposition gives the energy levels; for the covariance matrix of a data set, it gives the principal components; for the Laplacian of a vibrating drum, it gives the resonant frequencies.
+\end{thought}
+
+\subsection{Step 4: Functional calculus}
+
+\begin{problem}
+\label{prob:funcalc}
+If $T$ is a normal operator with spectral decomposition $T = \sum_i\lambda_i P_i$, define $f(T) = \sum_i f(\lambda_i)P_i$ for any function $f$.
+
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Verify: $f(T) = p(T)$ (matrix polynomial) when $f=p$ is a polynomial. This is the Cayley-Hamilton theorem from a new angle.
+  \item Compute $\sqrt{T}$ (the positive square root) for $T = \begin{pmatrix}5&2\\2&5\end{pmatrix}$.
+  \item For a positive definite symmetric matrix $A$, define $A^t = \sum_i\lambda_i^t P_i$ for real $t$. Show $A^1 = A$, $A^0 = I$, $A^{-1}$ is the matrix inverse, and $A^{1/2}A^{1/2} = A$.
+  \item The heat equation $\partial_t u = \Delta u$ (where $\Delta$ is the Laplacian) has solution $u(t) = e^{t\Delta}u(0)$. If $\Delta$ has eigenfunctions $\phi_n$ with eigenvalues $-\lambda_n^2$ (negative, as the Laplacian on a bounded domain has negative spectrum), write the solution explicitly. What happens to high-frequency components as $t$ increases?
+  \item The \textbf{Stone-von Neumann theorem} says: if $U(t) = e^{itH}$ for a self-adjoint $H$, then $U(t)$ is a one-parameter group of unitary operators. This is the abstract form of the Schr\"odinger equation. Verify that $U(t)U(s) = U(t+s)$ using the functional calculus.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:bilinear}
+An \textbf{inner product space} over $\mathbb{R}$ generalises to a \textbf{bilinear form} when we drop positive-definiteness.
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item The \textbf{Minkowski inner product} on $\mathbb{R}^4$: $\langle\mathbf{u},\mathbf{v}\rangle_M = -u_0v_0 + u_1v_1 + u_2v_2 + u_3v_3$. Is this positive definite? What is the ``length'' of the vector $(1,0,0,1)$?
+  \item In special relativity, $\mathbf{x}=(ct,x,y,z)$ is a spacetime event. The Minkowski ``distance'' $\langle\mathbf{x},\mathbf{x}\rangle_M = -c^2t^2+x^2+y^2+z^2$ is Lorentz-invariant. What does $\langle\mathbf{x},\mathbf{x}\rangle_M = 0$ mean physically?
+  \item Lorentz transformations are the linear maps preserving the Minkowski inner product. In $1+1$ dimensions, the Lorentz boost is $\Lambda = \begin{pmatrix}\gamma&-\beta\gamma\\-\beta\gamma&\gamma\end{pmatrix}$ where $\beta=v/c$, $\gamma=1/\sqrt{1-\beta^2}$. Verify $\Lambda^T\eta\Lambda = \eta$ where $\eta = \begin{pmatrix}-1&0\\0&1\end{pmatrix}$.
+  \item The adjoint of $T$ with respect to the Minkowski inner product satisfies $\langle T\mathbf{u},\mathbf{v}\rangle_M = \langle\mathbf{u},T^\dagger\mathbf{v}\rangle_M$. Show $T^\dagger = \eta^{-1}T^T\eta$. This is the Lorentz-adjoint.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:variational}
+The \textbf{Rayleigh quotient} of a symmetric matrix $A$ at $\mathbf{v}\neq\mathbf{0}$ is $R(\mathbf{v}) = \frac{\mathbf{v}^TA\mathbf{v}}{\mathbf{v}^T\mathbf{v}}$.
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Show $\lambda_{\min}\leq R(\mathbf{v})\leq\lambda_{\max}$ with equality when $\mathbf{v}$ is the corresponding eigenvector. \textit{Hint: write $\mathbf{v}$ in the eigenbasis.}
+  \item The \textbf{min-max theorem} (Courant-Fischer): $\lambda_k = \max_{\dim S = k}\min_{\mathbf{v}\in S,\mathbf{v}\neq 0}R(\mathbf{v})$. Interpret: the $k$-th eigenvalue is the best possible minimum of $R$ over all $k$-dimensional subspaces.
+  \item Use the Rayleigh quotient to find the smallest eigenvalue of $A = \begin{pmatrix}4&2\\2&1\end{pmatrix}$ variationally: try several unit vectors, observe the minimum, then confirm analytically.
+  \item In mechanics, the normal modes of a vibrating system with mass matrix $M$ and stiffness matrix $K$ are found by solving $K\mathbf{v}=\omega^2 M\mathbf{v}$ (generalised eigenvalue problem). The Rayleigh quotient here is $R(\mathbf{v})=\frac{\mathbf{v}^TK\mathbf{v}}{\mathbf{v}^TM\mathbf{v}}$. The lowest resonant frequency minimises $R$. Why is this physically sensible?
+\end{enumerate}
+\end{problem}
+
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The adjoint $T^*$ is defined by the inner product: $\langle T\mathbf{u},\mathbf{v}\rangle = \langle\mathbf{u},T^*\mathbf{v}\rangle$. In matrix language, $T^*$ is the transpose (real) or conjugate transpose (complex). But the abstract definition works in any inner product space --- including function spaces.
+
+\textbf{Second.} Self-adjoint, unitary, and normal operators each have their own spectral theorems. Normal operators are exactly those diagonalisable by an orthonormal basis. Self-adjoint operators have real eigenvalues; unitary operators have eigenvalues of modulus 1.
+
+\textbf{Third.} The spectral decomposition $T = \sum\lambda_i P_i$ enables functional calculus: $f(T) = \sum f(\lambda_i)P_i$ for any function $f$. This lets you define $e^T$, $\sqrt{T}$, $T^t$, and the solution operator of a differential equation.
+
+\textbf{Fourth.} The Rayleigh quotient connects eigenvalues to variational problems: the smallest eigenvalue is the minimum of the Rayleigh quotient. This turns eigenvalue problems into optimisation problems and vice versa.
+
+\medskip
+\textbf{The thread to quantum mechanics.} Self-adjoint operators are observables. Unitary operators are time evolution. The eigenvalues of the Hamiltonian (self-adjoint) are the energy levels. The spectral theorem guarantees they are real. Functional calculus gives $e^{-itH/\hbar}$, the unitary time-evolution operator. Every piece of quantum mechanics is linear algebra on a Hilbert space.
+\end{discoverybox}
+
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+
+\begin{namebox}
+\textbf{Adjoint and operator classes.}
+
+$T^*$ is defined by $\langle T\mathbf{u},\mathbf{v}\rangle = \langle\mathbf{u},T^*\mathbf{v}\rangle$. Matrix of $T^*$ in orthonormal basis: transpose (real) or conjugate transpose (complex).
+
+\textbf{Self-adjoint}: $T=T^*$ (symmetric/Hermitian). Real eigenvalues, orthogonal eigenvectors.
+
+\textbf{Unitary}: $TT^*=I$ (orthogonal over $\mathbb{R}$). Eigenvalues of modulus 1. Preserves inner product.
+
+\textbf{Normal}: $TT^*=T^*T$. Equivalent to having orthonormal eigenbasis (over $\mathbb{C}$).
+
+\textbf{Spectral theorem}: every normal operator $T = \sum_i\lambda_i P_i$ with $P_i = \mathbf{q}_i\mathbf{q}_i^T$.
+
+\textbf{Functional calculus}: $f(T) = \sum_i f(\lambda_i)P_i$ for any function $f$.
+\end{namebox}
+
+\section{Part 5 \texorpdfstring{---}{--} Deep Problems}
+
+\begin{deepproblem}[The spectral theorem for compact operators]
+In infinite dimensions, the spectral theorem for self-adjoint operators is harder. A \textbf{compact operator} $T$ on a Hilbert space is one where bounded sequences have images with convergent subsequences.
+\begin{enumerate}[label=(\alph*)]
+  \item Show the integral operator $(Tf)(x) = \int_0^1 K(x,y)f(y)\,dy$ (for continuous $K$) is compact on $L^2[0,1]$.
+  \item If $K(x,y) = K(y,x)$ (symmetric kernel), $T$ is self-adjoint. The spectral theorem gives a countable sequence of eigenvalues $\lambda_n\to 0$ with orthonormal eigenfunctions $\phi_n$, and $f = \sum\langle f,\phi_n\rangle\phi_n$ for all $f\in L^2$. This is the \textbf{Mercer representation}. Compute the eigenvalues of $(Tf)(x)=\int_0^1\min(x,y)f(y)\,dy$ --- the Green's function of $-d^2/dx^2$.
+  \item Compare the Mercer representation to the SVD: what are the analogues of $\sigma_i$, $\mathbf{u}_i$, $\mathbf{v}_i$?
+  \item The spectrum of an operator in infinite dimensions can have three parts: point spectrum (eigenvalues), continuous spectrum, and residual spectrum. Give an example of an operator with continuous spectrum.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[C*-algebras and the abstract spectral theorem]
+A \textbf{C*-algebra} is a Banach algebra with an involution $*$ satisfying $\|aa^*\|=\|a\|^2$.
+\begin{enumerate}[label=(\alph*)]
+  \item The bounded operators $\mathcal{B}(\mathcal{H})$ on a Hilbert space form a C*-algebra with $T^* = $ adjoint and $\|T\| = $ operator norm. Verify the C*-identity $\|TT^*\|=\|T\|^2$.
+  \item The \textbf{Gelfand-Naimark theorem}: every commutative C*-algebra is isomorphic to $C(X)$ (continuous functions on a compact Hausdorff space $X$). For a single normal operator $T$, the commutative C*-algebra it generates is isomorphic to $C(\sigma(T))$ where $\sigma(T)$ is the spectrum. This is the abstract form of functional calculus.
+  \item \textbf{GNS construction}: every C*-algebra has a faithful representation as operators on a Hilbert space. This shows that abstract algebraic structure always has a concrete realisation as linear maps. Write one sentence stating what this means philosophically.
+  \item In quantum mechanics, the C*-algebra of observables encodes the physical theory. Two theories described by the same C*-algebra are physically equivalent. What does this say about the relationship between mathematics and physical reality?
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Sturm-Liouville theory]
+The \textbf{Sturm-Liouville operator} $L = -\frac{d}{dx}\left[p(x)\frac{d}{dx}\right] + q(x)$ on $[a,b]$ with suitable boundary conditions is self-adjoint on $L^2([a,b],w\,dx)$ (weighted inner product).
+\begin{enumerate}[label=(\alph*)]
+  \item Show $L$ is self-adjoint (with appropriate boundary conditions) by computing $\langle Lf,g\rangle - \langle f,Lg\rangle$ via integration by parts.
+  \item The eigenvalue problem $Lu = \lambda w u$ has a countable sequence of real eigenvalues $\lambda_1<\lambda_2<\cdots\to\infty$ and orthogonal eigenfunctions. This is the abstract spectral theorem for $L$.
+  \item Legendre's equation on $[-1,1]$ is a Sturm-Liouville problem with $p=1-x^2$, $q=0$, $w=1$. The eigenfunctions are the Legendre polynomials $P_n(x)$. Verify $\int_{-1}^1 P_m(x)P_n(x)\,dx = 0$ for $m\neq n$.
+  \item Bessel's equation arises from the Laplacian in polar coordinates. Its eigenfunctions are Bessel functions $J_n(x)$. State the Sturm-Liouville problem that produces them and name one physical system where they appear.
+  \item Fourier series, Legendre polynomials, Bessel functions, Hermite polynomials, Laguerre polynomials: all are eigenfunctions of Sturm-Liouville operators. State the unifying theorem that explains why they all form complete orthogonal bases.
+\end{enumerate}
+\end{deepproblem}
+
+\section{Part 6 \texorpdfstring{---}{--} Reflection}
+
+\begin{reflectionbox}
+\textbf{Your reflection task.}
+
+\begin{enumerate}
+  \item \textbf{On the adjoint and integration by parts.} Integration by parts is a formula relating $\int f'g$ to $\int fg'$. The adjoint of differentiation is $-d/dx$ (with appropriate boundary conditions). These are the same fact. Write a paragraph: does recognising integration by parts as a statement about the adjoint of an operator change how you think about it?
+
+  \item \textbf{On quantum mechanics.} Every observable in quantum mechanics is a self-adjoint operator on a Hilbert space. The possible measurement outcomes are its eigenvalues. Write two sentences: why does the adjointness condition guarantee the eigenvalues are real, and why is that physically necessary?
+
+  \item \textbf{On functional calculus.} The functional calculus defines $f(T)$ for a normal operator and any function $f$. This means you can take the square root of a matrix, or define $e^{iT}$. Does it feel surprising that a function of a number can become a function of a matrix via a coherent, canonical construction? What limits this construction (e.g., can you take $f = $ Dirichlet function)?
+
+  \item \textbf{Looking ahead.} Module 6 closes Journey 3 by connecting linear algebra to the differential equations of Journey 2. The solution space of a linear ODE is a vector space. The ODE operator is a linear map. Its solutions correspond to eigenvectors. You already know all the pieces. What do you expect Module 6 to say?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6 closes Journey~3: it shows how linear algebra and differential equations are the same subject in two languages. The solution space of a linear ODE is a vector space; the ODE operator is self-adjoint under the right inner product; the eigenfunctions are the normal modes. This unification is the bridge from Journey~3 to Journey~4 (Fields and Space), where calculus and linear algebra operate together in three-dimensional space.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 3, Module 5 --- Adjoints and the Spectral Theorem}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 6 --- Linear Algebra and Differential Equations}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

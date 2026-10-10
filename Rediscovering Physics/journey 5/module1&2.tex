@@ -1,0 +1,457 @@
+\documentclass[12pt, a4paper, twoside]{book}
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning, decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+
+\definecolor{deep}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{e94560}
+\definecolor{teal}{HTML}{2ec4b6}
+\definecolor{gold}{HTML}{f5a623}
+\definecolor{midblue}{HTML}{0f3460}
+\definecolor{purple}{HTML}{533483}
+\definecolor{orange}{HTML}{ff6b35}
+\definecolor{green}{HTML}{2d6a4f}
+\definecolor{lightbg}{HTML}{f7f9fc}
+\definecolor{warmbg}{HTML}{fffbf2}
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{realworldbox}[1][]{enhanced,breakable,colback=green!5,
+  colframe=green!70!black,fonttitle=\bfseries\color{white},coltitle=white,
+  title={In the Real World},#1}
+\newtcolorbox{crisisbox}[1][]{enhanced,breakable,colback=accent!6,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,
+  title={Crisis},drop shadow,#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{1.8cm}
+
+% Interferometer arms with null result
+\begin{tikzpicture}[scale=1.0]
+  % Horizontal arm
+  \draw[accent!70, line width=2pt, ->] (-4,0) -- (4,0);
+  \draw[accent!40, line width=1.5pt, ->] (4,0) -- (-4,0);
+  \node[accent!80, font=\small] at (0,0.5) {arm 1: along motion};
+  % Vertical arm
+  \draw[teal!70, line width=2pt, ->] (0,0) -- (0,3.5);
+  \draw[teal!40, line width=1.5pt, ->] (0,3.5) -- (0,0);
+  \node[teal!80, font=\small, rotate=90] at (-0.7,1.75) {arm 2: perpendicular};
+  % Beamsplitter
+  \fill[gold] (0,0) circle (0.18cm);
+  % Earth velocity
+  \draw[->, white!60, line width=2pt] (5,-0.5) -- (3.5,-0.5);
+  \node[white!60, font=\small] at (5.5,-0.5) {v};
+  % Null result box
+  \node[accent, font=\bfseries\large,
+    draw=accent, rounded corners, fill=accent!15, inner sep=6pt]
+    at (0,-1.5) {FRINGE SHIFT: ZERO};
+\end{tikzpicture}
+
+\vspace{0.4cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 5}}}
+\vspace{0.3cm}
+{\fontsize{34}{40}\selectfont\bfseries Modules 5.1 \& 5.2}
+\vspace{0.3cm}
+{\fontsize{20}{26}\selectfont\textcolor{gold}{%
+The Aether and Its Absence\\[5pt]
+The Two Postulates}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+In 1887, the most precise experiment in physics\\[4pt]
+found exactly nothing. That nothing changed everything.}}
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+
+\chapter*{Journey 5: An Overview}
+\addcontentsline{toc}{chapter}{Journey 5: An Overview}
+\markboth{Journey 5: The Breaking of Classical Physics}{}
+
+\epigraph{\itshape
+  The most important thing I can tell you about this theory is not the
+  equations, but the fact that Newton was wrong. The fabric of space and time
+  that he thought was the fixed, God-given stage on which physics was played
+  out simply does not exist. Space contracts. Time dilates. Simultaneity is
+  relative. This is not a small correction --- it is a fundamental change
+  in what we mean by space and time.
+}{--- Adapted from various physicists' lecture notes}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{B}}{y} 1887, classical physics was at its zenith. Newton's mechanics explained the motion of planets, pendulums, projectiles, and gases. Maxwell's equations described all of electricity, magnetism, and optics. Thermodynamics had been unified by Clausius, Kelvin, and Boltzmann. It seemed as though all the major work was done.
+
+Then Michelson and Morley looked for the aether --- the medium through which light was supposed to travel --- and found nothing. Not a small effect. Not a weak signal buried in noise. Nothing at all, where the theory predicted a clear, unambiguous result.
+
+It took eighteen years and one extraordinary mind to understand what the null result meant. In 1905, Einstein published four papers of such importance that the year is known as his \textit{annus mirabilis} --- miraculous year. The third of these, ``On the Electrodynamics of Moving Bodies,'' contained the special theory of relativity. It abolished the aether, redefined the concepts of space, time, and simultaneity, and derived consequences so bizarre that they still shock new students a century later.
+
+\textbf{Journey 5 modules:}
+\begin{itemize}[leftmargin=2em,itemsep=2pt]
+  \item \textbf{5.1} --- The Aether and the Experiment That Killed It
+  \item \textbf{5.2} --- The Two Postulates and What Follows
+  \item \textbf{5.3} --- Time Dilation: Moving Clocks Run Slow
+  \item \textbf{5.4} --- Length Contraction and Spacetime
+  \item \textbf{5.5} --- $E = mc^2$: Mass as Frozen Energy
+  \item \textbf{5.6} --- The Crisis in Classical Physics: What Was Breaking
+\end{itemize}
+
+\tableofcontents
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter{The Breaking of Classical Physics}
+\markboth{Journey 5: The Breaking of Classical Physics}{}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 5.1 — The Aether and the Experiment That Killed It}
+\label{sec:aether}
+
+\epigraph{\itshape
+  The luminiferous aether is the only substance we are confident of in dynamics.
+  One thing we are sure of, and that is the reality and substantiality of the
+  luminiferous aether.
+}{--- Lord Kelvin, 1884}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Sound is a wave in air. Waves on the sea are waves in water. Every wave known to science required a medium --- a substance in which it propagated. Maxwell proved that light is a wave. So what is light a wave \textit{in}? And can we detect it?
+\end{puzzlebox}
+
+\subsection{Why the Aether Made Perfect Sense}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{I}}{t} is easy, in hindsight, to mock the aether. But the reasoning that led to it was impeccable by nineteenth-century standards. Maxwell's equations, published in 1865, unified electricity, magnetism, and optics into a single theory and predicted that light is an electromagnetic wave propagating at $c = \SI{3e8}{m/s}$.
+
+Every other wave known to physics required a medium:
+\begin{itemize}[leftmargin=2em,itemsep=2pt]
+  \item Sound: vibrations in air, water, or solid matter
+  \item Seismic waves: vibrations in rock
+  \item Water waves: oscillations of the water surface
+\end{itemize}
+
+The medium for electromagnetic waves was called the \textbf{luminiferous aether}. It was hypothesised to fill all space, be perfectly rigid (to allow transverse waves like light), and be undetectable by any direct means except through its effect on the propagation of light.
+
+The aether had to be extremely rigid because transverse waves (like light, which oscillates perpendicular to its direction of travel) can only propagate in rigid solids, not fluids. Yet it was also supposed to offer no resistance to the motion of planets --- they had been moving through it for billions of years without slowing down.
+
+These contradictions were acknowledged but not taken as fatal. Physicists assumed the aether was simply unusual.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j5_aether}
+\caption{Left: Earth moves through the hypothetical aether at $v \approx \SI{30}{km/s}$ (its orbital velocity around the Sun). This should create a detectable ``aether wind'' --- a difference in the measured speed of light in different directions. Right: the Michelson interferometer, designed specifically to detect this wind. Light is split, sent along two perpendicular arms, and recombined. If one arm is aligned with the aether wind, that beam should arrive delayed relative to the other, producing a detectable fringe shift when the apparatus is rotated.}
+\label{fig:aether}
+\end{figure}
+
+\subsection{The Michelson-Morley Experiment: Calculating the Expected Signal}
+
+Albert Michelson designed his interferometer to detect the aether wind. The predicted fringe shift is calculated as follows.
+
+Let $L$ be the length of each arm, $v$ the speed of Earth through the aether, and $c$ the speed of light.
+
+\textbf{Arm 1 (parallel to aether wind):} Light travels at $c+v$ going with the wind and $c-v$ returning. Time for the round trip:
+\begin{equation}
+  t_1 = \frac{L}{c+v} + \frac{L}{c-v} = \frac{2Lc}{c^2-v^2} = \frac{2L/c}{1-v^2/c^2}
+\end{equation}
+
+\textbf{Arm 2 (perpendicular to aether wind):} Light must angle slightly into the wind to travel straight across. By the Pythagorean theorem, its effective speed is $\sqrt{c^2-v^2}$. Time for the round trip:
+\begin{equation}
+  t_2 = \frac{2L}{\sqrt{c^2-v^2}} = \frac{2L/c}{\sqrt{1-v^2/c^2}}
+\end{equation}
+
+The time difference:
+\begin{equation}
+  \Delta t = t_1 - t_2 \approx \frac{Lv^2}{c^3} \quad\text{(for } v \ll c\text{)}
+\end{equation}
+
+The expected fringe shift (in units of wavelengths):
+\begin{equation}
+  \Delta n = \frac{c\,\Delta t}{\lambda} \approx \frac{Lv^2}{c^2\lambda}
+\end{equation}
+
+With $L = \SI{11}{m}$ (Michelson's folded-path length), $v = \SI{3e4}{m/s}$, $\lambda = \SI{590}{nm}$:
+\begin{equation}
+  \Delta n \approx \frac{11 \times (3\times10^4)^2}{(3\times10^8)^2 \times 590\times10^{-9}} \approx 0.37 \text{ fringes}
+\end{equation}
+
+Michelson's instrument could detect shifts as small as $0.01$ fringes. The expected signal was 37 times larger than the detection threshold.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j5_null_result}
+\caption{Left: the expected fringe shift (red, $\approx 0.37$ fringes) vs.\ the observed shift (teal, $< 0.01$ fringes) as the Michelson interferometer is rotated through $360^\circ$. The null result was unmistakable and reproducible. Right: the three main attempts to explain the result. The FitzGerald-Lorentz contraction and aether drag were ad hoc patches; Einstein's 1905 solution dissolved the problem entirely by removing the aether.}
+\label{fig:null_result}
+\end{figure}
+
+\begin{explobox}
+\problem \textit{Working through the Michelson calculation.}
+\begin{enumerate}[label=(\alph*)]
+  \item Derive the time $t_1$ for light to travel along the arm parallel to the aether wind (length $L$, aether wind speed $v$, light speed $c$). Show all steps.
+  \item Derive $t_2$ for the perpendicular arm. (Hint: draw a triangle. The light must travel at an angle to the aether wind so its net transverse velocity is $c$. What is its speed along the arm direction?)
+  \item Show that $\Delta t = t_1 - t_2 \approx Lv^2/c^3$ using the approximation $(1-x)^{-1} \approx 1+x$ and $(1-x)^{-1/2} \approx 1+x/2$ for small $x$.
+  \item Compute $\Delta n$ for Michelson's parameters. Confirm the value 0.37 fringes.
+  \item If Earth's speed through the aether were $v = c/10$ (ten times faster than its orbital speed), what fringe shift would be expected?
+\end{enumerate}
+
+\problem \textit{The FitzGerald-Lorentz contraction.} George FitzGerald proposed in 1889 that objects moving through the aether contract along the direction of motion by a factor $\sqrt{1-v^2/c^2}$.
+\begin{enumerate}[label=(\alph*)]
+  \item If arm 1 (parallel to the wind) contracts to $L' = L\sqrt{1-v^2/c^2}$, but arm 2 (perpendicular) remains length $L$, show that the fringe shift becomes exactly zero.
+  \item This contraction hypothesis makes the Michelson-Morley result exactly zero. But it is \textit{ad hoc}: it was invented specifically to explain the null result. What would make it a genuine scientific hypothesis? (What additional prediction would it need to make?)
+  \item Remarkably, special relativity \textit{does} predict exactly this contraction --- but for a completely different reason. What is the difference between ``the aether squeezes you'' and ``moving rulers really are shorter''?
+\end{enumerate}
+
+\problem \textit{Speed of light measurements.}
+\begin{enumerate}[label=(\alph*)]
+  \item R\o{}mer (1676) measured the speed of light by observing timing variations in Jupiter's moon Io. When Earth was moving toward Jupiter, eclipses appeared early; when moving away, they appeared late. If the diameter of Earth's orbit is $\SI{3e11}{m}$ and the measured timing discrepancy was $\SI{22}{min}$, estimate $c$.
+  \item Fizeau (1849) measured $c$ by shining a light beam through a rotating gear wheel. A gear with 720 teeth rotating at $\SI{12.6}{rev/s}$ passed light through a gap to a mirror $\SI{8.63}{km}$ away. The returning beam was blocked by the next tooth. Find $c$.
+  \item The modern definition: since 1983, the metre is defined so that $c = \SI{299792458}{m/s}$ exactly. What does it mean to define a unit this way? What can no longer be measured, in principle?
+\end{enumerate}
+\end{explobox}
+
+\begin{historybox}
+\textbf{Albert Abraham Michelson (1852--1931).} Michelson was a Prussian-born American physicist who spent most of his career at the University of Chicago. He was obsessed with precision measurement of the speed of light and other optical phenomena. The 1887 experiment was done with chemist Edward Morley using an interferometer mounted on a massive stone slab floating on mercury (to allow smooth rotation and vibration isolation). The experiment was repeated many times in many labs over the following decades; the result was always null. Michelson received the Nobel Prize in Physics in 1907, the first American to do so. He spent his later years trying to improve the precision of $c$ measurements and reportedly considered the null aether result a failure rather than a triumph.
+\end{historybox}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 5.2 — The Two Postulates and What Follows}
+\label{sec:postulates}
+
+\epigraph{\itshape
+  The introduction of a ``luminiferous ether'' will prove to be superfluous
+  inasmuch as the view here to be developed will not require an ``absolutely
+  stationary space'' provided with special properties.
+}{--- Albert Einstein, \textit{On the Electrodynamics of Moving Bodies}, 1905}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+The Michelson-Morley experiment found that the speed of light is the same in all directions, regardless of Earth's motion. Maxwell's equations predict a single value of $c$ with no reference to any observer or medium. What if we simply \textit{take this seriously}? If $c$ is truly the same for all observers, what must follow?
+\end{puzzlebox}
+
+\subsection{Galilean Relativity: What We Already Knew}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{G}}{alileo} already knew that uniform motion is undetectable without looking out the window. On a smoothly moving ship, you can play billiards, pour wine, and throw balls --- all physics works exactly as on land. This is \textbf{Galilean relativity}: the laws of mechanics are the same in all inertial frames.
+
+Galilean relativity also told us how velocities add. If you are on a train moving at $V$ and you throw a ball forward at $v'$ relative to the train, a ground observer sees the ball at speed $v' + V$. Simple.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j5_velocity_addition}
+\caption{Left: Galilean velocity addition. A ball thrown forward on a moving train is seen by a ground observer to move at $v' + V$ --- velocities simply add. This works perfectly for everyday speeds. Right: relativistic velocity addition. For high speeds, velocities do not simply add. The formula $u = (v'+V)/(1+v'V/c^2)$ ensures that nothing ever exceeds $c$. Crucially: if $v' = c$ (a light beam), then $u = c$ regardless of $V$. Light always travels at $c$.}
+\label{fig:velocity_addition}
+\end{figure}
+
+\subsection{Einstein's Leap: Two Postulates}
+
+In 1905, Einstein made a radical move. He accepted the experimental evidence and took it as a fundamental principle:
+
+\begin{namebox}
+\textbf{The Two Postulates of Special Relativity (Einstein, 1905):}
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+  \item \textbf{The Principle of Relativity:} The laws of physics (not just mechanics, but \textit{all} laws, including Maxwell's equations) are the same in all inertial reference frames.
+  \item \textbf{The Constancy of the Speed of Light:} The speed of light in vacuum is $c = \SI{299792458}{m/s}$ in all inertial frames, independent of the motion of the source or the observer.
+\end{enumerate}
+These two postulates, together with basic logic, imply all of special relativity.
+\end{namebox}
+
+The second postulate is the shocking one. It means: if you are standing still and you measure the speed of a light beam, you get $c$. If you are moving toward the source at $0.9c$ and you measure the same beam, you \textit{still} get $c$. Not $1.9c$. Not $c + 0.9c$. Exactly $c$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j5_postulates}
+\caption{The two postulates and their consequences. From just two assumptions --- the laws of physics are the same for all inertial observers, and $c$ is constant --- all of special relativity follows by logical deduction. The consequences include time dilation, length contraction, the relativity of simultaneity, and $E = mc^2$. Each has been confirmed by experiment with extraordinary precision.}
+\label{fig:postulates}
+\end{figure}
+
+\subsection{The Lorenz Factor}
+
+The single most important quantity in special relativity is the \textbf{Lorentz factor}:
+
+\begin{equation}
+  \boxed{\gamma = \frac{1}{\sqrt{1-v^2/c^2}}}
+\end{equation}
+
+Note:
+\begin{itemize}[leftmargin=2em,itemsep=2pt]
+  \item For $v \ll c$: $\gamma \approx 1$ (classical physics recovered)
+  \item For $v = 0.9c$: $\gamma \approx 2.29$
+  \item For $v = 0.99c$: $\gamma \approx 7.09$
+  \item For $v = 0.9999c$: $\gamma \approx 70.7$
+  \item As $v \to c$: $\gamma \to \infty$
+  \item For $v > c$: $\gamma$ is imaginary --- no physical meaning
+\end{itemize}
+
+$\gamma$ appears in every relativistic formula. It quantifies how different relativistic reality is from the Galilean approximation.
+
+\begin{explobox}
+\problem \textit{Galilean vs relativistic velocity addition.}
+\begin{enumerate}[label=(\alph*)]
+  \item A rocket moves at $v_1 = 0.6c$ relative to Earth. Inside, it fires a smaller rocket at $v_2 = 0.8c$ relative to the first rocket. Find the speed of the smaller rocket relative to Earth using (i) Galilean addition and (ii) relativistic addition $u = (v_1+v_2)/(1+v_1 v_2/c^2)$.
+  \item Two protons in the LHC move in opposite directions, each at $0.9999c$ relative to the lab. Find their speed relative to each other (relativistically). Why is it less than $2 \times 0.9999c$?
+  \item Light from a flashlight on a rocket moving at $0.9c$: what speed does an Earth observer measure for the light? What does the rocket pilot measure?
+\end{enumerate}
+
+\problem \textit{The Lorentz factor.}
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $\gamma$ for $v/c = 0.1, 0.5, 0.9, 0.99, 0.999, 0.9999$.
+  \item For $v \ll c$, show that $\gamma \approx 1 + v^2/2c^2$ (use the binomial approximation). This correction is the kinetic energy term: $\Delta E = (\gamma-1)mc^2 \approx \frac{1}{2}mv^2$. Consistent with classical KE?
+  \item The ISS orbits at $v \approx \SI{7700}{m/s}$. Compute $\gamma$. How many nanoseconds per day does an ISS clock gain due to this speed? (Time dilation effect: $\Delta t_{\rm gained} \approx v^2/(2c^2)\times t_{\rm day}$.)
+\end{enumerate}
+
+\problem \textit{Why can nothing reach c?}
+\begin{enumerate}[label=(\alph*)]
+  \item The relativistic momentum of a particle is $p = \gamma mv$. As $v \to c$, what happens to $p$?
+  \item The kinetic energy is $KE = (\gamma-1)mc^2$. As $v \to c$, what happens to $KE$?
+  \item To accelerate an electron (mass $\SI{9.1e-31}{kg}$) from $0$ to $0.9c$, then from $0.9c$ to $0.99c$, then from $0.99c$ to $0.999c$: find the energy required for each step. What do you notice?
+  \item This is why particle accelerators like the LHC cost billions of dollars. Explain.
+\end{enumerate}
+
+\problem \textit{The thought experiment that convinced Einstein.} Einstein wrote that at age 16 he imagined riding alongside a light beam and asked: what would the wave look like? A stationary electromagnetic wave is not a solution to Maxwell's equations. Discuss: what is wrong with the Galilean picture of ``catching up'' to a light beam?
+\end{explobox}
+
+\begin{crisisbox}
+\textbf{What was really at stake.}
+
+The two postulates seem innocuous. But they are in violent contradiction with the classical view of space and time. In classical physics:
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Time is absolute --- all clocks tick at the same rate
+  \item Space is absolute --- distances are the same for all observers
+  \item Simultaneity is absolute --- if two events happen at the same time for one observer, they happen at the same time for all observers
+\end{itemize}
+
+Special relativity abolishes \textit{all three}. Moving clocks run slow. Moving rulers are short. Two events that are simultaneous for one observer are \textit{not} simultaneous for another. These are not illusions or measurement errors. They are real, physically meaningful differences that have been confirmed by thousands of experiments.
+
+The conceptual cost is enormous. Newton's absolute space and time --- the framework that had served physics for 250 years --- must be discarded. In its place: a four-dimensional \textit{spacetime} in which space and time are not separate, independent things but aspects of a single unified structure.
+\end{crisisbox}
+
+\begin{reflectionbox}
+\textbf{Reflection: Modules 5.1--5.2.}
+
+Write two pages:
+
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+  \item \textit{What makes a null result significant?} The Michelson-Morley experiment found nothing. Most null results in science are uninteresting --- they simply mean the effect you were looking for doesn't exist or is too small to detect. What makes this particular null result different? What conditions must be met for a null result to be scientifically important? Give a second example of a historically important null result from physics or science.
+
+  \item \textit{The strategy of postulates.} Einstein's approach was to take the empirical evidence seriously (the Michelson-Morley result) and promote it to a postulate --- an assumption to be taken as fundamental and from which everything else is derived. Compare this to the strategy of Newton (who postulated laws of motion and gravitation) and Maxwell (who postulated field equations). Is this approach trustworthy? What are its risks?
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Module Summary: 5.1--5.2}
+\addcontentsline{toc}{chapter}{Module Summary: 5.1--5.2}
+\markboth{Module Summary: 5.1--5.2}{}
+
+\begin{tcolorbox}[enhanced,colback=deep!4,colframe=deep,
+  title={\bfseries\color{white} Key Ideas: Modules 5.1--5.2},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+\textbf{Module 5.1 --- The Aether and the Experiment That Killed It}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Aether: the hypothesised medium for light waves --- well-motivated by wave physics
+  \item Michelson-Morley (1887): expected 0.37 fringe shift; observed less than 0.01
+  \item The null result is unambiguous: the aether either does not exist or produces no detectable effect
+  \item FitzGerald-Lorentz contraction: numerically correct but physically ad hoc
+  \item Einstein's response: remove the aether entirely
+\end{itemize}
+\vspace{6pt}
+\textbf{Module 5.2 --- The Two Postulates and What Follows}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Postulate 1: All laws of physics are the same in all inertial frames
+  \item Postulate 2: The speed of light $c$ is the same for all observers
+  \item These two postulates + logic $\Rightarrow$ all of special relativity
+  \item Lorentz factor: $\gamma = 1/\sqrt{1-v^2/c^2}$; governs all relativistic effects
+  \item Relativistic velocity addition: $u = (v'+V)/(1+v'V/c^2)$; nothing exceeds $c$
+  \item Classical absolute time, space, and simultaneity must all be abandoned
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[teal,line width=1.5pt] (0,0) -- (12,0);
+  \node[below,teal] at (6,-0.1)
+    {\small\itshape Next: Time Dilation and Length Contraction (Modules 5.3--5.4)};
+\end{tikzpicture}
+\end{center}
+
+\end{document}

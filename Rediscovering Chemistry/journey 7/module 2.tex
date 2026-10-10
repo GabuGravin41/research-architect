@@ -1,0 +1,356 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Journey 7 — forest green / amber) ────────────────────────────────
+\definecolor{JourneyColor}{HTML}{065F46}
+\definecolor{ModuleColor}{HTML}{059669}
+\definecolor{PuzzleColor}{HTML}{B45309}
+\definecolor{DiscoveryColor}{HTML}{D97706}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{6}
+\chapter[Journey 7 --- Organic Chemistry: The World It Builds]
+        {Journey Seven\\[8pt]
+         \textcolor{ModuleColor}{\large Organic Chemistry: The World It Builds}}
+\setcounter{section}{1}
+
+\section{Module 7.2 --- Nucleic Acids and DNA Structure}
+\label{sec:mod7.2}
+
+\subsection*{Motivation}
+
+We explored in Module 7.1 how chiral geometry and binding free energies govern molecular recognition at the clinical scale.
+Now, we scale up to the absolute genetic blueprint of life: DNA.
+
+Deoxyribonucleic acid (DNA) is a massive organic polymer.
+Its primary role is informational: it stores the hereditary instructions for all living organisms.
+Yet, this information is not written in ink. It is encoded in the precise 3D spatial alignment of hydrogen bonds.
+This module explores the organic chemistry of nucleotides, the geometric matching rules of base pairing, and the thermodynamic forces—from hydrogen bonding to hydrophobic $\pi-\pi$ stacking—that stabilize the double helix against the thermal fluctuations of the cell.
+
+\subsection{Watson and Crick's Cardboard Bases}
+
+We analyze how the geometry of hydrogen bonding dictates the specificity of genetic coding.
+
+\begin{puzzlebox}
+\textbf{The base Pairing Rules.}
+
+In 1953, James Watson and Francis Crick cut out cardboard shapes of the four nitrogenous bases: Adenine (A), Thymine (T), Guanine (G), and Cytosine (C). They tried to arrange them in pairs to fit inside a uniform double helix of width $\sim \SI{20}{\text{\AA}}$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Adenine and Guanine are double-ringed structures called **purines**. Thymine and Cytosine are single-ringed structures called **pyrimidines**.
+        Why would a purine-purine pair or a pyrimidine-pyrimidine pair violate the uniform \SI{20}{\text{\AA}} width constraint of the helix?
+  \item Watson and Crick discovered that Adenine forms hydrogen bonds specifically with Thymine, and Guanine with Cytosine.
+        * **A-T pair:** Forms two hydrogen bonds: $\ce{N-H\cdots O}$ and $\ce{N\cdots H-N}$.
+        * **G-C pair:** Forms three hydrogen bonds: $\ce{O\cdots H-N}$, $\ce{N-H\cdots N}$, and $\ce{N-H\cdots O}$.
+        Explain why mismatched pairings (like A-C or G-T) are geometrically unstable, failing to align the hydrogen-bond donors (electronegative atoms bonded to H) and acceptors (lone pairs on electronegative atoms).
+  \item Erwin Chargaff discovered in 1950 that in all natural DNA samples, the amount of Adenine equals Thymine ($A=T$), and Guanine equals Cytosine ($G=C$). How does base-pairing geometry explain **Chargaff's rules**?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{The Phosphodiester Backbone and Directionality}
+
+We study the polymer linkages that form the structural rails of the DNA ladder.
+
+\begin{explobox}
+Each nucleotide consists of a nitrogenous base, a deoxyribose sugar, and a phosphate group.
+These nucleotides polymerize via a condensation reaction to form a **phosphodiester linkage** between the 3' (three-prime) hydroxyl group of one sugar and the 5' (five-prime) phosphate group of the next.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Explain why the phosphodiester backbone gives DNA a clear chemical directionality (meaning a strand runs from the 5' end to the 3' end).
+  \item The two strands in a double helix run in opposite directions; we call them **antiparallel**.
+        If one strand has the sequence 5'-ATCG-3', write the sequence of the complementary strand, indicating its 5' and 3' directionality.
+  \item The phosphate groups in the backbone are completely ionized at physiological pH, carrying a negative charge.
+        Since like charges repel, why doesn't the double helix immediately fly apart? (Think about the role of dissolved positive ions like $\ce{Na+}$ and $\ce{Mg^2+}$ in cell water).
+\end{enumerate}
+\end{explobox}
+
+\subsection{Helix Stabilization: The Aromatic Stack}
+
+We explore the thermodynamic forces that keep the double helix bound.
+
+\begin{explobox}
+A common misconception is that the hydrogen bonds between bases are the primary force holding the two strands together.
+In water, water molecules form strong hydrogen bonds with the bases when the DNA is single-stranded. Thus, the net energy change ($\Delta H$) of forming base-pair hydrogen bonds compared to base-water hydrogen bonds is close to zero.
+\problem The primary thermodynamic force stabilizing the double helix is actually **hydrophobic $\pi-\pi$ stacking**.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item The nitrogenous bases are highly planar, aromatic rings (from Journey 6 Module 3).
+        Are these aromatic rings hydrophilic or hydrophobic?
+  \item In the double helix, the bases are stacked flat on top of each other, like a stack of coins.
+        Explain how this stacking minimizes the contact of these hydrophobic surfaces with water, releasing water molecules into the bulk solution to increase entropy ($\Delta S > 0$).
+  \item How do the delocalized $\pi$ electron clouds of the stacked bases interact with each other to provide dispersion forces (Van der Waals interactions)?
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The specificity of genetic encoding arises from the geometry of hydrogen bonding: Adenine pairs with Thymine via two hydrogen bonds, and Guanine pairs with Cytosine via three hydrogen bonds.
+
+\textbf{Second.} The phosphodiester backbone links nucleotides from the 5' phosphate to the 3' hydroxyl, forming two complementary, antiparallel strands.
+
+\textbf{Third.} While hydrogen bonds provide the specificity required for exact replication, the primary thermodynamic stabilization of the double helix comes from hydrophobic $\pi-\pi$ stacking interactions between stacked aromatic bases.
+
+\textbf{Fourth.} The electrostatic repulsion between negatively charged phosphate backbones is screened in vivo by counter-ions like magnesium.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Nucleic acid parameters}
+* **Nucleotide:** The monomeric building block of nucleic acids, consisting of a nitrogenous base, a five-carbon sugar, and a phosphate group.
+* **Chargaff's Rules:** The observation that in double-stranded DNA, the ratio of A to T is 1:1, and the ratio of G to C is 1:1.
+* **Antiparallel:** The relative orientation of the two strands in a double helix, running in opposite chemical directions (5' $\to$ 3' and 3' $\to$ 5').
+* **$\pi-\pi$ Stacking:** The attractive non-covalent interaction between planar aromatic rings, driven by hydrophobic effects and London dispersion forces.
+* **Melting Temperature ($T_m$):** The temperature at which exactly half of a double-stranded DNA sample is denatured (melted) into single strands.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Applying Chargaff's Rules.}
+  
+        A double-stranded DNA sample isolated from an extreme thermophilic bacterium contains $35.0\%$ Guanine (G). Calculate the percentages of Adenine (A), Thymine (T), and Cytosine (C) in this sample.
+        
+        \textbf{Solution:}
+        By Chargaff's rules, the percentage of Cytosine must equal Guanine:
+        \[
+          \% \ce{C} \;=\; \% \ce{G} \;=\; 35.0\%.
+        \]
+        The sum of all four bases must equal $100.0\%$:
+        \[
+          \% \ce{A} + \% \ce{T} + \% \ce{G} + \% \ce{C} \;=\; 100.0\%.
+        \]
+        Substitute the values for G and C:
+        \[
+          \% \ce{A} + \% \ce{T} + 35.0\% + 35.0\% \;=\; 100.0\% \implies \% \ce{A} + \% \ce{T} + 70.0\% \;=\; 100.0\%.
+        \]
+        This leaves $30.0\%$ for Adenine and Thymine:
+        \[
+          \% \ce{A} + \% \ce{T} \;=\; 30.0\%.
+        \]
+        By Chargaff's rules, the percentage of Adenine must equal Thymine:
+        \[
+          \% \ce{A} \;=\; \% \ce{T} \implies 2 (\% \ce{A}) \;=\; 30.0\% \implies \% \ce{A} \;=\; 15.0\%.
+        \]
+        Thus, the total percentages are:
+        * **Guanine:** $35.0\%$
+        * **Cytosine:** $35.0\%$
+        * **Adenine:** $15.0\%$
+        * **Thymine:** $15.0\%$
+        
+  \item \textbf{Length of the Human Genome.}
+  
+        In the B-form double helix, the rise per base pair (the vertical distance between stacked base pairs along the helix axis) is $d \approx \SI{3.4}{\text{\AA}}$ ($3.4 \times 10^{-10}$ m).
+        The haploid human genome contains $N = 3.2 \times 10^9$ base pairs. Calculate the physical length of a single haploid genome's DNA in meters.
+        
+        \textbf{Solution:}
+        The total physical length $L$ of the DNA is the product of the number of base pairs and the rise per base pair:
+        \[
+          L \;=\; N \cdot d.
+        \]
+        Substitute the given values:
+        \[
+          L \;=\; \left( 3.2 \times 10^9 \text{ base pairs} \right) \left( 3.4 \times 10^{-10} \text{ m/base pair} \right)
+        \]
+        \[
+          L \;=\; 3.2 \times 3.4 \times 10^{-1} \text{ m} \;=\; 10.88 \times 10^{-1} \text{ m} \;=\; 1.09 \text{ m}.
+        \]
+        Thus, a single haploid genome contains about \SI{1.09}{m} of DNA. If we consider a diploid human cell (containing two haploid copies), there is over \SI{2}{m} of DNA packed inside a cell nucleus only a few micrometers wide!
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Geometries of Base Pairing.}
+  
+        Consider the chemical structures of the A-T and G-C base pairs.
+        \begin{enumerate}[label=(\alph*)]
+          \item Draw a diagram showing the hydrogen bonds in a G-C base pair. Label each hydrogen bond, indicating the electronegative donor atom (with its covalent H) and the acceptor atom (with its lone pair).
+          \item When we heat DNA in water, the thermal motion breaks the interactions, separating the double helix into single strands (denaturation).
+                Explain why DNA containing a higher percentage of G-C base pairs requires a higher temperature to melt (denature) than DNA with a lower G-C content.
+        \end{enumerate}
+
+  \item \textbf{Single-Stranded Genomes.}
+  
+        The DNA genome of the bacterial virus (bacteriophage) $\phi$X174 was isolated and analyzed, yielding the following base composition:
+        \[
+          \% \ce{A} \;=\; 24.0\%, \qquad \% \ce{T} \;=\; 33.0\%, \qquad \% \ce{G} \;=\; 23.0\%, \qquad \% \ce{C} \;=\; 20.0\%.
+        \]
+        \begin{enumerate}[label=(\alph*)]
+          \item Show why this composition violates Chargaff's rules.
+          \item What does this violation suggest about the physical structure of the DNA inside this virus?
+          \item If this virus infects a bacterium, the host machinery copies the viral DNA to form a double-stranded replicative form. Calculate the base composition of this double-stranded intermediate.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Thermodynamics of DNA Melting.}
+  
+        The transition between double-stranded DNA ($\ce{dsDNA}$) and single-stranded DNA ($\ce{ssDNA}$) is a dynamic equilibrium:
+        \[
+          \ce{dsDNA <=> 2 ssDNA}.
+        \]
+        Let $\theta$ be the fraction of denatured DNA ($\theta = 0$ for fully double-stranded, $\theta = 1$ for fully single-stranded).
+        The melting temperature $T_m$ is the temperature at which $\theta = 0.5$.
+        \begin{enumerate}[label=(\alph*)]
+          \item The equilibrium constant at $T_m$ is related to the standard enthalpy ($\Delta H^\circ$) and entropy ($\Delta S^\circ$) of denaturation by $\Delta G^\circ = \Delta H^\circ - T_m \Delta S^\circ = 0$.
+                Prove that:
+                \[
+                  T_m \;=\; \frac{\Delta H^\circ}{\Delta S^\circ}.
+                \]
+          \item Plot the fraction of denatured DNA $\theta$ versus temperature $T$. Why is this denaturation curve highly sigmoidal (a cooperative transition, where breaking the first few base pairs makes it much easier to break the rest)?
+          \item How does the difference in hydrogen bonding (3 bonds in G-C vs. 2 in A-T) affect the denaturation enthalpy $\Delta H^\circ$, and how does this mathematically shift the melting temperature $T_m$ according to your formula?
+        \end{enumerate}
+
+  \item \textbf{Intercalating Mutagens and $\pi-\pi$ Stacking.}
+  
+        Some planar, aromatic molecules, such as ethidium bromide ($\ce{EtBr}$) and proflavine, are potent mutagens.
+        They act by sliding directly in between adjacent base pairs in the double helix, a process called **intercalation**.
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain why the planar, aromatic structure of these molecules allows them to insert into the hydrophobic core of the double helix. What forces drive this insertion?
+          \item When an intercalator inserts, it increases the distance between adjacent base pairs from \SI{3.4}{\text{\AA}} to \SI{6.8}{\text{\AA}}, unwinding and deforming the helix geometry.
+                Explain how this physical deformation leads to insertion or deletion mutations (frameshifts) when the DNA polymerase enzyme tries to copy the deformed template.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Stability of Information:** If DNA was stabilized by covalent bonds between the two strands instead of weak non-covalent forces (hydrogen bonds and $\pi-\pi$ stacking), how would the cell copy the information? Why is the weak, reversible nature of these non-covalent bonds essential for genetic replication and transcription?
+  \item **On Molecular Packaging:** Human cells pack \SI{2}{m} of DNA into a nucleus only \SI{5}{\micro m} wide. If the DNA backbone was achiral and lacked the helical twist, would it be possible to coil and compress the molecule so densely without tangling?
+  \item **On Biophysics:** We saw that the sigmoidal shape of the DNA melting curve is a cooperative transition—meaning it behaves like a phase transition (like water boiling). How does the cooperative behavior of $10^6$ weak chemical bonds acting together create a sharp, binary threshold in biological state?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~7.3 completes this journey by introducing **Proteins and Molecular Machines**. Having analyzed the DNA blueprint, we will explore the active engines that DNA codes for. We will study peptide bonds, protein folding, and examine the rotary engine of ATP Synthase.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 7, Module 7.2 --- Nucleic Acids and DNA Structure}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 7.3 --- Proteins and Molecular Machines}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

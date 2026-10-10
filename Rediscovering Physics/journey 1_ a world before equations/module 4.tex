@@ -1,0 +1,281 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\setlength{\headheight}{24pt}
+\usepackage{fontenc}
+\usepackage{inputenc}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{fontawesome5}
+
+\usepackage{setspace}
+\usepackage{parskip}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=midblue,
+  urlcolor=accent,
+  citecolor=teal,
+  pdftitle={Discovery Physics: Journey 1 — The World Before Equations},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}
+  {\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+
+% Puzzle box
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep},
+  title={\faIcon{puzzle-piece}\ The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold},
+  #1
+}
+
+% Observation box
+\newtcolorbox{observebox}[1][]{
+  enhanced, breakable,
+  colback=greenbg, colframe=teal,
+  fonttitle=\bfseries\color{deep},
+  title={Observation},
+  #1
+}
+
+% Exploration/problem box
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue},
+  #1
+}
+
+% Discovery box
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white},
+  coltitle=white,
+  title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent},
+  drop shadow,
+  #1
+}
+
+% Name reveal box
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep},
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white},
+  coltitle=white,
+  title={Reflection},
+  #1
+}
+
+% Margin note style
+\newtcolorbox{marginidea}{
+  enhanced,
+  colback=gold!15, colframe=gold,
+  fontupper=\small\itshape,
+  left=2mm, right=2mm, top=1mm, bottom=1mm,
+  boxrule=0.6pt
+}
+
+% Problem counter
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi%
+}
+
+% Key idea
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[
+    enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}
+  ]
+  #1
+  \end{tcolorbox}
+}
+
+% ─── Theorem-like environments ──────────────────────────────────────────────
+\newtheoremstyle{disc}
+  {8pt}{8pt}{\itshape}{}
+  {\bfseries\color{midblue}}{.}{.5em}{}
+
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Epigraph style ─────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{0}
+\setcounter{section}{3}
+
+\section{Module 1.4 — Patterns in Heat and Cold}
+\label{sec:patterns_heat}
+
+\epigraph{%
+  \itshape It is not the answer that enlightens, but the question.%
+}{--- Eugène Ionesco}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+Heat flows. It always flows in one direction. Why?
+\end{tcolorbox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/fig_heat}
+  \caption{Two objects in contact. The hot object cools, the cold object warms, until they reach the same temperature. The temperature profiles at different times are shown. Crucially: this process never runs in reverse spontaneously.}
+  \label{fig:heat}
+\end{figure}
+
+\subsection{Introduction}
+
+Touch an ice cube. Heat flows from your hand to the ice. The ice cools your hand; your hand warms the ice. This seems completely natural---but think about why.
+
+Your hand is at about 37°C. The ice is at 0°C. Heat flows from hot to cold. But why this direction and not the reverse? The atoms of the ice are moving. The atoms of your hand are moving faster. When the two are in contact, the fast atoms collide with the slow atoms and transfer energy to them. This happens because there are vastly more ways for energy to be spread between the atoms than for it to be concentrated in one object. It is a statistical inevitability.
+
+But in 1820, this explanation was not available. Atoms were a disputed hypothesis. What was known was only the observation: heat flows from hot to cold. Never the reverse. This was a pattern waiting for its explanation. That explanation would take another fifty years and the combined genius of Boltzmann, Clausius, and Maxwell.
+
+For now: observe.
+
+\subsection{What Heat Does}
+
+\begin{explobox}
+\problem Place a metal spoon and a wooden spoon in the same glass of hot water for 30 seconds. Touch both at the handle. Which feels hotter? Are they at the same temperature? What does this tell you?
+
+\problem Fill two identical cups: one with hot water, one with cold. Place them in a room and measure the temperature every 5 minutes for 30 minutes. Does the hot one cool faster when it is very hot, or does it cool at a constant rate? Plot a rough graph.
+
+\problem Put a small amount of food dye (or ink) into a glass of cold water. Put the same amount into hot water. Describe the difference. What is causing the dye to spread?
+
+\problem Can you think of any situation where heat flows from cold to hot? (Consider: a refrigerator. What makes this possible that doesn't apply to two objects simply touching?)
+\end{explobox}
+
+\subsection{The Direction of Flow}
+
+The pattern is clear: heat always flows from higher temperature to lower temperature. Left alone, any two objects in contact will eventually reach the same temperature. This final state---called \textbf{thermal equilibrium}---is always reached, and never spontaneously departed.
+
+\begin{discoverybox}
+\textbf{The key observation.} When two objects at different temperatures are placed in contact, the final state is always one of equal temperatures. The process that brings this about is irreversible: you cannot get the heat to ``flow back'' using only the two objects themselves.
+
+This is one of the most important facts in physics. Why it is true is the subject of Module 4.4.
+\end{discoverybox}
+
+\subsection{Heat and Work}
+
+Here is a puzzle that bothered people for a long time:
+
+A cannon barrel becomes very hot when fired. But also, a cannon barrel becomes very hot when a drill bores into it---even without any fire or chemical reaction. Count Rumford noticed this in 1798 and was troubled by it.
+
+At the time, many scientists believed heat was a substance---a fluid called ``caloric'' that flowed from hot objects to cold ones. This theory worked well for explaining heat flow. But if heat is a substance with a fixed amount, how can you generate it indefinitely by drilling?
+
+\begin{explobox}
+\problem Rub your hands together vigorously for 30 seconds. What do you feel? Where did the heat come from?
+
+\problem Bend a piece of wire back and forth rapidly ten or fifteen times at the same point. Touch that point. What do you notice? Can you explain it using the caloric theory?
+
+\problem A ball dropped from a height of 10 metres bounces back to about 7 metres. The rest of the energy seems to have disappeared. Where did it go?
+\end{explobox}
+
+The answer to Rumford's puzzle, and the answer to all of the questions above, is the same: mechanical motion can be converted into heat. They are different forms of the same thing. This is the first hint of one of the great principles of physics, which we will name properly in Journey 4: \textbf{conservation of energy}.
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

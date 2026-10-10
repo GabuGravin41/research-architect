@@ -1,0 +1,409 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [...
+  \vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{3}
+\chapter[Journey 4 --- Programming Paradigms and Language Semantics]
+        {Journey Four\\[8pt]
+         \textcolor{ModuleColor}{\large Programming Paradigms and Language Semantics}}
+\setcounter{section}{2}
+
+\section{Module 4.3 --- Type Theory and Lambda Calculus with Types}
+\label{sec:mod4.3}
+
+\subsection*{Motivation}
+
+We formalized in Module 4.2 the operational transitions of imperative code, studying how variables change state step-by-step.
+But operational semantics only tells us what a program does when it runs. It cannot prevent runtime crashes.
+If a function expecting a number receives another function, it will get **stuck**.
+To guarantee that programs execute safely without runtime crashes, we introduce **Type Theory**.
+
+We will study Alonzo Church's **Simply Typed Lambda Calculus ($\lambda^\to$)**.
+By tagging terms with static labels called types, we can check a program for logical consistency before execution.
+We will prove the twin theorems of **Progress** and **Preservation** that guarantee type safety: "well-typed programs never get stuck."
+Finally, we will explore the **Curry-Howard Isomorphism**, discovering a deep mathematical bridge that links compiler type systems directly to formal logic.
+
+\subsection{The Type Invariant}
+
+We analyze how static tags prevent runtime execution failures.
+
+\begin{puzzlebox}
+\textbf{The Stuck Configuration.}
+
+In the untyped $\lambda$-calculus, we can write any syntactically valid application, such as applying a variable $x$ to itself: $x \, x$.
+However, if we want to run this code on physical hardware, we must compile variables to distinct structures (like integer registers or function pointers).
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Suppose a function expects an integer $n$ and executes arithmetic. If a caller passes the identity function $\lambda z. z$ instead of an integer, explain why a physical processor will crash or execute undefined behavior when it attempts to add this function to a number.
+  \item To prevent this, we tag every variable and term with a **Type** ($\tau$):
+        * A base type (e.g. $\text{Bool}$).
+        * A function type (e.g. $\tau_1 \to \tau_2$, representing a function that maps an input of type $\tau_1$ to an output of type $\tau_2$).
+        If a term $e$ has type $\text{Bool} \to \text{Bool}$, what type of argument must we pass to $e$ for the application to be safe? What type will the resulting output have?
+  \item Suppose we write a program that passes a static type check (meaning the compiler verifies that all function arguments match their expected types).
+        How does this check guarantee that the compiled code will run to completion without ever attempting an invalid operation (getting stuck)?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{The Simply Typed Lambda Calculus ($\lambda^\to$)}
+
+We define the typing context and inference rules of the typed calculus.
+
+\begin{namedconcept}{Simply Typed Lambda Calculus Syntax}
+* **Types ($\tau$):**
+  \[
+    \tau \;::=\; B \;\mid\; \tau_1 \to \tau_2
+  \]
+  where $B$ is a base type (like $\text{Bool}$).
+* **Terms ($e$):**
+  \[
+    e \;::=\; x \;\mid\; \lambda x : \tau. e \;\mid\; e_1 \, e_2 \;\mid\; \text{true} \;\mid\; \text{false}
+  \]
+\end{namedconcept}
+
+\begin{explobox}
+We write typing judgments as:
+\[
+  \Gamma \;\vdash\; e \;:\; \tau
+\]
+meaning "under typing context $\Gamma$ (a set of variable-type bindings $x:\tau$), term $e$ has type $\tau$".
+We define the typing rules using inference syntax:
+\[
+  \textbf{[T-Var]} \quad \frac{x : \tau \in \Gamma}{\Gamma \vdash x : \tau}
+\]
+\[
+  \textbf{[T-Abs]} \quad \frac{\Gamma, x : \tau_1 \vdash e : \tau_2}{\Gamma \vdash \lambda x : \tau_1. e : \tau_1 \to \tau_2}
+\]
+\[
+  \textbf{[T-App]} \quad \frac{\Gamma \vdash e_1 : \tau_1 \to \tau_2 \quad \Gamma \vdash e_2 : \tau_1}{\Gamma \vdash e_1 \, e_2 : \tau_2}
+\]
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Using the rules above, draw a derivation tree showing that the term $\lambda x : B. \lambda y : B \to B. y \, x$ is well-typed under the empty context ($\Gamma = \emptyset$).
+  \item Identify the type of the resulting abstraction.
+  \item A term is **stuck** if it is not a value (like $\text{true}$ or an abstraction) and cannot make an evaluation step.
+        Give an example of a term in the syntax of $\lambda^\to$ that is stuck. Show why this term is not well-typed under the typing rules.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Type Safety and the Curry-Howard Isomorphism}
+
+We study the theorems of type safety and the equivalence of types and logic.
+
+\begin{explobox}
+To prove a language is type-safe, we must prove two fundamental theorems:
+1. **Progress:** If $\emptyset \vdash e : \tau$ (a closed term is well-typed), then either $e$ is a value, or there exists $e'$ such that $e \to e'$ (it can make a step).
+2. **Preservation:** If $\Gamma \vdash e : \tau$ and $e \to e'$, then $\Gamma \vdash e' : \tau$ (evaluation preserves type).
+* **Curry-Howard Isomorphism:** A deep mathematical equivalence linking computation and logic:
+  \begin{center}
+  \begin{tabular}{lcl}
+    \toprule
+    \textbf{Type Theory} & \qquad\qquad & \textbf{Logic} \\
+    \midrule
+    Type $\tau$ && Proposition $P$ \\
+    Lambda Term $e$ && Proof of $P$ \\
+    Type Checking && Proof Verification \\
+    $\beta$-Reduction && Proof Simplification \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item The logical proposition $A \implies A$ corresponds to the type $\tau \to \tau$.
+        Show that the identity program $\lambda x : \tau. x$ represents a proof of this proposition.
+  \item The proposition $A \implies (B \implies A)$ corresponds to the type $\tau_1 \to (\tau_2 \to \tau_1)$.
+        Write a lambda term that represents a proof of this theorem.
+  \item If a logical system is consistent, it is impossible to prove a contradiction ($\text{False}$).
+        Under the Curry-Howard Isomorphism, what does this imply about the existence of a term of type $\text{Void}$ (empty type) in a well-typed language?
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The Simply Typed Lambda Calculus ($\lambda^\to$) uses typing contexts and inference rules to statically verify programs before execution.
+
+\textbf{Second.} Type safety is proved via the twin theorems of Progress (well-typed terms are not stuck) and Preservation (evaluation preserves types).
+
+\textbf{Third.} The Curry-Howard Isomorphism establishes that type signatures are logical propositions, and well-typed programs are mathematical proofs of those propositions.
+
+\textbf{Fourth.} Strong Normalization guarantees that all well-typed $\lambda^\to$ terms terminate, which makes $\lambda^\to$ non-Turing-complete (proving that static safety restricts expressive limits).
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Typing parameters}
+* **Simply Typed $\lambda$-Calculus:** A version of the lambda calculus equipped with static function types.
+* **Typing Context ($\Gamma$):** A lookup environment mapping variables to their designated types.
+* **Progress:** The theorem stating that well-typed terms can always make a step or are already values.
+* **Preservation:** The theorem stating that evaluation steps do not change a term's type.
+* **Curry-Howard Isomorphism:** The mapping between logic systems and computational type systems.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Typing Derivation Tree.}
+  
+        Draw the typing derivation tree for the term $\lambda x : B. \lambda y : B \to B. y \, x$ under the empty context $\Gamma = \emptyset$.
+        
+        \textbf{Solution:}
+        To show $\emptyset \vdash \lambda x : B. \lambda y : B \to B. y \, x : B \to ((B \to B) \to B)$, we apply the typing rules bottom-up:
+        
+        1. Apply **[T-Abs]** for the parameter $x$:
+           \[
+             \frac{\{x : B\} \vdash \lambda y : B \to B. y \, x : (B \to B) \to B}{\emptyset \vdash \lambda x : B. \lambda y : B \to B. y \, x : B \to ((B \to B) \to B)}.
+           \]
+        2. Apply **[T-Abs]** for the parameter $y$:
+           Let $\Gamma_1 = \{x : B\}$.
+           \[
+             \frac{\Gamma_1, y : B \to B \vdash y \, x : B}{\Gamma_1 \vdash \lambda y : B \to B. y \, x : (B \to B) \to B}.
+           \]
+        3. Apply **[T-App]** to the application $y \, x$:
+           Let $\Gamma_2 = \{x : B, y : B \to B\}$.
+           \[
+             \frac{\Gamma_2 \vdash y : B \to B \quad \Gamma_2 \vdash x : B}{\Gamma_2 \vdash y \, x : B}.
+           \]
+        4. Both leaf nodes are resolved using **[T-Var]** because $y:B\to B \in \Gamma_2$ and $x:B \in \Gamma_2$.
+        
+        The complete assembled derivation tree is:
+        \[
+          \frac{\cfrac{\cfrac{y : B \to B \in \Gamma_2}{\Gamma_2 \vdash y : B \to B} \quad \cfrac{x : B \in \Gamma_2}{\Gamma_2 \vdash x : B}}{\{x : B, y : B \to B\} \vdash y \, x : B}}{\cfrac{\{x : B\} \vdash \lambda y : B \to B. y \, x : (B \to B) \to B}{\emptyset \vdash \lambda x : B. \lambda y : B \to B. y \, x : B \to ((B \to B) \to B)}}.
+        \]
+        This completes the derivation.
+        
+  \item \textbf{Curry-Howard Logic Translation.}
+  
+        Show that the program $\lambda f : A \to B. \lambda g : B \to C. \lambda x : A. g (f \, x)$ is a proof of the logical proposition $(A \implies B) \implies ((B \implies C) \implies (A \implies C))$ under the Curry-Howard Isomorphism.
+        
+        \textbf{Solution:}
+        1. **Map logical implication to function types:**
+           Under the isomorphism, logical implication $\implies$ maps to function type $\to$.
+           * $A \implies B \implies A \to B$.
+           * $B \implies C \implies B \to C$.
+           * $A \implies C \implies A \to C$.
+           So the proposition maps to the type:
+           \[
+             (A \to B) \to ((B \to C) \to (A \to C)).
+           \]
+        2. **Determine the type of the lambda term:**
+           The term is $e = \lambda f : A \to B. \lambda g : B \to C. \lambda x : A. g (f \, x)$.
+           * The outermost abstraction binds $f : A \to B$.
+           * The next abstraction binds $g : B \to C$.
+           * The innermost abstraction binds $x : A$.
+           * Inside, $f \, x$ has type $B$ (applying $f : A \to B$ to $x : A$).
+           * $g (f \, x)$ has type $C$ (applying $g : B \to C$ to $f \, x : B$).
+           * The innermost abstraction has type $A \to C$.
+           * The next abstraction has type $(B \to C) \to (A \to C)$.
+           * The full term has type:
+             \[
+               (A \to B) \to ((B \to C) \to (A \to C)).
+             \]
+        Since the term is well-typed and has the exact type corresponding to the proposition, it represents a valid proof of the proposition (known as hypothetical syllogism or transitivity).
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Typing Derivation Tree.}
+  
+        Let the context be $\Gamma = \{f : B \to (B \to B), x : B\}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Draw the complete typing derivation tree for the term:
+                \[
+                  f \, x \, x.
+                \]
+          \item Specify the final type of the evaluated application.
+        \end{enumerate}
+
+  \item \textbf{Curry-Howard Logic Translation.}
+  
+        Translate the following logical formulas into types in the simply typed lambda calculus, and write down a lambda term that serves as a proof (inhabitant) for each type:
+        \begin{enumerate}[label=(\alph*)]
+          \item $A \implies (B \implies (A \land B))$.
+                *(Hint: Logical conjunction $\land$ maps to **Product Types** $\tau_1 \times \tau_2$, with constructor $\langle e_1, e_2 \rangle$).*
+          \item $(A \land B) \implies A$.
+                *(Hint: Use the projection term $\pi_1(e)$ which extracts the first element of a product).*
+          \item $A \implies (A \lor B)$.
+                *(Hint: Logical disjunction $\lor$ maps to **Sum Types** $\tau_1 + \tau_2$, with constructors $\text{inl}(e)$ and $\text{inr}(e)$).*
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Proof of the Preservation Theorem.}
+  
+        The Preservation (Subject Reduction) theorem states that if $\Gamma \vdash e : \tau$ and $e \to_\beta e'$, then $\Gamma \vdash e' : \tau$.
+        To prove this, we first need the **Substitution Lemma**:
+        If $\Gamma, x : \tau_1 \vdash e : \tau$ and $\Gamma \vdash v : \tau_1$, then $\Gamma \vdash e[x \mapsto v] : \tau$.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain the physical meaning of the Substitution Lemma. (Why does replacing a variable with a value of the same type preserve the type of the expression?)
+          \item We prove Preservation by induction on the typing derivation of $\Gamma \vdash e : \tau$.
+                Consider the induction step for the application rule:
+                \[
+                  e \;=\; (\lambda x : \tau_1. e_1) \, v \;\to_\beta\; e_1[x \mapsto v] \;=\; e'.
+                \]
+                Show how the Substitution Lemma completes this step.
+          \item If our language allowed unsafe type casts (like C's `void*` casts), explain why the Preservation theorem would fail. What does this reveal about compiler type safety?
+        \end{enumerate}
+
+  \item \textbf{Strong Normalization and Turing-Incompleteness.}
+  
+        The **Strong Normalization Theorem** states that in the simply typed lambda calculus ($\lambda^\to$), *every* well-typed term can be reduced to a normal form in a finite number of steps.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Recall the infinite loop term $\Omega \equiv (\lambda x. x \, x) \, (\lambda x. x \, x)$.
+                Prove that $\Omega$ cannot be typed in the simply typed lambda calculus $\lambda^\to$.
+                *(Hint: Assume $x$ has type $\tau_x$. For the application $x \, x$ to be well-typed, show that we must satisfy the equation $\tau_x = \tau_x \to \tau_y$ for some type $\tau_y$. Explain why no finite type can satisfy this equation).*
+          \item Since every well-typed term in $\lambda^\to$ must terminate, explain why $\lambda^\to$ is **not** Turing-complete. (Why can you not write an infinite loop in $\lambda^\to$?)
+          \item What does this trade-off reveal about programming language design? (Why does guaranteeing absolute static safety require us to limit the expressive power of our code?)
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Logic of Code:** The Curry-Howard Isomorphism shows that writing a program is identical to proving a theorem. Does this mean that programming is not an engineering discipline, but a branch of formal logic?
+  \item **On the cost of safety:** Dynamically typed languages (like Python) are Turing-complete but lack compile-time safety guarantees. Strongly typed languages (like Simply Typed Lambda Calculus) are safe but cannot implement all computable algorithms. How do modern languages (like Rust or Haskell) attempt to balance these limits?
+  \item **On Gödel's Limit:** Gödel's Incompleteness Theorem states that any logic system powerful enough to describe arithmetic must contain unprovable truths. Under Curry-Howard, what does this imply about the existence of programs we can write, but whose type safety can never be proven by a compiler?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~4.4 introduces **Compiler Design: Parsing to Code Generation**. Having mastered the semantics and types of programming languages, we will build the actual engine that translates this code into hardware instructions: lexing, parsing, Abstract Syntax Trees (ASTs), type checking, and code generation.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 4, Module 4.3 --- Type Theory and Lambda Calculus with Types}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 4.4 --- Compiler Design: Parsing to Code Generation}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

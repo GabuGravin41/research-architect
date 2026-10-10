@@ -1,0 +1,374 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.8cm, bottom=2.8cm, left=3.0cm, right=2.5cm, includeheadfoot, headheight=15pt]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue}
+
+% ── Colours ─────────────────────────────────────────────────
+\definecolor{NavyBlue}{HTML}{1E3A8A}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{D97706}
+\definecolor{LightBlue}{HTML}{EFF6FF}
+\definecolor{LightGold}{HTML}{FEF3C7}
+\definecolor{DarkGrey}{HTML}{334155}
+\definecolor{BoxGreen}{HTML}{F0FDF4}
+\definecolor{SoftRed}{HTML}{FFF1F2}
+\definecolor{SidebarGrey}{HTML}{F8FAFC}
+
+% ── Section formatting ───────────────────────────────────────
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{Gold}}{}{0em}{}
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 5 $\cdot$ Module 1}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Environments (tcolorbox Unification) ─────────────────────
+
+% Puzzle box — opening problem
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=NavyBlue!5, colframe=NavyBlue,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Discovery box — moment of crystallisation
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=LightGold, colframe=Gold,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Name box — formal definition reveal
+\newtcolorbox{namebox}[1][]{
+  enhanced, breakable,
+  colback=LightBlue, colframe=MidBlue,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=BoxGreen, colframe=DarkGrey!35,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Thought provocation — inline philosophical aside
+\newtcolorbox{thought}[1][]{
+  enhanced, breakable,
+  colback=SidebarGrey, colframe=Gold,
+  boxrule=0pt, leftrule=1.5pt,
+  sharp corners,
+  left=10pt, right=10pt, top=7pt, bottom=7pt,
+  before skip=10pt, after skip=10pt,
+  #1
+}
+
+% Problem counter
+\newcounter{problem}
+\newenvironment{problem}[1][]{%
+  \refstepcounter{problem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{MidBlue}Problem \theproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Deep problem counter
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{%
+  \refstepcounter{deepproblem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Exercise counter
+\newcounter{exercise}
+\newenvironment{exercise}[1][]{%
+  \refstepcounter{exercise}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{Gold}Exercise \theexercise}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 5: UNCERTAINTY}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 1}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Probability and Counting}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+Probability is the mathematics of ignorance.\\[0.15cm]
+But ignorance has a precise structure,\\[0.15cm]
+and that structure is beautiful.}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}           & Journey 5 --- Uncertainty \\[4pt]
+\color{DarkGrey}\textbf{Module}            & 1 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}     & Journey 1 (functions, sequences); basic combinatorics \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & Sample spaces, probability axioms, conditional probability, Bayes' theorem, counting \\[4pt]
+\color{DarkGrey}\textbf{Format}            & 8 problems $+$ 3 deep problems $\approx$ 13 pages \\
+\end{tabular}
+\vspace{1cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+\noindent\textbf{Opening Journey 5.}
+Journey~4 ended with quantum mechanics, where probability is not a reflection of ignorance but is intrinsic to nature. This journey builds the mathematical foundations of probability from scratch, in a way that applies to both the classical case (shuffled cards, rolling dice, sampling populations) and the quantum case (measuring spin, detecting photons). The same axioms underlie both. The difference is in the structure of the events: classical probability lives on a Boolean algebra; quantum probability lives on a lattice of subspaces of a Hilbert space.
+
+\medskip
+We begin not with axioms but with counting. The question ``how many ways can this happen?'' is the heart of combinatorial probability, and it is already rich enough to encounter deep mathematics.
+
+\newpage
+
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle: The birthday problem.}
+
+There are 30 students in a room. What is the probability that at least two of them share a birthday?
+
+\medskip
+\textbf{Question 1.} Most people guess this probability is small --- perhaps 30/365 $\approx$ 8\%. Compute the actual probability. You may assume birthdays are uniformly distributed over 365 days and ignore leap years.
+
+\textbf{Question 2.} How large does the group need to be for the probability to exceed 50\%?
+
+\textbf{Question 3.} How large for the probability to exceed 99\%?
+
+\textbf{Question 4.} The answer to Question~2 surprises almost everyone: it is much smaller than 183. Why does our intuition fail so badly here? What structure in the problem are we not seeing?
+
+\textbf{Question 5.} Generalise: in a group of $n$ people with birthdays distributed over $d$ days, write a formula for the probability that all birthdays are distinct. What does it approach as $n,d\to\infty$ with $n^2/d$ fixed?
+\end{puzzlebox}
+
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+
+\subsection{Step 1: Counting}
+
+\begin{problem}
+\label{prob:counting}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item \textbf{Multiplication principle.} A menu has 4 starters, 6 mains, and 3 desserts. How many distinct three-course meals are possible? State the general principle.
+  \item \textbf{Permutations.} How many ways can $n$ distinct objects be arranged in a row? Denote this $n!$. Compute $P(n,k)$ = the number of ways to choose and arrange $k$ objects from $n$.
+  \item \textbf{Combinations.} How many ways to choose $k$ objects from $n$ (order doesn't matter)? Show $\binom{n}{k} = \frac{n!}{k!(n-k)!}$. Verify $\binom{n}{k}=\binom{n}{n-k}$ and give a combinatorial proof (not algebraic).
+  \item \textbf{Pascal's triangle.} Show $\binom{n}{k}=\binom{n-1}{k-1}+\binom{n-1}{k}$ by a combinatorial argument. Use this to prove the binomial theorem $(x+y)^n = \sum_{k=0}^n\binom{n}{k}x^k y^{n-k}$.
+  \item \textbf{Stars and bars.} In how many ways can $n$ identical objects be distributed into $k$ distinct bins? Show the answer is $\binom{n+k-1}{k-1}$. Apply: how many non-negative integer solutions does $x_1+x_2+x_3=10$ have?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:advanced_counting}
+\textbf{Advanced counting.}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item \textbf{Inclusion-exclusion.} Let $|A\cup B| = |A|+|B|-|A\cap B|$. Generalise to three sets. How many integers from 1 to 1000 are divisible by 2, 3, or 5?
+  \item \textbf{Derangements.} A derangement of $\{1,\ldots,n\}$ is a permutation with no fixed point ($\sigma(i)\neq i$ for all $i$). Show the number of derangements is $D_n = n!\sum_{k=0}^n\frac{(-1)^k}{k!}$. Compute $D_3$ and $D_4$ directly to verify. Show $D_n/n!\to 1/e$ as $n\to\infty$.
+  \item \textbf{Catalan numbers.} The number of ways to triangulate a convex $(n+2)$-gon is $C_n = \frac{1}{n+1}\binom{2n}{n}$. Compute $C_1,C_2,C_3,C_4$. Verify $C_n$ also counts: (i) balanced parenthesisations of length $2n$; (ii) monotone lattice paths from $(0,0)$ to $(n,n)$ that never go above the diagonal.
+  \item \textbf{The twelvefold way.} Distributing $n$ balls into $k$ boxes, the answer depends on whether balls are distinguishable, boxes are distinguishable, and whether multiple balls per box are allowed. Organise the twelve cases and identify which formula applies to each.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 2: Probability axioms}
+
+\begin{problem}
+\label{prob:axioms}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item A \textbf{probability space} consists of a sample space $\Omega$, a collection of events $\mathcal{F}$ (a $\sigma$-algebra), and a probability measure $P:\mathcal{F}\to[0,1]$ satisfying Kolmogorov's axioms:
+  \begin{itemize}[noitemsep]
+    \item $P(\Omega)=1$
+    \item $P(A)\geq 0$ for all $A\in\mathcal{F}$
+    \item If $A_1,A_2,\ldots$ are pairwise disjoint: $P\!\left(\bigcup_i A_i\right)=\sum_i P(A_i)$
+  \end{itemize}
+  Derive from these axioms: $P(\emptyset)=0$; $P(A^c)=1-P(A)$; $P(A\cup B)=P(A)+P(B)-P(A\cap B)$.
+  \item \textbf{Uniform probability.} On a finite sample space with $|\Omega|=N$ equally likely outcomes, $P(A) = |A|/N$. Verify this satisfies the axioms. Use it to solve the birthday problem.
+  \item \textbf{A non-uniform example.} A biased coin has $P(\text{H})=p$ and $P(\text{T})=1-p$. Toss it $n$ times. The sample space is $\{H,T\}^n$ with $|\Omega|=2^n$ outcomes, but they are not equally likely. The probability of exactly $k$ heads is $\binom{n}{k}p^k(1-p)^{n-k}$. Derive this.
+  \item A \textbf{$\sigma$-algebra} is a collection $\mathcal{F}$ of subsets of $\Omega$ closed under complement and countable unions. Why is countable (not just finite) closure required? Give an example where finite closure is insufficient.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 3: Conditional probability and independence}
+
+\begin{problem}
+\label{prob:conditional}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item \textbf{Conditional probability.} $P(A|B) = \frac{P(A\cap B)}{P(B)}$ (assuming $P(B)>0$). Interpret: this is the probability of $A$ given that $B$ is known to have occurred. Verify the axioms hold for $P(\cdot|B)$.
+  \item \textbf{The multiplication rule.} $P(A\cap B)=P(A|B)P(B)=P(B|A)P(A)$. Use this to derive \textbf{Bayes' theorem}:
+  $P(A|B) = \frac{P(B|A)P(A)}{P(B)}$.
+  \item \textbf{Law of total probability.} If $\{A_1,\ldots,A_n\}$ partition $\Omega$: $P(B) = \sum_i P(B|A_i)P(A_i)$. Use this to compute $P(B)$ in Bayes' theorem when $P(B)$ is not directly known.
+  \item \textbf{Independence.} $A$ and $B$ are independent if $P(A\cap B)=P(A)P(B)$, equivalently $P(A|B)=P(A)$. Show: if $A$ and $B$ are independent, so are $A$ and $B^c$, $A^c$ and $B$, $A^c$ and $B^c$.
+  \item \textbf{Pairwise vs.\ mutual independence.} Three events $A,B,C$ are \textbf{mutually independent} if $P(A\cap B)=P(A)P(B)$, $P(A\cap C)=P(A)P(C)$, $P(B\cap C)=P(B)P(C)$, and $P(A\cap B\cap C)=P(A)P(B)P(C)$. Construct three events that are pairwise independent but not mutually independent.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:bayes_apps}
+\textbf{Bayes' theorem in practice.}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item \textbf{Medical testing.} A disease affects 1\% of the population. A test is 99\% sensitive (correctly identifies 99\% of sick people) and 99\% specific (correctly identifies 99\% of healthy people). A random person tests positive. What is the probability they have the disease?
+  \item The answer to (a) surprises most people, including doctors. Compute it and explain the intuition: why is a positive test from a 99\%-accurate test not very reassuring when the disease is rare?
+  \item \textbf{The Monty Hall problem.} Behind one of three doors is a car; behind the other two are goats. You pick door~1. The host (who knows where the car is) opens door~3 to reveal a goat. Should you switch to door~2?
+  \begin{enumerate}[label=(\roman*),noitemsep]
+    \item Solve by direct enumeration of all cases.
+    \item Solve using Bayes' theorem: let $C_i$ be the event that the car is behind door $i$, and $H_3$ be the event that the host opens door~3.
+    \item What changes if the host opens a door uniformly at random (not necessarily revealing a goat)?
+  \end{enumerate}
+  \item \textbf{Sequential Bayes.} You see data $D_1,D_2,\ldots$ one at a time. Start with prior $P(H)$. After seeing $D_1$, update to $P(H|D_1)$ using Bayes. This becomes the new prior. After seeing $D_2$, update to $P(H|D_1,D_2)$. Show the order in which data is processed does not matter (assuming independence).
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{Frequentist vs.\ Bayesian probability.}
+There are two major interpretations of probability. The \textbf{frequentist} says $P(A)$ is the long-run frequency of $A$ in infinitely many repeated identical trials. The \textbf{Bayesian} says $P(A)$ is a degree of belief in $A$, updated by evidence via Bayes' theorem. Neither is obviously correct. The frequentist cannot assign probability to one-off events (``what is the probability it rained in Nairobi on 3rd January 1847?''); the Bayesian must choose a prior, which introduces subjectivity. In science, the debate is alive: frequentist hypothesis testing (the $p$-value) has been criticised for systematic misuse, and Bayesian methods are gaining ground. In quantum mechanics, the wave function is sometimes interpreted as a Bayesian probability (QBism), and sometimes as an objective physical field. The question of what probability \emph{is} remains genuinely open.
+\end{thought}
+
+\subsection{Step 4: Combinatorial identities}
+
+\begin{problem}
+\label{prob:identities}
+\textbf{Combinatorial identities and generating functions.}
+\begin{enumerate}[label=(\alph*),topsep=2pt]
+  \item Prove $\sum_{k=0}^n\binom{n}{k}=2^n$ combinatorially (counting subsets) and algebraically (binomial theorem with $x=y=1$).
+  \item Prove \textbf{Vandermonde's identity}: $\sum_{k=0}^r\binom{m}{k}\binom{n}{r-k}=\binom{m+n}{r}$ by a committee-selection argument.
+  \item The \textbf{generating function} of the sequence $a_n=\binom{N}{n}$ is $\sum_{n\geq 0}\binom{N}{n}x^n=(1+x)^N$. Use this to find a closed form for $\sum_{n\geq 0}\binom{N}{n}^2$.
+  \item \textbf{The hockey stick identity}: $\sum_{i=k}^n\binom{i}{k}=\binom{n+1}{k+1}$. Prove combinatorially by a ``when is the $(k+1)$-th element chosen?'' argument.
+  \item The number of paths on a grid from $(0,0)$ to $(m,n)$ taking steps right (R) or up (U) is $\binom{m+n}{m}$. How many such paths pass through $(a,b)$? Use this to prove the ballot problem: in an election where candidate A gets $a$ votes and B gets $b$ votes ($a>b$), the probability that A is strictly ahead throughout the counting is $(a-b)/(a+b)$.
+\end{enumerate}
+\end{problem}
+
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Counting is not trivial. The multiplication principle, permutations, combinations, inclusion-exclusion, derangements, and Catalan numbers are all instances of a general theory of counting under constraints. Generating functions are the bridge between counting and analysis.
+
+\textbf{Second.} Kolmogorov's axioms give probability a rigorous foundation. From three axioms, all the standard rules of probability follow. The axioms apply equally to discrete, continuous, and abstract probability spaces.
+
+\textbf{Third.} Conditional probability is the engine of inference. Bayes' theorem updates beliefs in the light of evidence. The birthday problem, the medical test, and the Monty Hall problem all show that conditional probability is deeply counterintuitive --- our heuristics are calibrated for a different world.
+
+\textbf{Fourth.} Independence is a structural property, not just intuitive ``unrelated-ness''. Pairwise independence does not imply mutual independence. This distinction becomes critical in statistics and information theory.
+\end{discoverybox}
+
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+
+\begin{namebox}
+\textbf{Probability fundamentals.}
+
+\textbf{Kolmogorov axioms}: $P(\Omega)=1$; $P(A)\geq 0$; countable additivity.
+
+\textbf{Conditional probability}: $P(A|B)=P(A\cap B)/P(B)$.
+
+\textbf{Bayes' theorem}: $P(A|B)=P(B|A)P(A)/P(B)$.
+
+\textbf{Independence}: $P(A\cap B)=P(A)P(B)$.
+
+\textbf{Key counting}: $P(n,k)=n!/(n-k)!$;\quad $\binom{n}{k}=n!/[k!(n-k)!]$;\quad $D_n=n!\sum_{k=0}^n(-1)^k/k!$.
+\end{namebox}
+
+\section{Part 5 \texorpdfstring{---}{--} Deep Problems}
+
+\begin{deepproblem}[The probabilistic method]
+The \textbf{probabilistic method} (Erd\H{o}s): to prove that a combinatorial object with a certain property \emph{exists}, show that a randomly chosen object has the property with positive probability.
+\begin{enumerate}[label=(\alph*)]
+  \item \textbf{Ramsey theory.} The Ramsey number $R(k,k)$ is the minimum $n$ such that any 2-colouring of the edges of $K_n$ contains a monochromatic $K_k$. Show $R(k,k)\geq 2^{k/2}$ by: randomly 2-colour the edges of $K_n$; compute the expected number of monochromatic $K_k$'s; show it is less than 1 for $n=2^{k/2}$. Conclude a colouring with no monochromatic $K_k$ must exist.
+  \item \textbf{Turán-type.} Let $G$ be a graph with $n$ vertices and $m$ edges. Show there exists an independent set (set of mutually non-adjacent vertices) of size at least $n^2/(2m+n)$. Use the probabilistic method: include each vertex independently with probability $p$, remove one vertex from each edge, optimise over $p$.
+  \item \textbf{Graph colouring.} Show every graph $G$ with maximum degree $\Delta$ has chromatic number $\chi(G)\leq \Delta+1$ using a greedy colouring argument. Then use the probabilistic method to show $\chi(G)\leq 2\Delta$ for any graph where the neighbourhood of each vertex spans at most $\Delta^2/4$ edges.
+  \item \textbf{Lovász Local Lemma.} Let $A_1,\ldots,A_n$ be events each with probability $\leq p$, and suppose each is independent of all but at most $d$ others. If $ep(d+1)\leq 1$, then $P(\bigcap_i A_i^c)>0$ (all bad events can be simultaneously avoided). State a combinatorial application.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Measure theory foundations]
+\begin{enumerate}[label=(\alph*)]
+  \item A \textbf{$\sigma$-algebra} on $\Omega$ is a collection $\mathcal{F}\subseteq 2^\Omega$ such that: $\Omega\in\mathcal{F}$; $A\in\mathcal{F}\Rightarrow A^c\in\mathcal{F}$; countable unions of elements of $\mathcal{F}$ are in $\mathcal{F}$. The \textbf{Borel $\sigma$-algebra} on $\mathbb{R}$ is generated by all open intervals. Show it contains all open sets, all closed sets, all countable sets.
+  \item A \textbf{measure} $\mu:\mathcal{F}\to[0,\infty]$ satisfies $\mu(\emptyset)=0$ and countable additivity. A \textbf{probability measure} additionally satisfies $\mu(\Omega)=1$. The Lebesgue measure on $[0,1]$ assigns $\mu([a,b])=b-a$. Show the Cantor set has Lebesgue measure zero but is uncountable.
+  \item A random variable is a measurable function $X:\Omega\to\mathbb{R}$ (meaning $\{X\leq x\}\in\mathcal{F}$ for all $x$). The \textbf{distribution} of $X$ is the induced measure $P_X(B) = P(X^{-1}(B))$ on $\mathbb{R}$. This abstracts the random variable away from the underlying probability space.
+  \item \textbf{Carathéodory's extension theorem}: a probability measure on an algebra (closed under finite operations) extends uniquely to a probability measure on the generated $\sigma$-algebra. This is why it suffices to specify $P([a,b])=b-a$ for intervals --- the rest of the Lebesgue measure is uniquely determined.
+  \item \textbf{Non-measurable sets.} Under the axiom of choice, there exist subsets of $[0,1]$ that cannot be assigned a consistent probability. The Vitali set is constructed by choosing one representative from each equivalence class of $[0,1]/\mathbb{Q}$. Why can no translation-invariant measure be assigned to it?
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Information theory and entropy]
+\begin{enumerate}[label=(\alph*)]
+  \item The \textbf{Shannon entropy} of a discrete distribution $P=(p_1,\ldots,p_n)$ is $H(P)=-\sum_i p_i\log_2 p_i$ (bits). Show: $H\geq 0$; $H=0$ iff one $p_i=1$; $H$ is maximised at $\log_2 n$ for the uniform distribution.
+  \item Show: $H(P)=-\sum p_i\log p_i$ is the unique function satisfying: (i) symmetry in the $p_i$; (ii) continuity; (iii) $H(1/n,\ldots,1/n)$ is increasing in $n$; (iv) the chain rule $H(X,Y)=H(X)+H(Y|X)$. (This is Shannon's characterisation theorem.)
+  \item The \textbf{KL divergence} $D_{\text{KL}}(P\|Q) = \sum_i p_i\log(p_i/q_i)$ measures the ``distance'' from $Q$ to $P$ (non-symmetric). Show $D_{\text{KL}}\geq 0$ with equality iff $P=Q$ (using $\log x\leq x-1$). Interpret: how many extra bits are needed to encode $P$ using a code optimised for $Q$.
+  \item \textbf{Mutual information}: $I(X;Y)=H(X)-H(X|Y)=D_{\text{KL}}(P_{XY}\|P_X P_Y)$. It measures how much knowing $Y$ reduces uncertainty about $X$. Show $I(X;Y)=0$ iff $X$ and $Y$ are independent.
+  \item \textbf{Shannon's channel capacity theorem}: the maximum rate at which information can be reliably transmitted over a noisy channel is $C=\max_{P(X)}I(X;Y)$ bits per channel use. For a binary symmetric channel with error probability $p$: $C=1-H(p,-p\log p-(1-p)\log(1-p))$. Compute $C$ for $p=0.1$ and $p=0.5$.
+\end{enumerate}
+\end{deepproblem}
+
+\section{Part 6 \texorpdfstring{---}{--} Reflection}
+
+\begin{reflectionbox}
+\textbf{Your reflection task.}
+
+\begin{enumerate}
+  \item \textbf{On the birthday problem.} The birthday problem feels surprising because we think about specific pairs (``will I share a birthday with someone?'') rather than any pair (``will any two people share a birthday?''). Write a paragraph: what other everyday probabilistic mistakes do people make, and is there a common structure to these errors?
+
+  \item \textbf{On Bayes' theorem.} A doctor uses a 99\%-accurate test and concludes a positive result almost certainly means disease. They are wrong. Write a paragraph: should doctors be required to know Bayes' theorem? More broadly, should probability theory be taught earlier in education?
+
+  \item \textbf{On entropy.} Shannon's entropy $H=-\sum p_i\log p_i$ is formally identical to the Boltzmann entropy in statistical mechanics $S=-k_B\sum p_i\ln p_i$. This is not a coincidence: both measure the same thing --- the number of bits of information needed to describe a state, or equivalently, the logarithm of the number of accessible states. Write one sentence on what this identity suggests about the relationship between information and thermodynamics.
+
+  \item \textbf{Looking ahead.} Module~2 introduces random variables: functions that assign numerical values to outcomes. The key question becomes: what is the expected value of a random variable, and how is it distributed? You already know the binomial distribution from this module. What other distributions do you expect to encounter?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~2 studies random variables and their distributions: expectation, variance, the binomial, Poisson, and normal distributions, and the central limit theorem --- the most important theorem in all of statistics.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 5, Module 1 --- Probability and Counting}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 2 --- Random Variables and Distributions}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

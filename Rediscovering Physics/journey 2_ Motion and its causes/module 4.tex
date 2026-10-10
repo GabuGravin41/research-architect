@@ -1,0 +1,270 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+% ─── Packages ───────────────────────────────────────────────────────────────
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, patterns, backgrounds, decorations.markings}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{mdframed}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+
+% ─── Colours ────────────────────────────────────────────────────────────────
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+% ─── Page geometry fix ──────────────────────────────────────────────────────
+\setlength{\headheight}{24pt}
+
+% ─── Hyperref ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true, linkcolor=midblue, urlcolor=accent, citecolor=teal,
+  pdftitle={Discovery Physics: Journey 2 — Motion and Its Causes},
+  pdfauthor={Discovery Institute},
+}
+
+% ─── Page style ─────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height \headrulewidth\hfill}}
+
+% ─── Chapter / Section titles ───────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+% ─── Custom boxes ───────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=warmbg, colframe=gold,
+  fonttitle=\bfseries\large\color{deep}, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=gold, colframe=gold}, #1}
+
+\newtcolorbox{explobox}[1][]{
+  enhanced, breakable,
+  colback=lightbg, colframe=midblue,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Exploration},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=midblue, colframe=midblue}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=white, colframe=accent,
+  fonttitle=\bfseries\large\color{white}, coltitle=white, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=accent, colframe=accent}, drop shadow, #1}
+
+\newtcolorbox{namebox}[1][]{
+  enhanced,
+  colback=deep!5, colframe=deep,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=deep, colframe=deep}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=purple!5, colframe=purple,
+  fonttitle=\bfseries\color{white}, coltitle=white, title={Reflection}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=gold!8, colframe=gold!70!brown,
+  fonttitle=\bfseries\color{deep}, title={Historical Note}, #1}
+
+% ─── Problem counter ────────────────────────────────────────────────────────
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{%
+  \refstepcounter{problem}%
+  \medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ %
+  \ifx&#1&\else\textit{(#1)}\ \fi}
+
+\newcommand{\keyidea}[1]{%
+  \begin{tcolorbox}[enhanced, colback=teal!8, colframe=teal,
+    left=4mm, fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+% ─── Theorem environments ───────────────────────────────────────────────────
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+\newtheorem{question}{Question}[chapter]
+
+% ─── Spacing ────────────────────────────────────────────────────────────────
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+
+\setcounter{chapter}{1}
+\setcounter{section}{3}
+
+\section{Module 2.4 — What Is Force?}
+\label{sec:what_is_force}
+
+\epigraph{
+  \itshape Every body continues in its state of rest, or of uniform motion in a right line, unless it is compelled to change that state by forces impressed upon it.
+}{--- Isaac Newton, \textit{Principia Mathematica} (1687)}
+
+\subsection{The Central Question}
+
+\begin{tcolorbox}[colback=deep!5, colframe=deep, fontupper=\large\bfseries\color{deep}]
+What is force, really? Does it keep things moving --- or does it change their motion?
+\end{tcolorbox}
+
+\subsection{The Aristotelian Intuition (and Why It Is Wrong)}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/fig_j2_inertia}
+  \caption{Left: Aristotle's intuition---objects stop moving unless continuously pushed. This seems obvious from daily experience (friction). Right: Newton's insight---in the absence of force, objects continue at constant velocity. Force causes acceleration, not motion.}
+  \label{fig:inertia}
+\end{figure}
+
+Aristotle's view of motion, held for two thousand years, seems obvious: objects move because they are pushed. Stop pushing, and they stop. This is what everyday experience suggests. Push a box across the floor; it moves. Stop pushing; it stops.
+
+The problem with this view is not that it is wrong about experience. It is wrong about \textit{cause}. The box stops not because there is no pushing force, but because there is another force---friction---opposing the motion. Remove friction, and the box would continue forever.
+
+This is the first of Newton's laws, and it is deeply counterintuitive: an object at rest stays at rest, and an object in motion stays in motion \textit{at constant velocity}, unless acted upon by an external force.
+
+\begin{historybox}
+Galileo arrived at this insight by imagining ideal experiments. If a ball rolls down a slope and onto a flat surface with no friction, it would roll forever. The flatter the surface and the less the friction, the further it goes. In the ideal limit (no friction, perfectly flat), it never stops.
+
+This was a new kind of reasoning in science: using an idealised case that does not actually exist, but whose limit teaches us something real. This became one of the most powerful tools in physics.
+\end{historybox}
+
+\subsection{The Real Content of Newton's Laws}
+
+Newton's framework rests on three interconnected ideas. We will discover them in order, not by memorising them, but by seeing what they predict and why.
+
+\subsubsection*{First Law: Inertia}
+
+An object with no net force acting on it moves at constant velocity (including zero velocity, i.e., rest). Force is not needed to maintain motion. Force is needed to \textit{change} motion.
+
+The tendency of objects to resist changes in their motion is called \textbf{inertia}.
+
+\begin{explobox}
+\problem A book is sitting on a table. List all the forces acting on it. What is the net force? Why is it not moving?
+
+\problem A ball is rolling across a smooth floor (minimal friction). Sketch all the forces. Is there any horizontal force? Why does it continue rolling?
+
+\problem An astronaut in deep space (far from any gravity) gives a ball a gentle push. Describe the ball's subsequent motion for the next million years.
+
+\problem A car is moving at constant velocity on a motorway. Is the engine exerting a force? If so, why doesn't this force accelerate the car? Draw a force diagram.
+\end{explobox}
+
+\subsubsection*{Second Law: $F = ma$}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.88\textwidth]{figures/fig_j2_fma}
+  \caption{Left: for a fixed force, doubling the mass halves the acceleration. Right: for a fixed mass, doubling the force doubles the acceleration. Both results are combined in Newton's second law: $F = ma$.}
+  \label{fig:fma}
+\end{figure}
+
+When a net force \textit{does} act on an object, how does it change the motion? Experiment shows two things:
+
+\begin{enumerate}[leftmargin=2em]
+  \item The acceleration is proportional to the force: $a \propto F$
+  \item The acceleration is inversely proportional to the mass: $a \propto 1/m$
+\end{enumerate}
+
+These combine into the most important equation in classical mechanics:
+
+\begin{equation}
+  \boxed{F = ma}
+\end{equation}
+
+\begin{namebox}
+This is \textbf{Newton's Second Law of Motion}. The net force equals the mass multiplied by the acceleration. Force is measured in Newtons (\si{N}), where $\SI{1}{N} = \SI{1}{kg\cdot m/s^2}$.
+
+Note: this is not a definition of force. It is a physical law---a claim about how nature works that could have been otherwise.
+\end{namebox}
+
+\begin{explobox}
+\problem What force is required to give a $\SI{5}{kg}$ object an acceleration of $\SI{3}{m/s^2}$?
+
+\problem A $\SI{1000}{kg}$ car accelerates from 0 to $\SI{30}{m/s}$ in $\SI{10}{s}$. What is the net force?
+
+\problem Two forces act on a $\SI{3}{kg}$ block: $\SI{12}{N}$ to the right and $\SI{8}{N}$ to the left. What is the acceleration?
+
+\problem An object of mass $m$ is on a frictionless inclined plane at angle $\theta$. What is its acceleration along the slope? (Resolve the gravitational force $mg$ into components parallel and perpendicular to the slope.)
+
+\problem \textit{Deep question.} $F = ma$ relates force, mass, and acceleration. But how do we measure force independently of $F=ma$? Is there a circularity here? Think carefully.
+\end{explobox}
+
+\subsubsection*{Third Law: Action and Reaction}
+
+When object A exerts a force on object B, object B exerts an equal and opposite force on object A.
+
+\begin{equation}
+  \vec{F}_{A \to B} = -\vec{F}_{B \to A}
+\end{equation}
+
+This seems simple but has surprising implications:
+
+\begin{explobox}
+\problem When you push a wall, the wall pushes back equally on you. Why don't these equal forces cancel out and produce zero acceleration?
+
+\problem A horse pulls a cart. The cart pulls back on the horse with an equal and opposite force. So the net force is zero---and nothing should move. Find the flaw in this argument.
+
+\problem A rocket in space has no air to push against. How does it accelerate? Identify the action-reaction pair.
+
+\problem Two ice skaters push off from each other. Skater A has mass $\SI{60}{kg}$ and skater B has mass $\SI{90}{kg}$. If the force of interaction gives skater A an acceleration of $\SI{2}{m/s^2}$, what is skater B's acceleration?
+\end{explobox}
+
+% ────────────────────────────────────────────────────────────────────────────
+
+\end{document}

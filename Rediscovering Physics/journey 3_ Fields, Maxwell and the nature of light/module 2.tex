@@ -1,0 +1,592 @@
+\documentclass[12pt, a4paper, twoside]{book}
+
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, patterns, decorations.markings, positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+
+\definecolor{deep}{HTML}{0F172A}      % Deep Slate/Charcoal for body text/titles
+\definecolor{accent}{HTML}{E11D48}    % Crimson/Coral for problem counters
+\definecolor{teal}{HTML}{0D9488}      % Electric Teal for rules and highlights
+\definecolor{gold}{HTML}{D97706}      % Gold for puzzle borders
+\definecolor{midblue}{HTML}{334155}   % Muted Blue-Gray for section headings
+\definecolor{purple}{HTML}{6D28D9}    % Purple for reflection borders
+\definecolor{lightbg}{HTML}{F8FAFC}   % Very light gray-blue for exploration bg
+\definecolor{warmbg}{HTML}{FEF3C7}    % Warm gold-yellow for puzzle bg
+\definecolor{greenbg}{HTML}{F0FDF4}   % Light green for thought/keyidea bg
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal,
+  pdftitle={Discovery Physics J3 M3.3-3.4},pdfauthor={Discovery Institute}}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}{\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}{\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}{\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold,colframe=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\newtheoremstyle{disc}{8pt}{8pt}{\itshape}{}{\bfseries\color{midblue}}{.}{.5em}{}
+\theoremstyle{disc}
+\newtheorem{principle}{Principle}[chapter]
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+% ════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{2.5cm}
+\begin{tikzpicture}
+  % Electric field lines from two charges
+  \foreach \ang in {0,40,...,320}{
+    \draw[accent!70,line width=0.7pt,opacity=0.6,->]
+      ({-2+0.4*cos(\ang)},{0.4*sin(\ang)}) -- ({-2+2.5*cos(\ang)},{2.5*sin(\ang)});
+  }
+  \foreach \ang in {0,40,...,320}{
+    \draw[teal!70,line width=0.7pt,opacity=0.5,->]
+      ({2.5*cos(\ang+180)},{2.5*sin(\ang+180)}) -- ({2+0.4*cos(\ang+180)},{0.4*sin(\ang+180)});
+  }
+  \fill[accent] (-2,0) circle (0.22cm);
+  \fill[teal]   ( 2,0) circle (0.22cm);
+  \node[accent,font=\large\bfseries] at (-2,0) {+};
+  \node[white,font=\large\bfseries] at (2,0) {-};
+\end{tikzpicture}
+
+\vspace{0.4cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 3}}}
+\vspace{0.3cm}
+
+{\fontsize{32}{38}\selectfont\bfseries Modules 3.3 \& 3.4}
+\vspace{0.3cm}
+
+{\fontsize{18}{24}\selectfont\textcolor{gold}{Electric Charge and Its Patterns\\[6pt]Faraday's Lines of Force}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+From the force between charged objects\\[4pt]
+to the invisible structure Faraday saw}}
+
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+
+\tableofcontents
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter{Electric Charge and Faraday's Vision}
+\markboth{Journey 3: Modules 3.3 \& 3.4}{}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 3.3 — Electric Charge and Its Patterns}
+\label{sec:electric_charge}
+
+\epigraph{\itshape
+  Nature shows us only the tail of the lion. But I have no doubt that
+  the lion belongs to it even though he cannot reveal himself at once.
+}{--- Albert Einstein, letter to Heinrich Zangger, 1917}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Gravity and electricity both follow an inverse square law. They both fill all of space with a field. Yet electricity is $10^{36}$ times stronger than gravity---and it can both attract and repel. Why the same mathematical structure? Why such a different character?
+\end{puzzlebox}
+
+\subsection{The Discovery of Charge}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{R}}{ub} a glass rod with silk. Bring it near small pieces of paper. The paper leaps toward it. Now rub a second glass rod the same way and bring the two rods near each other. They repel. Take an amber rod, rub it with fur, bring it near the glass rod: they attract.
+
+This is the oldest known electrical observation---the word ``electricity'' comes from the Greek \textit{elektron}, meaning amber. But it took until the eighteenth century for Benjamin Franklin to propose that there is a single fluid that is either present in excess (positive charge) or deficit (negative charge). Later it was understood that charge is not a fluid but a property of matter, carried discretely by electrons ($-e$) and protons ($+e$).
+
+\begin{historybox}
+\textbf{Charles-Augustin de Coulomb (1736--1806)} was a French military engineer who invented the torsion balance---a fibre that twists in response to tiny forces---to measure the force between charged objects. In 1785, he announced the law that now bears his name.
+
+What makes his achievement remarkable is the precision he achieved. The force between two charges is so tiny that, before the torsion balance, no one had been able to measure its dependence on distance. Coulomb measured it at multiple distances and confirmed the inverse square law with the instruments available in the eighteenth century---a feat of experimental delicacy.
+\end{historybox}
+
+\subsection{Coulomb's Law}
+
+The force between two point charges $q_1$ and $q_2$ separated by distance $r$ is:
+
+\begin{equation}
+  \boxed{F = k\frac{q_1 q_2}{r^2}}
+\end{equation}
+
+where $k = \SI{8.99e9}{N.m^2/C^2}$ is Coulomb's constant, and $C$ (coulomb) is the SI unit of charge. Equivalently, $k = 1/(4\pi\varepsilon_0)$ where $\varepsilon_0 = \SI{8.85e-12}{C^2/(N.m^2)}$ is called the \textbf{permittivity of free space}---a constant we will meet again in a very different context.
+
+The sign of the force tells us the direction: if $q_1 q_2 > 0$ (same sign), the force is repulsive (positive = away from each other); if $q_1 q_2 < 0$ (opposite signs), it is attractive.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_single_charge}
+\caption{Electric field lines around a single positive charge (left) and a single negative charge (right). The structure is identical to the gravitational field, but charge can be positive or negative---hence the two cases. Note the radial symmetry and the inverse square falloff of density with distance.}
+\label{fig:single_charge}
+\end{figure}
+
+\begin{explobox}
+\problem The charge of a proton is $e = \SI{1.6e-19}{C}$ and its mass is $m_p = \SI{1.67e-27}{kg}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Calculate the electrostatic force between a proton and an electron separated by $\SI{5.3e-11}{m}$ (the Bohr radius of hydrogen).
+  \item Calculate the gravitational force between them at the same distance.
+  \item What is the ratio of electrical to gravitational force?
+  \item Why, given that electricity is so much stronger, does gravity dominate at large scales (planets, stars, galaxies)?
+\end{enumerate}
+
+\problem Two small charged spheres, each of mass $\SI{0.01}{kg}$ and carrying charge $q$, are hung from the same point by strings of length $\SI{0.3}{m}$. They hang at an angle and repel each other such that they are $\SI{0.1}{m}$ apart. Find $q$. (Draw a force diagram first---three forces act on each sphere: gravity, tension, and electrical repulsion.)
+
+\problem Three charges are placed on a line:
+\begin{itemize}[leftmargin=1.5em]
+  \item $q_1 = +\SI{2}{\mu C}$ at $x = 0$
+  \item $q_2 = -\SI{3}{\mu C}$ at $x = \SI{0.4}{m}$
+  \item $q_3 = +\SI{1}{\mu C}$ at $x = \SI{0.8}{m}$
+\end{itemize}
+Find the net force on $q_3$. In which direction does it point?
+
+\problem \textit{Earnshaw's theorem.} Can a positive charge be in stable equilibrium due to electrostatic forces alone---surrounded by other fixed charges that prevent it from moving in any direction? Investigate this with a simple arrangement: place equal positive charges at the four corners of a square, and a positive test charge at the centre. Is the equilibrium stable (does it return to centre if displaced) or unstable?
+\end{explobox}
+
+\subsection{The Electric Field}
+
+Exactly as with gravity, we define the electric field as the force per unit (positive) test charge:
+
+\begin{equation}
+  \boxed{\bm{E}(\bm{r}) = \frac{\bm{F}}{q_0} = k\frac{Q}{r^2}\hat{r}}
+\end{equation}
+
+where $Q$ is the source charge and $q_0$ is the test charge. The field exists at every point in space, independent of whether a test charge is placed there.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{figures/fig_j3_dipole_like}
+\caption{Left: the field of an electric dipole (opposite charges). Field lines leave the positive charge and terminate on the negative charge. Right: the field of two like charges (both positive). Field lines push away from each other; a null point (zero field) exists between them.}
+\label{fig:dipole}
+\end{figure}
+
+\begin{explobox}
+\problem A charge $Q = +\SI{5}{\mu C}$ is at the origin.
+\begin{enumerate}[label=(\alph*)]
+  \item Find the electric field vector at the point $(3, 4, 0)\,\si{m}$.
+  \item Find its magnitude and direction.
+  \item A charge $q = -\SI{2}{\mu C}$ is placed at that point. What force does it experience?
+\end{enumerate}
+
+\problem An electric dipole consists of charges $+q$ and $-q$ separated by distance $d$ along the $x$-axis, centred at the origin. Find the electric field at a point on the $y$-axis (perpendicular bisector) at distance $y \gg d$. Show it falls as $1/y^3$---faster than a single charge's $1/r^2$. Why does the field fall off faster for a dipole?
+
+\problem Two equal positive charges $q$ are placed at $(\pm a, 0)$.
+\begin{enumerate}[label=(\alph*)]
+  \item Find the field at $(0, y)$ for general $y$.
+  \item At what value of $y$ is the field magnitude maximum?
+  \item Sketch the field as a function of $y$.
+\end{enumerate}
+
+\problem \textit{Field of a uniform line charge.} An infinite line along the $z$-axis carries charge per unit length $\lambda$ (\si{C/m}). By symmetry, the field must point radially outward perpendicular to the line.
+\begin{enumerate}[label=(\alph*)]
+  \item What law replaces the inverse square law here, and why? (Think about 2D geometry---the field spreads in 2D, not 3D.)
+  \item Find the field at distance $r$ from the line.
+  \item Compare to a point charge: how does the field fall with distance?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Electric Potential}
+
+As with gravity, the electric field has an associated scalar potential $V$:
+
+\begin{equation}
+  V(\bm{r}) = k\frac{Q}{r}
+  \qquad\text{so that}\qquad
+  \bm{E} = -\nabla V
+\end{equation}
+
+The potential energy of a charge $q$ at position $\bm{r}$ is $U = qV$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig_j3_grav_elec_compare}
+\caption{A comparison of gravitational and electric fields. The mathematical structure is identical; the physical character differs in two key ways: charge comes in two signs (gravity does not), and electricity is vastly stronger.}
+\label{fig:comparison}
+\end{figure}
+
+\begin{explobox}
+\problem The electric potential at distance $r$ from a $+\SI{1}{\mu C}$ charge is $V = kQ/r$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is $V$ at $r = \SI{0.1}{m}$? At $r = \SI{1}{m}$?
+  \item A $+\SI{2}{\mu C}$ test charge is moved from $r = \SI{1}{m}$ to $r = \SI{0.1}{m}$. How much work must be done against the electric force?
+  \item In which direction does the field push the test charge? Does this agree with the sign of the work you calculated?
+\end{enumerate}
+
+\problem A parallel plate capacitor has uniform electric field $E = \SI{10000}{V/m}$ between the plates, separated by $d = \SI{0.01}{m}$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the potential difference between the plates?
+  \item An electron is released from rest at the negative plate. What is its speed when it reaches the positive plate? (Use energy conservation.)
+  \item This same principle accelerates electrons in old cathode ray tubes and in particle accelerators. If an electron is accelerated through $\SI{e6}{V}$ (one megavolt), what is its final kinetic energy in joules? Its speed? (Careful: at high speeds, relativity modifies the answer.)
+\end{enumerate}
+
+\problem \textit{The van de Graaff generator.} A conducting sphere of radius $R$ carries total charge $Q$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that the potential at the surface is $V = kQ/R$.
+  \item If $R = \SI{0.5}{m}$, what charge is needed to create a potential of $\SI{1}{MV}$ at the surface?
+  \item The electric field at the surface is $E = Q/(4\pi\varepsilon_0 R^2)$. Air breaks down (sparks) when $E \approx \SI{3e6}{V/m}$. What is the maximum charge this sphere can hold before sparking?
+\end{enumerate}
+
+\problem \textit{Lightning.} The potential difference between a thundercloud and the ground is roughly $\SI{e8}{V}$ over a distance of about $\SI{2}{km}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Estimate the average electric field between cloud and ground.
+  \item This exceeds the breakdown field for air. What does this mean?
+  \item Lightning discharges approximately $5$ coulombs of charge in about $\SI{0.2}{s}$. What is the average current? The average power?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Gauss's Law: The Deep Structure}
+
+There is a more elegant formulation of the inverse-square electric field that connects directly to the geometric argument of Module 3.1. It is called \textbf{Gauss's Law}:
+
+\begin{equation}
+  \oint_S \bm{E} \cdot d\bm{A} = \frac{Q_{\text{enc}}}{\varepsilon_0}
+\end{equation}
+
+In words: the total electric flux through any closed surface equals the total enclosed charge divided by $\varepsilon_0$.
+
+This is the ``flux spreading over a sphere'' argument made precise. For a spherical surface of radius $r$ enclosing a charge $Q$:
+\begin{equation}
+  E \cdot 4\pi r^2 = \frac{Q}{\varepsilon_0}
+  \implies E = \frac{Q}{4\pi\varepsilon_0 r^2} = k\frac{Q}{r^2}
+\end{equation}
+Coulomb's law falls out automatically.
+
+\begin{explobox}
+\problem Use Gauss's Law (and symmetry) to find the electric field:
+\begin{enumerate}[label=(\alph*)]
+  \item Outside a uniformly charged solid sphere of radius $R$ and total charge $Q$.
+  \item Inside the same sphere (at radius $r < R$).
+  \item Outside an infinite uniformly charged plane with surface charge density $\sigma$ (\si{C/m^2}). What is the field? Does it depend on distance from the plane?
+\end{enumerate}
+
+\problem \textit{Faraday cage.} The electric field inside a conductor in electrostatic equilibrium is zero.
+\begin{enumerate}[label=(\alph*)]
+  \item Use Gauss's Law to show this implies that any excess charge resides on the surface.
+  \item A hollow conducting shell has no charge. Show using Gauss's Law that the field inside the hollow is zero, regardless of the external field.
+  \item This is why a car is a safe place during lightning: the metal body acts as a Faraday cage.
+\end{enumerate}
+\end{explobox}
+
+\begin{namebox}
+\textbf{Gauss's Law for gravity.} An identical law holds for gravity:
+\begin{equation}
+  \oint_S \bm{g} \cdot d\bm{A} = -4\pi G M_{\text{enc}}
+\end{equation}
+The total gravitational flux through any closed surface equals $-4\pi G$ times the enclosed mass. The negative sign reflects that gravity is attractive---field lines point inward.
+
+This equivalence between Gauss's law for electricity and gravity is not a coincidence. Both arise from the inverse square law, which arises from the geometry of three-dimensional space. The same mathematical structure---called a \textbf{Gauss-type law}---appears whenever a quantity spreads from a point source in three dimensions without being created or destroyed.
+\end{namebox}
+
+% ────────────────────────────────────────────────────────────────────────────
+\section{Module 3.4 — Faraday's Lines of Force}
+\label{sec:faraday_lines}
+
+\epigraph{\itshape
+  I am inclined to think that when we ultimately arrive at the
+  solution\ldots{} we shall find it to bear a strong analogy
+  to that of the vibrations of an elastic medium.
+}{--- Michael Faraday, \textit{Experimental Researches in Electricity}, 1846}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+Iron filings around a magnet form beautiful, structured curves. Is this just a visual trick---a convenient way to draw forces---or is there something physically real about the space between the magnet and the filing?
+\end{puzzlebox}
+
+\subsection{Michael Faraday: The Unlikely Theorist}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{teal}{M}}{ichael} Faraday was born in 1791 in a poor London family. His father was a blacksmith. At thirteen he was apprenticed to a bookbinder, and it was through binding the books of others that he educated himself. He read everything he bound---in particular, a copy of the \textit{Encyclopaedia Britannica} and Jane Marcet's \textit{Conversations on Chemistry}---and became fascinated with science.
+
+By extraordinary luck, he attended lectures by the chemist Humphry Davy, wrote up careful notes, and presented them to Davy as evidence of his seriousness. Davy hired him as a laboratory assistant. Within decades, Faraday had made some of the most important experimental discoveries in the history of physics: electromagnetic induction, the laws of electrolysis, the relationship between light and magnetism (Faraday rotation), and the concept of the field.
+
+He had almost no formal mathematics. He could not read the differential equations of his contemporaries. So instead he thought in pictures---in curves and lines and patterns. And in doing so, he saw something the mathematicians had missed: that the space between objects is not empty.
+
+\begin{historybox}
+Faraday's notebooks are extraordinary documents. He was meticulous, curious, and willing to follow a thread wherever it led. In 1831, he wrote down his hypothesis: ``The lines of magnetic force have a physical existence.'' At the time, this was considered mysticism by many professional scientists. Thirty years later, Maxwell translated Faraday's visual intuitions into differential equations---and the result was one of the greatest triumphs of theoretical physics.
+
+Faraday was also the inventor of the electric motor (1821), the transformer (1831), and the dynamo (1831). He refused a knighthood, reportedly saying he wanted to remain ``plain Michael Faraday.''
+\end{historybox}
+
+\subsection{The Three Rules of Field Lines}
+
+Field lines are not a vague metaphor. They obey precise rules that encode the mathematics of the field:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j3_field_rules}
+\caption{The three fundamental rules of field lines. Rule 1: Lines never cross (crossing would mean two field directions at one point, which is impossible). Rule 2: Density encodes strength (lines closer together means stronger field). Rule 3: Lines begin only on positive charges and end only on negative charges (or go to infinity if no opposite charge is present).}
+\label{fig:field_rules}
+\end{figure}
+
+\begin{principle}[Rules for Electric Field Lines]
+\leavevmode
+\begin{enumerate}[leftmargin=2em,itemsep=4pt]
+  \item \textbf{Direction.} Field lines are tangent to the field vector at every point. The direction of the line (indicated by arrows) gives the direction of $\bm{E}$.
+  \item \textbf{Density.} The number of lines passing through a unit area perpendicular to the field is proportional to $|\bm{E}|$.
+  \item \textbf{Origin and terminus.} Lines begin on positive charges and end on negative charges. In the absence of the opposite charge, they extend to infinity.
+  \item \textbf{No crossing.} Two field lines can never intersect (at a crossing point, the field would have to point in two directions simultaneously---impossible for a vector field).
+\end{enumerate}
+\end{principle}
+
+\begin{explobox}
+\problem Consider the field line patterns in Figure~\ref{fig:dipole} (the dipole and like charges).
+\begin{enumerate}[label=(\alph*)]
+  \item For the dipole: approximately how many field lines leave the positive charge? How many arrive at the negative? What does this tell you about the relative magnitudes of the charges?
+  \item For like charges: there is a point midway between the charges where the field is zero (a null point). What does this look like in the field line pattern? Can field lines pass through a null point?
+  \item If one charge were $+2q$ and the other $+q$, would the null point be at the midpoint, closer to the larger charge, or closer to the smaller? Justify your answer qualitatively, then verify algebraically.
+\end{enumerate}
+
+\problem Sketch the electric field lines for the following charge distributions:
+\begin{enumerate}[label=(\alph*)]
+  \item A charge of $+2q$ and a charge of $-q$ separated by distance $d$.
+  \item Four equal positive charges at the corners of a square.
+  \item A uniformly charged positive ring (viewed from the side).
+  \item An infinite plane of positive charge (edge-on view).
+\end{enumerate}
+For each: where is the field strongest? Where is it weakest? Are there null points?
+\end{explobox}
+
+\subsection{Magnetic Field Lines: Faraday's Major Contribution}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j3_faraday_patterns}
+\caption{Magnetic field line patterns for three configurations. Left: a single bar magnet---lines emerge from the north pole and curve back to the south. Centre: attracting magnets (N facing S)---field lines connect across the gap. Right: repelling magnets (N facing N)---lines push away; a null point exists at the midpoint. These patterns are visible with iron filings in a thin layer of oil.}
+\label{fig:faraday_patterns}
+\end{figure}
+
+The iron filing experiment is one of the most beautiful in all of physics. Sprinkle iron filings on a piece of paper placed over a bar magnet, tap gently. The filings align with the magnetic field---each tiny filing becomes a small magnet and orients along the local field direction. The result is a direct visual map of the invisible field structure.
+
+\begin{explobox}
+\problem From Figure~\ref{fig:faraday_patterns}, answer the following:
+\begin{enumerate}[label=(\alph*)]
+  \item For the single bar magnet: do field lines \textit{start} at the north pole and \textit{end} at the south pole, or do they form closed loops? Look carefully at the lines inside the magnet.
+  \item For the attracting configuration: where is the field strongest? How do you know from the diagram?
+  \item For the repelling configuration: describe the field at the null point. What would a compass needle do if placed exactly there?
+\end{enumerate}
+
+\problem \textit{A crucial difference from electric fields.} Electric field lines start on positive charges and end on negative charges. But magnetic field lines form \textbf{closed loops}---they have no beginning or end. What does this tell us about magnetic ``charges'' (monopoles)?
+\begin{enumerate}[label=(\alph*)]
+  \item If you cut a bar magnet in half, you get two smaller bar magnets, each with a north and south pole. Why does this support the claim that magnetic poles cannot be separated?
+  \item In mathematical terms, the fact that magnetic field lines have no sources or sinks is expressed as $\nabla \cdot \bm{B} = 0$ (Gauss's law for magnetism). This contrasts with $\nabla \cdot \bm{E} = \rho/\varepsilon_0$ (which has sources: charges). Explain the meaning of each equation in plain language.
+\end{enumerate}
+
+\problem \textit{Magnetic monopoles.} Paul Dirac showed in 1931 that if even one magnetic monopole existed anywhere in the universe, it would explain why electric charge is quantised (comes only in integer multiples of $e$). No monopole has ever been observed. This remains an open question:
+\begin{enumerate}[label=(\alph*)]
+  \item What experiment would you design to look for a magnetic monopole?
+  \item In 1982, Blas Cabrera reported a single event consistent with a monopole passing through a superconducting loop. No subsequent experiment has confirmed it. How should scientists respond to a single unrepeated observation?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Flux: Quantifying What Flows Through a Surface}
+
+Faraday's field lines give a visual representation. The quantitative version is \textbf{flux}---the total field ``flowing'' through a surface.
+
+For a uniform field $\bm{E}$ passing through a flat surface of area $A$ with normal unit vector $\hat{n}$:
+\begin{equation}
+  \Phi_E = \bm{E} \cdot \hat{n} \cdot A = EA\cos\theta
+\end{equation}
+where $\theta$ is the angle between the field and the surface normal.
+
+For a non-uniform field or curved surface, we integrate:
+\begin{equation}
+  \Phi_E = \int_S \bm{E} \cdot d\bm{A}
+\end{equation}
+
+\begin{explobox}
+\problem A uniform electric field $\bm{E} = E_0\hat{x}$ with magnitude $E_0 = \SI{500}{V/m}$ passes through a square surface of side $\SI{0.2}{m}$. Calculate the flux through the surface when:
+\begin{enumerate}[label=(\alph*)]
+  \item The surface is perpendicular to the field (normal parallel to $\hat{x}$).
+  \item The surface makes a $45°$ angle with the field.
+  \item The surface is parallel to the field (normal perpendicular to $\hat{x}$).
+\end{enumerate}
+
+\problem A charge $Q$ is placed at the centre of a cube of side $L$.
+\begin{enumerate}[label=(\alph*)]
+  \item What is the total electric flux through all six faces?
+  \item What is the flux through each face individually? (By symmetry, all faces are equal.)
+  \item Now move the charge to the corner of the cube. What is the total flux through the cube's faces now? (Be careful---what fraction of the total ``solid angle'' does the cube now subtend?)
+\end{enumerate}
+
+\problem \textit{Why flux is the right concept.} Consider two closed surfaces: a small sphere of radius $r_1$ and a large sphere of radius $r_2$, both centred on a point charge $Q$.
+\begin{enumerate}[label=(\alph*)]
+  \item Calculate the total flux through each sphere.
+  \item Compare. What does this tell you about the relationship between flux and the source charge?
+  \item This is the essence of Gauss's law: the total flux depends only on the enclosed charge, not on the size or shape of the surface. Why is this true?
+\end{enumerate}
+\end{explobox}
+
+\subsection{The Energy Stored in a Field}
+
+Faraday's insight that fields are physically real receives strong support from a remarkable fact: \textbf{fields carry energy}. This energy is stored in space itself, in proportion to the square of the field strength.
+
+For an electric field:
+\begin{equation}
+  u_E = \frac{1}{2}\varepsilon_0 E^2 \quad (\si{J/m^3})
+\end{equation}
+
+For a magnetic field (anticipating Module 3.5):
+\begin{equation}
+  u_B = \frac{1}{2\mu_0} B^2 \quad (\si{J/m^3})
+\end{equation}
+
+\begin{explobox}
+\problem The electric field just outside Earth's surface (due to its net charge) is approximately $\SI{130}{V/m}$. Estimate the total energy stored in Earth's electric field out to a distance of $\SI{1000}{km}$ above the surface. Is this a large or small amount of energy in practical terms?
+
+\problem A parallel plate capacitor with plate area $A$ and separation $d$ stores charge $Q$ and has energy $U = Q^2/(2C)$ where $C = \varepsilon_0 A/d$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that the energy can be written as $U = \frac{1}{2}\varepsilon_0 E^2 \cdot Ad$, where $E$ is the field between the plates.
+  \item Interpret this: the energy density is $\frac{1}{2}\varepsilon_0 E^2$, times the volume $Ad$. Where exactly is the energy stored?
+\end{enumerate}
+
+\problem \textit{A conceptual challenge.} A charge $Q$ exerts a force on a charge $q$ across empty space. Before you learned about fields, you might have said: ``the energy is in the interaction between the charges.'' Now you say: ``the energy is in the field.'' Are these two descriptions equivalent? Can you think of an experiment or situation that would distinguish between them? (Hint: think about what happens when you remove one charge and ask where the energy went.)
+\end{explobox}
+
+\begin{discoverybox}
+\textbf{Faraday's legacy.} By insisting that field lines are physically real---that the space between objects is modified by the presence of charge---Faraday did something more than describe electricity and magnetism. He changed the fundamental ontology of physics.
+
+Before Faraday, the world was made of particles that interact via forces. After Faraday (and after Maxwell translated his ideas into mathematics), the world is made of \textbf{fields}, with particles as sources and detectors. This conceptual shift---from particle to field---was completed by quantum field theory in the twentieth century, which holds that even the ``particles'' are themselves excitations of underlying fields.
+
+The iron filings pattern is not just pretty. It is a glimpse of the true structure of space.
+\end{discoverybox}
+
+\begin{reflectionbox}
+\textbf{Reflection: Modules 3.3--3.4.}
+
+Write two to three pages on the following:
+
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+  \item \textit{The sign problem.} Gravity is always attractive; electricity can be either. Both follow $1/r^2$. Why does the sign of charge not have a gravitational analogue? (Hint: consider what would happen if there were ``negative mass'' that repelled positive mass---could a universe with such negative mass be stable?)
+
+  \item \textit{Faraday's method.} Faraday had no mathematics but enormous physical intuition. Maxwell had enormous mathematics but needed Faraday's pictures to give them meaning. What does this suggest about the relationship between mathematical formalism and physical intuition in science? Which is more fundamental?
+
+  \item \textit{Field line rules and Maxwell's equations.} The four rules for field lines each correspond to one of Maxwell's four equations. Rule 3 (lines begin on positive charges) is Gauss's law ($\nabla \cdot \bm{E} = \rho/\varepsilon_0$). The fact that magnetic field lines close on themselves is $\nabla \cdot \bm{B} = 0$. The other two equations describe how changing fields create each other---which you will encounter in Module 3.6. Can you already guess what those equations say, from the field-line picture?
+\end{enumerate}
+\end{reflectionbox}
+
+% ════════════════════════════════════════════════════════════════════════════
+\chapter*{Module Summary: 3.3--3.4}
+\addcontentsline{toc}{chapter}{Module Summary: 3.3--3.4}
+\markboth{Module Summary: 3.3--3.4}{}
+
+\begin{tcolorbox}[enhanced,colback=deep!4,colframe=deep,
+  title={\bfseries\color{white} Key Ideas: Modules 3.3--3.4},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+
+\textbf{Module 3.3 --- Electric Charge and Its Patterns}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Coulomb's law: $F = kq_1q_2/r^2$, same inverse-square structure as gravity
+  \item Electric field: $\bm{E} = \bm{F}/q_0$; exists at every point in space
+  \item Crucial difference: charge comes in $+$ and $-$; gravity has no negative mass
+  \item Electricity is $10^{36}$ times stronger than gravity between elementary particles
+  \item Gauss's law: $\oint \bm{E}\cdot d\bm{A} = Q_{\text{enc}}/\varepsilon_0$ --- inverse square from 3D geometry
+  \item Electric potential: $V = kQ/r$; field lines perpendicular to equipotentials
+\end{itemize}
+
+\vspace{6pt}
+\textbf{Module 3.4 --- Faraday's Lines of Force}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Field lines: direction = field direction; density = field strength; never cross
+  \item Electric field lines: start on $+$ charges, end on $-$ charges
+  \item Magnetic field lines: always closed loops---no magnetic monopoles observed
+  \item Flux: $\Phi = \int \bm{E}\cdot d\bm{A}$; Gauss's law relates flux to enclosed charge
+  \item Fields carry energy: $u_E = \frac{1}{2}\varepsilon_0 E^2$, $u_B = B^2/(2\mu_0)$
+  \item Faraday's conceptual revolution: fields are physically real, not just calculational tools
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.6cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[teal,line width=1.5pt] (0,0) -- (12,0);
+  \node[below,teal] at (6,-0.1)
+    {\small\itshape End of Modules 3.3--3.4. Next: Magnetic Fields and Moving Charges (Module 3.5).};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5cm}
+\begin{center}
+{\large\textcolor{deep}{\textbf{Coming in Module 3.5:}}}\\[6pt]
+{\itshape\textcolor{midblue}{%
+A wire carrying a current deflects a compass needle.\\[3pt]
+Moving charge creates a magnetic field.\\[3pt]
+And changing magnetic fields create electric fields.\\[3pt]
+The two fields are not independent---they dance together.
+}}
+\end{center}
+
+\end{document}

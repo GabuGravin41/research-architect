@@ -1,0 +1,475 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.8cm, bottom=2.8cm, left=3.0cm, right=2.5cm, includeheadfoot, headheight=15pt]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue}
+
+% ── Colours ─────────────────────────────────────────────────
+\definecolor{NavyBlue}{HTML}{1E3A8A}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{D97706}
+\definecolor{LightBlue}{HTML}{EFF6FF}
+\definecolor{LightGold}{HTML}{FEF3C7}
+\definecolor{DarkGrey}{HTML}{334155}
+\definecolor{BoxGreen}{HTML}{F0FDF4}
+\definecolor{SoftRed}{HTML}{FFF1F2}
+\definecolor{SidebarGrey}{HTML}{F8FAFC}
+
+% ── Section formatting ───────────────────────────────────────
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{Gold}}{}{0em}{}
+
+% ── Header / Footer ─────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 5 $\cdot$ Module 4}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Environments (tcolorbox Unification) ─────────────────────
+
+% Puzzle box — opening problem
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=NavyBlue!5, colframe=NavyBlue,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Discovery box — moment of crystallisation
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=LightGold, colframe=Gold,
+  boxrule=0pt, leftrule=2.5pt,
+  sharp corners,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Name box — formal definition reveal
+\newtcolorbox{namebox}[1][]{
+  enhanced, breakable,
+  colback=LightBlue, colframe=MidBlue,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Reflection box
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=BoxGreen, colframe=DarkGrey!35,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=12pt, right=10pt, top=10pt, bottom=10pt,
+  before skip=14pt, after skip=10pt,
+  #1
+}
+
+% Thought provocation — inline philosophical aside
+\newtcolorbox{thought}[1][]{
+  enhanced, breakable,
+  colback=SidebarGrey, colframe=Gold,
+  boxrule=0pt, leftrule=1.5pt,
+  sharp corners,
+  left=10pt, right=10pt, top=7pt, bottom=7pt,
+  before skip=10pt, after skip=10pt,
+  #1
+}
+
+% Problem counter
+\newcounter{problem}
+\newenvironment{problem}[1][]{%
+  \refstepcounter{problem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{MidBlue}Problem \theproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Deep problem counter
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{%
+  \refstepcounter{deepproblem}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+% Exercise counter
+\newcounter{exercise}
+\newenvironment{exercise}[1][]{%
+  \refstepcounter{exercise}%
+  \par\vspace{6pt}%
+  \noindent\textbf{\color{Gold}Exercise \theexercise}%
+  \ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip
+}{\par\vspace{4pt}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 5: UNCERTAINTY}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 4}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Generating Functions and Random Walks}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+Algebra meets probability.\\[0.15cm]
+How can a formal power series solve the return of a random walk?}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}           & Journey 5 --- Uncertainty \\[4pt]
+\color{DarkGrey}\textbf{Module}            & 4 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites}     & Module 3 (expectation, variance, limits, limits of series) \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & PGFs, independent sums, 1D random walks, Pólya's recurrence theorem \\[4pt]
+\color{DarkGrey}\textbf{Format}            & 8 problems $+$ 3 deep problems $\approx$ 13 pages \\
+\end{tabular}
+\vspace{1cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+\noindent\textbf{Recap of Module 3.}
+Module~3 transitioned probability from discrete variables to continuous densities. You defined probability density functions (PDFs) and cumulative distribution functions (CDFs), calculated expectations and variances using integrals, and proved the Weak Law of Large Numbers and the Central Limit Theorem.
+
+\medskip
+This module brings algebra to probability. When dealing with random variables taking non-negative integer values, we can package their entire probability distribution into the coefficients of a formal power series. This algebraic trick allows us to solve complex recurrences and prove Pólya's famous theorem on random walks: "A drunk man will find his way home, but a drunk bird may get lost forever."
+
+\newpage
+
+% ============================================================
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+% ============================================================
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle: Lost on a Grid.}
+
+A walker stands at the origin of a $d$-dimensional grid ($\mathbb{Z}^d$). At each step, they choose one of the $2d$ cardinal directions uniformly at random and take a single step of length 1.
+* In 1D ($d=1$), they step left or right with probability 1/2.
+* In 2D ($d=2$), they step up, down, left, or right with probability 1/4.
+* In 3D ($d=3$), they choose one of the six directions with probability 1/6.
+
+\medskip
+\textbf{Question 1.} In 1D, they start at 0. After $2n$ steps, what is the probability that they are back at the origin? (Why is it impossible to be back at 0 after an odd number of steps?)
+
+\textbf{Question 2.} Let $p_{d}$ be the probability that the walker will \emph{eventually} return to the origin at least once, given that they start at 0. What is your intuition for how $p_{d}$ changes as the dimension $d$ increases? Does a walker always return?
+
+\textbf{Question 3.} (Pólya's Paradox.) Shizuo Kakutani famously described Pólya's result: \textit{``A drunk man will find his way home, but a drunk bird may get lost forever.''} Mathematically, $p_1 = p_2 = 1$, but $p_3 < 1$. Why does adding a third dimension break the guarantee of returning home? What is the mathematical boundary between recurrence and transience?
+\end{puzzlebox}
+
+\newpage
+
+% ============================================================
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+% ============================================================
+
+\subsection{Step 1: Probability Generating Functions}
+
+We represent discrete integer-valued random variables using algebraic power series.
+
+\begin{problem}
+\label{prob:pgf_definition}
+Let $X$ be a random variable taking values in $\{0, 1, 2, \ldots\}$. The **probability generating function** (PGF) of $X$ is the formal power series:
+\[
+  G_X(s) \;=\; E[s^X] \;=\; \sum_{k=0}^\infty P(X = k) s^k.
+\]
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Show that the power series converges for all $|s| \le 1$. What is the value of $G_X(1)$?
+  \item Prove that the $n$-th derivative evaluated at $s=0$ extracts the probabilities:
+  \[
+    P(X = n) \;=\; \frac{G_X^{(n)}(0)}{n!}.
+  \]
+  \item Let $X \sim \text{Bernoulli}(p)$. Write down its PGF.
+  \item Let $X \sim \text{Poisson}(\lambda)$. Show that $G_X(s) = e^{-\lambda(1-s)}$.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 2: Expectations and Independent Sums}
+
+We discover how generating functions turn probability operations into algebraic ones.
+
+\begin{problem}
+\label{prob:pgf_moments}
+Expectations can be extracted directly by evaluating derivatives of PGFs at $s = 1$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Prove that:
+  \[
+    E[X] \;=\; G'_X(1) \quad \text{and} \quad \text{Var}(X) \;=\; G''_X(1) + G'_X(1) - (G'_X(1))^2.
+  \]
+  \item Let $X$ and $Y$ be independent random variables taking values in $\{0, 1, \ldots\}$. Prove that the PGF of their sum is the product of their PGFs:
+  \[
+    G_{X+Y}(s) \;=\; G_X(s) \cdot G_Y(s).
+  \]
+  \item Let $X_1, \ldots, X_n$ be i.i.d. Bernoulli($p$) trials. Use (b) to derive the PGF of their sum $S_n$ (which is Binomial).
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{The Magic of Convolution.}
+When we add two independent random variables, the probability of the sum is a **convolution**: $P(X+Y=k) = \sum P(X=i)P(Y=k-i)$. Calculating this directly is tedious. PGFs turn this convolution of coefficients into a simple multiplication of functions. This is the algebraic equivalent of the Fourier transform used in continuous probability (characteristic functions).
+\end{thought}
+
+\subsection{Step 3: Random Walks in One Dimension}
+
+We model a walker stepping left or right on a line.
+
+\begin{problem}
+\label{prob:rw_1d}
+Let $X_i = 1$ with probability $1/2$, and $-1$ with probability $1/2$. Let $S_n = \sum_{i=1}^n X_i$ be the position of the walker at step $n$, starting with $S_0 = 0$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Let $u_{2n} = P(S_{2n} = 0)$. Show that $u_{2n} = \binom{2n}{n} 2^{-2n}$.
+  \item Define the generating function of the return probabilities: $U(s) = \sum_{n=0}^\infty u_{2n} s^{2n}$. Use the generalized binomial theorem to prove:
+  \[
+    U(s) \;=\; \frac{1}{\sqrt{1 - s^2}}.
+  \]
+  \item Let $f_{2n}$ be the probability that the walker returns to the origin for the \emph{first} time at step $2n$. Define $F(s) = \sum_{n=1}^\infty f_{2n} s^{2n}$. Prove the fundamental relation:
+  \[
+    U(s) \;=\; 1 + U(s)F(s).
+  \]
+  \textit{Hint: Decompose any return at step $2n$ by the step $2k$ of its first return.}
+  \item Solve for $F(s)$ in terms of $U(s)$ and show that $F(s) = 1 - \sqrt{1 - s^2}$.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 4: Recurrence vs. Transience}
+
+We evaluate if the walker will ever return home.
+
+\begin{problem}
+\label{prob:recurrence}
+Let $f = \sum_{n=1}^\infty f_{2n} = F(1)$ be the probability of eventually returning to the origin.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Using the formula for $F(s)$ from Problem~\ref{prob:rw_1d}, evaluate $f = F(1)$. Confirm that $f = 1$ (the 1D walk is **recurrent**).
+  \item Show that the expected number of returns to the origin is $\sum_{n=0}^\infty u_{2n} = U(1) = \infty$.
+  \item **General Boundary:** A random walk is recurrent if and only if the sum of return probabilities diverges: $\sum_{n=0}^\infty u_n = \infty$.
+  \item In 3D, the return probability behaves like $u_{2n} \propto n^{-3/2}$ as $n \to \infty$. Explain why this implies that the 3D random walk is **transient** ($p_3 < 1$).
+\end{enumerate}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The probability generating function $G(s) = E[s^X]$ packages a discrete probability sequence into an algebraic power series, converting probability convolutions into simple function multiplications.
+
+\textbf{Second.} The moments of a distribution can be extracted directly from the derivatives of its PGF evaluated at $s = 1$.
+
+\textbf{Third.} The return of a random walk is governed by the relation $U(s) = 1 + U(s)F(s)$, which separates any return from the first return.
+
+\textbf{Fourth.} Random walks in 1D and 2D are recurrent (return probability is 1). In 3D and higher, the space is large enough that return is no longer guaranteed; the walk is transient.
+\end{discoverybox}
+
+\newpage
+
+% ============================================================
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+% ============================================================
+
+\begin{namebox}
+\textbf{Generating Functions and Recurrence.}
+
+Let $X$ take values in $\{0, 1, 2, \dots\}$.
+* **PGF:** $G_X(s) = E[s^X] = \sum_{k=0}^\infty P(X=k) s^k$.
+* **Expectation:** $E[X] = G'_X(1)$.
+* **Independent Sums:** $G_{X+Y}(s) = G_X(s) G_Y(s)$.
+
+\medskip
+\textbf{Random Walk Properties:}
+
+Let $S_n$ be a random walk starting at 0.
+* **Return Probability:** $u_n = P(S_n = 0)$, with generating function $U(s) = \sum_n u_n s^n$.
+* **First Return Probability:** $f_n$ is the probability of the first return at step $n$, with generating function $F(s) = \sum_n f_n s^n$.
+* **Relation:** $U(s) = 1 + U(s)F(s) \implies F(s) = 1 - \frac{1}{U(s)}$.
+* **Recurrence:** The walk is **recurrent** if $F(1) = 1$, which is equivalent to $\sum_n u_n = U(1) = \infty$. Otherwise, it is **transient** ($F(1) < 1$).
+\end{namebox}
+
+\newpage
+
+% ============================================================
+\section{Part 5 \texorpdfstring{---}{--} Solved Exercises}
+% ============================================================
+
+\begin{exercise}[Sum of Independent Poisson Variables]
+Let $X \sim \text{Poisson}(\lambda)$ and $Y \sim \text{Poisson}(\mu)$ be independent random variables. Prove that their sum $Z = X + Y$ is distributed as $\text{Poisson}(\lambda + \mu)$ using PGFs.
+\end{exercise}
+
+\begin{proof}[Solution]
+We first write down the PGF of $X \sim \text{Poisson}(\lambda)$:
+\[
+  G_X(s) = \sum_{k=0}^\infty e^{-\lambda} \frac{\lambda^k}{k!} s^k = e^{-\lambda} \sum_{k=0}^\infty \frac{(\lambda s)^k}{k!} = e^{-\lambda} e^{\lambda s} = e^{-\lambda(1-s)}.
+\]
+Similarly, the PGF of $Y \sim \text{Poisson}(\mu)$ is:
+\[
+  G_Y(s) = e^{-\mu(1-s)}.
+\]
+Since $X$ and $Y$ are independent, the PGF of their sum $Z = X + Y$ is the product of their PGFs:
+\[
+  G_Z(s) = G_X(s) \cdot G_Y(s) = e^{-\lambda(1-s)} \cdot e^{-\mu(1-s)} = e^{-(\lambda + \mu)(1-s)}.
+\]
+Observe that $e^{-(\lambda + \mu)(1-s)}$ is precisely the PGF of a Poisson random variable with parameter $\lambda + \mu$. Since the generating function uniquely determines the distribution, it follows that:
+\[
+  Z \;\sim\; \text{Poisson}(\lambda + \mu).
+\]
+This completes the proof.
+\end{proof}
+
+\begin{exercise}[PGF of the Binomial Distribution]
+Use the PGF of the Binomial distribution to calculate its expected value and variance.
+\end{exercise}
+
+\begin{proof}[Solution]
+Let $X \sim \text{Binomial}(n, p)$. Since $X$ is the sum of $n$ independent Bernoulli($p$) trials, and the PGF of a single Bernoulli trial is $G_I(s) = (1-p) + ps$, the PGF of $X$ is:
+\[
+  G_X(s) \;=\; \bigl( (1-p) + ps \bigr)^n.
+\]
+To find the expected value:
+\[
+  G'_X(s) = n \bigl( (1-p) + ps \bigr)^{n-1} \cdot p.
+\]
+Evaluating at $s = 1$:
+\[
+  E[X] = G'_X(1) = n \bigl( (1-p) + p \bigr)^{n-1} p = np.
+\]
+To find the variance, we calculate the second derivative:
+\[
+  G''_X(s) = n(n-1) \bigl( (1-p) + ps \bigr)^{n-2} \cdot p^2.
+\]
+Evaluating at $s = 1$:
+\[
+  G''_X(1) = n(n-1) p^2.
+\]
+Thus, the variance is:
+\[
+  \text{Var}(X) = G''_X(1) + G'_X(1) - (G'_X(1))^2 = n(n-1)p^2 + np - (np)^2 = n^2 p^2 - n p^2 + np - n^2 p^2 = np(1-p).
+\]
+This matches the result derived in Module 2.
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Part 6 \texorpdfstring{---}{--} Problems}
+% ============================================================
+
+\begin{problem}[PGF of the Geometric Distribution]
+Let $X \sim \text{Geometric}(p)$ with PMF $P(X = k) = (1-p)^{k-1}p$ for $k \ge 1$.
+\begin{enumerate}[label=(\alph*)]
+  \item Calculate the PGF $G_X(s)$. For what values of $s$ does it converge?
+  \item Use $G'_X(1)$ to find the expected value $E[X]$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[Catalan Numbers Recurrence]
+In Module 1, we introduced the Catalan numbers $C_n = \frac{1}{n+1}\binom{2n}{n}$, which satisfy the recurrence relation:
+\[
+  C_n \;=\; \sum_{i=0}^{n-1} C_i C_{n-1-i} \quad \text{for } n \ge 1, \qquad C_0 = 1.
+\]
+Let $C(x) = \sum_{n=0}^\infty C_n x^n$ be their generating function.
+\dots
+Show that the recurrence relation implies:
+\[
+  x C(x)^2 - C(x) + 1 \;=\; 0.
+\]
+Solve this quadratic equation for $C(x)$. Explain why we must choose the negative square root: $C(x) = \frac{1 - \sqrt{1 - 4x}}{2x}$.
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 7 \texorpdfstring{---}{--} Deep Problems}
+% ============================================================
+
+\begin{deepproblem}[Pólya's Recurrence Theorem in 1D]
+Show that the first return generating function for a 1D symmetric random walk is $F(s) = 1 - \sqrt{1 - s^2}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Expand $F(s)$ using the generalized binomial theorem to show that:
+  \[
+    f_{2n} \;=\; \frac{1}{2n-1} \binom{2n}{n} 2^{-2n}.
+  \]
+  \item Prove that $\sum_{n=1}^\infty f_{2n} = F(1) = 1$. What does this mean physically?
+  \item Show that the expected number of steps to return to the origin is:
+  \[
+    E[\text{steps to return}] \;=\; F'(1) \;=\; \infty.
+  \]
+  Explain this paradoxical result: the walker is guaranteed to return to the origin, but the expected time to do so is infinite.
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Transience of the 3D Random Walk]
+In 3D, a walker at each step moves to one of the six neighbors with probability 1/6.
+\begin{enumerate}[label=(\alph*)]
+  \item Show that the probability of being at the origin at step $2n$ is:
+  \[
+    u_{2n} \;=\; 6^{-2n} \sum_{i+j+k=n} \frac{(2n)!}{(i!j!k!)^2}.
+  \]
+  \item Show that this sum is bounded above by $C \cdot n^{-3/2}$.
+  \item Show that $\sum u_{2n}$ converges, proving that the return probability $F(1) < 1$. (Pólya calculated this return probability to be approximately $0.3405$).
+\end{enumerate}
+\end{deepproblem}
+
+\newpage
+
+% ============================================================
+\section{Part 8 \texorpdfstring{---}{--} Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Recurrence and Transience:** A random walk in 2D is recurrent, but in 3D it is transient. What does this tell you about the geometry of space? Why does adding a third dimension create enough "room" for the walker to get lost forever?
+  \item **On expectations:** The expected number of steps to return to 0 in a 1D walk is infinite, even though the return is guaranteed with probability 1. How can you reconcile these two facts?
+  \item **On algebra and probability:** Generating functions represent sequences as coefficients of polynomials. Why is the interface between algebra (power series) and probability (distributions) so deep?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~5 introduces **Markov Chains**. We will generalize our random walks to structures where the probability of the next step depends on the current state. We will discover steady states, stationary distributions, and transition matrices. Symmetries in walks will meet matrix algebra.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 5, Module 4 --- Generating Functions and Random Walks}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 5 --- Markov Chains and Transition Matrices}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

@@ -1,0 +1,382 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{2}
+\chapter[Journey 3 --- Automata, Complexity, and the Limits of Computation]
+        {Journey Three\\[8pt]
+         \textcolor{ModuleColor}{\large Automata, Complexity, and the Limits of Computation}}
+\setcounter{section}{2}
+
+\section{Module 3.3 --- Turing Machines and the Limits of Decidability}
+\label{sec:mod3.3}
+
+\subsection*{Motivation}
+
+We explored in Module 3.2 pushdown automata, which resolve nested languages using stack memories.
+However, a stack is still a highly limited memory structure: we can only write and read from the very top.
+To study the absolute mathematical limits of physical computation, we must remove all memory constraints.
+
+In 1936, mathematician Alan Turing formalized the ultimate model of computation: the **Turing Machine**.
+Equipped with an infinite, random-access paper tape, this simple machine can execute any calculation that can be described by an algorithm.
+But removing hardware limits does not make all problems solvable.
+This module formalizes the Turing Machine, introduces the Church-Turing Thesis, and proves Turing's most famous result: the **Halting Problem** is undecidable.
+We will discover that some questions remain forever beyond the reach of any computer.
+
+\subsection{The Halting Problem}
+
+We investigate the paradox of a program that analyzes its own execution.
+
+\begin{puzzlebox}
+\textbf{The Infinite Loop Detector.}
+
+Suppose we want to write a program $H$ (a "Halting Analyzer") that takes two inputs:
+1. The source code of *any* program $M$.
+2. An input string $w$.
+The program $H$ must analyze the code of $M$ and decide:
+* Return **Accept** if $M$ halts (finishes executing) on input $w$.
+* Return **Reject** if $M$ loops forever on input $w$.
+We want $H$ to always return a correct answer in a finite time for any input program.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Why can we not implement $H$ simply by running $M$ on $w$ and waiting to see what happens? (What if $M$ has been running for three days—how do we distinguish a slow program from an infinite loop?)
+  \item Suppose such a program $H$ exists. We construct a new, paradoxical program $D$ that takes the code of a program $\langle M \rangle$ as input:
+        * $D$ runs $H$ on the inputs $\langle M, \langle M \rangle \rangle$.
+        * If $H$ returns Accept (meaning $M$ halts), $D$ enters an infinite loop.
+        * If $H$ returns Reject (meaning $M$ loops), $D$ halts and exits immediately.
+        What happens if we run the program $D$ on its own source code $\langle D \rangle$?
+        * If $D$ halts on $\langle D \rangle$, show that the analyzer $H$ forces it to loop forever.
+        * If $D$ loops forever on $\langle D \rangle$, show that $H$ forces it to halt immediately.
+  \item How does this contradiction prove that it is mathematically impossible to write a general program $H$ that decides halting?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{The Formal Turing Machine}
+
+We define the mathematical tuple that formalizes universal computation.
+
+\begin{namedconcept}{The Turing Machine Tuple}
+A \newterm{Turing Machine (TM)} is a 7-tuple $(Q, \Sigma, \Gamma, \delta, q_0, q_{\text{accept}}, q_{\text{reject}})$, where:
+1. $Q$ is a finite set of **states**.
+2. $\Sigma$ is the **input alphabet** (not containing the blank symbol $\sqcup$).
+3. $\Gamma$ is the **tape alphabet**, where $\Sigma \subset \Gamma$ and $\sqcup \in \Gamma$.
+4. $\delta: Q \times \Gamma \to Q \times \Gamma \times \{L, R\}$ is the **transition function**, yielding: a next state, a symbol to write, and a direction to move the tape head (Left or Right).
+5. $q_0 \in Q$ is the **start state**.
+6. $q_{\text{accept}} \in Q$ is the **accept state**.
+7. $q_{\text{reject}} \in Q$ is the **reject state** ($q_{\text{reject}} \neq q_{\text{accept}}$).
+\end{namedconcept}
+
+\begin{explobox}
+We distinguish two classes of languages:
+* **Turing-Decidable:** A language recognized by a TM that halts on *every* input (either accepting or rejecting).
+* **Turing-Recognizable:** A language recognized by a TM that halts and accepts when the string is in the language, but may loop forever if it is not.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item State the **Church-Turing Thesis**. Why does it assert that the Turing Machine represents the absolute limit of what any physical computer can compute?
+  \item If a language $L$ is Turing-decidable, explain why its complement $\overline{L}$ must also be Turing-decidable. (How do we modify the decider for $L$ to decide $\overline{L}$?)
+  \item If a language $L$ and its complement $\overline{L}$ are both Turing-recognizable, prove that $L$ must be Turing-decidable. (Hint: Run the recognizers for $L$ and $\overline{L}$ in parallel on the input string, step-by-step. Why is one of them guaranteed to halt?)
+\end{enumerate}
+\end{explobox}
+
+\subsection{Reductions and Rice's Theorem}
+
+We study how to prove undecidability by showing one problem reduces to another.
+
+\begin{explobox}
+Once we have proved that the halting language $A_{TM} = \{\langle M, w \rangle : M \text{ is a TM that accepts } w\}$ is undecidable, we can prove other problems are undecidable using **reductions**.
+To prove a problem $X$ is undecidable: we show that if we could solve $X$, we could use that solution as a subroutine to solve $A_{TM}$ (which is impossible).
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Let $HALT_{\emptyset} = \{\langle M \rangle : M \text{ is a TM that halts on an empty tape}\}$.
+        We reduce $A_{TM}$ to $HALT_{\emptyset}$.
+        Given $\langle M, w \rangle$, we construct a new machine $M_w$ that does the following:
+        * $M_w$ ignores its input, writes $w$ on the tape, and then runs $M$.
+        Show that $M_w$ halts on an empty tape if and only if $M$ halts on $w$.
+        Why does this prove that deciding if a program halts on an empty tape is undecidable?
+  \item **Rice's Theorem:** Let $P$ be any non-trivial property of the language recognized by a Turing Machine.
+        Prove that $P$ is undecidable.
+        What does this theorem reveal about static code analyzers? (Why can no compiler verify if a program's output matches its specification without running it?)
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The Turing Machine formalizes universal computation using a finite state controller and an infinite random-access tape.
+
+\textbf{Second.} Decidable languages represent problems that can be solved by algorithms that always halt. Recognizable languages allow the machine to loop forever on invalid inputs.
+
+\textbf{Third.} The Halting Problem ($A_{TM}$) is undecidable. This is proved using Cantor's diagonalization method to construct a self-referential paradox.
+
+\textbf{Fourth.} Rice's theorem states that any non-trivial semantic property of a program's behavior is undecidable, placing a fundamental mathematical limit on software verification.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Decidability Parameters}
+* **Turing Machine:** The formal mathematical model of a computer, possessing infinite tape storage.
+* **Decidable Language:** A language for which there exists an algorithm that correctly decides membership and always halts.
+* **Recognizable Language:** A language for which a machine can identify valid members, but may loop indefinitely on invalid inputs.
+* **Diagonalization:** The mathematical proof technique (due to Georg Cantor) that uses self-reference to construct contradictions.
+* **Reduction:** The process of mapping one problem to another to transfer properties like decidability or complexity.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Turing Machine for Divisibility by Two Powers.}
+  
+        Describe the high-level algorithm of a Turing Machine that decides the language $L = \{0^{2^n} : n \ge 0\}$ over the alphabet $\Sigma = \{0\}$.
+        
+        \textbf{Solution:}
+        A string of 0s belongs to $L$ if its length is a power of 2: $1, 2, 4, 8, 16, \dots$.
+        We can decide this language on a Turing Machine by repeatedly dividing the length of the string of 0s by 2.
+        
+        The high-level algorithm:
+        1. Sweep the tape from left to right, crossing out every second $0$ (replacing it with an $X$ marker).
+        2. During this sweep:
+           * If the tape contains only a single $0$ remaining, **Accept** (the initial length was a power of 2).
+           * If the tape contains an odd number of $0$s (greater than 1), **Reject** (the initial length had an odd factor, so it was not a power of 2).
+        3. Return the tape head to the left end of the tape and repeat from Step 1.
+        
+        Let us trace this on input $0000$ (length 4):
+        * Sweep 1: Write $X$ on second and fourth positions $\implies 0 X 0 X$.
+          * Remaining 0s: 2 (even). Return head to start.
+        * Sweep 2: Write $X$ on second remaining $0$ $\implies X X X X$.
+          * Remaining 0s: 1. **Accept** (length 4 $= 2^2$).
+          
+        Let us trace this on input $000$ (length 3):
+        * Sweep 1: Write $X$ on second position $\implies 0 X 0$.
+          * Remaining 0s: 2 (even). Return head to start.
+        * Sweep 2: Write $X$ on second remaining $0$ $\implies X X X$.
+          * Remaining 0s: 1. **Accept**? No, wait!
+          Let's retrace Sweep 1 for length 3:
+          Tape: $0 0 0$.
+          Head reads first $0$ (keeps it), reads second $0$ (writes $X$), reads third $0$ (keeps it).
+          The count of $0$s seen during this sweep is 3 (odd). Since the count is odd and greater than 1, we **Reject**.
+          The algorithm is correct.
+        
+  \item \textbf{Equivalence of Decidability and Complementary Recognizability.}
+  
+        Prove that a language $L$ is Turing-decidable if and only if both $L$ and its complement $\overline{L}$ are Turing-recognizable.
+        
+        \textbf{Solution:}
+        There are two directions to prove:
+        
+        **Direction 1: If $L$ is decidable, then both $L$ and $\overline{L}$ are recognizable.**
+        By definition, if $L$ is decidable, there exists a TM $M$ that decides $L$ (halts and accepts for $w \in L$; halts and rejects for $w \notin L$).
+        * To recognize $L$: we simply run $M$. Since $M$ always halts, this is a recognizer.
+        * To recognize $\overline{L}$: we construct a TM $M'$ that runs $M$ on the input. If $M$ accepts, $M'$ rejects; if $M$ rejects, $M'$ accepts. Since $M$ always halts, $M'$ always halts, so it recognizes $\overline{L}$.
+        Thus, both are recognizable.
+        
+        **Direction 2: If both $L$ and $\overline{L}$ are recognizable, then $L$ is decidable.**
+        Let $M_1$ be the TM recognizing $L$, and $M_2$ be the TM recognizing $\overline{L}$.
+        We construct a new TM $M$ to decide $L$ on input $w$:
+        1. Run $M_1$ and $M_2$ on input $w$ in parallel by interleaving their execution steps (execute step 1 of $M_1$, then step 1 of $M_2$, then step 2 of $M_1$, and so on).
+        2. Since any string $w$ must belong to either $L$ or $\overline{L}$, one of the two machines $M_1$ or $M_2$ is guaranteed to halt and accept:
+           * If $M_1$ halts and accepts, $M$ halts and **Accepts**.
+           * If $M_2$ halts and accepts, $M$ halts and **Rejects**.
+        Since one of them must halt, $M$ always halts, making it a decider for $L$.
+        This completes the proof.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{The Halting Problem on Blank Tape.}
+  
+        Let $HALT_{\emptyset} = \{\langle M \rangle : M \text{ is a TM that halts when started on an empty tape}\}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Prove that $HALT_{\emptyset}$ is undecidable by reducing the halting language $A_{TM}$ to it.
+                Specify how to transform a pair $\langle M, w \rangle$ into a single machine description $\langle M_w \rangle$.
+          \item If $HALT_{\emptyset}$ were decidable, explain how you would use it to solve $A_{TM}$.
+        \end{enumerate}
+
+  \item \textbf{Decidability of Regular Languages.}
+  
+        Unlike Turing Machine languages, properties of regular languages are decidable.
+        Let $E_{\text{DFA}} = \{\langle A \rangle : A \text{ is a DFA and } L(A) = \emptyset\}$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Describe an algorithm that decides $E_{\text{DFA}}$. (Hint: Think of the DFA transition diagram as a directed graph. How do we test if any accept state is reachable from the start state?)
+          \item Show that the language $EQ_{\text{DFA}} = \{\langle A, B \rangle : A, B \text{ are DFAs and } L(A) = L(B)\}$ is decidable.
+                \textit{Hint: Express the symmetric difference of the two languages, $(L(A) \cap \overline{L(B)}) \cup (\overline{L(A)} \cap L(B))$, and use the decider for $E_{\text{DFA}}$.}
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{The Busy Beaver Function and Uncomputability.}
+  
+        Let the alphabet be $\Sigma = \{1\}$.
+        The **Busy Beaver function** $\Sigma(n)$ is defined as the maximum number of 1s that an $n$-state Turing Machine (with tape alphabet $\{\sqcup, 1\}$) can write on an initially blank tape before halting.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain why the set of $n$-state Turing Machines is finite.
+          \item Prove that $\Sigma(n)$ grows faster than any computable function.
+                \textit{Hint: Assume there exists a computable function $f(n) \ge \Sigma(n)$. Show that we could use $f$ to solve the Halting Problem for any $n$-state TM by running the machine for $f(n)$ steps; if it has not halted by then, it will never halt.}
+          \item Calculate the value of $\Sigma(1)$ and $\Sigma(2)$ for a binary tape.
+        \end{enumerate}
+
+  \item \textbf{Hilbert's Tenth Problem and Arithmetic Undecidability.}
+  
+        In 1900, mathematician David Hilbert presented his Tenth Problem: Find an algorithm that decides if any given Diophantine equation (a polynomial equation with integer coefficients, like $x^n + y^n = z^n$) has an integer solution.
+        In 1970, Yuri Matiyasevich completed the proof that no such algorithm exists (the problem is undecidable).
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain how a Turing Machine's configuration (state, tape contents, head position) can be encoded as a sequence of integers.
+          \item The transition rules of a TM can be expressed as algebraic relations between these integers.
+                Show that the question "Does there exist a step $t$ at which the TM reaches the accept state?" can be written as a Diophantine equation:
+                \[
+                  P(x_1, x_2, \dots, x_k) \;=\; 0,
+                \]
+                where the existence of an integer solution corresponds to the machine halting.
+          \item What does this result reveal about the limits of mathematical proofs? (Why must there exist true statements in arithmetic that can never be proven within any axiomatic framework like ZFC?)
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Limits of self-Reference:** The proof of the Halting Problem relies on self-reference: feeding a program its own code, and doing the opposite of what it predicts. This paradox matches Gödel's Incompleteness Theorem and Russell's Paradox. Why does self-reference always mark the boundaries of logical and mathematical systems?
+  \item **On the Physicality of Undecidability:** Since the Halting Problem is undecidable, no computer can ever solve it. Does this represent a limit of human programming, or is it a fundamental law of the physical universe? (If we built a computer out of different physical materials, would the Halting Problem still be undecidable?)
+  \item **On the Church-Turing Thesis:** The Church-Turing Thesis is not a mathematical theorem that can be proven, but a physical hypothesis. It asserts that no physical process in the universe can calculate anything that cannot be computed by a Turing Machine. What would happen to computer science if we discovered a physical process (say, in quantum gravity) that could solve the Halting Problem?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~3.4 introduces **Computational Complexity and P vs NP**. Having explored what is computable in infinite time, we will restrict our focus to what is computable in *polynomial time* (efficiently). We will study time complexity classes, polynomial reductions, and analyze the most famous open question in mathematics: the P vs NP problem.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 3, Module 3.3 --- Turing Machines and the Limits of Decidability}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 3.4 --- Computational Complexity and P vs NP}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

@@ -1,0 +1,13 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/c:\\Users\\User 1\\OneDrive\\Desktop\\projects\\django projects\\personal projects\\discovery institute\\Rediscovering Chemistry\\journey 3\\module 3.aux": true,
+        "**/c:\\Users\\User 1\\OneDrive\\Desktop\\projects\\django projects\\personal projects\\discovery institute\\Rediscovering Chemistry\\journey 3\\module 3.log": true,
+        "**/c:\\Users\\User 1\\OneDrive\\Desktop\\projects\\django projects\\personal projects\\discovery institute\\Rediscovering Chemistry\\journey 3\\module 3.gz": true,
+        "**/c:\\Users\\User 1\\OneDrive\\Desktop\\projects\\django projects\\personal projects\\discovery institute\\Rediscovering Chemistry\\journey 3\\module 3.out": true
+    }
+}

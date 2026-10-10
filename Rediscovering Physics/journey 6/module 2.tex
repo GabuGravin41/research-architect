@@ -1,0 +1,484 @@
+\documentclass[12pt, a4paper, twoside]{book}
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning, decorations.pathmorphing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+
+\definecolor{deep}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{e94560}
+\definecolor{teal}{HTML}{2ec4b6}
+\definecolor{gold}{HTML}{f5a623}
+\definecolor{midblue}{HTML}{0f3460}
+\definecolor{purple}{HTML}{533483}
+\definecolor{orange}{HTML}{ff6b35}
+\definecolor{green}{HTML}{2d6a4f}
+\definecolor{lightbg}{HTML}{f7f9fc}
+\definecolor{warmbg}{HTML}{fffbf2}
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal,
+  pdftitle={Discovery Physics J6 M2}}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{midblue}}
+  {\thesubsubsection}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{realworldbox}[1][]{enhanced,breakable,colback=green!5,
+  colframe=green!70!black,fonttitle=\bfseries\color{white},coltitle=white,
+  title={In the Real World},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{1.8cm}
+
+\begin{tikzpicture}[scale=1.2]
+  % Blackbody cavity radiation plot showing classical vs quantum
+  \begin{axis}[
+    axis lines = left,
+    xlabel = {Frequency $\nu$},
+    ylabel = {Energy Density $u(\nu)$},
+    xmin = 0, xmax = 4.5,
+    ymin = 0, ymax = 3.5,
+    ticks = none,
+    domain = 0.01:4.5,
+    legend pos = north east,
+    legend style={draw=none, fill=none, text=white}
+  ]
+    % Rayleigh-Jeans (classical)
+    \addplot [accent, line width=2pt] {0.7*x^2};
+    \addlegendentry{Classical (Rayleigh-Jeans)};
+    
+    % Planck (quantum)
+    \addplot [teal, line width=2pt, samples=100] {12*x^3 / (exp(2*x) - 1)};
+    \addlegendentry{Quantum (Planck)};
+  \end{axis}
+\end{tikzpicture}
+
+\vspace{0.8cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 6}}}
+\vspace{0.3cm}
+{\fontsize{34}{40}\selectfont\bfseries Module 6.2}
+\vspace{0.3cm}
+{\fontsize{20}{26}\selectfont\textcolor{gold}{%
+The Blackbody Crisis and\\
+Planck's Quantization}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+The disaster at high frequencies.\\[4pt]
+How did thermal radiation expose the fatal flaw of classical physics\\
+and force the birth of the quantum?}}
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+\tableofcontents
+
+\chapter{The Blackbody Crisis and Planck's Quantization}
+\markboth{Journey 6: Module 6.2}{}
+
+\begin{epigraph}
+{On the other hand, the classical theory of radiation, as we have seen, leads to a result which is in flat contradiction with experiment... The difficulty is a fundamental one, and cannot be avoided by any minor modification.}
+{--- Lord Rayleigh}
+\end{epigraph}
+
+\section{Part 1 --- The Puzzle}
+
+\begin{puzzlebox}
+\textbf{The Blackbody Cavity.}
+
+If you heat a hollow metal box with a tiny pinhole to a high temperature $T$, the box glows. The light leaking out of the pinhole is electromagnetic radiation in thermodynamic equilibrium with the cavity walls. This is called **blackbody radiation**.
+* Classically, electromagnetic radiation is a wave. The cavity behaves like a 3D resonant chamber (similar to a hollow guitar body). It has standing wave modes of vibration.
+* There are infinitely many vibration modes, especially at high frequencies (short wavelengths like ultraviolet, X-rays, and gamma rays).
+* By the Equipartition Theorem you proved in Module 6.1, every active quadratic degree of freedom in equilibrium must hold exactly $\frac{1}{2} k_B T$ of thermal kinetic energy and $\frac{1}{2} k_B T$ of potential energy. Thus, each mode of electromagnetic vibration should have exactly $k_B T$ of thermal energy.
+
+\medskip
+\textbf{Question 1.} If each standing wave mode has energy $k_B T$, and there are infinitely many modes as frequency $\nu \to \infty$, what is the total energy density inside the box?
+
+\textbf{Question 2.} This classical prediction is known as the **Ultraviolet Catastrophe**. Why does it mean that every time you turn on a toaster or open an oven door, you should be vaporized by an infinite blast of high-frequency X-rays and gamma radiation?
+
+\textbf{Question 3.} (The Paradox.) The ultraviolet catastrophe is a mathematically solid consequence of classical electromagnetism and statistical mechanics. Yet, in the real world, ovens do not vaporize us, and the energy density of blackbody radiation goes smoothly to *zero* at high frequencies. Where does classical physics fail? How does nature suppress high-frequency thermal vibration?
+\end{puzzlebox}
+
+\newpage
+
+% ============================================================
+\section{Part 2 --- Exploration}
+% ============================================================
+
+\subsection{Step 1: Classical Modes in a 3D Cavity}
+
+We count the number of standing wave modes inside a cubical container of volume $V = L^3$.
+
+\begin{explobox}
+\problem Electromagnetic waves inside a box must satisfy boundary conditions: the electric field must vanish at the conducting walls. This forces the components of the wave vector $\vec{k} = (k_x, k_y, k_z)$ to satisfy:
+\[
+  k_x \;=\; \frac{n_x \pi}{L}, \quad k_y \;=\; \frac{n_y \pi}{L}, \quad k_z \;=\; \frac{n_z \pi}{L},
+\]
+where $n_x, n_y, n_z$ are positive integers.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item The frequency $\nu$ of a mode is related to the magnitude of the wave vector by $2\pi\nu = c |\vec{k}|$, where $c$ is the speed of light. Show that:
+  \[
+    n_x^2 + n_y^2 + n_z^2 \;=\; \left(\frac{2 L \nu}{c}\right)^2.
+  \]
+  \item The number of modes in the positive octant of a sphere in $n$-space with radius $R = 2L\nu/c$ is $N(\nu) = \frac{1}{8} \left( \frac{4}{3} \pi R^3 \right)$. Since light has two independent transverse polarization states, we multiply by 2: $N(\nu) = \frac{8\pi V}{3 c^3} \nu^3$.
+  \item Differentiate $N(\nu)$ with respect to $\nu$ to show that the number of modes in the frequency range $[\nu, \nu + d\nu]$ per unit volume is the **density of states**:
+  \[
+    g(\nu) \, d\nu \;=\; \frac{8\pi}{c^3} \nu^2 \, d\nu.
+  \]
+\end{enumerate}
+\end{explobox}
+
+\subsection{Step 2: The Rayleigh-Jeans Law and the Catastrophe}
+
+We apply classical thermodynamics to the electromagnetic modes.
+
+\begin{explobox}
+\problem Suppose each mode of vibration behaves classically as a simple harmonic oscillator.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item In classical statistical mechanics, the energy of a harmonic oscillator is continuous: $E = \frac{p^2}{2m} + \frac{1}{2}m\omega^2 x^2$. Show that its partition function $Z = \int_{-\infty}^\infty \int_{-\infty}^\infty e^{-\beta E} dx dp$ yields an average energy:
+  \[
+    \langle E \rangle \;=\; k_B T.
+  \]
+  \item Multiply the density of states $g(\nu)$ by $\langle E \rangle$ to derive the **Rayleigh-Jeans Law** for the spectral energy density:
+  \[
+    u(\nu) \, d\nu \;=\; \frac{8\pi \nu^2}{c^3} k_B T \, d\nu.
+  \]
+  \item Integrate $u(\nu) d\nu$ from $\nu = 0$ to $\infty$ to show why the total classical energy density $u_{\text{tot}} = \int_0^\infty u(\nu) d\nu$ diverges to infinity. This is the **ultraviolet catastrophe**.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Step 3: Planck's Quantization Hypothesis}
+
+Max Planck proposed in 1900 that the cavity walls do not exchange energy continuously with the radiation.
+
+\begin{explobox}
+\problem Planck hypothesized that a mode of frequency $\nu$ can only absorb or emit energy in discrete packets of size $E = h\nu$, where $h \approx 6.626 \times 10^{-34}$ J$\cdot$s is a new fundamental constant (Planck's constant).
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Under this hypothesis, the energy levels of a frequency mode are discrete:
+  \[
+    E_n \;=\; n h\nu, \qquad n \in \{0, 1, 2, \dots\}.
+  \]
+  Using the discrete canonical partition function from Module 6.1, write the partition function $Z$ of a single frequency mode:
+  \[
+    Z \;=\; \sum_{n=0}^\infty e^{-n \beta h\nu}.
+  \]
+  \item Observe that this is a infinite geometric series. Sum it to show that:
+  \[
+    Z \;=\; \frac{1}{1 - e^{-\beta h\nu}}.
+  \]
+  For what values of $\beta$ does this series converge?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Step 4: Resolving the Ultraviolet Catastrophe}
+
+We compute the quantum expectation of energy and derive the true radiation law.
+
+\begin{explobox}
+\problem Let us calculate the average energy $\langle E \rangle$ of a quantized oscillator.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Using the generating relation $\langle E \rangle = -\frac{\partial \ln Z}{\partial \beta}$ on the partition function from Problem 3, prove that:
+  \[
+    \langle E \rangle \;=\; \frac{h\nu}{e^{\beta h\nu} - 1}.
+  \]
+  \item Multiply this quantum expectation by the density of states $g(\nu)$ to derive **Planck's Law**:
+  \[
+    u(\nu) \, d\nu \;=\; \frac{8\pi h \nu^3}{c^3} \frac{1}{e^{h\nu/k_B T} - 1} \, d\nu.
+  \]
+  \item Examine the behavior of $u(\nu)$ as $\nu \to \infty$. Explain how the exponential term in the denominator suppresses high-frequency radiation, keeping the total energy finite and resolving the ultraviolet catastrophe.
+\end{enumerate}
+\end{explobox}
+
+\begin{historybox}
+\textbf{Max Planck's "Act of Desperation".}
+Max Planck did not set out to launch a quantum revolution. He was a conservative physicist devoted to classical thermodynamics. In late 1900, he introduced the assumption $E = h\nu$ merely as an algebraic interpolation trick to fit the experimental data measured in Berlin. He later called it "an act of desperation," assuming that some classical explanation would eventually be found. It took Einstein (1905, photoelectric effect) and Bohr (1913, atomic levels) to prove that energy quantization is a fundamental reality of nature.
+\end{historybox}
+
+\newpage
+
+% ============================================================
+\section{Part 3 --- Discovery}
+% ============================================================
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The density of electromagnetic standing wave modes in a cavity grows quadratically with frequency: $g(\nu) \propto \nu^2$.
+
+\textbf{Second.} Classical statistical mechanics assigns an equal average thermal energy $\langle E \rangle = k_B T$ to every mode, predicting infinite energy at high frequencies (the ultraviolet catastrophe).
+
+\textbf{Third.} Planck resolved this by quantizing energy: $E = n h\nu$. The partition function of a quantized mode is a geometric series: $Z = (1 - e^{-\beta h\nu})^{-1}$.
+
+\textbf{Fourth.} The average energy of a quantum mode is $\langle E \rangle = \frac{h\nu}{e^{h\nu/k_B T} - 1}$. As $\nu \to \infty$, the thermal energy required to excite even the first quantum state ($h\nu$) becomes much larger than the available thermal energy ($k_B T$), freezing out high-frequency modes and resolving the crisis.
+\end{discoverybox}
+
+\newpage
+
+% ============================================================
+\section{Part 4 --- What This Is Called}
+% ============================================================
+
+\begin{namebox}
+\textbf{Quantized Radiation Concepts.}
+
+* **Density of States ($g(\nu)$):** The number of standing wave modes per unit volume per unit frequency: $g(\nu) = \frac{8\pi \nu^2}{c^3}$.
+* **Rayleigh-Jeans Law:** The classical radiation limit: $u(\nu) = \frac{8\pi \nu^2}{c^3} k_B T$.
+* **Planck's Law:** The correct quantum radiation distribution:
+  \[
+    u(\nu) \;=\; \frac{8\pi h \nu^3}{c^3} \frac{1}{e^{h\nu/k_B T} - 1}.
+  \]
+* **Correspondence Principle:** In the limit of low frequencies or high temperatures ($h\nu \ll k_B T$), quantum behavior converges to classical predictions.
+* **Planck's Constant ($h$):** A fundamental constant of nature, $h \approx 6.626 \times 10^{-34}$ J$\cdot$s.
+\end{namebox}
+
+\newpage
+
+% ============================================================
+\section{Part 5 --- Solved Exercises}
+% ============================================================
+
+\begin{exercise}[The Classical Correspondence Limit]
+Prove that Planck's Law:
+\[
+  u(\nu) \;=\; \frac{8\pi h \nu^3}{c^3} \frac{1}{e^{h\nu/k_B T} - 1}
+\]
+reduces exactly to the classical Rayleigh-Jeans Law in the limit of low frequencies ($h\nu \ll k_B T$).
+\end{exercise}
+
+\begin{proof}[Solution]
+We define the dimensionless variable $x = \frac{h\nu}{k_B T}$. The condition $h\nu \ll k_B T$ is equivalent to $x \ll 1$.
+Let us expand the exponential term in the denominator of Planck's Law using its Taylor series around $x = 0$:
+\[
+  e^x \;=\; 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots.
+\]
+For $x \ll 1$, we can approximate $e^x$ by the first two terms:
+\[
+  e^x \;\approx\; 1 + x.
+\]
+Substituting this back into the denominator:
+\[
+  e^{h\nu/k_B T} - 1 \;\approx\; \left(1 + \frac{h\nu}{k_B T}\right) - 1 \;=\; \frac{h\nu}{k_B T}.
+\]
+Now substitute this approximation into Planck's Law:
+\[
+  u(\nu) \;\approx\; \frac{8\pi h \nu^3}{c^3} \frac{1}{\left( \dfrac{h\nu}{k_B T} \right)} \;=\; \frac{8\pi h \nu^3}{c^3} \frac{k_B T}{h\nu} \;=\; \frac{8\pi \nu^2}{c^3} k_B T.
+\]
+Observe that this is precisely the classical Rayleigh-Jeans Law. This proves that classical physics is not simply wrong; rather, it is a limiting case of quantum mechanics when the energy quantum $h\nu$ is negligibly small compared to thermal fluctuations.
+\end{proof}
+
+\begin{exercise}[Deriving the Stefan-Boltzmann Law]
+Integrate Planck's Law over all frequencies to prove that the total energy density of blackbody radiation is proportional to $T^4$:
+\[
+  u_{\text{tot}} \;=\; \int_0^\infty u(\nu) \, d\nu \;=\; a T^4,
+\]
+where $a$ is a constant. (Use the standard integral $\int_0^\infty \frac{x^3}{e^x - 1} dx = \frac{\pi^4}{15}$).
+\end{exercise}
+
+\begin{proof}[Solution]
+We write the integral for total energy density:
+\[
+  u_{\text{tot}} \;=\; \int_0^\infty \frac{8\pi h \nu^3}{c^3} \frac{1}{e^{h\nu/k_B T} - 1} \, d\nu.
+\]
+We define the substitution variable:
+\[
+  x \;=\; \frac{h\nu}{k_B T} \implies \nu \;=\; \frac{k_B T}{h} x \implies d\nu \;=\; \frac{k_B T}{h} \, dx.
+\]
+As $\nu$ ranges from $0$ to $\infty$, $x$ also ranges from $0$ to $\infty$. Substitute these expressions into the integral:
+\[
+  u_{\text{tot}} \;=\; \frac{8\pi h}{c^3} \int_0^\infty \left( \frac{k_B T}{h} x \right)^3 \frac{1}{e^x - 1} \left( \frac{k_B T}{h} \, dx \right).
+\]
+Pull all constant parameters, including the temperature $T$, out of the integral:
+\[
+  u_{\text{tot}} \;=\; \frac{8\pi h}{c^3} \left( \frac{k_B T}{h} \right)^4 \int_0^\infty \frac{x^3}{e^x - 1} \, dx \;=\; \frac{8\pi k_B^4 T^4}{c^3 h^3} \int_0^\infty \frac{x^3}{e^x - 1} \, dx.
+\]
+Substitute the value of the standard integral $\int_0^\infty \frac{x^3}{e^x - 1} dx = \frac{\pi^4}{15}$:
+\[
+  u_{\text{tot}} \;=\; \frac{8\pi k_B^4 T^4}{c^3 h^3} \left( \frac{\pi^4}{15} \right) \;=\; \left( \frac{8\pi^5 k_B^4}{15 c^3 h^3} \right) T^4.
+\]
+Defining the constant $a = \frac{8\pi^5 k_B^4}{15 c^3 h^3}$, we obtain:
+\[
+  u_{\text{tot}} \;=\; a T^4.
+\]
+This proves that the total energy density of thermal radiation scales as the fourth power of absolute temperature.
+\end{proof}
+
+\newpage
+
+% ============================================================
+\section{Part 6 --- Problems}
+% ============================================================
+
+\begin{problem}[Wien's Displacement Law]
+Wien's Displacement Law states that the peak frequency $\nu_{\text{max}}$ of blackbody radiation shifts linearly with temperature.
+\begin{enumerate}[label=(\alph*)]
+  \item Take the derivative of the spectral density $u(\nu)$ in Planck's Law with respect to $\nu$ and set it to 0. Show that this leads to the transcendental equation:
+  \[
+    3\left(1 - e^{-x}\right) \;=\; x, \qquad \text{where } x \;=\; \frac{h\nu}{k_B T}.
+  \]
+  \item Using a numerical calculator or graphing tool, show that the non-zero solution is $x \approx 2.821$.
+  \item Conclude that:
+  \[
+    \nu_{\text{max}} \;\approx\; 2.821 \frac{k_B T}{h},
+  \]
+  proving that the peak frequency is directly proportional to temperature. Why does this explain why heating a metal bar causes its color to shift from dull red to bright yellow?
+\end{enumerate}
+\end{problem}
+
+\begin{problem}[The Photoelectric Effect]
+Albert Einstein generalized Planck's quantization by proposing that light itself consists of localized packets of energy called **photons**, each with energy $E = h\nu$.
+In the photoelectric effect, light shining on a metal plate ejects electrons.
+\begin{enumerate}[label=(\alph*)]
+  \item Let $\Phi$ be the minimum energy (work function) required to pull an electron out of the metal. If the photon energy is absorbed completely by a single electron, show that the maximum kinetic energy of the ejected electron is:
+  \[
+    K_{\text{max}} \;=\; h\nu - \Phi.
+  \]
+  \item If light were a classical wave, its energy would be proportional to its *intensity* (amplitude squared). Explain why classical wave theory predicts that increasing the light intensity should increase the kinetic energy of the ejected electrons.
+  \item Why does the quantum formula correctly predict that (i) below a threshold frequency $\nu_0 = \Phi/h$, no electrons are ejected regardless of intensity, and (ii) increasing the intensity only increases the *number* of ejected electrons, not their kinetic energy?
+\end{enumerate}
+\end{problem}
+
+\newpage
+
+% ============================================================
+\section{Part 7 --- Deep Problems}
+% ============================================================
+
+\begin{deepproblem}[Einstein's A and B Coefficients]
+In 1917, Einstein derived Planck's Law from first principles by considering a system of two-level atoms in equilibrium with blackbody radiation.
+Let the two levels have energies $E_1$ and $E_2$ (with $E_2 - E_1 = h\nu$) and populations $N_1$ and $N_2$. Let $u(\nu)$ be the radiation energy density at frequency $\nu$.
+There are three transitions:
+1. **Absorption:** $1 \to 2$, rate $= N_1 B_{12} u(\nu)$.
+2. **Spontaneous Emission:** $2 \to 1$, rate $= N_2 A_{21}$.
+3. **Stimulated Emission:** $2 \to 1$, rate $= N_2 B_{21} u(\nu)$.
+\begin{enumerate}[label=(\alph*)]
+  \item At equilibrium, the rate of transitions upward must equal the rate downward. Write this balance equation.
+  \item In thermodynamic equilibrium, the population ratio satisfies the Boltzmann distribution: $N_2/N_1 = e^{-\beta(E_2 - E_1)} = e^{-\beta h\nu}$. Use this to show that:
+  \[
+    u(\nu) \;=\; \frac{A_{21}}{B_{12} e^{\beta h\nu} - B_{21}}.
+  \]
+  \item Since $u(\nu) \to \infty$ as $T \to \infty$ ($\beta \to 0$), show that we must have $B_{12} = B_{21}$ (the probability of stimulated emission equals absorption).
+  \item Compare this to Planck's Law to show that the ratio of spontaneous to stimulated transition rates is:
+  \[
+    \frac{A_{21}}{B_{21}} \;=\; \frac{8\pi h \nu^3}{c^3}.
+  \]
+  Explain why this means stimulated emission (the principle behind lasers) is much easier to achieve at low frequencies (microwave/infrared) than at high frequencies (ultraviolet/X-ray).
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[The Casimir Effect and Vacuum Energy]
+Quantizing the electromagnetic field assigns a zero-point energy $E_0 = \frac{1}{2}h\nu$ to every single mode, even at absolute zero temperature ($T=0$).
+\begin{enumerate}[label=(\alph*)]
+  \item Show that summing this zero-point energy over all modes $g(\nu) d\nu$ yields an infinite vacuum energy density:
+  \[
+    u_{\text{vac}} \;=\; \int_0^\infty \frac{1}{2}h\nu \cdot \left(\frac{8\pi \nu^2}{c^3}\right) \, d\nu \;=\; \infty.
+  \]
+  \item Suppose we place two parallel, uncharged conducting plates a distance $a$ apart. The plates restrict the accessible modes of vibration between them to discrete wavelengths $\lambda_n = 2a/n$.
+  Explain how this restriction creates a difference in zero-point energy inside versus outside the plates, resulting in a measurable, attractive force (the Casimir Force) pulling the plates together.
+\end{enumerate}
+\end{deepproblem}
+
+\newpage
+
+% ============================================================
+\section{Part 8 --- Reflection}
+% ============================================================
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Correspondence Principle:** We showed that Planck's Law converges to classical physics for $h\nu \ll k_B T$. Does this mean classical physics is "wrong," or is it a structurally correct description of reality on macroscopic scales? How does this compare to how relativity converges to Newtonian physics at low speeds?
+  \item **On the Photoelectric Effect:** In Einstein's photoelectric model, a single photon is absorbed by a single electron. This is a point-like interaction. How does this conflict with the classical view of light as a smooth wave spreading out through space?
+  \item **On the Vacuum:** The Casimir effect shows that the quantum vacuum has measurable physical energy. If space is not empty but is filled with zero-point energy fluctuations, what does this tell you about the classical definition of "nothing"?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6.3 introduces **The Schrödinger Wave Equation**. Having discovered that light possesses particle-like properties (photons), we will explore the converse proposal: that physical particles (like electrons) possess wave-like properties. We will set up and solve the wave equations that govern matter at atomic scales.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{teal}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{deep}\textit{End of Journey 6, Module 6.2 --- The Blackbody Crisis and Planck's Quantization}}\\[4pt]
+{\small\color{deep}Continue to: \textbf{Module 6.3 --- The Schrödinger Wave Equation}}\\[6pt]
+{\color{teal}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

@@ -1,0 +1,339 @@
+% ============================================================
+%  DISCOVERY CURRICULUM — Journey 3, Module 2
+%  "Matrices and Systems"
+%  Compile with: pdflatex J3_M2.tex  (run twice for references)
+% ============================================================
+
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm, headheight=15pt]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{parskip}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=NavyBlue, urlcolor=NavyBlue}
+
+% ── Colours ─────────────────────────────────────────────────
+\definecolor{NavyBlue}{HTML}{1A3A5C}
+\definecolor{MidBlue}{HTML}{2E6DA4}
+\definecolor{Gold}{HTML}{C8922A}
+\definecolor{LightBlue}{HTML}{EBF2FA}
+\definecolor{LightGold}{HTML}{FDF4E3}
+\definecolor{DarkGrey}{HTML}{3A3A3A}
+\definecolor{BoxGreen}{HTML}{E8F5E9}
+\definecolor{SidebarGrey}{HTML}{F5F5F5}
+
+\titleformat{\section}{\Large\bfseries\color{NavyBlue}}{}{0em}{}[{\color{MidBlue}\vspace{2pt}\rule{\linewidth}{1.5pt}}]
+\titleformat{\subsection}{\large\bfseries\color{MidBlue}}{}{0em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{DarkGrey}\textit{Discovery Curriculum}}
+\fancyhead[R]{\small\color{DarkGrey}\textit{Journey 3 $\cdot$ Module 2}}
+\fancyfoot[C]{\small\color{MidBlue}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newmdenv[backgroundcolor=NavyBlue!7,linecolor=NavyBlue,linewidth=2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{puzzlebox}
+\newmdenv[backgroundcolor=LightGold,linecolor=Gold,linewidth=2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{discoverybox}
+\newmdenv[backgroundcolor=LightBlue,linecolor=MidBlue,linewidth=1.5pt,roundcorner=4pt,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{namebox}
+\newmdenv[backgroundcolor=BoxGreen,linecolor=DarkGrey!35,linewidth=1pt,roundcorner=4pt,innerleftmargin=14pt,innerrightmargin=10pt,innertopmargin=10pt,innerbottommargin=10pt,skipabove=14pt,skipbelow=10pt]{reflectionbox}
+\newmdenv[backgroundcolor=SidebarGrey,linecolor=Gold,linewidth=1.2pt,leftline=true,rightline=false,topline=false,bottomline=false,innerleftmargin=12pt,innerrightmargin=10pt,innertopmargin=7pt,innerbottommargin=7pt,skipabove=10pt,skipbelow=10pt]{thought}
+
+\newcounter{problem}
+\newenvironment{problem}[1][]{\refstepcounter{problem}\par\vspace{6pt}\noindent\textbf{\color{MidBlue}Problem \theproblem}\ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip}{\par\vspace{4pt}}
+\newcounter{deepproblem}
+\newenvironment{deepproblem}[1][]{\refstepcounter{deepproblem}\par\vspace{6pt}\noindent\textbf{\color{NavyBlue}$\bigstar$\ Deep Problem \thedeepproblem}\ifx&#1&\else\ \textit{(#1)}\fi\textbf{.}\enskip}{\par\vspace{4pt}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+{\small\color{MidBlue}\textbf{DISCOVERY CURRICULUM}\quad$\cdot$\quad\textbf{JOURNEY 3: LINEAR STRUCTURE}}
+\vspace{0.6cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\vspace{0.5cm}
+
+{\Huge\bfseries\color{NavyBlue}Module 2}\\[0.3cm]
+{\LARGE\bfseries\color{MidBlue}Matrices and Systems}\\[0.4cm]
+{\color{Gold}\rule{0.4\linewidth}{1.2pt}}\\[0.4cm]
+{\large\itshape\color{DarkGrey}
+A matrix is a linear map wearing coordinates.\\[0.15cm]
+Row reduction is the act of finding its soul.}
+
+\vspace{1cm}
+\begin{tabular}{rl}
+\color{DarkGrey}\textbf{Journey}     & Journey 3 --- Linear Structure \\[4pt]
+\color{DarkGrey}\textbf{Module}      & 2 of 6 \\[4pt]
+\color{DarkGrey}\textbf{Prerequisites} & J3 Module 1; basic matrix notation \\[4pt]
+\color{DarkGrey}\textbf{You will discover} & Matrix multiplication, row reduction, determinants, invertibility \\[4pt]
+\color{DarkGrey}\textbf{Format}      & 8 problems $+$ 3 deep problems $\approx$ 13 pages \\
+\end{tabular}
+\vspace{1cm}
+
+{\color{NavyBlue}\rule{\linewidth}{2pt}}
+\end{center}
+
+\vspace{0.5cm}
+\noindent\textbf{From abstraction to computation.}
+Module~1 showed that a linear map is completely determined by its action on a basis. Once bases are chosen, a linear map $T : \mathbb{R}^n \to \mathbb{R}^m$ becomes a matrix $A$ --- an $m \times n$ array of numbers. All the abstract theory (kernel, image, rank-nullity) translates into questions about matrices that can be answered by computation. This module builds that computational engine.
+
+\newpage
+
+\section{Part 1 \texorpdfstring{---}{--} The Puzzle}
+
+\begin{puzzlebox}
+\textbf{The Opening Puzzle.}
+
+Three factories produce three goods. Each factory uses the goods as inputs in the following amounts per unit produced:
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+               & Good 1 & Good 2 & Good 3 \\
+\midrule
+Factory 1 uses & 0.2    & 0.0    & 0.1    \\
+Factory 2 uses & 0.4    & 0.3    & 0.1    \\
+Factory 3 uses & 0.1    & 0.2    & 0.3    \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+If the economy demands outputs $\mathbf{d} = (100, 200, 150)$ units, and the total production vector is $\mathbf{x}$, then the production satisfies:
+\[
+  \mathbf{x} - A\mathbf{x} = \mathbf{d} \qquad \Longrightarrow \qquad (I - A)\mathbf{x} = \mathbf{d}.
+\]
+
+\textbf{Question 1.} What does the system $(I-A)\mathbf{x} = \mathbf{d}$ mean? What are we solving for?
+
+\textbf{Question 2.} This is a \emph{linear system}: three equations in three unknowns. How would you solve it?
+
+\textbf{Question 3.} What would it mean for this system to have no solution? More than one solution? Exactly one? Which outcome do you expect here, and why?
+\end{puzzlebox}
+
+\medskip
+This is the \textbf{Leontief input-output model}, developed by Wassily Leontief in the 1940s to model national economies. It won him the Nobel Prize in Economics in 1973. The mathematics is a linear system, and its solvability depends entirely on properties of the matrix $(I-A)$.
+
+\section{Part 2 \texorpdfstring{---}{--} Exploration}
+
+\subsection{Step 1: Matrix multiplication as composition}
+
+\begin{problem}
+\label{prob:matmul}
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item If $A$ is the matrix of $T : \mathbb{R}^n \to \mathbb{R}^m$ and $B$ is the matrix of $S : \mathbb{R}^p \to \mathbb{R}^n$, the composition $T \circ S$ has matrix $AB$. Write out the formula for $(AB)_{ij}$.
+  \item Compute $AB$ and $BA$ for $A = \begin{pmatrix}1&2\\3&4\end{pmatrix}$, $B = \begin{pmatrix}0&1\\1&0\end{pmatrix}$. Is $AB = BA$?
+  \item Prove that matrix multiplication is associative: $(AB)C = A(BC)$.
+  \item The identity matrix $I$ satisfies $AI = IA = A$. Write $I$ explicitly for $n=3$ and verify.
+  \item Geometric interpretation: if $A$ represents a $45°$ rotation and $B$ represents a scaling by 2, what does $AB$ represent? Does the order matter?
+\end{enumerate}
+\end{problem}
+
+\begin{thought}
+\textbf{Why $AB \neq BA$ in general.}
+Matrix multiplication represents composition of linear maps. And composition of functions is generally not commutative: rotating then reflecting is not the same as reflecting then rotating. Non-commutativity is not a flaw in matrices --- it is an accurate reflection of the geometry. This non-commutativity is also why Heisenberg's uncertainty principle holds: the operators for position and momentum do not commute, and their commutator is proportional to Planck's constant. The algebra of matrices is, in a deep sense, the algebra of quantum mechanics.
+\end{thought}
+
+\subsection{Step 2: Row reduction and linear systems}
+
+\begin{problem}
+\label{prob:rowred}
+The system $A\mathbf{x} = \mathbf{b}$ is solved by row-reducing the augmented matrix $[A \mid \mathbf{b}]$ to row echelon form.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Row reduce and solve:
+  $\begin{pmatrix}1&2&3\\2&5&7\\1&1&2\end{pmatrix}\mathbf{x} = \begin{pmatrix}6\\13\\5\end{pmatrix}$
+
+  \item Row reduce to find all solutions:
+  $\begin{pmatrix}1&2&1&3\\2&4&3&7\\1&2&0&2\end{pmatrix}\mathbf{x} = \begin{pmatrix}0\\0\\0\end{pmatrix}$
+
+  \item The system $A\mathbf{x} = \mathbf{0}$ always has the trivial solution $\mathbf{x} = \mathbf{0}$. When does it have other solutions? Express your answer in terms of rank and nullity.
+
+  \item A system $A\mathbf{x} = \mathbf{b}$ has: no solution if $\mathbf{b} \notin \text{im}\,A$; a unique solution if $\ker A = \{\mathbf{0}\}$; infinitely many if $\ker A \neq \{\mathbf{0}\}$. Verify all three cases with examples.
+
+  \item Solve the Leontief system from the puzzle: $(I-A)\mathbf{x} = \mathbf{d}$ with the given matrix and $\mathbf{d} = (100, 200, 150)^T$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:rref}
+The \textbf{reduced row echelon form} (RREF) of a matrix encodes all structural information.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Find the RREF of $A = \begin{pmatrix}2&4&1&3\\0&0&3&6\\1&2&2&6\end{pmatrix}$.
+  \item Identify the pivot columns and free columns. The pivot columns form a basis for the column space (image). What is $\text{rank}(A)$?
+  \item Write the general solution to $A\mathbf{x} = \mathbf{0}$ in terms of free variables.
+  \item Verify rank-nullity: $\text{rank}(A) + \text{nullity}(A) = $ number of columns.
+  \item The RREF is unique (same for any sequence of row operations). Why does this make it a canonical form for the row space?
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 3: Invertibility and determinants}
+
+\begin{problem}
+\label{prob:invert}
+A square matrix $A$ is \textbf{invertible} if there exists $A^{-1}$ with $AA^{-1} = A^{-1}A = I$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item $A$ is invertible if and only if $A\mathbf{x} = \mathbf{0}$ has only the trivial solution. Prove this.
+  \item Find $A^{-1}$ for $A = \begin{pmatrix}2&1\\5&3\end{pmatrix}$ by row-reducing $[A \mid I]$ to $[I \mid A^{-1}]$.
+  \item Prove: $(AB)^{-1} = B^{-1}A^{-1}$. The order reversal matters --- explain geometrically.
+  \item The \textbf{determinant} $\det A$ measures how much $A$ scales volumes. For $2\times 2$: $\det\begin{pmatrix}a&b\\c&d\end{pmatrix} = ad - bc$. Compute $\det A$ for the matrix in (b). What is the connection between $\det A = 0$ and non-invertibility?
+  \item For a $3\times 3$ matrix, expand the determinant along the first row using cofactors. Compute $\det\begin{pmatrix}1&2&3\\0&1&4\\5&6&0\end{pmatrix}$.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:det_props}
+Determinants have three defining properties from which everything else follows.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item The three properties: (i) $\det I = 1$; (ii) $\det$ changes sign when two rows are swapped; (iii) $\det$ is linear in each row separately. Use these to derive:
+    \begin{itemize}[noitemsep]
+      \item $\det A = 0$ if two rows are equal
+      \item $\det(cA) = c^n \det A$ for an $n\times n$ matrix
+      \item $\det(AB) = \det A \cdot \det B$
+    \end{itemize}
+  \item Verify $\det(AB) = \det A \cdot \det B$ numerically for two $2\times 2$ matrices.
+  \item A matrix representing a rotation by angle $\theta$ in $\mathbb{R}^2$ is $R = \begin{pmatrix}\cos\theta & -\sin\theta \\ \sin\theta & \cos\theta\end{pmatrix}$. Compute $\det R$. Does a rotation change volumes?
+  \item A \textbf{reflection} matrix has $\det = -1$. What does the sign of the determinant represent geometrically?
+  \item \textbf{Cramer's rule}: the solution to $A\mathbf{x} = \mathbf{b}$ (when $\det A \neq 0$) has $x_i = \det A_i / \det A$, where $A_i$ is $A$ with the $i$-th column replaced by $\mathbf{b}$. Verify for the $2\times 2$ case.
+\end{enumerate}
+\end{problem}
+
+\subsection{Step 4: Column space, row space, null space}
+
+\begin{problem}
+\label{prob:four_subspaces}
+Every matrix $A$ ($m\times n$) has four fundamental subspaces:
+\[
+  \text{Column space } C(A) \subseteq \mathbb{R}^m, \quad
+  \text{Row space } C(A^T) \subseteq \mathbb{R}^n, \quad
+  \text{Null space } N(A) \subseteq \mathbb{R}^n, \quad
+  \text{Left null space } N(A^T) \subseteq \mathbb{R}^m.
+\]
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item For $A = \begin{pmatrix}1&2&3\\4&5&6\\7&8&9\end{pmatrix}$: find a basis for each of the four fundamental subspaces.
+  \item What are the dimensions of each subspace? Verify they satisfy the rank-nullity theorem in both directions.
+  \item \textbf{Fundamental theorem of linear algebra}: $N(A) \perp C(A^T)$ and $N(A^T) \perp C(A)$. Verify orthogonality: show that any vector in $N(A)$ is orthogonal to any vector in $C(A^T)$.
+  \item $A\mathbf{x} = \mathbf{b}$ has a solution if and only if $\mathbf{b} \perp N(A^T)$ (i.e.\ $\mathbf{b}$ is orthogonal to the left null space). Verify for a specific example.
+\end{enumerate}
+\end{problem}
+
+\begin{problem}
+\label{prob:change_of_basis}
+Suppose the same linear map $T$ is represented by matrix $A$ in basis $\mathcal{B}$ and by matrix $B$ in basis $\mathcal{C}$. Let $P$ be the change-of-basis matrix from $\mathcal{C}$ to $\mathcal{B}$.
+\begin{enumerate}[label=(\alph*), topsep=2pt]
+  \item Show $B = P^{-1}AP$. Matrices related this way are called \textbf{similar}.
+  \item Compute $P^{-1}AP$ for $A = \begin{pmatrix}3&1\\0&2\end{pmatrix}$ and $P = \begin{pmatrix}1&1\\1&-1\end{pmatrix}$.
+  \item Two similar matrices have the same determinant, the same trace ($\text{tr}\,A = \sum a_{ii}$), and the same characteristic polynomial. Verify these for $A$ and $B = P^{-1}AP$ from (b).
+  \item The trace and determinant are \emph{invariants} of the linear map --- independent of the basis. List two more invariants. Why do invariants matter?
+  \item \textit{(Preview.)} Can we always choose a basis in which the matrix is diagonal? When is this possible? This is the eigenvalue question, which is Module 3.
+\end{enumerate}
+\end{problem}
+
+\section{Part 3 \texorpdfstring{---}{--} Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Matrix multiplication is composition of linear maps. It is associative but generally not commutative --- and both properties are geometrically meaningful.
+
+\textbf{Second.} Row reduction is the computational workhorse: it solves linear systems, computes rank, finds bases for all four fundamental subspaces, and determines invertibility.
+
+\textbf{Third.} The determinant measures signed volume scaling. It vanishes exactly when the matrix is singular (non-invertible), and it satisfies $\det(AB) = \det A \cdot \det B$.
+
+\textbf{Fourth.} The four fundamental subspaces --- column space, row space, null space, left null space --- and their orthogonality relations are the geometric heart of the theory. Every solvability question about $A\mathbf{x} = \mathbf{b}$ is answered by these subspaces.
+
+\medskip
+\textbf{The key question not yet answered.} Change of basis produces similar matrices. Is there a ``best'' basis --- one in which the matrix is diagonal or nearly so? The answer involves eigenvalues. When a matrix is diagonal, it acts on each basis vector by simply scaling it. Finding those basis vectors is the eigenvalue problem, the deepest and most powerful idea in linear algebra.
+\end{discoverybox}
+
+\section{Part 4 \texorpdfstring{---}{--} Naming the Ideas}
+
+\begin{namebox}
+\textbf{Matrix operations and rank.}
+
+$(AB)_{ij} = \sum_k A_{ik}B_{kj}$ (row of $A$ dots column of $B$).
+
+$\text{rank}(A) = \dim C(A) = \dim C(A^T)$. \quad $\text{rank}(A) + \text{nullity}(A) = n$ (columns).
+
+$A$ ($n\times n$) is invertible $\iff$ $\det A \neq 0$ $\iff$ $\text{rank}(A) = n$ $\iff$ $A\mathbf{x}=\mathbf{0}$ has only $\mathbf{x}=\mathbf{0}$.
+\end{namebox}
+
+\begin{namebox}
+\textbf{Determinant.}
+
+Uniquely defined by: $\det I = 1$; sign-change under row swap; linearity in each row.
+
+Key facts: $\det(AB) = \det A \cdot \det B$; $\det(A^T) = \det A$; $\det(A^{-1}) = 1/\det A$.
+
+$|\det A|$ = volume scaling factor of the linear map represented by $A$.
+\end{namebox}
+
+\section{Part 5 \texorpdfstring{---}{--} Deep Problems}
+
+\begin{deepproblem}[LU decomposition]
+Every invertible matrix $A$ can be written as $A = LU$ where $L$ is lower triangular with ones on the diagonal and $U$ is upper triangular.
+\begin{enumerate}[label=(\alph*)]
+  \item Perform Gaussian elimination on $A = \begin{pmatrix}2&1&1\\4&3&3\\8&7&9\end{pmatrix}$ keeping track of the multipliers used. Show that the multipliers form the matrix $L$.
+  \item Why is $LU$ decomposition faster than recomputing Gaussian elimination for each right-hand side $\mathbf{b}$ in $A\mathbf{x}=\mathbf{b}$?
+  \item When row swaps are needed, the decomposition becomes $PA = LU$ where $P$ is a permutation matrix. Show $\det P = \pm 1$ and explain the sign.
+  \item The number of floating-point operations for Gaussian elimination on an $n\times n$ matrix is $O(n^3)$. For $n = 1000$, how does this compare to $O(n^2)$ algorithms? Why does this matter for large-scale scientific computing?
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[Least squares via the normal equations]
+This connects to Module~6 of Journey~1 and the preview in Journey~2.
+\begin{enumerate}[label=(\alph*)]
+  \item When $A\mathbf{x} = \mathbf{b}$ has no solution (overdetermined system), the \textbf{least squares solution} minimises $\|A\mathbf{x} - \mathbf{b}\|^2$. Show the minimum is achieved when $\mathbf{b} - A\hat{\mathbf{x}} \perp C(A)$, i.e.\ when $A^T(A\hat{\mathbf{x}} - \mathbf{b}) = 0$.
+  \item Derive the \textbf{normal equations}: $A^T A\hat{\mathbf{x}} = A^T \mathbf{b}$.
+  \item When is $A^T A$ invertible? Express the condition in terms of the columns of $A$.
+  \item Use the normal equations to fit a line $y = mx + c$ to the data $(1,2), (2,4), (3,5), (4,4)$ by setting up the overdetermined system and solving.
+  \item The \textbf{pseudoinverse} $A^+ = (A^T A)^{-1}A^T$ gives $\hat{\mathbf{x}} = A^+\mathbf{b}$. Show that $A^+A = I$ (left inverse) but $AA^+ \neq I$ in general. What does $AA^+$ project onto?
+\end{enumerate}
+\end{deepproblem}
+
+\begin{deepproblem}[The matrix exponential]
+For a square matrix $A$, define $e^A = \sum_{k=0}^\infty \frac{A^k}{k!}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Show this series converges for any matrix $A$ by bounding $\|A^k\| \leq \|A\|^k$.
+  \item Prove $e^{tA}$ solves the matrix ODE $\frac{d}{dt}X = AX$, $X(0) = I$.
+  \item If $A = \begin{pmatrix}0 & -1 \\ 1 & 0\end{pmatrix}$, compute $A^2, A^3, A^4$. Use the pattern to sum $e^{tA}$ in closed form.
+  \item The system of ODEs $\dot{\mathbf{x}} = A\mathbf{x}$ has solution $\mathbf{x}(t) = e^{tA}\mathbf{x}(0)$. Verify for your matrix $A$ from (c) and initial condition $\mathbf{x}(0) = (1,0)^T$. What geometric motion does the solution trace?
+  \item \textit{(Preview.)} If $A$ is diagonalisable with $A = PDP^{-1}$, then $e^A = Pe^DP^{-1}$ where $e^D$ is trivially computed. This makes eigenvalue decomposition (Module~3) essential for solving systems of ODEs.
+\end{enumerate}
+\end{deepproblem}
+
+\section{Part 6 \texorpdfstring{---}{--} Reflection}
+
+\begin{reflectionbox}
+\textbf{Your reflection task.}
+
+\begin{enumerate}
+  \item \textbf{On computation.} Row reduction is an algorithm: a fixed sequence of steps that always terminates with the answer. Much of mathematics involves finding algorithms. But not every mathematical question has an algorithm --- some are undecidable. Is linear algebra unusual in being so thoroughly algorithmic? Can you think of questions about matrices that do \emph{not} have efficient algorithms?
+
+  \item \textbf{On the determinant.} The determinant is defined by three axioms and encodes a geometric fact (volume scaling). It is also computed by a specific formula. Write down the three axioms, the geometric meaning, and the $2\times 2$ formula. Do you find it surprising that such a simple formula captures such rich information?
+
+  \item \textbf{On the four subspaces.} The fundamental theorem says the null space and row space are orthogonal complements. This means every vector in $\mathbb{R}^n$ splits uniquely into a component in the row space and a component in the null space. Write a physical analogy: what does this decomposition look like for a specific linear map?
+
+  \item \textbf{Looking ahead.} Module~3 asks: when can we find a basis in which a linear map is diagonal? The matrix $\begin{pmatrix}3&1\\0&2\end{pmatrix}$ from Problem~\ref{prob:change_of_basis} is upper triangular. Is there a basis in which it is diagonal? How would you find such a basis?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~3 is the jewel of linear algebra: eigenvalues and eigenvectors. An eigenvector is a direction that a linear map does not rotate --- only stretches or compresses. Finding eigenvectors means finding the ``natural axes'' of a transformation. This will unify differential equations (the characteristic equation for ODEs is exactly the eigenvalue equation), graph theory (PageRank is an eigenvector), and quantum mechanics (measurable quantities are eigenvalues of operators).
+
+\vspace{1.4cm}
+\begin{center}
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{DarkGrey}\textit{End of Journey 3, Module 2 --- Matrices and Systems}}\\[4pt]
+{\small\color{DarkGrey}Continue to: \textbf{Module 3 --- Eigenvalues and Eigenvectors}}\\[6pt]
+{\color{MidBlue}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

@@ -1,0 +1,406 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{4}
+\chapter[Journey 5 --- Algorithms, Data Structures, and Optimization]
+        {Journey Five\\[8pt]
+         \textcolor{ModuleColor}{\large Algorithms, Data Structures, and Optimization}}
+\setcounter{section}{0}
+
+\section{Module 5.1 --- Algorithmic Analysis and Divide-and-Conquer}
+\label{sec:mod5.1}
+
+\subsection*{Motivation}
+
+We completed in Journey 4 the software-hardware boundary, studying how compilers translate syntactic structures into registers and machine instructions.
+Now, we shift focus from the translation of code to the structural efficiency of the logic itself.
+We begin our study of algorithmic analysis.
+
+As the size of input data grows, the execution speed of a program is determined not by the speed of the compiler or hardware, but by the mathematical complexity class of the algorithm.
+This module formalizes asymptotic notation (Big-O, $\Omega$, $\Theta$) to measure execution scaling.
+We will study the **Divide-and-Conquer** design paradigm, formalize the Master Theorem to solve recurrences, and derive a fundamental mathematical proof: the absolute, comparison-based sorting lower bound of $\Omega(n \log n)$.
+
+\subsection{The Sorting Complexity Boundary}
+
+We investigate why divide-and-conquer reduces computation steps.
+
+\begin{puzzlebox}
+\textbf{The Comparison Limit.}
+
+Suppose we want to sort an unsorted list of $n$ numbers.
+* A basic sorting algorithm (like Bubble Sort or Insertion Sort) compares adjacent elements and swaps them, executing $O(n^2)$ comparisons.
+* A divide-and-conquer algorithm (like Merge Sort) splits the list in half, recursively sorts each half, and merges the sorted halves in linear time, executing $O(n \log n)$ comparisons.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item If $n = 10^6$ (one million elements):
+        * Calculate the approximate number of comparisons executed by Insertion Sort ($n^2$).
+        * Calculate the approximate number of comparisons executed by Merge Sort ($n \log_2 n$).
+        If a CPU can execute $10^9$ comparisons per second, calculate the running time of both algorithms. Why does the complexity difference represent the boundary between usability and failure?
+  \item We model any comparison-based sorting algorithm as a binary **Decision Tree**, where each node is a comparison ($x_i < x_j$), and each leaf is a unique sorted permutation of the input elements.
+        For a list of $n$ elements, how many unique permutations (leaves) must the decision tree contain?
+  \item The height of the decision tree represents the worst-case number of comparisons.
+        Prove that a binary tree with $L$ leaves must have a height $h \ge \log_2 L$.
+        Using Stirling's Approximation ($\ln n! \approx n \ln n - n$), show why the worst-case height of any comparison-based sorting decision tree must be at least $\Omega(n \log n)$.
+        Does there exist any comparison-based sorting algorithm that can sort in $O(n)$ time?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Asymptotic Complexity and the Master Theorem}
+
+We formalize how to measure scaling and solve recursive recurrences.
+
+\begin{namedconcept}{Asymptotic Definitions}
+Let $f(n)$ and $g(n)$ be functions mapping positive integers to positive reals.
+* **$f(n) = O(g(n))$ (Upper Bound):** There exist constants $c > 0$ and $n_0 > 0$ such that $f(n) \le c \cdot g(n)$ for all $n \ge n_0$.
+* **$f(n) = \Omega(g(n))$ (Lower Bound):** There exist constants $c > 0$ and $n_0 > 0$ such that $f(n) \ge c \cdot g(n)$ for all $n \ge n_0$.
+* **$f(n) = \Theta(g(n))$ (Tight Bound):** $f(n) = O(g(n))$ and $f(n) = \Omega(g(n))$.
+\end{namedconcept}
+
+\begin{explobox}
+Many divide-and-conquer algorithms yield recurrence relations of the form:
+\[
+  T(n) \;=\; a \cdot T(n/b) + f(n)
+\]
+representing a problem of size $n$ divided into $a$ subproblems of size $n/b$, with $f(n)$ work done to split and merge.
+We solve these recurrences using the **Master Theorem**:
+1. If $f(n) = O(n^{\log_b a - \epsilon})$ for some $\epsilon > 0$, then $T(n) = \Theta(n^{\log_b a})$.
+2. If $f(n) = \Theta(n^{\log_b a})$, then $T(n) = \Theta(n^{\log_b a} \log n)$.
+3. If $f(n) = \Omega(n^{\log_b a + \epsilon})$ for some $\epsilon > 0$, and if $a \cdot f(n/b) \le c \cdot f(n)$ for some $c < 1$ and large $n$, then $T(n) = \Theta(f(n))$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Solve the recurrence $T(n) = 4 T(n/2) + n$ using the Master Theorem. Specify which case applies.
+  \item Solve the recurrence for Merge Sort: $T(n) = 2 T(n/2) + \Theta(n)$.
+  \item Consider the recurrence $T(n) = 2 T(n/2) + n \log n$.
+        Explain why the standard Master Theorem does not apply directly to this recurrence.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Pivot Selection and Randomized Quicksort}
+
+We study the impact of pivot selection on quicksort complexity.
+
+\begin{explobox}
+Unlike Merge Sort, **Quicksort** partitions the array around a selected **pivot** element.
+* **Best Case:** The pivot divides the array into two equal halves at each step $\implies T(n) = 2 T(n/2) + \Theta(n) \implies \Theta(n \log n)$.
+* **Worst Case:** The pivot is always the smallest or largest element, dividing the array into $0$ and $n-1$ elements $\implies T(n) = T(n-1) + \Theta(n)$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Solve the worst-case recurrence $T(n) = T(n-1) + c \cdot n$ using expansion. Show that it yields $\Theta(n^2)$.
+  \item To prevent this worst-case behavior on sorted arrays, we use **Randomized Quicksort**, selecting the pivot uniformly at random from the subarray.
+        Explain how selecting a random pivot ensures that we achieve $O(n \log n)$ average-case running time, regardless of the initial order of the input.
+  \item Why is quicksort often faster in practice than merge sort, even though both have $O(n \log n)$ average time? (Think about cache locality and in-place memory usage).
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Asymptotic notations (Big-O, $\Omega$, $\Theta$) mathematically define how algorithm execution times scale as inputs approach infinity.
+
+\textbf{Second.} The Master Theorem provides a recipe for solving divide-and-conquer recurrences by comparing subproblem branching to split/merge costs.
+
+\textbf{Third.} Comparison-based sorting has a mathematically provable worst-case lower bound of $\Omega(n \log n)$, derived by modeling sorting as a binary decision tree.
+
+\textbf{Fourth.} Randomized pivot selection in Quicksort prevents $O(n^2)$ worst-case execution paths, guaranteeing $O(n \log n)$ average-case runtime.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Algorithmic parameters}
+* **Asymptotic Analysis:** The study of how execution parameters (time, space) scale with input size.
+* **Divide-and-Conquer:** An algorithmic paradigm that divides a problem into smaller subproblems, solves them recursively, and combines the results.
+* **Master Theorem:** A theorem for solving asymptotic recurrence relations of divide-and-conquer algorithms.
+* **Decision Tree:** A directed model mapping all possible sequences of comparisons executed by a sorting algorithm.
+* **Randomized Algorithm:** An algorithm that makes random choices during execution to optimize average-case complexity.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Solving Recurrences via the Master Theorem.}
+  
+        Solve the recurrence relation $T(n) = 4 T(n/2) + n$ using the Master Theorem.
+        
+        \textbf{Solution:}
+        The recurrence is:
+        \[
+          T(n) \;=\; a \cdot T(n/b) + f(n)
+        \]
+        where:
+        * $a = 4$ (number of subproblems).
+        * $b = 2$ (factor by which input size is divided).
+        * $f(n) = n$ (work done outside recursive calls).
+        
+        1. **Compute the critical exponent $\log_b a$:**
+           \[
+             \log_b a \;=\; \log_2 4 \;=\; 2.
+           \]
+           The comparing function is $n^{\log_b a} = n^2$.
+           
+        2. **Compare $f(n)$ to $n^2$:**
+           We compare $f(n) = n$ to $n^{\log_b a} = n^2$.
+           Clearly, $f(n) = O(n^{2 - \epsilon})$ for $\epsilon = 1 > 0$.
+           
+        3. **Apply the Master Theorem:**
+           This matches **Case 1** of the Master Theorem.
+           The recursive branching dominates the complexity.
+           Therefore:
+           \[
+             T(n) \;=\; \Theta\left( n^{\log_b a} \right) \;=\; \Theta\left( n^2 \right).
+           \]
+           Thus, the recurrence solves to $\Theta(n^2)$.
+           
+  \item \textbf{Stirling's Approximation and the Sorting Bound.}
+  
+        Prove that $\log_2(n!) = \Theta(n \log n)$ using Stirling's Approximation.
+        
+        \textbf{Solution:}
+        Stirling's Approximation states that:
+        \[
+          n! \;\approx\; \sqrt{2 \pi n} \left( \frac{n}{e} \right)^n.
+        \]
+        Taking the natural logarithm of both sides:
+        \[
+          \ln(n!) \;\approx\; n \ln n - n + \frac{1}{2} \ln(2 \pi n).
+        \]
+        We can write this in terms of base-2 logarithms:
+        \[
+          \log_2(n!) \;=\; \frac{\ln(n!)}{\ln 2} \;\approx\; \frac{1}{\ln 2} \left[ n \ln n - n + \frac{1}{2} \ln(2\pi n) \right].
+        \]
+        Let us isolate the dominant terms as $n \to \infty$:
+        * The term $n \ln n$ grows much faster than $n$ and $\ln n$.
+        * Thus, the asymptotic behavior is dominated by the first term:
+          \[
+            \lim_{n \to \infty} \frac{\log_2(n!)}{n \log_2 n} \;=\; \lim_{n \to \infty} \frac{\frac{1}{\ln 2} (n \ln n - n + o(n))}{\frac{1}{\ln 2} (n \ln n)} \;=\; 1.
+          \]
+        By definition of $\Theta$-notation, this limit proves that:
+        \[
+          \log_2(n!) \;=\; \Theta(n \log n).
+        \]
+        This completes the proof. Since the decision tree height $h \ge \log_2(n!)$, the worst-case number of comparisons for any comparison-based sort must be $\Omega(n \log n)$.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Solving Recurrences.}
+  
+        Solve the following recurrence relations using the Master Theorem or explain why it does not apply. If it does not apply, use the recurrence tree method to find a tight asymptotic bound:
+        \begin{enumerate}[label=(\alph*)]
+          \item $T(n) = 3 T(n/3) + n$.
+          \item $T(n) = 8 T(n/2) + n^3$.
+          \item $T(n) = 2 T(n/2) + n \log n$.
+        \end{enumerate}
+
+  \item \textbf{Comparison-Free Sorting (Counting Sort).}
+  
+        Comparison-based sorting has a lower bound of $\Omega(n \log n)$.
+        However, the **Counting Sort** algorithm sorts $n$ integers in the range $[0, k]$ in $O(n + k)$ time.
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain the mechanism of Counting Sort. (How does it use an auxiliary array to determine elements positions without comparing them?)
+          \item If $k = O(n)$ (the range of integers is proportional to the list size), Counting Sort runs in linear $O(n)$ time.
+                Explain why this does not violate the $\Omega(n \log n)$ lower bound.
+                *(What assumption about the input data distinguishes Counting Sort from comparison-based decision trees?)*
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Average-Case Complexity of Quicksort.}
+  
+        Let $T(n)$ be the average number of comparisons executed by Quicksort to sort $n$ distinct elements.
+        Assuming the pivot is chosen uniformly at random, the pivot splits the array into sizes $i$ and $n-1-i$ with equal probability $1/n$ for any $i \in [0, n-1]$.
+        This yields the recurrence:
+        \[
+          T(n) \;=\; (n-1) + \frac{2}{n} \sum_{i=0}^{n-1} T(i)
+        \]
+        where $T(0) = T(1) = 0$.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Multiply the equation by $n$ to get:
+                \[
+                  n \cdot T(n) \;=\; n(n-1) + 2 \sum_{i=0}^{n-1} T(i).
+                \]
+                Write down the corresponding equation for $(n-1) \cdot T(n-1)$, and subtract it to prove the relation:
+                \[
+                  n \cdot T(n) \;=\; (n+1) T(n-1) + 2(n-1).
+                \]
+          \item Divide this by $n(n+1)$ to derive the telescoping sum:
+                \[
+                  \frac{T(n)}{n+1} \;=\; \frac{T(n-1)}{n} + \frac{2(n-1)}{n(n+1)} \;\le\; \frac{T(n-1)}{n} + \frac{2}{n}.
+                \]
+          \item Expand this telescoping sum to prove that:
+                \[
+                  T(n) \;\le\; 2 (n+1) \sum_{i=1}^n \frac{1}{i}.
+                \]
+                Using the integral approximation of the harmonic series ($\sum_{i=1}^n 1/i \approx \ln n$), prove that the average-case complexity of quicksort is $T(n) \le 2 n \ln n \approx 1.39 n \log_2 n \in \Theta(n \log n)$.
+        \end{enumerate}
+
+  \item \textbf{Linear-Time Selection (Median of Medians).}
+  
+        The selection problem is to find the $i$-th smallest element in an unsorted list of $n$ elements (e.g. finding the median).
+        The **Median of Medians** algorithm guarantees linear $O(n)$ running time by recursively finding a good pivot:
+        1. Divide the $n$ elements into $\lceil n/5 \rceil$ groups of 5.
+        2. Find the median of each group.
+        3. Recursively call the selection algorithm to find the median $x$ of these $\lceil n/5 \rceil$ medians.
+        4. Partition the array around $x$ and recurse on the appropriate side.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Show that at least half of the $\lceil n/5 \rceil$ group medians are less than or equal to $x$.
+                Conclude that at least $3n/10 - 6$ elements are less than or equal to $x$.
+          \item Explain why this guarantees that the recursive call on the partition has size at most $7n/10 + 6$.
+          \item Show that the total running time satisfies the recurrence:
+                \[
+                  T(n) \;\le\; T(\lceil n/5 \rceil) + T(7n/10 + 6) + c \cdot n.
+                \]
+                Prove by induction that $T(n) = O(n)$, showing that we can find the median of an unsorted list in linear time without sorting it.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the Limit of Infinite Scale:** Asymptotic analysis measures performance as inputs grow to infinity ($n \to \infty$). In the physical world, computer inputs are always finite, restricted by memory and lifespan. Why is an infinite limit still the best way to evaluate finite algorithm behavior?
+  \item **On the Power of Randomization:** Randomized Quicksort uses a random number generator to bypass its worst-case input configurations. How does introducing "meaningless" entropy (randomness) into a deterministic machine prevent worst-case calculation failures?
+  \item **On the Value of Information:** We proved that sorting requires at least $\Omega(n \log n)$ comparisons because each comparison yields at most 1 bit of information (yes/no). How does this lower bound demonstrate a fundamental connection between algorithmic complexity and information theory?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~5.2 introduces **Advanced Data Structures and Balanced Trees**. Having analyzed how to sort and search data, we will study how to store it dynamically. We will study hash tables (universal hashing), self-balancing binary search trees (Red-Black trees and AVL rotations), and priority queues.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 5, Module 5.1 --- Algorithmic Analysis and Divide-and-Conquer}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 5.2 --- Advanced Data Structures and Balanced Trees}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

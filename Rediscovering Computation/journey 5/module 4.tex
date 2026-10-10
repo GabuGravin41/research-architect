@@ -1,0 +1,409 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={History Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{4}
+\chapter[Journey 5 --- Algorithms, Data Structures, and Optimization]
+        {Journey Five\\[8pt]
+         \textcolor{ModuleColor}{\large Algorithms, Data Structures, and Optimization}}
+\setcounter{section}{3}
+
+\section{Module 5.4 --- Dynamic Programming and Greedy Algorithms}
+\label{sec:mod5.4}
+
+\subsection*{Motivation}
+
+We completed in Module 5.3 the analysis of graphs and network flows, proving the Max-Flow Min-Cut dual capacity theorem.
+But optimization problems exist beyond graph pathways.
+We frequently encounter resource constraints where a simple greedy choice fails, and an exhaustive search is computationally impossible.
+We must study the calculus of optimization.
+
+This module formalizes two design paradigms: **Dynamic Programming (DP)** and **Greedy Algorithms**.
+We will study the concepts of optimal substructure and overlapping subproblems, contrasting top-down memoization with bottom-up tabulation.
+We will analyze the classic 0-1 Knapsack problem to show why dynamic programming solves resource constraints, and formulate mathematical proofs of greedy optimality for activity selection and Huffman prefix codes.
+
+\subsection{The Knapsack Puzzle}
+
+We investigate subproblem decomposition and caching redundant calculations.
+
+\begin{puzzlebox}
+\textbf{The Resource Allocation.}
+
+Suppose we have a knapsack that can hold at most $W$ kilograms.
+We are given $n$ items, where item $i$ has weight $w_i \in \mathbb{N}$ and value $v_i \in \mathbb{N}$.
+We want to select a subset of items to maximize value without exceeding capacity $W$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item If we try to evaluate every possible subset of items, there are $2^n$ subsets.
+        If $n = 50$, write down the number of subsets.
+        Explain why an exhaustive search is computationally impossible for $n=50$.
+  \item Let $dp[i][w]$ be the maximum value obtained from a subset of items $\{1, \dots, i\}$ with weight limit $w$.
+        Explain why the optimal choice for item $i$ satisfies the recurrence:
+        \[
+          dp[i][w] \;=\; \max\left( dp[i-1][w], \; dp[i-1][w-w_i] + v_i \right)
+        \]
+        if $w_i \le w$, and $dp[i-1][w]$ otherwise.
+  \item In a recursive implementation, many subproblems (like calculating $dp[i-1][w-w_i]$) are called repeatedly.
+        How does storing these values in a table (**Tabulation**) reduce the complexity from $O(2^n)$ to $O(n W)$?
+  \item If capacity $W = 10^9$, why does the $O(n W)$ complexity class fail? (This is called a **pseudopolynomial** running time. Why does it depend on the numeric value of the input rather than its size in bits?)
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Dynamic Programming vs. Greedy Choice}
+
+We study the constraints of dynamic programming and greedy strategies.
+
+\begin{namedconcept}{Optimal Substructure and Overlapping Subproblems}
+* **Optimal Substructure:** An optimal solution to a problem contains optimal solutions to its subproblems.
+* **Overlapping Subproblems:** A recursive algorithm revisits the same subproblems repeatedly, rather than generating new subproblems at each step.
+\end{namedconcept}
+
+\begin{explobox}
+A **Greedy Algorithm** solves an optimization problem by making the locally optimal choice at each step, hoping it leads to a global optimum.
+To prove a greedy algorithm is correct, we must prove:
+1. **Greedy Choice Property:** A global optimal solution can be reached by making a local greedy choice.
+2. **Optimal Substructure:** The remaining subproblem after the greedy choice is made is also solved optimally by the same algorithm.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item In the **Fractional Knapsack Problem**, we can take fractions of items.
+        Explain why a greedy strategy selecting items by highest value-to-weight ratio ($v_i/w_i$) yields the optimal solution.
+  \item Show by counterexample that this greedy ratio strategy fails for the **0-1 Knapsack Problem** (where we must take or leave each item in full).
+  \item Contrast **Memoization** (top-down caching of recursive calls) with **Tabulation** (bottom-up filling of an iterative table). Which is preferred when all subproblems must be solved?
+\end{enumerate}
+\end{explobox}
+
+\subsection{ Huffman Prefix Coding}
+
+We study optimal codes and greedy frequency merging.
+
+\begin{explobox}
+In Journey 1 Module 1.1, we studied Shannon entropy and data compression.
+**Huffman Coding** is a greedy algorithm that designs optimal prefix-free codes.
+Given a set of characters $C$ with frequencies $f$:
+1. Find the two characters $x, y \in C$ with the lowest frequencies.
+2. Replace them with a parent node $z$ whose frequency is $f_z = f_x + f_y$.
+3. Repeat recursively until a single tree remains.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item What does it mean for a code to be **prefix-free**? Why is this property critical for decoding a stream of binary bits?
+  \item Why is Huffman's strategy of merging the lowest-frequency characters greedy?
+        How does placing lower-frequency characters deeper in the tree minimize the average codeword length?
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} Dynamic Programming optimizes problems with overlapping subproblems by caching results via top-down memoization or bottom-up tabulation.
+
+\textbf{Second.} The 0-1 Knapsack problem exhibits optimal substructure and is solved in pseudopolynomial $O(n W)$ time using tabulation.
+
+\textbf{Third.} Greedy algorithms make locally optimal choices at each step, requiring proofs of the greedy choice property to confirm global safety.
+
+\textbf{Fourth.} Huffman coding greedily merges character frequencies to construct optimal prefix-free codes, minimizing average binary bit representation lengths.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Optimization parameters}
+* **Dynamic Programming:** An optimization method that solves complex problems by combining solutions to overlapping subproblems.
+* **Memoization:** A top-down optimization technique that caches recursive function results.
+* **Tabulation:** A bottom-up optimization technique that fills an iterative table.
+* **Greedy Choice Property:** The property where local optimizations lead directly to global optimums.
+* **Huffman Coding:** An optimal prefix-free entropy encoding algorithm.
+* **Pseudopolynomial Time:** A running time that is polynomial in the numeric value of the inputs, rather than the input size in bits.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Tabulation of the 0-1 Knapsack Problem.}
+  
+        Let the knapsack capacity be $W = 5$. We have 3 items:
+        * Item 1: $w_1 = 2, v_1 = 6$.
+        * Item 2: $w_2 = 3, v_2 = 10$.
+        * Item 3: $w_3 = 4, v_3 = 12$.
+        Construct the bottom-up DP table and find the maximum value.
+        
+        \textbf{Solution:}
+        We set up a table of size $(n+1) \times (W+1)$, where rows $i \in [0, 3]$ represent items and columns $w \in [0, 5]$ represent capacities.
+        * Row 0: No items selected. All values are 0.
+        * Column 0: Capacity is 0. All values are 0.
+        
+        Let us compute the cells iteratively using the recurrence:
+        \[
+          dp[i][w] \;=\; \max\left( dp[i-1][w], \; dp[i-1][w-w_i] + v_i \right)
+        \]
+        
+        1. **Row 1 (Item 1, $w_1=2, v_1=6$):**
+           * For $w < 2$: $dp[1][w] = dp[0][w] = 0$.
+           * For $w \ge 2$: $dp[1][w] = \max(0, 0 + 6) = 6$.
+           Row 1 values: $[0, 0, 6, 6, 6, 6]$.
+           
+        2. **Row 2 (Item 2, $w_2=3, v_2=10$):**
+           * For $w < 3$: $dp[2][w] = dp[1][w]$. ($dp[2][0]=0, dp[2][1]=0, dp[2][2]=6$).
+           * For $w = 3$: $\max(dp[1][3], dp[1][0] + 10) = \max(6, 10) = 10$.
+           * For $w = 4$: $\max(dp[1][4], dp[1][1] + 10) = \max(6, 10) = 10$.
+           * For $w = 5$: $\max(dp[1][5], dp[1][3] + 10) = \max(6, 6 + 10) = 16$.
+           Row 2 values: $[0, 0, 6, 10, 10, 16]$.
+           
+        3. **Row 3 (Item 3, $w_3=4, v_3=12$):**
+           * For $w < 4$: $dp[3][w] = dp[2][w]$. ($dp[3][0]=0, dp[3][1]=0, dp[3][2]=6, dp[3][3]=10$).
+           * For $w = 4$: $\max(dp[2][4], dp[2][0] + 12) = \max(10, 12) = 12$.
+           * For $w = 5$: $\max(dp[2][5], dp[2][1] + 12) = \max(16, 0 + 12) = 16$.
+           Row 3 values: $[0, 0, 6, 10, 12, 16]$.
+           
+        The final completed DP table is:
+        \begin{center}
+        \begin{tabular}{ccccccc}
+          \toprule
+          Items $\setminus$ Cap & \textbf{0} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} \\
+          \midrule
+          \textbf{0} & 0 & 0 & 0 & 0 & 0 & 0 \\
+          \textbf{Item 1} & 0 & 0 & 6 & 6 & 6 & 6 \\
+          \textbf{Item 2} & 0 & 0 & 6 & 10 & 10 & 16 \\
+          \textbf{Item 3} & 0 & 0 & 6 & 10 & 12 & 16 \\
+          \bottomrule
+        \end{tabular}
+        \end{center}
+        The maximum value is in $dp[3][5] = 16$ (composed of Item 1 and Item 2, weight $2+3=5$, value $6+10=16$).
+        
+  \item \textbf{Failure of Greedy Choice in 0-1 Knapsack.}
+  
+        Show that the greedy choice by value-to-weight ratio ($v_i/w_i$) fails for the 0-1 Knapsack problem with capacity $W=50$ and items: $A (w_1=10, v_1=60)$, $B (w_2=20, v_2=100)$, $C (w_3=30, v_3=120)$.
+        
+        \textbf{Solution:}
+        1. **Compute value-to-weight ratios:**
+           * Item $A$: ratio $= 60/10 = 6$.
+           * Item $B$: ratio $= 100/20 = 5$.
+           * Item $C$: ratio $= 120/30 = 4$.
+           
+        2. **Execute Greedy Choice:**
+           * The greedy algorithm selects items by highest ratio.
+           * Selects Item $A$ first (remaining capacity $50 - 10 = 40$).
+           * Selects Item $B$ next (remaining capacity $40 - 20 = 20$).
+           * Cannot select Item $C$ because its weight is $30$, which exceeds the remaining capacity of $20$.
+           * Total value selected = $v_A + v_B = 60 + 100 = 160$.
+           
+        3. **Compare to Global Optimum:**
+           * Consider selecting Item $B$ and Item $C$.
+           * Total weight = $w_B + w_C = 20 + 30 = 50 \le W$. (Valid configuration).
+           * Total value = $v_B + v_C = 100 + 120 = 220$.
+           
+        Since $220 > 160$, the greedy choice fails to find the global optimum.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Longest Common Subsequence (LCS).}
+  
+        Let $X = \langle A, B, C, B, D, A, B \rangle$ and $Y = \langle B, D, C, A, B, A \rangle$ be two sequences.
+        \begin{enumerate}[label=(\alph*)]
+          \item Write down the DP recurrence for the length of the LCS of prefixes $X[1..i]$ and $Y[1..j]$.
+          \item Construct the complete $(|X|+1) \times (|Y|+1)$ tabulation table.
+          \item Identify the length of the LCS, and trace back through the table to reconstruct the actual LCS sequence.
+        \end{enumerate}
+
+  \item \textbf{Activity Selection Greedy Choice Proof.}
+  
+        The Activity Selection problem asks us to select the maximum number of mutually compatible activities from a set $S = \{a_1, \dots, a_n\}$ with start times $s_i$ and finish times $f_i$.
+        The greedy strategy is to select the activity with the *earliest finish time* $f_i$ first.
+        \begin{enumerate}[label=(\alph*)]
+          \item Prove the greedy choice property: let $a_1$ be the activity in $S$ with the earliest finish time.
+                Prove that there exists an optimal solution to $S$ that includes $a_1$.
+                *(Hint: Let $A$ be an optimal solution. If $a_1 \notin A$, show how we can swap the first activity in $A$ with $a_1$ without violating compatibility).*
+          \item Explain why choosing activities by earliest start time or shortest duration fails to guarantee global optimality. Provide counterexamples for both.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Matrix Chain Multiplication.}
+  
+        Given a sequence of $n$ matrices $A_1, A_2, \dots, A_n$ where matrix $A_i$ has dimensions $p_{i-1} \times p_i$, we want to find the optimal parenthesization that minimizes the total number of scalar multiplications.
+        Let $m[i][j]$ be the minimum number of scalar multiplications needed to compute the product $A_i \dots A_j$.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Write down the recurrence relation for $m[i][j]$ in terms of split points $k$, where $i \le k < j$.
+          \item Explain why the time complexity of the tabulated DP solution is $O(n^3)$ and its space complexity is $O(n^2)$.
+          \item Given the matrix dimensions vector $p = \langle 10, 20, 30, 40, 30 \rangle$ (representing 4 matrices), compute the optimal cost table and show the final parenthesization.
+        \end{enumerate}
+
+  \item \textbf{Huffman Coding Greedy Choice Proof.}
+  
+        Let $C$ be a set of characters, where each character $c \in C$ has a frequency $f[c]$.
+        We prove the correctness of Huffman's greedy algorithm.
+        Let $x$ and $y$ be the two characters in $C$ with the lowest frequencies.
+        We prove the greedy choice property: there exists an optimal prefix code for $C$ in which the codewords for $x$ and $y$ have the same length and differ only in the last bit.
+        
+        Let $T$ be a binary tree representing an arbitrary optimal prefix code.
+        Let $a$ and $b$ be two sibling leaves of maximum depth in $T$.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Without loss of generality, assume $f[a] \ge f[b]$ and $f[x] \le f[y]$.
+                Since $x$ and $y$ have the lowest frequencies, explain why $f[x] \le f[a]$ and $f[y] \le f[b]$.
+          \item We construct a new tree $T'$ by swapping $x$ with $a$, and a tree $T''$ by swapping $y$ with $b$.
+                We define the cost of a tree as $B(T) = \sum_{c \in C} f[c] d_T(c)$, where $d_T(c)$ is the depth of leaf $c$ in $T$.
+                Prove that:
+                \[
+                  B(T) - B(T') \;\ge\; 0.
+                \]
+                *(Hint: Show that $B(T) - B(T') = (f[a] - f[x])(d_T(a) - d_T(x))$ and explain why both factors are non-negative).*
+          \item Conclude that $B(T'') \le B(T)$, proving that the tree $T''$ (where the lowest-frequency characters $x$ and $y$ are sibling leaves of maximum depth) is also an optimal tree.
+                How does this complete the proof of the greedy choice property?
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the nature of subproblems:** Dynamic Programming divides a problem into overlapping subproblems, whereas Divide-and-Conquer partitions a problem into independent subproblems. How does this distinction reflect the differences between linear systems and systems with shared dependencies?
+  \item **On the cost of pseudopolynomiality:** The 0-1 Knapsack problem is NP-complete, yet solved in $O(n W)$ time. If $P \neq NP$, how does this pseudopolynomial bound avoid violating complexity theory? (Hint: Think about how the numeric value $W$ scales relative to its representation in binary bits).
+  \item **On Greedy choices in life:** Greedy algorithms are fast but easily trapped in local optima. Dynamic programming explores all options systematically, guaranteeing correctness at higher cost. When is it rational to make greedy choices in real-world systems, and when must we execute full DP searches?
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking back at Journey 5.}
+You have traversed the analysis and design of algorithms:
+* **Module 5.1:** Asymptotic scaling (O, $\Omega$, $\Theta$), Master Theorem, Quicksort, and the $\Omega(n \log n)$ sorting lower bound.
+* **Module 5.2:** AVL rotations, Red-Black tree properties and height proofs, and Universal Hashing.
+* **Module 5.3:** Shortest path algorithms (Dijkstra vs. Bellman-Ford) and the Max-Flow Min-Cut Theorem.
+* **Module 5.4:** Optimal substructure, overlapping subproblems, 0-1 Knapsack tabulation, and greedy proofs.
+
+This completes Journey 5, providing the complete foundation of data structures and optimization. You are now ready to proceed to: **Computation Journey 6 --- Distributed Systems, Concurrency, and Hardware-Software Boundaries**.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 5 --- Algorithms, Data Structures, and Optimization}}\\[4pt]
+{\small\color{JourneyColor}You have completed the algorithms and optimization track. Continue to: \textbf{Computation Journey 6 --- Distributed Systems, Concurrency, and Hardware-Software Boundaries}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

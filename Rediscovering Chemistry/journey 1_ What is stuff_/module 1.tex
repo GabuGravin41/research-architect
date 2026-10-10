@@ -1,0 +1,948 @@
+\documentclass[12pt, a4paper]{book}
+
+% ─── Core packages ────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+% microtype removed
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=30mm, bottom=30mm,
+  inner=32mm, outer=25mm,
+  marginparwidth=18mm
+}
+
+% ─── Mathematics ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amsthm}
+
+% ─── Chemistry packages ───────────────────────────────────────────────────────
+\usepackage[version=4]{mhchem}          % \ce{H2O}, reaction arrows, etc.
+% chemfig removed                    % structural formulas
+% bohr removed                       % Bohr atomic diagrams
+% elements removed                   % element data
+
+% ─── Graphics & colour ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, decorations.pathmorphing, shapes.geometric,
+                positioning, calc, backgrounds, shadows}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% ─── Layout & typography ──────────────────────────────────────────────────────
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{marginnote}
+\usepackage{mdframed}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+
+% ─── Hyperlinks ───────────────────────────────────────────────────────────────
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COLOUR PALETTE
+% ══════════════════════════════════════════════════════════════════════════════
+\definecolor{JourneyColor}{HTML}{065F46}   % forest green — journey headings
+\definecolor{ModuleColor}{HTML}{0F766E}    % deep teal — module headings
+\definecolor{PuzzleColor}{HTML}{B45309}    % deep amber — puzzle boxes
+\definecolor{DiscoveryColor}{HTML}{D97706} % golden amber — discovery boxes
+\definecolor{WarningColor}{HTML}{E11D48}   % coral red — "model breaks" boxes
+\definecolor{ProblemColor}{HTML}{0F766E}   % dark teal — problem sets
+\definecolor{ReflectColor}{HTML}{047857}   % green — reflection boxes
+\definecolor{HistoryColor}{HTML}{9A3412}   % brown — history notes
+\definecolor{LightBg}{HTML}{F8FAFC}        % near-white background        % near-white background
+
+% ══════════════════════════════════════════════════════════════════════════════
+% TCOLORBOX ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+
+%% Puzzle box ─────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=PuzzleColor!6, colframe=PuzzleColor,
+  fonttitle=\bfseries\sffamily,
+  title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=PuzzleColor, colframe=PuzzleColor},
+  borderline west={3pt}{0pt}{PuzzleColor},
+  #1
+}
+
+%% Discovery box ──────────────────────────────────────────────────────────────
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  fonttitle=\bfseries\sffamily,
+  title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor},
+  #1
+}
+
+%% Problem set box ────────────────────────────────────────────────────────────
+\newtcolorbox{problembox}[1][]{
+  enhanced, breakable,
+  colback=ProblemColor!5, colframe=ProblemColor,
+  fonttitle=\bfseries\sffamily,
+  title={Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ProblemColor, colframe=ProblemColor},
+  borderline west={3pt}{0pt}{ProblemColor},
+  #1
+}
+
+%% Deep problems box ──────────────────────────────────────────────────────────
+\newtcolorbox{deepbox}[1][]{
+  enhanced, breakable,
+  colback=JourneyColor!5, colframe=JourneyColor,
+  fonttitle=\bfseries\sffamily,
+  title={Deep Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=JourneyColor, colframe=JourneyColor},
+  borderline west={4pt}{0pt}{JourneyColor},
+  #1
+}
+
+%% History note ───────────────────────────────────────────────────────────────
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=HistoryColor!7, colframe=HistoryColor!60,
+  fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=HistoryColor!80, colframe=HistoryColor},
+  #1
+}
+
+%% Reflection box ─────────────────────────────────────────────────────────────
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=ReflectColor!6, colframe=ReflectColor,
+  fonttitle=\bfseries\sffamily,
+  title={Reflection},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ReflectColor, colframe=ReflectColor},
+  borderline west={3pt}{0pt}{ReflectColor},
+  #1
+}
+
+%% Model-breaks warning ───────────────────────────────────────────────────────
+\newtcolorbox{modelbreaks}[1][]{
+  enhanced, breakable,
+  colback=WarningColor!6, colframe=WarningColor,
+  fonttitle=\bfseries\sffamily,
+  title={Where This Model Breaks},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=WarningColor, colframe=WarningColor},
+  borderline west={4pt}{0pt}{WarningColor},
+  #1
+}
+
+%% Named concept box ──────────────────────────────────────────────────────────
+\newtcolorbox{namedconcept}[2][]{
+  enhanced,
+  colback=ModuleColor!6, colframe=ModuleColor,
+  fonttitle=\bfseries\sffamily\large,
+  title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ModuleColor, colframe=ModuleColor},
+  #1
+}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% THEOREM-LIKE ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\theoremstyle{definition}
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{question}{Question}[chapter]
+\newtheorem{experiment}{Experiment}[chapter]
+\newtheorem{pattern}{Pattern}[chapter]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECTION FORMATTING
+% ══════════════════════════════════════════════════════════════════════════════
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}
+  {10pt}{\Huge}[\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% HEADER / FOOTER
+% ══════════════════════════════════════════════════════════════════════════════
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CHEMFIG SETTINGS
+% ══════════════════════════════════════════════════════════════════════════════
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CUSTOM COMMANDS
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\journeyname}[1]{\textcolor{JourneyColor}{\textbf{\sffamily#1}}}
+\newcommand{\chem}[1]{\ce{#1}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+
+% margin annotation
+\newcommand{\sidenote}[1]{%
+  \marginnote{\footnotesize\sffamily\textcolor{JourneyColor!70}{#1}}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% DOCUMENT BEGINS
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ─── Title page ──────────────────────────────────────────────────────────────
+\begin{titlepage}
+\pagecolor{JourneyColor}
+\color{white}
+\centering
+\vspace*{3cm}
+
+{\fontsize{11}{13}\selectfont\sffamily\MakeUppercase{A Discovery Curriculum}}
+
+\vspace{0.6cm}
+{\fontsize{42}{46}\selectfont\bfseries\sffamily The Chemistry\\[6pt] of Everything}
+
+\vspace{0.8cm}
+\textcolor{white!60}{\rule{0.5\textwidth}{1pt}}
+
+\vspace{0.8cm}
+{\large\sffamily From Substances to Structure to the World They Build}
+
+\vspace{3cm}
+
+\begin{tcolorbox}[
+  enhanced, width=0.75\textwidth,
+  colback=white!10, colframe=white!40,
+  boxrule=0.8pt, arc=4pt
+]
+\centering\sffamily\small
+This document is written for the student who will not merely\\
+\textit{use} chemistry as a tool, but who will one day\\
+\textit{extend} it. Every concept you meet here was once unknown.\\
+You are invited to rediscover it.
+\end{tcolorbox}
+
+\vfill
+{\sffamily\small Kenya Mathematical Olympiad Programme \quad\textbullet\quad Discovery Series}
+\pagecolor{white}
+\end{titlepage}
+
+% ─── TOC ─────────────────────────────────────────────────────────────────────
+\tableofcontents
+\clearpage
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  JOURNEY 1 — WHAT IS STUFF?
+% ══════════════════════════════════════════════════════════════════════════════
+\chapter[Journey 1 — What Is Stuff?]
+        {Journey One\\[8pt]\textcolor{ModuleColor}{\large What Is Stuff?\\ Matter and Its Patterns}}
+\label{ch:journey1}
+
+\begin{tcolorbox}[
+  enhanced, colback=JourneyColor!8, colframe=JourneyColor,
+  arc=4pt, left=6mm, right=6mm, top=4mm, bottom=4mm
+]
+\sffamily\small
+\textbf{What this journey is about.}
+Chemistry begins not with atoms — atoms are already an answer.
+It begins with a much older question:
+\textit{why do different substances behave so differently?}
+Why does wood burn while stone does not?
+Why does salt dissolve in water but oil refuses?
+Why does heating copper ore in a fire produce
+a shining metal while the ore itself is dull and brittle?
+
+In this journey we do what the earliest chemists did:
+we observe, we classify, we measure, and we chase
+the simplest possible explanation for stubborn facts.
+By the end, we will have \textit{invented} the concept of the atom ---
+not because someone told us atoms exist,
+but because the data leave us no other choice.
+\end{tcolorbox}
+
+\vspace{1em}
+
+\begin{center}
+\begin{tikzpicture}[
+  node distance=1.6cm,
+  every node/.style={font=\sffamily\small},
+  arrow/.style={-{Stealth[length=5pt]}, thick, color=JourneyColor!70}
+]
+  \node[draw=JourneyColor, fill=JourneyColor!10, rounded corners=4pt,
+        minimum width=3.2cm, minimum height=0.8cm, align=center]
+        (obs) {Observation:\\substances differ};
+  \node[draw=ModuleColor, fill=ModuleColor!10, rounded corners=4pt,
+        minimum width=3.2cm, minimum height=0.8cm, align=center,
+        right=of obs]
+        (clas) {Classification:\\elements \& compounds};
+  \node[draw=DiscoveryColor, fill=DiscoveryColor!10, rounded corners=4pt,
+        minimum width=3.2cm, minimum height=0.8cm, align=center,
+        right=of clas]
+        (cons) {Conservation:\\mass is conserved};
+  \node[draw=PuzzleColor, fill=PuzzleColor!10, rounded corners=4pt,
+        minimum width=3.2cm, minimum height=0.8cm, align=center,
+        right=of cons]
+        (atom) {Fixed ratios:\\the atomic hypothesis};
+
+  \draw[arrow] (obs)  -- (clas);
+  \draw[arrow] (clas) -- (cons);
+  \draw[arrow] (cons) -- (atom);
+\end{tikzpicture}
+\end{center}
+
+\vspace{1.5em}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  MODULE 1.1 — THE STUBBORN QUESTION
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Module 1.1 — The Stubborn Question: Why Do Substances Differ?}
+\label{sec:mod1.1}
+
+\subsection*{Motivation}
+
+Before we discuss any chemistry at all, we must sit with a fact that is
+easy to overlook because we are so accustomed to it:
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=LightBg, colframe=JourneyColor!40,
+  width=0.88\textwidth, arc=3pt
+]
+\centering\sffamily
+The world is made of an enormous variety of substances.\\[4pt]
+Iron is hard and conducts electricity.
+Sulfur is brittle and does not.\\
+Water flows and extinguishes fire.
+Ethanol flows and feeds fire.\\
+Salt is a white crystal that your body needs to survive.\\
+Arsenic is a white powder that will kill you.\\[4pt]
+\textit{Same colour. Very different substance.}
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+Why should matter come in so many distinct varieties?
+This is the question chemistry was born to answer.
+And the answer, when it comes, will be surprisingly deep:
+the properties of a substance are consequences of its \emph{composition}
+and \emph{structure} at the very smallest scale.
+
+But we are not there yet.
+First, we must learn to look carefully.
+
+% ─── Section: Observation ────────────────────────────────────────────────────
+\subsection{The Art of Careful Observation}
+
+The earliest move in chemistry is not calculation.
+It is \newterm{systematic observation} — noting not just that
+substances differ, but \emph{how} and \emph{when} they differ.
+
+Consider the following observations, which any careful person
+in the ancient world could have made.
+
+\begin{observation}[Fire and transformation]
+When wood burns, the solid wood disappears and is replaced by
+a small amount of ash, heat, and smoke.
+The product is nothing like the original wood.
+\label{obs:burning}
+\end{observation}
+
+\begin{observation}[Heating ore]
+When greenish \emph{malachite} (a copper-containing rock)
+is heated strongly with charcoal,
+a shining red-orange metal appears.
+The rock becomes metal.
+\label{obs:ore}
+\end{observation}
+
+\begin{observation}[Dissolving]
+When common salt is placed in water, it disappears.
+The water now tastes salty.
+When the water is evaporated, the salt reappears —
+identical to what was added.
+\label{obs:dissolving}
+\end{observation}
+
+\begin{observation}[Fixed composition]
+No matter where in the world you find pure water,
+it always has the same properties: same boiling point,
+same density, same taste, same behaviour.
+Water from the Nile and water from the Amazon are \emph{indistinguishable}.
+\label{obs:fixedcomp}
+\end{observation}
+
+\vspace{0.5em}
+
+These four observations are profoundly different in character,
+and it took centuries to understand why.
+Observations~\ref{obs:burning} and~\ref{obs:ore} involve
+\emph{transformation} — the substance changes permanently.
+Observation~\ref{obs:dissolving} involves \emph{mixing} —
+the salt returns unchanged.
+Observation~\ref{obs:fixedcomp} is perhaps the most striking:
+pure substances have \emph{fixed, reproducible properties}.
+
+\begin{puzzlebox}
+You have a clear liquid in a flask.
+You do not know what it is.
+
+\begin{enumerate}[leftmargin=*, label=(\alph*)]
+  \item List five \emph{physical} measurements you could make to
+        characterise it, without chemically altering it.
+  \item What does it mean for a substance to be \emph{pure}?
+        How would you test for purity using only the properties
+        you listed?
+  \item Two liquids are both clear and colourless.
+        One is water, one is ethanol.
+        They look identical.
+        Design an experiment (without tasting) to distinguish them.
+\end{enumerate}
+\end{puzzlebox}
+
+% ─── Section: Physical vs Chemical ───────────────────────────────────────────
+\subsection{Physical Properties vs Chemical Behaviour}
+
+The earliest classification in chemistry distinguishes
+two types of properties:
+
+\begin{itemize}[leftmargin=2em]
+  \item \newterm{Physical properties} can be measured without
+        changing what the substance fundamentally is:
+        colour, mass, density, boiling point, melting point,
+        electrical conductivity.
+  \item \newterm{Chemical properties} describe how a substance
+        interacts with other substances — what it reacts with,
+        what it becomes, what energy is released or absorbed.
+\end{itemize}
+
+\vspace{0.5em}
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small},
+  arrow/.style={-{Stealth[length=4pt]}, thick}
+]
+  % Two columns: Physical | Chemical
+  \node[draw=ModuleColor, fill=ModuleColor!8, rounded corners=4pt,
+        minimum width=5cm, minimum height=1cm, align=center]
+        (phys) at (0,0) {\textbf{Physical Property}\\
+                          substance unchanged after measurement};
+  \node[draw=WarningColor, fill=WarningColor!8, rounded corners=4pt,
+        minimum width=5cm, minimum height=1cm, align=center]
+        (chem) at (7.5,0) {\textbf{Chemical Property}\\
+                             substance is transformed};
+
+  % Examples below
+  \node[align=left, text=ModuleColor] at (0,-1.8) {
+    density, boiling point,\\
+    colour, conductivity,\\
+    hardness, solubility};
+  \node[align=left, text=WarningColor] at (7.5,-1.8) {
+    flammability, reactivity\\
+    with acid, ability to\\
+    rust, toxicity};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+Why does this distinction matter?
+Because it tells us something deep:
+\emph{a substance can be characterised by its properties,
+and no two distinct pure substances have identical properties}.
+Properties are like fingerprints.
+This will become the foundation of chemical identification.
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item Classify each property as physical or chemical:
+    \begin{multicols}{2}
+    \begin{itemize}[nosep]
+      \item Melting point of ice: \SI{0}{\celsius}
+      \item Iron rusts in moist air
+      \item Gold density: \SI{19.3}{\gram\per\centi\metre\cubed}
+      \item Magnesium burns with bright white flame
+      \item Ethanol boils at \SI{78}{\celsius}
+      \item Sodium reacts violently with water
+    \end{itemize}
+    \end{multicols}
+
+  \item A student claims that dissolving salt in water is a
+        \emph{chemical} change because the salt disappears.
+        Another claims it is \emph{physical} because the salt
+        can be recovered by evaporation.
+        Who is correct, and why?
+
+  \item Consider ice, liquid water, and steam.
+        Do they have the same physical properties?
+        The same chemical properties?
+        What does your answer tell you about the
+        relationship between physical state and chemical identity?
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Mixtures vs Pure Substances ────────────────────────────────────
+\subsection{Mixtures and Pure Substances}
+
+A key early discovery is that not all matter is equally \emph{uniform}.
+
+\begin{observation}[Heterogeneous vs homogeneous matter]
+Gravel mixed with sand looks non-uniform to the eye.
+Salt dissolved in water looks completely uniform.
+Yet both are \emph{mixtures} that can be separated by physical means.
+\end{observation}
+
+\vspace{0.5em}
+
+This leads to our first classification tree:
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  edge/.style={thick, color=JourneyColor!70},
+  level 1/.style={sibling distance=6cm},
+  level 2/.style={sibling distance=3cm}
+]
+  \node[draw=JourneyColor, fill=JourneyColor!10,
+        rounded corners=4pt, minimum width=3cm, minimum height=0.7cm]
+        {Matter}
+    child[edge from parent/.style={draw=JourneyColor, thick}]{
+      node[draw=ModuleColor, fill=ModuleColor!10,
+           rounded corners=3pt, minimum width=2.8cm]{Pure\\Substance}
+      child{ node[draw=ModuleColor!70, fill=ModuleColor!5,
+                  rounded corners=2pt]{Element} }
+      child{ node[draw=ModuleColor!70, fill=ModuleColor!5,
+                  rounded corners=2pt]{Compound} }
+    }
+    child[edge from parent/.style={draw=JourneyColor, thick}]{
+      node[draw=DiscoveryColor!80, fill=DiscoveryColor!10,
+           rounded corners=3pt, minimum width=2.8cm]{Mixture}
+      child{ node[draw=DiscoveryColor!60, fill=DiscoveryColor!5,
+                  rounded corners=2pt]{Homogeneous\\(solution)} }
+      child{ node[draw=DiscoveryColor!60, fill=DiscoveryColor!5,
+                  rounded corners=2pt]{Heterogeneous} }
+    };
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The most important boundary here is between a \newterm{pure substance}
+and a \newterm{mixture}.
+
+\begin{namedconcept}{Pure Substance}
+A pure substance has \emph{fixed, definite composition}
+and \emph{fixed properties} that do not depend on its origin or
+how it was prepared.
+
+A pure substance cannot be separated into simpler components
+by \emph{physical} means (filtering, evaporation, distillation).
+\end{namedconcept}
+
+\vspace{0.5em}
+
+Notice what we did not say: we said nothing about atoms.
+This definition is \emph{operational} — it is defined by what you
+can and cannot do to the substance.
+This is exactly how early chemists thought.
+
+\begin{puzzlebox}
+Consider the following and classify each:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Substance & Observation & Your classification \\
+\midrule
+Seawater & Tastes salty; evaporation leaves solid & ? \\
+Distilled water & Always boils at exactly \SI{100}{\celsius} & ? \\
+Bronze & Gold-coloured metal, variable hardness & ? \\
+Dry air & Uniform gas; \ce{N2} extractable by cooling & ? \\
+Diamond & Always same density, hardness & ? \\
+Crude oil & Distillation gives many different liquids & ? \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+After classifying, answer:
+\begin{enumerate}[label=(\alph*)]
+  \item What test distinguishes a pure substance from a mixture?
+  \item Can a mixture be \emph{uniform} in appearance?
+        Does uniformity guarantee purity?
+\end{enumerate}
+\end{puzzlebox}
+
+% ─── Section: Elements ───────────────────────────────────────────────────────
+\subsection{Elements: Substances That Cannot Be Broken Down Further}
+
+We can divide pure substances further.
+Some can be decomposed into simpler substances by chemical means.
+Others cannot.
+
+\begin{namedconcept}{Element}
+An \newterm{element} is a pure substance that \emph{cannot be broken
+down into simpler substances} by any chemical process.
+
+Historically, something was declared an element when no known
+chemical procedure could decompose it further.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+\begin{namedconcept}{Compound}
+A \newterm{compound} is a pure substance that \emph{can be decomposed}
+into simpler substances, and whose properties are entirely
+\emph{different} from the elements that compose it.
+\end{namedconcept}
+
+\vspace{0.5em}
+
+The distinction sounds simple. It was extraordinarily hard to establish in practice. 
+
+Consider water.
+For over two thousand years, water was believed to be an \emph{element}.
+It took until 1781 for Henry Cavendish to show that burning hydrogen
+gas in air produces water — demonstrating that water is a \emph{compound}.
+
+\begin{historybox}
+\textbf{Cavendish and the Composition of Water (1781)}
+
+Henry Cavendish was a reclusive English scientist who avoided
+company but was meticulous with measurements.
+He discovered that a gas he called \emph{inflammable air}
+(what we now call hydrogen) burns to produce water.
+He later showed the ratio: water is approximately
+\SI{11.1}{\percent} hydrogen and \SI{88.9}{\percent} oxygen by mass.
+
+This single experiment overturned millennia of belief.
+Water was not an element.
+It was built from two things that were.
+
+\begin{center}
+\ce{2H2 + O2 -> 2H2O}
+\end{center}
+\end{historybox}
+
+% ─── Section: The Strangeness of Compounds ───────────────────────────────────
+\subsection{The Strangeness of Compounds}
+
+Here is something that should bother you.
+
+Sodium is a \emph{silvery metal} that reacts explosively with water.
+Chlorine is a \emph{yellow-green poisonous gas}.
+
+When they react together:
+
+\vspace{0.3em}
+\begin{center}
+\ce{2Na_{(s)} + Cl2_{(g)} -> 2NaCl_{(s)}}
+\end{center}
+\vspace{0.3em}
+
+The product is common table salt — a white crystal essential for life,
+that dissolves harmlessly in water.
+
+\begin{center}
+\begin{tikzpicture}[every node/.style={font=\sffamily\small}]
+  % Sodium
+  \node[draw=JourneyColor, fill=JourneyColor!10, rounded corners=3pt,
+        minimum width=2.5cm, minimum height=1.8cm, align=center]
+        (na) at (0,0) {\textbf{Sodium}\\silver metal\\reacts with water};
+  % Plus sign
+  \node at (3,0) {\Large +};
+  % Chlorine
+  \node[draw=WarningColor, fill=WarningColor!10, rounded corners=3pt,
+        minimum width=2.5cm, minimum height=1.8cm, align=center]
+        (cl) at (5,0) {\textbf{Chlorine}\\toxic green gas\\corrosive};
+  % Arrow
+  \draw[-{Stealth[length=6pt]}, thick, color=ModuleColor] (6.5,0) -- (8.5,0)
+        node[midway, above, font=\sffamily\small]{react};
+  % Salt
+  \node[draw=ModuleColor, fill=ModuleColor!10, rounded corners=3pt,
+        minimum width=2.8cm, minimum height=1.8cm, align=center]
+        (salt) at (10.5,0) {\textbf{Sodium chloride}\\white crystal\\edible salt};
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+This is one of the most important lessons in chemistry:
+\emph{the properties of a compound are not the sum of the properties
+of its elements}.
+When elements combine to form a compound,
+something genuinely new is created.
+
+A compound is not a mixture of its elements.
+It is a new substance entirely.
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item Iron (\ce{Fe}) is a strong metal. Sulfur (\ce{S}) is a
+        yellow brittle powder. When heated together they form
+        iron(II) sulfide (\ce{FeS}), a grey-black brittle solid.
+        \begin{enumerate}[label=(\alph*)]
+          \item A magnet attracts iron but not \ce{FeS}.
+                Is this consistent with \ce{FeS} being a compound?
+                Explain.
+          \item If you mixed iron filings and sulfur powder
+                \emph{without} heating, would a magnet separate them?
+                Why does this distinguish a mixture from a compound?
+        \end{enumerate}
+
+  \item Water (\ce{H2O}) and hydrogen peroxide (\ce{H2O2})
+        have the same elements: hydrogen and oxygen.
+        Water is stable and life-sustaining.
+        Hydrogen peroxide is a strong oxidising agent that can
+        bleach hair and disinfect wounds.
+        \begin{enumerate}[label=(\alph*)]
+          \item What does this tell you about the relationship
+                between composition and properties?
+          \item Is the \emph{ratio} of elements in a compound
+                fixed or variable? How would you test this experimentally?
+        \end{enumerate}
+
+  \item A student decomposes \SI{18.0}{\gram} of water by passing
+        electricity through it (electrolysis).
+        She collects \SI{2.0}{\gram} of hydrogen gas and
+        \SI{16.0}{\gram} of oxygen gas.
+        She repeats with \SI{36.0}{\gram} of water.
+        \begin{enumerate}[label=(\alph*)]
+          \item Predict the masses of hydrogen and oxygen produced.
+          \item What pattern do you see?
+          \item Another student claims the ratio might change if
+                the water comes from a different source.
+                Design an experiment to test this claim.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+% ─── Section: Separation Methods ─────────────────────────────────────────────
+\subsection{Separating Mixtures: Physical Methods}
+
+An important experimental skill — one that shaped the history
+of chemistry — is the ability to separate mixtures into their components.
+
+The key principle: \emph{different components of a mixture differ in
+their physical properties}, and we can exploit these differences
+to separate them without any chemical reaction occurring.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\footnotesize, align=center},
+  arrow/.style={-{Stealth[length=4pt]}, thick, color=JourneyColor!60}
+]
+  % Central node
+  \node[draw=JourneyColor, fill=JourneyColor!10, rounded corners=5pt,
+        minimum width=3cm, minimum height=1cm, font=\sffamily\small\bfseries]
+        (mix) {Separating\\Mixtures};
+
+  % Surrounding methods
+  \node[draw=ModuleColor!80, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=2.8cm, minimum height=0.9cm]
+        (filt) at (0, 2.8) {Filtration\\solid from liquid};
+  \node[draw=ModuleColor!80, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=2.8cm, minimum height=0.9cm]
+        (evap) at (3.5, 1.8) {Evaporation\\dissolved solid from solution};
+  \node[draw=ModuleColor!80, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=2.8cm, minimum height=0.9cm]
+        (dist) at (3.5, -1.8) {Distillation\\liquids by boiling point};
+  \node[draw=ModuleColor!80, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=2.8cm, minimum height=0.9cm]
+        (chrom) at (0, -2.8) {Chromatography\\by solubility};
+  \node[draw=ModuleColor!80, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=2.8cm, minimum height=0.9cm]
+        (mag) at (-3.5, -1.8) {Magnetism\\magnetic from non-magnetic};
+  \node[draw=ModuleColor!80, fill=ModuleColor!8, rounded corners=3pt,
+        minimum width=2.8cm, minimum height=0.9cm]
+        (crys) at (-3.5, 1.8) {Crystallisation\\by solubility difference};
+
+  \foreach \n in {filt, evap, dist, chrom, mag, crys}
+    \draw[arrow] (mix) -- (\n);
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+Each separation method relies on a \emph{physical property difference}:
+filtration uses particle size;
+distillation uses boiling point;
+chromatography uses relative solubility.
+None of these methods create new substances.
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{\arabic*.}]
+  \item A mixture contains salt (\ce{NaCl}), sand (\ce{SiO2}),
+        and iron filings.
+        \begin{enumerate}[label=(\alph*)]
+          \item Design a three-step procedure to obtain
+                each pure component.
+          \item State which physical property difference
+                each step exploits.
+        \end{enumerate}
+
+  \item Crude oil is a mixture of many hydrocarbons.
+        They can be separated by heating and collecting vapours
+        at different temperatures.
+        \begin{enumerate}[label=(\alph*)]
+          \item What physical property is this separation based on?
+          \item If two components have very similar properties,
+                how would you modify the procedure?
+        \end{enumerate}
+
+  \item Ink is a mixture of coloured compounds.
+        If you place a dot of ink on filter paper and allow
+        water to seep through, the colours separate.
+        \begin{enumerate}[label=(\alph*)]
+          \item What does this tell you about the ink's composition?
+          \item Could this technique tell you whether a substance
+                is pure or mixed? Explain.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Towards the Atom ───────────────────────────────────────────────
+\subsection{The Question at the Edge of Observation}
+
+We have established:
+substances differ in properties;
+some are pure, some are mixtures;
+some pure substances can be decomposed (compounds);
+others cannot (elements).
+
+This leaves us with a question that observation alone cannot answer:
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=PuzzleColor!8, colframe=PuzzleColor,
+  width=0.82\textwidth, arc=3pt,
+  fontupper=\sffamily\large\bfseries, halign=center
+]
+What is an element \emph{made of}?\\[4pt]
+\normalfont\normalsize\sffamily
+If we could divide a piece of iron into smaller and smaller pieces,\\
+would we eventually reach something that is not iron?\\
+Or would every piece, however small, still be iron?
+\end{tcolorbox}
+\end{center}
+
+\vspace{0.5em}
+
+This question is ancient.
+The Greek philosopher Democritus (around 400 BCE)
+proposed that matter is made of \emph{indivisible particles}
+he called \emph{atomos} — uncuttable.
+But this was pure philosophy, with no experimental evidence.
+
+The answer would have to wait two thousand years,
+for a set of precise measurements that pointed inescapably
+toward a hidden structure.
+
+That is the subject of Module 1.4.
+Before we get there, we need one more observation
+from the history of chemistry — one that transformed
+the entire field.
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\subsection*{Reflection}
+
+\begin{reflectionbox}
+Take ten minutes to write your answers to the following.
+You can revise your answers after completing the later modules.
+
+\begin{enumerate}[label=\textbf{R\arabic*.}]
+  \item We built a classification tree: matter splits into
+        mixtures and pure substances; pure substances split into
+        elements and compounds.
+        \textbf{What observations forced each branch of this classification?}
+        In other words, what experiments would you do to decide
+        where an unknown substance belongs?
+
+  \item The properties of sodium chloride are completely different
+        from those of sodium metal and chlorine gas.
+        \textbf{What does this tell us about the nature of chemical bonding?}
+        (You do not need to answer this fully now — just write
+        your current intuition.)
+
+  \item We defined an element as a substance that cannot be decomposed
+        by chemical means.
+        \textbf{What is the weakness of this definition?}
+        (Hint: what would happen if we hadn't yet discovered
+        all possible chemical reactions?)
+
+  \item A pure substance always has fixed properties,
+        regardless of its origin.
+        \textbf{Why is this fact so important?}
+        What would chemistry look like if the same substance
+        had different properties depending on where it was found?
+\end{enumerate}
+\end{reflectionbox}
+
+\vspace{1.5em}
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  width=0.88\textwidth, arc=3pt
+]
+\centering\sffamily\small
+\textbf{What we invented in this module.}\\[4pt]
+We invented the idea that substances can be \emph{classified by
+what can and cannot be done to them}.
+This classification — into mixtures, compounds, and elements —
+was not handed to us by nature. It was a \emph{choice of framework},
+and it turned out to be the right one.
+Chemists did not discover elements by finding tiny objects called elements.
+They discovered them by finding substances that \emph{resisted}
+all attempts at decomposition.\\[4pt]
+When we later discover that elements correspond to distinct types of atoms,
+we will see that this operational definition was pointing at
+something deeply real — but we did not need to know that yet.
+\end{tcolorbox}
+\end{center}
+
+\vspace{2em}
+\noindent\textcolor{JourneyColor!40}{\rule{\textwidth}{0.6pt}}
+\begin{center}
+\textit{\sffamily\small
+Module 1.1 complete. Continue to Module 1.2:
+\textbf{Burning, Dissolving, Reacting — The First Clues}.}
+\end{center}
+
+\end{document}

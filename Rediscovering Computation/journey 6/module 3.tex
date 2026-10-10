@@ -1,0 +1,402 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Charcoal / Royal Blue) ──────────────────────────────────────────
+\definecolor{JourneyColor}{HTML}{0F172A}
+\definecolor{ModuleColor}{HTML}{2563EB}
+\definecolor{PuzzleColor}{HTML}{D97706}
+\definecolor{DiscoveryColor}{HTML}{3B82F6}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={History Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{5}
+\chapter[Journey 6 --- Distributed Systems and Concurrency]
+        {Journey Six\\[8pt]
+         \textcolor{ModuleColor}{\large Distributed Systems and Concurrency}}
+\setcounter{section}{2}
+
+\section{Module 6.3 --- Distributed Systems, Consensus, and Paxos}
+\label{sec:mod6.3}
+
+\subsection*{Motivation}
+
+We completed in Module 6.2 the physical memory boundaries of concurrency, studying store buffers, cache coherence (MESI), and memory fences.
+Now, we scale out past CPU bus connections to network boundaries.
+Instead of cores coordinating over a shared memory bus, we must analyze independent servers communicating over unreliable network channels.
+We enter the domain of **Distributed Systems**.
+
+In this module, we formalize the fundamental limits of network computation.
+We will study the **CAP Theorem**, proving why systems cannot simultaneously guarantee consistency and availability during network partitions.
+We will analyze the consensus problem, state the **FLP Impossibility Theorem**, and explore the mechanics of **Paxos**, deriving how majority quorums enforce safe state consensus in the presence of node crash failures.
+
+\subsection{The Unreliable Channel}
+
+We investigate network partition trade-offs and consensus limitations.
+
+\begin{puzzlebox}
+\textbf{The Distributed Database.}
+
+Suppose we have a distributed database running on three servers ($G_1, G_2, G_3$) located in different cities.
+Clients can write data to any server, and the servers replicate updates by sending network messages to each other.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Suppose a network failure partitions the servers: $G_1$ and $G_2$ can communicate, but their link to $G_3$ is cut.
+        * A client writes a new value `x = 5` to server $G_1$.
+        * Another client reads variable `x` from server $G_3$ concurrently.
+        Explain why the system must choose between **Consistency** (preventing $G_3$ from returning stale data) and **Availability** (allowing both writes and reads to succeed without blocking).
+  \item This limit is formalized by the **CAP Theorem**.
+        Define the three parameters: Consistency (Linearizability), Availability, and Partition Tolerance.
+        Prove that when a partition ($P$) occurs, we must choose between Consistency ($C$) and Availability ($A$).
+  \item To maintain consistency under node crashes, servers must agree on a single sequence of updates. This is the **Consensus Problem**.
+        We require three properties of any consensus algorithm:
+        * **Agreement:** No two correct nodes decide on different values.
+        * **Validity:** The decided value must have been proposed by some node.
+        * **Termination:** Every correct node eventually decides.
+        State the **FLP Impossibility Theorem** (1985). Why does even a single node crash prevent guaranteed termination in asynchronous networks?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{The Paxos Consensus Protocol}
+
+We study the roles, phases, and quorum constraints of Paxos.
+
+\begin{namedconcept}{Paxos Protocol Architecture}
+Paxos guarantees safety (Agreement and Validity) under crash failures, bypassing the FLP termination limit by allowing infinite loops only in rare, non-terminating configurations (resolved in practice by randomized timeouts or leaders).
+Nodes play three roles:
+* **Proposers:** Advocate for values proposed by clients.
+* **Acceptors:** Store and vote on proposals, acting as the memory of the consensus.
+* **Learners:** Detect when a proposal has been decided (accepted by a majority).
+\end{namedconcept}
+
+\begin{explobox}
+Paxos operates in two distinct phases:
+* **Phase 1a (Prepare):** A Proposer selects a unique proposal number $n$ and broadcasts `Prepare(n)` to a majority of Acceptors.
+* **Phase 1b (Promise):** An Acceptor receives `Prepare(n)`. If $n$ is greater than any proposal number it has seen, it promises not to accept any proposals numbered $< n$, and replies with the highest-numbered proposal it has already accepted (if any).
+* **Phase 2a (Accept):** If the Proposer receives promises from a majority, it sends `Accept(n, v)` to those Acceptors, where $v$ is the value of the highest-numbered proposal among the promises, or its own proposed value if no accepted value was returned.
+* **Phase 2b (Accepted):** An Acceptor receives `Accept(n, v)`. It accepts the proposal unless it has already promised not to.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Why must the proposal numbers $n$ be unique across all proposers? (What would happen if two proposers used the same $n$ for different values?)
+  \item Explain how the **Majority Quorum** ($Q > N/2$) ensures that any two quorums must intersect.
+        Why is this intersection property critical for carrying over previously accepted values to Phase 2?
+  \item Draw a message sequence chart showing a successful Paxos round where a value $v$ is decided among three acceptors.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Fault Tolerance and Raft Consensus}
+
+We analyze leader election and log replication.
+
+\begin{explobox}
+While Paxos is mathematically elegant, implementing it for a continuous stream of commands (a replicated log) is complex.
+Modern systems often use **Raft**, which decomposes consensus into explicit leader election, log replication, and safety.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item In Raft, time is divided into arbitrary **Terms** of numbered integers.
+        During an election, a candidate must obtain votes from a majority of nodes to become leader.
+        Prove that there can be at most one leader elected in any single Term.
+  \item Raft enforces the **Leader Completeness** safety invariant: if a log entry is committed in a given term, that entry will be present in the logs of the leaders for all higher-termed terms.
+        How does the voting process (where a follower denies its vote if the candidate's log is less up-to-date than its own) guarantee this completeness invariant?
+  \item If a distributed database has $N = 5$ nodes, what is the maximum number of simultaneous node crash failures the system can tolerate while remaining functional?
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The CAP Theorem proves that no distributed system can guarantee both Consistency and Availability during network partitions.
+
+\textbf{Second.} The FLP Impossibility Theorem states that deterministic consensus cannot guarantee termination in asynchronous networks if a single node can crash.
+
+\textbf{Third.} Paxos achieves safe consensus by using a two-phase prepare-accept protocol where majority quorums intersect, preserving chosen states.
+
+\textbf{Fourth.} Replicated consensus engines (like Raft) structure Paxos concepts into terms, leader election, and log replication.
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Distributed parameters}
+* **CAP Theorem:** The theorem stating a distributed system can satisfy at most two of Consistency, Availability, and Partition Tolerance.
+* **Consensus:** The process of reaching agreement among a set of independent network nodes on a shared data value.
+* **FLP Impossibility:** The theorem proving asynchronous consensus cannot guarantee termination under crash failures.
+* **Paxos:** A family of protocols for solving consensus in a network of unreliable or fallible processors.
+* **Quorum:** The minimum number of node votes required to validate a transaction or decision.
+* **Raft:** A leader-based consensus algorithm designed for ease of understanding and implementation.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Quorum Intersection Proof.}
+  
+        Prove that in a system of $N$ nodes, any two majority quorums must share at least one node.
+        
+        \textbf{Solution:}
+        Let $V$ be the set of nodes, with size $|V| = N$.
+        * A majority quorum is any subset $Q \subseteq V$ such that:
+          \[
+            |Q| \;\ge\; \left\lfloor \frac{N}{2} \right\rfloor + 1.
+          \]
+        Let $Q_1$ and $Q_2$ be two majority quorums.
+        We want to show that $Q_1 \cap Q_2 \neq \emptyset$.
+        
+        1. **Sum the sizes of the quorums:**
+           \[
+             |Q_1| + |Q_2| \;\ge\; 2 \left( \left\lfloor \frac{N}{2} \right\rfloor + 1 \right).
+           \]
+           * If $N$ is even ($N = 2k$):
+             \[
+               |Q_1| + |Q_2| \;\ge\; 2(k + 1) \;=\; 2k + 2 \;=\; N + 2.
+             \]
+           * If $N$ is odd ($N = 2k+1$):
+             \[
+               |Q_1| + |Q_2| \;\ge\; 2(k + 1) \;=\; 2k + 2 \;=\; N + 1.
+             \]
+           In both cases, we have:
+           \[
+             |Q_1| + |Q_2| \;\ge\; N + 1 \;>\; |V|.
+           \]
+        2. **Apply the Principle of Inclusion-Exclusion:**
+           The size of the union of the two sets is:
+           \[
+             |Q_1 \cup Q_2| \;=\; |Q_1| + |Q_2| - |Q_1 \cap Q_2|.
+           \]
+           Since $Q_1 \cup Q_2 \subseteq V$, we must have $|Q_1 \cup Q_2| \le |V| = N$.
+           Substituting this in:
+           \[
+             N \;\ge\; |Q_1| + |Q_2| - |Q_1 \cap Q_2| \;\ge\; N + 1 - |Q_1 \cap Q_2|.
+           \]
+        3. **Isolate the intersection term:**
+           \[
+             |Q_1 \cap Q_2| \;\ge\; 1.
+           \]
+        Since the size of the intersection is at least 1, the two majority quorums must share at least one node.
+        This completes the proof.
+        
+  \item \textbf{CAP Theorem Partition Trade-off Trace.}
+  
+        Sketch a formal counterexample showing why Consistency and Availability cannot coexist in a partitioned 2-node system.
+        
+        \textbf{Solution:}
+        Let the system consist of two nodes, $G_1$ and $G_2$, holding a replicated variable $x$ (initially $x = 0$).
+        A network partition cuts the link between $G_1$ and $G_2$.
+        
+        1. **Event 1: Write operation.**
+           A client connects to $G_1$ and requests a write: `write(x = 5)`.
+           * To be **Available**, $G_1$ must accept the write immediately and return a success acknowledgment to the client without waiting indefinitely.
+           * $G_1$ updates its local value to $x = 5$.
+           * Because of the partition, $G_1$ cannot send this update to $G_2$.
+           
+        2. **Event 2: Read operation.**
+           Concurrently, another client connects to $G_2$ and requests a read: `read(x)`.
+           * To be **Available**, $G_2$ must respond to the client immediately.
+           * Since it has not received the update, $G_2$ returns its local value: $x = 0$.
+           
+        3. **Analyze the outcome:**
+           * The read operation at $G_2$ returned $0$, which is stale compared to the completed write of $5$ at $G_1$. This violates **Consistency** (specifically, linearizability).
+           * To enforce consistency, $G_2$ would have to block or return an error, which violates **Availability**.
+        
+        Thus, under a network partition, the system must choose to sacrifice either Consistency or Availability.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Paxos Split Vote.}
+  
+        Suppose two Proposers propose values $v_1$ (with proposal number $n_1 = 1$) and $v_2$ (with proposal number $n_2 = 2$) concurrently to three Acceptors $\{A_1, A_2, A_3\}$ in a Paxos consensus network.
+        Suppose the network messages interleave as follows:
+        1. Proposer 1 sends `Prepare(1)` to $A_1$ and $A_2$. Both send promises.
+        2. Proposer 2 sends `Prepare(2)` to $A_2$ and $A_3$. Both send promises.
+        \begin{enumerate}[label=(\alph*)]
+          \item When $A_2$ receives `Prepare(2)`, explain why it is allowed to send a promise to Proposer 2, even though it has already promised Proposer 1. (What happens to its old promise?)
+          \item Proposer 1 now sends `Accept(1, v_1)` to $A_1$ and $A_2$.
+                Explain why $A_1$ accepts the proposal, but $A_2$ rejects it.
+          \item Trace the remaining steps of the protocol. Show which value ($v_1$ or $v_2$) is ultimately decided by a majority quorum.
+        \end{enumerate}
+
+  \item \textbf{Raft Split Elections.}
+  
+        In Raft, a split election occurs when multiple nodes candidate concurrently, and none obtains a majority of votes.
+        \begin{enumerate}[label=(\alph*)]
+          \item Consider a system of $N = 4$ nodes.
+                Suppose Candidate 1 gets 2 votes, and Candidate 2 gets 2 votes.
+                Explain why neither candidate can become leader.
+          \item How does Raft resolve this split election block?
+                *(Explain the use of randomized election timeouts).*
+          \item If $N = 4$ nodes, why is the split vote probability higher than in a system of $N = 5$ nodes?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{Proof of Paxos Safety Invariant.}
+  
+        The core safety invariant of Paxos is: if a proposal with value $v$ and number $n$ is chosen (accepted by a majority of acceptors), then every proposal with number $n' > n$ issued by any proposer also has value $v$.
+        
+        Let $S$ be the majority quorum of Acceptors that accepted proposal $(n, v)$.
+        Let $T$ be the majority quorum of Acceptors that respond to a Proposer's `Prepare(n')` message for a later proposal $n' > n$.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Using the quorum intersection theorem, prove that there exists at least one Acceptor $u$ such that $u \in S \cap T$.
+          \item Since $u \in S$, it has accepted proposal $(n, v)$.
+                Since $u \in T$, it must respond to the proposer of $n'$ with its accepted value.
+                Explain how the proposer of $n'$ receives this value $v$ during the Phase 1b promise step.
+          \item Under the Paxos Phase 2a rule, the proposer must set the value of its proposal $n'$ to the value of the highest-numbered proposal among all responses.
+                Using mathematical induction on the proposal numbers, prove that the proposer of $n'$ is forced to choose value $v$, preserving the decided consensus.
+        \end{enumerate}
+
+  \item \textbf{FLP Impossibility and Asynchronous Time boundaries.}
+  
+        The FLP Impossibility Theorem states that in an asynchronous network model, no deterministic consensus protocol can be both safe (Agreement and Validity) and live (guaranteed Termination) under a single unannounced crash failure.
+        
+        \begin{enumerate}[label=(\alph*)]
+          \item Contrast **Synchronous** networks (which have bounded message transmission delays) with **Asynchronous** networks (where message delays are unbounded but finite).
+                Why does this distinction alter consensus solvability?
+          \item In an asynchronous network, if a node has not responded to a message after 1 hour, explain why we cannot distinguish between:
+                * The node has crashed.
+                * The node is running extremely slowly or the network link is delayed.
+                How does this ambiguity prevent deterministic protocols from achieving termination?
+          \item Since Paxos is safe and widely used, how does it bypass the FLP impossibility result in practical deployments?
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On the bounds of consensus:** Paxos requires majorities to agree. This means a system can only tolerate $F < N/2$ crash failures. Is this a fundamental mathematical boundary of information, or can we design systems that tolerate more failures using alternative quorums?
+  \item **On the nature of consistency:** Consistency (Linearizability) forces all nodes to behave as if there is only a single copy of the database. This restricts performance by requiring constant network communication. When is it acceptable to relax consistency (e.g. eventual consistency) to maximize database throughput?
+  \item **On trust in networks:** Consensus protocols assume that crashed nodes stop executing (fail-stop model). In real networks, nodes can experience **Byzantine** failures: executing maliciously or sending corrupt messages. How does the consensus problem change when we must tolerate Byzantine nodes? (Think about blockchain systems).
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~6.4 introduces **Cryptography, Secure Computation, and Zero Knowledge**. Having analyzed how distributed nodes agree on shared data, we will study how to protect this data: symmetric/asymmetric encryption, digital signatures, zero-knowledge proofs (ZKPs), and secure multi-party computation.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 6, Module 6.3 --- Distributed Systems, Consensus, and Paxos}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 6.4 --- Cryptography, Secure Computation, and Zero Knowledge}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

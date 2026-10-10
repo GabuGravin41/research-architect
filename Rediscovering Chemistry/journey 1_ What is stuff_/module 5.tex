@@ -1,0 +1,1029 @@
+\documentclass[12pt, a4paper]{book}
+
+% ─── Core packages ────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=30mm, bottom=30mm,
+  inner=32mm, outer=25mm,
+  marginparwidth=18mm
+}
+
+% ─── Mathematics ──────────────────────────────────────────────────────────────
+\usepackage{amsmath, amsthm}
+
+% ─── Chemistry ────────────────────────────────────────────────────────────────
+\usepackage[version=4]{mhchem}
+
+% ─── Graphics & colour ────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage[dvipsnames,svgnames,table]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning,
+                calc, backgrounds, decorations.pathmorphing,
+                decorations.text, patterns}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+
+% ─── Layout ───────────────────────────────────────────────────────────────────
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{marginnote}
+\usepackage{caption}
+\usepackage{parskip}
+\usepackage{pifont}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% COLOUR PALETTE
+% ══════════════════════════════════════════════════════════════════════════════
+\definecolor{JourneyColor}{HTML}{065F46}   % forest green — journey headings
+\definecolor{ModuleColor}{HTML}{0F766E}    % deep teal — module headings
+\definecolor{PuzzleColor}{HTML}{B45309}    % deep amber — puzzle boxes
+\definecolor{DiscoveryColor}{HTML}{D97706} % golden amber — discovery boxes
+\definecolor{WarningColor}{HTML}{E11D48}   % coral red — "model breaks" boxes
+\definecolor{ProblemColor}{HTML}{0F766E}   % dark teal — problem sets
+\definecolor{ReflectColor}{HTML}{047857}   % green — reflection boxes
+\definecolor{HistoryColor}{HTML}{9A3412}   % brown — history notes
+\definecolor{LightBg}{HTML}{F8FAFC}        % near-white background
+\definecolor{SynthColor}{HTML}{4A235A}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% TCOLORBOX ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\newtcolorbox{puzzlebox}[1][]{
+  enhanced, breakable,
+  colback=PuzzleColor!6, colframe=PuzzleColor,
+  fonttitle=\bfseries\sffamily, title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=PuzzleColor, colframe=PuzzleColor},
+  borderline west={3pt}{0pt}{PuzzleColor}, #1}
+
+\newtcolorbox{discoverybox}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!8, colframe=DiscoveryColor,
+  fonttitle=\bfseries\sffamily, title={Discovery},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor}, #1}
+
+\newtcolorbox{problembox}[1][]{
+  enhanced, breakable,
+  colback=ProblemColor!5, colframe=ProblemColor,
+  fonttitle=\bfseries\sffamily, title={Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ProblemColor, colframe=ProblemColor},
+  borderline west={3pt}{0pt}{ProblemColor}, #1}
+
+\newtcolorbox{deepbox}[1][]{
+  enhanced, breakable,
+  colback=JourneyColor!5, colframe=JourneyColor,
+  fonttitle=\bfseries\sffamily, title={Deep Problems},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=JourneyColor, colframe=JourneyColor},
+  borderline west={4pt}{0pt}{JourneyColor}, #1}
+
+\newtcolorbox{historybox}[1][]{
+  enhanced, breakable,
+  colback=HistoryColor!7, colframe=HistoryColor!60,
+  fonttitle=\bfseries\sffamily\small, title={Historical Note},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=HistoryColor!80, colframe=HistoryColor}, #1}
+
+\newtcolorbox{reflectionbox}[1][]{
+  enhanced, breakable,
+  colback=ReflectColor!6, colframe=ReflectColor,
+  fonttitle=\bfseries\sffamily, title={Reflection},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ReflectColor, colframe=ReflectColor},
+  borderline west={3pt}{0pt}{ReflectColor}, #1}
+
+\newtcolorbox{synthbox}[1][]{
+  enhanced, breakable,
+  colback=SynthColor!5, colframe=SynthColor,
+  fonttitle=\bfseries\sffamily, title={Journey Synthesis},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=SynthColor, colframe=SynthColor},
+  borderline west={4pt}{0pt}{SynthColor}, #1}
+
+\newtcolorbox{namedconcept}[2][]{
+  enhanced,
+  colback=ModuleColor!6, colframe=ModuleColor,
+  fonttitle=\bfseries\sffamily\large, title={#2},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=ModuleColor, colframe=ModuleColor}, #1}
+
+\newtcolorbox{openquestion}[1][]{
+  enhanced, breakable,
+  colback=DiscoveryColor!5, colframe=DiscoveryColor!70,
+  fonttitle=\bfseries\sffamily, title={Open Question},
+  attach boxed title to top left={yshift=-2mm, xshift=6mm},
+  boxed title style={colback=DiscoveryColor!80, colframe=DiscoveryColor},
+  borderline west={3pt}{0pt}{DiscoveryColor!70}, #1}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% THEOREM ENVIRONMENTS
+% ══════════════════════════════════════════════════════════════════════════════
+\theoremstyle{definition}
+\newtheorem{observation}{Observation}[chapter]
+\newtheorem{principle}{Principle}[chapter]
+
+% ══════════════════════════════════════════════════════════════════════════════
+% SECTION FORMATTING
+% ══════════════════════════════════════════════════════════════════════════════
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}
+  {10pt}{\Huge}[\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% HEADER / FOOTER
+% ══════════════════════════════════════════════════════════════════════════════
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% CUSTOM COMMANDS
+% ══════════════════════════════════════════════════════════════════════════════
+\newcommand{\chem}[1]{\ce{#1}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\sidenote}[1]{%
+  \marginnote{\footnotesize\sffamily\textcolor{JourneyColor!70}{#1}}}
+
+% ══════════════════════════════════════════════════════════════════════════════
+% DOCUMENT
+% ══════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\setcounter{chapter}{0}
+\chapter[Journey 1 --- What Is Stuff?]
+        {Journey One\\[8pt]
+         \textcolor{ModuleColor}{\large What Is Stuff?\ \ Matter and Its Patterns}}
+\setcounter{section}{4}
+
+% ══════════════════════════════════════════════════════════════════════════════
+%  MODULE 1.5 — THE COMPLETE PICTURE: JOURNEY ONE SYNTHESIS
+% ══════════════════════════════════════════════════════════════════════════════
+\section{Module 1.5 --- The Complete Picture: Putting Journey One Together}
+\label{sec:mod1.5}
+
+\subsection*{What This Module Is}
+
+This module is different from the previous four.
+There are no new facts here.
+Instead, we step back and look at the whole landscape
+we have crossed, ask what the discoveries of Journey~1
+actually mean as a \emph{way of doing science},
+and identify the questions that Journey~1 answers ---
+and, crucially, the deeper questions it opens.
+
+The goal is synthesis: not just knowing the facts,
+but understanding the structure of the argument.
+
+% ─── Section: The Narrative Arc ───────────────────────────────────────────────
+\subsection{The Narrative Arc of Journey One}
+
+Journey~1 began with a question so old it seems trivial:
+\emph{why do different substances behave differently?}
+It ended with atoms.
+The path between them was not a straight line.
+It was a zigzag of observations, failed theories,
+unexpected data, and forced conclusions.
+
+Here is the complete arc:
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\footnotesize, align=center},
+  stepbox/.style={draw=JourneyColor!50, fill=JourneyColor!7,
+                  rounded corners=4pt, minimum width=3.6cm,
+                  minimum height=1.0cm, text width=3.3cm},
+  failbox/.style={draw=WarningColor!60, fill=WarningColor!6,
+                  rounded corners=4pt, minimum width=3.0cm,
+                  minimum height=0.8cm, text width=2.8cm,
+                  font=\sffamily\tiny, align=center},
+  arr/.style={-{Stealth[length=5pt]}, thick, color=ModuleColor!70},
+  failarr/.style={-{Stealth[length=4pt]}, thick, color=WarningColor!60,
+                  dashed}
+]
+
+% Main chain - vertical spine
+\node[stepbox] (obs)   at (0,  0)   {Observation:\\substances differ\\in properties};
+\node[stepbox] (class) at (0, -2.2) {Classification:\\elements, compounds,\\mixtures};
+\node[stepbox] (phlog) at (0, -4.4) {Burning and\\reactions observed:\\phlogiston theory};
+\node[stepbox] (lav)   at (0, -6.6) {Lavoisier weighs\\everything:\\mass is conserved};
+\node[stepbox] (proust)at (0, -8.8) {Fixed mass ratios\\in compounds:\\definite proportions};
+\node[stepbox] (dalton)at (0,-11.0) {Multiple proportions:\\integer ratios demand\\discrete particles};
+\node[stepbox] (avog)  at (0,-13.2) {Gas volumes confirm\\molecule formulas:\\Avogadro's hypothesis};
+\node[stepbox, draw=DiscoveryColor, fill=DiscoveryColor!10,
+               minimum height=1.3cm]
+               (atom)  at (0,-15.6) {\textbf{Atomic-Molecular Theory}\\Matter = discrete atoms\\Each element = one atom type\\Compounds = fixed atom ratios};
+
+% Arrows down the spine
+\foreach \a/\b in {obs/class, class/phlog, phlog/lav, lav/proust,
+                   proust/dalton, dalton/avog, avog/atom}
+  \draw[arr] (\a) -- (\b);
+
+% Failed theories and corrections on the right
+\node[failbox] (phlogfail) at (5.5, -4.4)
+  {Phlogiston theory:\\explains much,\\but mass increase\\breaks it};
+\draw[failarr] (phlog.east) -- (phlogfail.west);
+\draw[arr, color=DiscoveryColor!70] (phlogfail.south)
+  -- ++(0,-0.6) -- ++(-2.6,-0.6) -- (lav.east);
+
+\node[failbox] (daltonwrong) at (5.5, -11.0)
+  {\ce{H2O} or \ce{HO}?\\Atomic masses\\ambiguous from\\mass data alone};
+\draw[failarr] (dalton.east) -- (daltonwrong.west);
+\draw[arr, color=DiscoveryColor!70] (daltonwrong.south)
+  -- ++(0,-0.5) -- ++(-2.6,-0.9) -- (avog.east);
+
+% Annotations on left
+\node[font=\sffamily\tiny\itshape, text=HistoryColor,
+      text width=2.5cm, align=right]
+  at (-3.2, -1.1) {Module 1.1};
+\node[font=\sffamily\tiny\itshape, text=HistoryColor,
+      text width=2.5cm, align=right]
+  at (-3.2, -3.3) {Module 1.1};
+\node[font=\sffamily\tiny\itshape, text=HistoryColor,
+      text width=2.5cm, align=right]
+  at (-3.2, -5.5) {Module 1.2};
+\node[font=\sffamily\tiny\itshape, text=HistoryColor,
+      text width=2.5cm, align=right]
+  at (-3.2, -7.7) {Module 1.2--1.3};
+\node[font=\sffamily\tiny\itshape, text=HistoryColor,
+      text width=2.5cm, align=right]
+  at (-3.2, -9.9) {Module 1.3};
+\node[font=\sffamily\tiny\itshape, text=HistoryColor,
+      text width=2.5cm, align=right]
+  at (-3.2, -12.1) {Module 1.3};
+\node[font=\sffamily\tiny\itshape, text=HistoryColor,
+      text width=2.5cm, align=right]
+  at (-3.2, -14.3) {Module 1.4};
+
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+Notice the structure.
+Twice in this journey, a theory that explained most of the data
+was overturned by a \emph{quantitative anomaly} that the theory
+could not absorb:
+phlogiston failed because metals gained mass on burning,
+and Dalton's simple-atom picture failed because gas volumes
+demanded diatomic molecules.
+
+In both cases, the anomaly was not immediately obvious.
+It required careful measurement.
+It required someone to insist on accounting for everything.
+
+\emph{This is how science actually works.}
+Not by grand theoretical leaps, but by small quantitative
+inconsistencies that accumulate until a better framework
+becomes unavoidable.
+
+% ─── Section: Five Laws, One Picture ──────────────────────────────────────────
+\subsection{Five Laws, One Picture}
+
+Journey~1 produced five empirical laws.
+Each one was discovered by different people,
+in different countries, using different apparatus.
+Yet they all say the same thing from different angles.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily\small, align=center},
+  lawbox/.style={draw=JourneyColor!60, fill=JourneyColor!8,
+                 rounded corners=5pt, minimum width=5.5cm,
+                 minimum height=1.1cm, text width=5.2cm},
+  corebox/.style={draw=DiscoveryColor, fill=DiscoveryColor!12,
+                  rounded corners=6pt, minimum width=4.8cm,
+                  minimum height=2.8cm, text width=4.5cm},
+  arr/.style={-{Stealth[length=5pt]}, thick, color=JourneyColor!60}
+]
+  % Five laws around the outside
+  \node[lawbox] (cm) at (0,    5.0)
+    {\textbf{Conservation of Mass}\\(Lavoisier, 1785)\\
+     Mass in = Mass out};
+  \node[lawbox] (dp) at (5.5,  2.2)
+    {\textbf{Definite Proportions}\\(Proust, 1799)\\
+     Fixed mass ratios in compounds};
+  \node[lawbox] (mp) at (4.2, -2.5)
+    {\textbf{Multiple Proportions}\\(Dalton, 1803)\\
+     Ratios form small integers};
+  \node[lawbox] (cv) at (-4.2,-2.5)
+    {\textbf{Combining Volumes}\\(Gay-Lussac, 1809)\\
+     Gas volumes in integer ratios};
+  \node[lawbox] (av) at (-5.5, 2.2)
+    {\textbf{Avogadro's Hypothesis}\\(1811)\\
+     Equal volumes = equal molecules};
+
+  % Central core
+  \node[corebox] (core) at (0, 0.8)
+    {\textbf{Atomic-Molecular\\Theory}\\[5pt]
+     \small Matter is made of\\
+     discrete, indivisible atoms.\\
+     Compounds have fixed\\
+     atom ratios.\\
+     Equal gas volumes $\Leftrightarrow$\\
+     equal molecule counts.};
+
+  % Arrows from laws to core
+  \foreach \law in {cm, dp, mp, cv, av}
+    \draw[arr] (\law) -- (core);
+
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+The atomic-molecular theory is not one of these laws.
+It is the \emph{explanation} of all five simultaneously.
+When a single picture explains five independent sets
+of measurements, that is strong evidence the picture
+is pointing at something real.
+
+\begin{principle}
+\textbf{Convergence as evidence.}
+When multiple independent lines of evidence all point
+to the same underlying structure, the probability that
+the structure is real increases dramatically.
+No single law proves atoms exist.
+But five laws that \emph{all follow from} the atomic picture ---
+that is a compelling argument.
+\end{principle}
+
+% ─── Section: What the Theory Explains ────────────────────────────────────────
+\subsection{Accounting for Everything: A Checklist}
+
+Let us be precise about what the atomic-molecular theory
+explains and what it does not.
+
+\begin{center}
+\begin{tabular}{p{6cm} p{2.2cm} p{5.5cm}}
+\toprule
+\textbf{Phenomenon} & \textbf{Explained?} & \textbf{How} \\
+\midrule
+Mass conserved in reactions
+  & \checkmark
+  & Atoms rearrange; none created/destroyed \\[4pt]
+Fixed mass ratios in compounds
+  & \checkmark
+  & Each compound has a fixed atom ratio \\[4pt]
+Integer ratios between related compounds
+  & \checkmark
+  & Atoms are discrete; you cannot have half an atom \\[4pt]
+Gas volume ratios are integers
+  & \checkmark
+  & Equal volumes contain equal numbers of molecules \\[4pt]
+\emph{Why} elements have characteristic masses
+  & \ding{55}
+  & Theory assumes it; no explanation \\[4pt]
+\emph{Why} atoms of different elements differ
+  & \ding{55}
+  & Internal structure of atoms unknown \\[4pt]
+\emph{Why} certain atoms bond together
+  & \ding{55}
+  & Bonding mechanism not yet known \\[4pt]
+Periodic patterns in element properties
+  & \ding{55}
+  & Requires knowledge of atomic structure \\[4pt]
+Why matter has the properties it has
+  & \ding{55}
+  & Deeper structure still hidden \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+
+The right-hand column of failures is not a weakness.
+It is a map of where we are going next.
+
+Every \ding{55} in the table is a door.
+Journey~2 (architecture of the atom) will open several of them.
+Journey~3 (the periodic table) will open more.
+By Journey~4 (the chemical bond), almost all of them
+will have answers.
+
+\begin{puzzlebox}
+Each unanswered question in the table above
+led to a major scientific revolution.
+
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item ``Why do elements have characteristic masses?''
+        was answered when the nucleus was discovered.
+        What do you think determines an atom's mass?
+        (Write a hypothesis now; check it in Journey~2.)
+
+  \item ``Why do certain atoms bond together?''
+        was answered by quantum mechanics.
+        Based only on what you know so far, what feature
+        of atoms do you think might determine their bonding?
+
+  \item ``Why do element properties repeat periodically?''
+        was Mendeleev's great mystery.
+        He could describe the pattern but not explain it.
+        What hidden structure might cause properties
+        to cycle with increasing atomic mass?
+\end{enumerate}
+\end{puzzlebox}
+
+% ─── Section: The Methods of Journey One ──────────────────────────────────────
+\subsection{The Methods That Made Journey One Possible}
+
+The content of Journey~1 matters.
+But the \emph{methods} matter more,
+because they are transferable to every scientific question.
+
+\subsubsection{Method 1: Systematic Classification}
+
+Before you can explain why things differ,
+you must describe \emph{how} they differ.
+Classification is not just naming.
+It is the first act of pattern recognition ---
+grouping things that behave similarly
+and separating things that behave differently.
+
+Lavoisier's classification of substances into elements,
+compounds, and mixtures was not obvious.
+For centuries, water was believed to be an element.
+The classification was forced by experimental tests
+(which substances resist decomposition?) not by intuition.
+
+\subsubsection{Method 2: Quantitative Measurement}
+
+Lavoisier's revolution was methodological:
+he insisted on weighing everything,
+including the gases that previous chemists had ignored.
+The moment you include gases in the mass balance,
+phlogiston theory collapses.
+
+This is a general lesson:
+\emph{anomalies hide in the things you have not yet measured}.
+Every time chemistry advanced, it was because someone measured
+something that had previously been ignored or assumed constant.
+
+\subsubsection{Method 3: Seeking the Simplest Explanation}
+
+Dalton did not prove atoms exist.
+He showed that atoms are the simplest explanation
+consistent with all the quantitative data.
+This is the principle of parsimony:
+among all explanations that fit the data,
+prefer the simplest.
+
+Note that ``simplest'' does not mean ``easiest to understand.''
+Atoms were a stranger idea than continuous matter.
+But the atomic picture required \emph{fewer arbitrary assumptions}:
+once you accept discrete particles with fixed masses,
+all five laws follow automatically.
+Continuous matter requires separate explanations for each law.
+
+\subsubsection{Method 4: Using Failure Productively}
+
+Both phlogiston theory and Dalton's original atomic theory
+were wrong in important ways.
+But both were \emph{productively wrong}: they made precise
+enough predictions that their failures could be identified
+and used to build better theories.
+
+A vague theory cannot be proven wrong.
+A precise theory that makes wrong predictions
+is more valuable than a vague one that makes none.
+
+\begin{center}
+\begin{tcolorbox}[
+  enhanced, colback=SynthColor!5, colframe=SynthColor!60,
+  width=0.85\textwidth, arc=3pt, fontupper=\sffamily
+]
+\centering
+\textbf{The four methods of Journey One:}\\[6pt]
+\small
+Classify systematically $\cdot$
+Measure everything $\cdot$
+Seek the simplest explanation $\cdot$
+Use failure productively\\[4pt]
+\normalsize
+These are not methods of chemistry.\\
+They are methods of \emph{science}.\\
+Every journey in this curriculum uses them.
+\end{tcolorbox}
+\end{center}
+
+% ─── Section: What Journey One Does Not Explain ───────────────────────────────
+\subsection{The Open Doors: What Journey One Cannot Tell Us}
+
+Journey~1 ends with a picture of matter as a collection of atoms.
+But the atoms themselves are treated as \emph{featureless spheres}:
+they have masses and they bond together, but we know nothing
+about their internal structure.
+
+This is precisely the situation that makes Journey~2 so exciting.
+Here are the open questions that atomic theory raises
+but cannot answer:
+
+\begin{openquestion}
+\textbf{Question 1: What is inside an atom?}
+
+Dalton's atoms are indivisible. But we know from electrolysis
+(Davy, Faraday) that electricity can decompose compounds.
+Electricity involves charged particles.
+Are there charged particles inside atoms?
+
+\vspace{0.3em}
+\textit{This leads to: the discovery of the electron (Thomson, 1897).}
+\end{openquestion}
+
+\begin{openquestion}
+\textbf{Question 2: How is the atom's mass distributed?}
+
+If atoms contain electrons (which are very light),
+where is the rest of the mass?
+Is the atom like a uniform sphere,
+or is the mass concentrated somewhere?
+
+\vspace{0.3em}
+\textit{This leads to: Rutherford's gold foil experiment (1909)
+and the nuclear model.}
+\end{openquestion}
+
+\begin{openquestion}
+\textbf{Question 3: Why do atoms emit light at specific colours?}
+
+When sodium is burned, it emits a characteristic bright
+yellow colour. Every element emits a unique set of colours.
+Why? What is happening inside the atom?
+
+\vspace{0.3em}
+\textit{This leads to: the hydrogen spectrum, Bohr's model,
+and quantum mechanics.}
+\end{openquestion}
+
+\begin{openquestion}
+\textbf{Question 4: Why don't electrons spiral into the nucleus?}
+
+Classical physics says that an electron orbiting a nucleus ---
+like a planet orbiting the sun --- should continuously radiate
+energy and spiral inward, destroying the atom in nanoseconds.
+But atoms are stable. Why?
+
+\vspace{0.3em}
+\textit{This leads to: quantisation of energy and wave mechanics.}
+\end{openquestion}
+
+\begin{openquestion}
+\textbf{Question 5: Why do element properties repeat?}
+
+Mendeleev ordered elements by atomic mass and found that
+properties recur in a pattern: every eighth element
+(approximately) has similar chemistry.
+Why would properties depend on mass?
+What hidden structure repeats?
+
+\vspace{0.3em}
+\textit{This leads to: electron shells, orbitals,
+and the full quantum model of the atom.}
+\end{openquestion}
+
+\vspace{0.5em}
+
+Each of these questions opens an entire journey.
+Journey~2 answers Questions 1, 2, 3, and 4.
+Journey~3 answers Question 5.
+The answers change our picture of the atom completely.
+
+% ─── Section: Master Problem Set ─────────────────────────────────────────────
+\subsection{Journey One Master Problem Set}
+
+These problems integrate all four modules of Journey~1.
+They are designed to be harder than the problems within
+individual modules, and some require combining ideas
+from more than one module.
+
+\begin{problembox}[title={Integration Problems}]
+\begin{enumerate}[label=\textbf{I\arabic*.}]
+  \item \textbf{A mystery compound.}
+
+        A pure white solid \textbf{X} is subjected to several tests:
+        \begin{itemize}[nosep, leftmargin=2em]
+          \item It dissolves completely in water to give a clear solution.
+          \item Electrolysis of the solution deposits a silver metal
+                at one electrode and produces a yellow-green gas at the other.
+          \item The solid has a fixed melting point and fixed density,
+                regardless of where it was obtained.
+          \item When \SI{5.85}{\gram} of \textbf{X} is dissolved and
+                the water is evaporated, exactly \SI{5.85}{\gram}
+                of solid is recovered.
+          \item Complete combustion analysis is not applicable
+                (the compound contains no carbon or hydrogen).
+        \end{itemize}
+
+        \begin{enumerate}[label=(\alph*)]
+          \item From the tests, classify \textbf{X} as element,
+                compound, or mixture. Justify each step.
+          \item The silver metal is identified as sodium.
+                The yellow-green gas is identified as chlorine.
+                What is the most likely identity of \textbf{X}?
+          \item What does the electrolysis tell us about the
+                bonding in \textbf{X}?
+                (Hint: what must be present for electricity to
+                decompose a compound?)
+          \item Write a balanced equation for the electrolysis.
+        \end{enumerate}
+
+  \item \textbf{Testing the laws.}
+
+        A student claims to have made a new compound of tin and oxygen.
+        She reports the following data from three separate preparations:
+
+        \begin{center}
+        \begin{tabular}{lcc}
+        \toprule
+        Sample & Mass of Sn (\si{\gram}) & Mass of O (\si{\gram}) \\
+        \midrule
+        1 & 14.87 & 4.00 \\
+        2 & 22.31 & 6.00 \\
+        3 & 29.74 & 8.00 \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Show that these data are consistent with the
+                law of definite proportions.
+          \item The known oxides of tin are \ce{SnO} (tin(II) oxide)
+                and \ce{SnO2} (tin(IV) oxide).
+                The atomic mass of Sn is \SI{118.7}{\gram\per\mol}
+                and O is \SI{16.0}{\gram\per\mol}.
+                Calculate the mass ratio Sn:O in each oxide.
+          \item Which oxide did the student make?
+          \item Another student makes \ce{SnO2}.
+                If the law of multiple proportions holds,
+                what mass of oxygen should combine with
+                \SI{14.87}{\gram} of tin in \ce{SnO2}?
+        \end{enumerate}
+
+  \item \textbf{Gas stoichiometry.}
+
+        Ethane (\ce{C2H6}) burns in oxygen:
+        \begin{center}
+        \ce{2C2H6 + 7O2 -> 4CO2 + 6H2O}
+        \end{center}
+
+        \begin{enumerate}[label=(\alph*)]
+          \item What volume of \ce{O2} (at STP) is needed to
+                completely burn \SI{60.0}{\gram} of ethane?
+          \item What volume of \ce{CO2} (at STP) is produced?
+          \item If air is 21\% \ce{O2} by volume,
+                what volume of air is needed for part (a)?
+          \item In practice, the reaction is carried out with
+                only 85\% of the theoretical oxygen.
+                What product other than \ce{CO2} and \ce{H2O}
+                would you expect, and why?
+                (This is why gas burners produce \ce{CO} if
+                starved of air.)
+        \end{enumerate}
+
+  \item \textbf{Reasoning from first principles.}
+
+        Before the mole was defined, chemists worked with
+        ``equivalents'' --- the amount of a substance that
+        reacts with a fixed reference amount of hydrogen
+        or oxygen.
+
+        Suppose you know that:
+        \begin{itemize}[nosep, leftmargin=2em]
+          \item \SI{8}{\gram} of oxygen reacts with \SI{1}{\gram} of hydrogen.
+          \item \SI{12}{\gram} of carbon reacts with \SI{16}{\gram} of oxygen.
+          \item \SI{56}{\gram} of iron reacts with \SI{24}{\gram} of oxygen.
+        \end{itemize}
+
+        And you know (from gas experiments) that:
+        \begin{itemize}[nosep, leftmargin=2em]
+          \item Water is \ce{H2O}.
+          \item Iron oxide is \ce{Fe2O3}.
+          \item Carbon dioxide is \ce{CO2}.
+        \end{itemize}
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Derive the atomic masses of O, C, and Fe
+                relative to H = 1.
+          \item Check your values against the periodic table.
+          \item If you did not know the formula of iron oxide
+                (i.e., you didn't know if it was \ce{FeO},
+                \ce{Fe2O3}, or \ce{Fe3O4}),
+                how many different atomic masses for iron
+                would be consistent with the data?
+          \item How does this illustrate the fundamental
+                ambiguity that Avogadro's hypothesis resolved?
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+% ─── Section: Deep problems ───────────────────────────────────────────────────
+\subsection*{Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+
+  \item \textbf{The Epistemology of the Atom.}
+
+        In 1897 the physicist Ernst Mach --- one of the most
+        influential philosophers of science --- argued that
+        atoms did not ``really exist'' because they could
+        not be directly observed.
+        He accepted that atomic theory was a useful calculating
+        tool, but denied it described reality.
+
+        Ludwig Boltzmann defended the reality of atoms his entire career.
+        The debate was so bitter that it is said to have contributed
+        to Boltzmann's suicide in 1906.
+
+        \begin{enumerate}[label=(\alph*)]
+          \item What criterion was Mach using for ``reality''?
+                Is direct observation the only valid criterion?
+
+          \item Dalton's atoms in 1803 were invisible and
+                unmeasurable directly.
+                Yet the evidence we developed in Journey~1
+                was compelling.
+                Make the strongest possible argument for the
+                \emph{reality} of atoms using only
+                pre-1900 evidence.
+
+          \item In 1905, Einstein's analysis of Brownian motion
+                gave the first way to calculate Avogadro's number
+                from observable statistics of visible particles.
+                Why was this considered decisive?
+                What did it add that the chemical evidence lacked?
+
+          \item Today we can image individual atoms using
+                scanning tunnelling microscopes.
+                Does this settle the philosophical debate?
+                Or can a philosopher still argue the image
+                is an inference, not a direct observation?
+        \end{enumerate}
+
+  \item \textbf{Building the First Periodic Table from Scratch.}
+
+        Suppose you have access to all the experimental data
+        available to Mendeleev in 1869:
+        the atomic masses of all known elements (about 63)
+        and qualitative descriptions of their chemistry.
+
+        You are told that:
+        \begin{itemize}[nosep, leftmargin=2em]
+          \item Lithium, sodium, and potassium are all soft metals
+                that react violently with water and form compounds
+                of formula \ce{MX} (where M is the metal, X is a
+                non-metal like chlorine).
+          \item Fluorine, chlorine, bromine, and iodine are all
+                reactive non-metals that form salts.
+          \item Helium, neon, and argon form no compounds.
+          \item The atomic masses increase in the order given
+                within each group.
+          \item Atomic masses: Li = 7, Na = 23, K = 39, F = 19,
+                Cl = 35.5, Br = 80, Ar = 40.
+        \end{itemize}
+
+        \begin{enumerate}[label=(\alph*)]
+          \item If you order all elements by atomic mass,
+                do elements with similar properties appear
+                at regular intervals?
+                Calculate the mass gaps within each group above.
+
+          \item What pattern do you see in the gaps?
+
+          \item If the pattern continues, predict the atomic mass
+                of an undiscovered element that should appear
+                between calcium (40) and titanium (48).
+                (This was Mendeleev's prediction of ``eka-calcium,''
+                later discovered as scandium with mass 45.)
+
+          \item Argon (mass 40) comes \emph{before} potassium (mass 39)
+                by chemical behaviour, but \emph{after} potassium
+                by atomic mass.
+                This was a genuine anomaly for Mendeleev.
+                Propose a hypothesis for why atomic mass order
+                might sometimes differ from chemical order.
+                (Hint: what do we know about isotopes?)
+        \end{enumerate}
+
+  \item \textbf{Counting the Invisible: A Thought Experiment.}
+
+        You are a chemist in 1860.
+        You have the following data:
+        \begin{itemize}[nosep, leftmargin=2em]
+          \item The density of hydrogen gas at STP:
+                \SI{0.0899}{\gram\per\litre}.
+          \item The fact that hydrogen is diatomic (\ce{H2}).
+          \item The atomic mass of hydrogen: 1.008 u.
+          \item The measured size of a hydrogen atom from
+                kinetic theory: approximately
+                $1.2 \times 10^{-10}\ \si{\metre}$ diameter.
+        \end{itemize}
+
+        \begin{enumerate}[label=(\alph*)]
+          \item Using only the density and the fact that
+                1 mole of gas occupies \SI{22.4}{\litre} at STP,
+                calculate the mass of one mole of \ce{H2}.
+                From this, deduce the mass of one hydrogen atom in grams.
+
+          \item If a hydrogen atom has diameter
+                $d = 1.2\times10^{-10}$ m,
+                estimate its volume (treat it as a sphere).
+
+          \item From the mass and volume of one atom,
+                estimate the density of ``solid hydrogen''
+                if atoms were packed with no gaps.
+                How does this compare with the actual density
+                of liquid hydrogen ($\approx \SI{71}{\gram\per\litre}$)?
+                What does the discrepancy tell you?
+
+          \item From parts (a) and the molar mass,
+                calculate Avogadro's number.
+                How close is your answer to the modern value?
+        \end{enumerate}
+
+\end{enumerate}
+\end{deepbox}
+
+% ─── Section: Journey One Synthesis ──────────────────────────────────────────
+\subsection*{Journey One: The Complete Synthesis}
+
+\begin{synthbox}
+\textbf{The single sentence of Journey One:}
+\begin{center}
+\large\sffamily\bfseries
+Matter is made of discrete, indivisible atoms;
+each element has one type;\\
+compounds are fixed combinations;
+and all of this was forced upon us\\
+by measurement, not imagination.
+\end{center}
+
+\vspace{0.6em}
+\textbf{The five laws, one by one:}
+
+\vspace{0.3em}
+\begin{tabular}{lp{9cm}}
+\toprule
+\textbf{Law} & \textbf{Why it demands atoms} \\
+\midrule
+Conservation of mass &
+  If atoms rearrange but are never destroyed, mass is always conserved.
+  No other simple model predicts this for all reactions. \\[5pt]
+Definite proportions &
+  If a compound is always the same atom ratio, its mass ratio is fixed.
+  Continuous matter has no reason to produce fixed ratios. \\[5pt]
+Multiple proportions &
+  If you must use whole numbers of atoms, ratios between
+  related compounds must be simple integers.
+  Irrational ratios are impossible. \\[5pt]
+Combining volumes &
+  If equal volumes contain equal numbers of molecules,
+  volume ratios directly reflect molecule ratios.
+  This only works if molecules are discrete. \\[5pt]
+Avogadro's hypothesis &
+  Resolves the diatomic-molecule problem and fixes all
+  molecular formulas. Makes the mole scale self-consistent. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\textbf{The open questions that lead us forward:}
+\begin{itemize}[nosep, leftmargin=2em]
+  \item What is inside an atom? $\longrightarrow$ Journey~2
+  \item Why do properties repeat? $\longrightarrow$ Journey~3
+  \item Why do atoms bond? $\longrightarrow$ Journey~4
+  \item What drives reactions? $\longrightarrow$ Journey~5
+  \item What can carbon do? $\longrightarrow$ Journeys~6 and~7
+  \item What can we build? $\longrightarrow$ Journey~8
+\end{itemize}
+\end{synthbox}
+
+% ─── Final Reflection ─────────────────────────────────────────────────────────
+\subsection*{Final Reflection for Journey One}
+
+\begin{reflectionbox}
+These questions are meant to be hard.
+Take time. Write at length.
+There are no short correct answers.
+
+\begin{enumerate}[label=\textbf{R\arabic*.}]
+  \item \textbf{The logic of the atomic hypothesis.}
+
+        Dalton did not discover atoms.
+        He showed that atoms were the \emph{simplest explanation}
+        of the data.
+        Write a careful argument for why the five laws together
+        constitute strong evidence for atoms,
+        even though no individual law proves atoms exist.
+        Use the word ``convergence.''
+
+  \item \textbf{What makes a theory scientific?}
+
+        Phlogiston theory explained a great deal of chemistry
+        and was believed by excellent scientists.
+        Dalton's atomic theory also explained a great deal
+        and was partially wrong (water as \ce{HO}).
+
+        What distinguishes a \emph{good scientific theory}
+        from a \emph{bad one}?
+        Is it just whether the theory is correct?
+        Or is there something else --- a property that makes
+        a theory worth holding and worth testing?
+
+  \item \textbf{The role of instrumentation.}
+
+        Many of the advances in Journey~1 required new instruments:
+        precision balances (Lavoisier), gas collection apparatus
+        (Priestley, Cavendish), electrolysis equipment (Davy).
+
+        Write a general principle about the relationship between
+        instruments and scientific discovery.
+        What determines when a new instrument is \emph{needed}?
+        What kinds of discoveries are impossible without better tools?
+
+  \item \textbf{Looking forward.}
+
+        Based on what you know from Journey~1,
+        write your best current hypothesis for why
+        elements have the chemical properties they do.
+        Be specific: what feature of an atom do you think
+        determines whether it is reactive or inert,
+        whether it bonds to many other atoms or few?
+
+        You do not need to be correct.
+        You need to be \emph{precise enough that your hypothesis
+        makes a prediction that could be tested}.
+        Write the test.
+\end{enumerate}
+\end{reflectionbox}
+
+% ─── Closing page ─────────────────────────────────────────────────────────────
+\vspace{2em}
+\begin{center}
+\begin{tikzpicture}
+  \node[
+    draw=JourneyColor, fill=JourneyColor, rounded corners=8pt,
+    minimum width=13cm, minimum height=5.5cm
+  ] (bg) at (0,0) {};
+
+  \node[
+    font=\sffamily\large\bfseries, text=white,
+    text width=12cm, align=center
+  ] at (0, 1.4) {Journey One is complete.};
+
+  \node[
+    font=\sffamily\small, text=white!80,
+    text width=11.5cm, align=center
+  ] at (0, 0.2) {
+    You began with the observation that substances differ.\\
+    You end knowing that matter is discrete, that atoms are real,\\
+    and that the evidence for this --- accumulated over two centuries\\
+    by dozens of scientists in different countries ---\\
+    converges on a single picture from five independent directions.
+  };
+
+  \node[
+    font=\sffamily\normalsize\bfseries\itshape, text=DiscoveryColor!80,
+    text width=11.5cm, align=center
+  ] at (0, -1.5) {
+    The atoms are real.\\
+    But we do not yet know what they look like inside.\\[5pt]
+    That is the question of Journey Two.
+  };
+\end{tikzpicture}
+\end{center}
+
+\end{document}

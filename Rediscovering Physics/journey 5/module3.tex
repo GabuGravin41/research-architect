@@ -1,0 +1,432 @@
+\documentclass[12pt, a4paper, twoside]{book}
+\usepackage[a4paper, inner=3.0cm, outer=2.5cm, top=2.8cm, bottom=2.8cm, includeheadfoot, headheight=24pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{mathtools}
+\usepackage{physics}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{epigraph}
+\usepackage{lettrine}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{array}
+
+\definecolor{deep}{HTML}{1a1a2e}
+\definecolor{accent}{HTML}{e94560}
+\definecolor{teal}{HTML}{2ec4b6}
+\definecolor{gold}{HTML}{f5a623}
+\definecolor{midblue}{HTML}{0f3460}
+\definecolor{purple}{HTML}{533483}
+\definecolor{orange}{HTML}{ff6b35}
+\definecolor{green}{HTML}{2d6a4f}
+\definecolor{lightbg}{HTML}{f7f9fc}
+\definecolor{warmbg}{HTML}{fffbf2}
+
+\setlength{\headheight}{24pt}
+\hypersetup{colorlinks=true,linkcolor=midblue,urlcolor=accent,citecolor=teal}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[LE]{\small\textcolor{deep}{\textit{Discovery Physics}}}
+\fancyhead[RO]{\small\textcolor{deep}{\textit{\leftmark}}}
+\fancyfoot[C]{\small\textcolor{deep}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{teal}\leaders\hrule height\headrulewidth\hfill}}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{deep}}
+  {\textcolor{accent}{\chaptertitlename\ \thechapter}}{12pt}{\Huge}
+  [\vspace{4pt}\textcolor{teal}{\titlerule[1.5pt]}]
+\titleformat{\section}{\normalfont\Large\bfseries\color{midblue}}
+  {\textcolor{accent}{\thesection}}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{deep}}
+  {\textcolor{teal}{\thesubsection}}{1em}{}
+
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,colback=warmbg,colframe=gold,
+  fonttitle=\bfseries\large\color{deep},title={The Puzzle},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=gold},#1}
+\newtcolorbox{explobox}[1][]{enhanced,breakable,colback=lightbg,colframe=midblue,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Exploration},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=midblue},#1}
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,colback=white,colframe=accent,
+  fonttitle=\bfseries\large\color{white},coltitle=white,title={Discovery},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=accent},drop shadow,#1}
+\newtcolorbox{namebox}[1][]{enhanced,colback=deep!5,colframe=deep,
+  fonttitle=\bfseries\color{white},coltitle=white,title={What This Is Called},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep},#1}
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,colback=purple!5,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Reflection},#1}
+\newtcolorbox{historybox}[1][]{enhanced,breakable,colback=gold!8,
+  colframe=gold!70!brown,fonttitle=\bfseries\color{deep},title={Historical Note},#1}
+\newtcolorbox{deepquestion}[1][]{enhanced,colback=accent!5,colframe=accent!60,
+  fonttitle=\bfseries\color{accent},title={A Question Worth Sitting With},#1}
+\newtcolorbox{realworldbox}[1][]{enhanced,breakable,colback=green!5,
+  colframe=green!70!black,fonttitle=\bfseries\color{white},coltitle=white,
+  title={In the Real World},#1}
+\newtcolorbox{paradoxbox}[1][]{enhanced,breakable,colback=purple!6,colframe=purple,
+  fonttitle=\bfseries\color{white},coltitle=white,title={Apparent Paradox},#1}
+
+\newcounter{problem}[chapter]
+\newcommand{\problem}[1][]{\refstepcounter{problem}\medskip\noindent
+  \textcolor{accent}{\textbf{Problem \theproblem.}}\ \ifx&#1&\else\textit{(#1)}\ \fi}
+\newcommand{\keyidea}[1]{\begin{tcolorbox}[enhanced,colback=teal!8,colframe=teal,
+  left=4mm,fontupper=\bfseries\color{deep}]#1\end{tcolorbox}}
+
+\setlength{\epigraphwidth}{0.65\textwidth}
+\renewcommand{\epigraphflush}{center}
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+\onehalfspacing
+
+\begin{document}
+
+\begin{titlepage}
+\pagecolor{deep}\color{white}\centering\vspace*{2cm}
+
+\begin{tikzpicture}[scale=1.0]
+  % Two clocks at different speeds
+  % Slow clock (stationary)
+  \draw[teal, line width=2pt] (0,0) circle (1.5cm);
+  \foreach \a in {0,30,...,330}
+    \draw[teal!50,line width=0.8pt] ({1.2*cos(\a)},{1.2*sin(\a)}) -- ({1.5*cos(\a)},{1.5*sin(\a)});
+  \draw[teal,line width=2pt] (0,0) -- ({1.1*cos(90)},{1.1*sin(90)});
+  \draw[teal,line width=2pt] (0,0) -- ({0.8*cos(0)},{0.8*sin(0)});
+  \node[teal!70,font=\small] at (0,-2.0) {At rest: ticks normally};
+  % Fast clock (time-dilated)
+  \draw[accent, line width=2pt] (5,0) circle (1.5cm);
+  \foreach \a in {0,30,...,330}
+    \draw[accent!50,line width=0.8pt] ({5+1.2*cos(\a)},{1.2*sin(\a)}) -- ({5+1.5*cos(\a)},{1.5*sin(\a)});
+  \draw[accent,line width=2pt] (5,0) -- ({5+1.1*cos(90+15)},{1.1*sin(90+15)});
+  \draw[accent,line width=2pt] (5,0) -- ({5+0.8*cos(10)},{0.8*sin(10)});
+  \node[accent!70,font=\small] at (5,-2.0) {Moving fast: ticks slow};
+  % Arrow between
+  \draw[->,gold,line width=2pt] (1.7,0) -- (3.3,0);
+  \node[gold,font=\small] at (2.5,0.4) {speed up};
+\end{tikzpicture}
+
+\vspace{0.5cm}
+{\fontsize{11}{14}\selectfont\textcolor{teal}{\MakeUppercase{Discovery Physics · Journey 5}}}
+\vspace{0.3cm}
+{\fontsize{34}{40}\selectfont\bfseries Modules 5.3 \& 5.4}
+\vspace{0.3cm}
+{\fontsize{20}{26}\selectfont\textcolor{gold}{%
+Time Dilation\\[5pt]
+Length Contraction \& Spacetime}}
+\vspace{0.5cm}
+\textcolor{white!60}{\rule{8cm}{0.4pt}}
+\vspace{0.4cm}
+{\fontsize{12}{18}\selectfont\textcolor{white!80}{\itshape
+Moving clocks run slow.\\[4pt]
+Moving rulers are short.\\[4pt]
+These are not illusions. They are real.}}
+\vfill\textcolor{white!30}{\small Version 1.0}
+\end{titlepage}
+\nopagecolor
+\tableofcontents
+
+\chapter{Time Dilation, Length Contraction, and Spacetime}
+\markboth{Journey 5: Modules 5.3--5.4}{}
+
+% ── Module 5.3 ────────────────────────────────────────────────────────────────
+\section{Module 5.3 — Time Dilation: Moving Clocks Run Slow}
+\label{sec:time_dilation}
+
+\epigraph{\itshape
+  It came to me suddenly that our concept of time was suspect.
+  I felt an enormous joy when I achieved the solution.
+}{--- Albert Einstein, recalling the moment he solved the time dilation problem}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+If the speed of light is the same for all observers, and if a clock ticks by counting light bounces, then a moving clock must tick more slowly. This is not a mechanical malfunction. Time itself must pass more slowly for moving observers. But is this a mere thought experiment --- or does it actually happen?
+\end{puzzlebox}
+
+\subsection{Deriving Time Dilation: The Light Clock}
+
+\lettrine[lines=3,loversize=0.08]{\textcolor{accent}{T}}{he} simplest way to derive time dilation is through a thought experiment: the \textbf{light clock}. Imagine a clock that works by bouncing a pulse of light between two mirrors separated by a distance $L_0$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j5_light_clock}
+\caption{Left: a light clock at rest. One tick takes time $t_0 = L_0/c$. Right: the same clock moving sideways at speed $v$, as seen by a ground observer. The light pulse must now travel a longer diagonal path. By the constancy of $c$ (Postulate 2), it still travels at $c$ --- so it takes longer. The extra time is computed via the Pythagorean theorem, giving $t = \gamma t_0$. This is time dilation.}
+\label{fig:light_clock}
+\end{figure}
+
+\textbf{At rest} (in the clock's own frame): one tick takes:
+\begin{equation}
+  t_0 = \frac{2L_0}{c} \quad\text{(proper time)}
+\end{equation}
+
+\textbf{When moving at speed $v$} (as seen by an outside observer): in the time $t$ that the light bounces once, the clock has moved sideways by $vt$. The light must travel a diagonal path of length $ct$. By the Pythagorean theorem:
+\begin{equation}
+  (ct)^2 = (vt)^2 + (2L_0)^2
+\end{equation}
+\begin{equation}
+  t^2(c^2-v^2) = 4L_0^2 = (ct_0)^2
+\end{equation}
+\begin{equation}
+  \boxed{t = \frac{t_0}{\sqrt{1-v^2/c^2}} = \gamma\,t_0}
+\end{equation}
+
+Since $\gamma \geq 1$, we have $t \geq t_0$: the moving clock takes \textit{longer} to tick. Moving clocks run slow.
+
+\begin{namebox}
+\textbf{Time Dilation.} For an observer at rest watching a clock moving at speed $v$:
+\begin{equation}
+  t = \gamma\,t_0, \qquad \gamma = \frac{1}{\sqrt{1-v^2/c^2}}
+\end{equation}
+where $t_0$ is the \textbf{proper time} --- the time elapsed in the clock's own rest frame. The proper time is always the \textit{minimum} time between two events measured by any observer.
+\end{namebox}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/fig_j5_time_dilation}
+\caption{Left: the Lorentz factor $\gamma$ as a function of speed $v/c$. For everyday speeds ($v \ll c$), $\gamma \approx 1$ and relativistic effects are negligible. At $v = 0.9c$, $\gamma \approx 2.3$; at $v = 0.99c$, $\gamma \approx 7$. Right: the classic muon experiment. Muons created by cosmic rays at $15$ km altitude travel at $v \approx 0.998c$ and have a rest-frame lifetime of $\SI{2.2}{\micro s}$. Classically, they should decay after travelling only $\approx 660$ m and never reach the surface. But time dilation extends their lifetime by factor $\gamma \approx 15$, giving $\approx 33\,\mu$s and a path length of $\sim 10$ km. Muons are abundantly detected at sea level.}
+\label{fig:time_dilation}
+\end{figure}
+
+\begin{explobox}
+\problem \textit{Basic time dilation calculations.}
+\begin{enumerate}[label=(\alph*)]
+  \item A spaceship travels at $v = 0.8c$. A clock on the ship ticks once per second (in the ship's frame). How often does it tick according to a ground observer?
+  \item A particle has a rest-frame lifetime of $\tau_0 = \SI{2.2}{\micro s}$ (the muon). At $v = 0.995c$, what is its observed lifetime in the lab frame? How far does it travel before decaying?
+  \item The ISS orbits at $v \approx \SI{7700}{m/s}$. In one year (about $3.15\times10^7$ s), by how much does an astronaut's clock differ from a ground clock? Use the approximation $\gamma \approx 1 + v^2/2c^2$. Is this measurable with modern atomic clocks ($\sim 1$ part in $10^{17}$)?
+\end{enumerate}
+
+\problem \textit{The Twin Paradox.} Alice and Bob are twins. Alice boards a rocket at age 20 and travels to a star $4$ light-years away at $v = 0.8c$, then returns at the same speed.
+\begin{enumerate}[label=(\alph*)]
+  \item How long does the journey take in Bob's frame (on Earth)?
+  \item How much time elapses on Alice's clock during the journey?
+  \item How old is each twin when Alice returns?
+  \item The ``paradox'': from Alice's perspective, isn't Bob the one who is moving? Why don't we get the symmetric answer (both aged equally)?
+  \item Resolution: Alice undergoes acceleration (she turns around). The scenario is not symmetric. Only Alice changes inertial frames. Which twin is older is an invariant fact, not frame-dependent.
+\end{enumerate}
+
+\problem \textit{GPS and relativistic corrections.} A GPS satellite orbits at altitude $\SI{20200}{km}$ and speed $\SI{3870}{m/s}$.
+\begin{enumerate}[label=(\alph*)]
+  \item \textit{Special relativistic effect (time dilation):} Moving clocks run slow. How many microseconds per day does a GPS clock lose due to its orbital speed?
+  \item \textit{General relativistic effect (gravitational time dilation):} Clocks run faster in weaker gravity. A GPS satellite's clock gains about $\SI{45.9}{\micro s}$ per day due to being farther from Earth's gravity well.
+  \item The net correction is $45.9 - 7.2 = \SI{38.7}{\micro s}$ per day (gain). If uncorrected, by how far would GPS position drift per day? (GPS uses $c = \SI{3e8}{m/s}$.)
+  \item The GPS system explicitly corrects for both effects. What does this tell you about the importance of relativity for everyday technology?
+\end{enumerate}
+
+\problem \textit{Particle accelerator lifetimes.} A pion ($\pi^+$) has a rest-frame lifetime of $\tau_0 = \SI{26}{ns}$ and can be produced at $v = 0.9998c$ in accelerators.
+\begin{enumerate}[label=(\alph*)]
+  \item What is $\gamma$ at this speed?
+  \item What is the observed lifetime in the lab frame?
+  \item How far does the pion travel before decaying (on average)?
+  \item This range determines the size of pion beams in particle therapy for cancer treatment. Why is a longer-lived pion beam clinically useful?
+\end{enumerate}
+\end{explobox}
+
+\begin{realworldbox}
+\textbf{Experimental confirmations of time dilation.}
+\begin{itemize}[leftmargin=1.5em,itemsep=3pt]
+  \item \textit{Hafele-Keating (1971)}: caesium atomic clocks were flown around the world on commercial aircraft. The clocks that flew East (with Earth's rotation, faster) lost $59 \pm 10$ ns relative to ground clocks, exactly as predicted by special and general relativity combined.
+  \item \textit{Muon experiments (1976 at CERN)}: muons stored in a storage ring at $\gamma = 29.3$ had their lifetime measured. The observed lifetime was $29.3 \times \tau_0$ to a precision of $0.1\%$.
+  \item \textit{GPS} (every day): the system must apply relativistic corrections or it would be useless within hours.
+  \item \textit{Particle physics}: every unstable particle seen in an accelerator has a dilated lifetime consistent with special relativity. The theory has never failed a precision test.
+\end{itemize}
+\end{realworldbox}
+
+% ── Module 5.4 ────────────────────────────────────────────────────────────────
+\section{Module 5.4 — Length Contraction and Spacetime}
+\label{sec:spacetime}
+
+\epigraph{\itshape
+  Henceforth space by itself, and time by itself, are doomed to fade away
+  into mere shadows, and only a kind of union of the two will preserve
+  an independent reality.
+}{--- Hermann Minkowski, 1908}
+
+\subsection{The Central Question}
+
+\begin{puzzlebox}
+If a moving observer measures time differently, they must also measure space differently --- otherwise the speed of light could not be the same for everyone. Moving objects are shorter in the direction of motion. But how do we reconcile this with the fact that from the moving object's perspective, \textit{it} is stationary and \textit{we} are the ones moving? And is there anything that all observers agree on?
+\end{puzzlebox}
+
+\subsection{Length Contraction: Deriving It}
+
+Consider a rod of rest length $L_0$ (measured in the rod's own frame). An observer watching it move at speed $v$ can measure its length by timing how long it takes to pass a fixed point:
+
+\begin{equation}
+  L = v \cdot \Delta t_{\rm observer}
+\end{equation}
+
+The rod passes in time $\Delta t_{\rm rod} = L_0/v$ in the rod's frame. By time dilation, the observer's time is shorter:
+\begin{equation}
+  \Delta t_{\rm observer} = \Delta t_{\rm rod}/\gamma = L_0/(v\gamma)
+\end{equation}
+
+Therefore:
+\begin{equation}
+  \boxed{L = v \cdot \frac{L_0}{v\gamma} = \frac{L_0}{\gamma} = L_0\sqrt{1-v^2/c^2}}
+\end{equation}
+
+Since $\gamma \geq 1$, we have $L \leq L_0$: the moving rod is shorter.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/fig_j5_contraction}
+\caption{Length contraction. Top: a rod of proper length $L_0$ at rest. Bottom: the same rod moving at $v = 0.8c$ ($\gamma \approx 1.67$), contracted to $L = L_0/\gamma \approx 0.6\,L_0$ in the direction of motion. Perpendicular dimensions are unaffected. This is not a perspective effect or optical illusion --- the rod is genuinely shorter in the observer's frame.}
+\label{fig:contraction}
+\end{figure}
+
+\begin{paradoxbox}
+\textbf{The Pole-Barn Paradox.} A pole of proper length $20$ m runs at $v = 0.866c$ ($\gamma = 2$) into a barn of proper length $10$ m.
+
+\textbf{Barn frame}: the pole is length-contracted to $20/2 = 10$ m. It fits in the barn! (For an instant, both doors can be closed simultaneously.)
+
+\textbf{Pole frame}: the barn is length-contracted to $10/2 = 5$ m. The pole cannot possibly fit!
+
+\textbf{Resolution}: simultaneity is relative. ``Both doors closed simultaneously'' in the barn frame does \textit{not} mean ``both doors closed simultaneously'' in the pole frame. In the pole frame, the back door closes first (while the front of the pole is still outside), then opens, then the front door closes. The sequence of events is different, but both frames agree that the pole never breaks and eventually exits the barn.
+\end{paradoxbox}
+
+\begin{explobox}
+\problem \textit{Length contraction calculations.}
+\begin{enumerate}[label=(\alph*)]
+  \item A spaceship of proper length $100$ m moves at $v = 0.6c$. What is its length as measured by a ground observer?
+  \item The spaceship passes a space station $50$ m long (at rest). In the spaceship's frame, how long is the station? Does the ship ``fit'' inside the station's length?
+  \item At what speed would a $1$ m ruler appear $0.5$ m long?
+\end{enumerate}
+
+\problem \textit{The relativistic bullet.} A bullet of proper length $5$ cm is fired at $v = 0.99c$ through a wall of thickness $4$ cm (in the wall's frame).
+\begin{enumerate}[label=(\alph*)]
+  \item Is the bullet contracted to less than $4$ cm in the wall's frame?
+  \item In the bullet's frame, is the wall thin enough for the bullet to be entirely inside it at some moment?
+  \item Both frames must agree: does the bullet pass through the wall? How do they agree despite the different lengths?
+\end{enumerate}
+\end{explobox}
+
+\subsection{Spacetime: Minkowski's Synthesis}
+
+Hermann Minkowski, Einstein's former mathematics professor, showed in 1908 that special relativity has a beautiful geometric interpretation. Space and time are not separate entities but together form a four-dimensional \textbf{spacetime}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig_j5_spacetime}
+\caption{Left: a Minkowski (spacetime) diagram. The horizontal axis is space ($x$), the vertical axis is time ($ct$). Every event is a point. Every observer's history is a ``world line.'' The world line of a stationary observer is vertical; of a moving observer, tilted. Light always travels at $45^\circ$. No world line can exceed $45^\circ$ from vertical (that would mean moving faster than light). Right: the three regions defined by the spacetime interval. Events in the timelike future can be causally influenced. Events in the spacelike region cannot be causally connected to the origin --- their ordering in time is frame-dependent.}
+\label{fig:spacetime}
+\end{figure}
+
+\subsection{The Invariant Spacetime Interval}
+
+In ordinary Euclidean geometry, the distance $r^2 = x^2 + y^2 + z^2$ is invariant under rotations. In spacetime, Minkowski identified the corresponding invariant:
+
+\begin{equation}
+  \boxed{s^2 = (ct)^2 - x^2 - y^2 - z^2}
+\end{equation}
+
+This \textbf{spacetime interval} $s^2$ has the same value for all inertial observers, regardless of their velocity. It is the spacetime analogue of distance. Different observers disagree about $t$, $x$, $y$, $z$ individually --- but they all agree on $s^2$.
+
+\begin{discoverybox}
+\textbf{The deep structure of spacetime.}
+
+The minus sign in $s^2 = (ct)^2 - x^2$ is the key difference between spacetime and ordinary Euclidean space. It means:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=3pt]
+  \item $s^2 > 0$ (timelike): the time separation dominates. A single observer can be present at both events. Causality can connect them.
+  \item $s^2 = 0$ (lightlike): only light can connect the events. Photons travel on lightlike intervals.
+  \item $s^2 < 0$ (spacelike): the space separation dominates. No signal can connect the events. Their time ordering is frame-dependent.
+\end{itemize}
+
+The causal structure of the universe --- what can cause what --- is encoded entirely in the sign of the spacetime interval between events.
+\end{discoverybox}
+
+\begin{explobox}
+\problem \textit{Spacetime interval calculations.} For each pair of events, calculate $s^2$, classify it (timelike/lightlike/spacelike), and state whether the events can be causally connected.
+\begin{enumerate}[label=(\alph*)]
+  \item Event 1: $(t=0, x=0)$; Event 2: $(t = \SI{1}{s}, x = \SI{2e8}{m})$. (Use $c = \SI{3e8}{m/s}$.)
+  \item Event 1: $(t=0, x=0)$; Event 2: $(t = \SI{1}{s}, x = \SI{3e8}{m})$.
+  \item Event 1: $(t=0, x=0)$; Event 2: $(t = \SI{1}{s}, x = \SI{4e8}{m})$.
+\end{enumerate}
+
+\problem \textit{Proper time as the invariant.} For a timelike interval, $s^2 > 0$. The proper time is $\tau = s/c$ --- the time measured in the frame where both events occur at the same place.
+\begin{enumerate}[label=(\alph*)]
+  \item Event 1 is the emission of a light pulse from a rocket; Event 2 is the same pulse received back at the rocket after reflecting from a mirror. In the rocket frame, the pulse takes $\SI{2}{\micro s}$. Find $s^2$ and confirm it equals $(c \cdot \tau)^2$.
+  \item Why is the proper time the \textit{minimum} time any observer can measure between two timelike events?
+\end{enumerate}
+
+\problem \textit{The relativistic Doppler effect.} When a light source moves toward you at speed $v$, the observed frequency is:
+\begin{equation}
+  f_{\rm obs} = f_0\sqrt{\frac{1+v/c}{1-v/c}} \quad\text{(toward you)}
+\end{equation}
+\begin{enumerate}[label=(\alph*)]
+  \item A star moves toward Earth at $v = 0.2c$. Its rest-frame emission line is at $\lambda_0 = \SI{656}{nm}$ (hydrogen-alpha). What wavelength is observed?
+  \item A galaxy at $z = 0.1$ (meaning $\lambda_{\rm obs}/\lambda_0 - 1 = 0.1$) moves away from us. Find its recession speed.
+  \item For nearby galaxies ($v \ll c$), the Doppler formula reduces to $z \approx v/c$. This is Hubble's law. For the Andromeda galaxy at $v \approx -120$ km/s (approaching!), what is $z$? What does the minus sign mean cosmologically?
+\end{enumerate}
+\end{explobox}
+
+\begin{reflectionbox}
+\textbf{Reflection: Modules 5.3--5.4.}
+
+Write two pages:
+
+\begin{enumerate}[leftmargin=2em,itemsep=6pt]
+  \item \textit{The reality of relativistic effects.} Students often wonder: is time dilation ``real'' or just an illusion caused by the finite speed of light? The muon experiment settles this: muons \textit{physically exist} longer than their rest-frame lifetime --- they decay less, not because of any measurement trick, but because their internal processes genuinely run slower. Explain in your own words why the light clock argument is not just about measuring light, but about the actual rate at which physical processes occur.
+
+  \item \textit{What is spacetime?} Before Minkowski, space and time were separate. Now they are unified in spacetime. Does this mean time is ``just another dimension of space''? What is similar and what is different about the spatial dimensions and the time dimension? (Hint: think about the minus sign in the spacetime interval and about the fact that you can move freely in space but only ``forward'' in time.)
+\end{enumerate}
+\end{reflectionbox}
+
+\chapter*{Module Summary: 5.3--5.4}
+\addcontentsline{toc}{chapter}{Module Summary: 5.3--5.4}
+\markboth{Module Summary: 5.3--5.4}{}
+
+\begin{tcolorbox}[enhanced,colback=deep!4,colframe=deep,
+  title={\bfseries\color{white} Key Ideas: Modules 5.3--5.4},
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  boxed title style={colback=deep}]
+\textbf{Module 5.3 --- Time Dilation}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Light clock derivation: $t = \gamma t_0$ where $\gamma = (1-v^2/c^2)^{-1/2}$
+  \item Proper time $t_0$: elapsed time in the clock's own rest frame (minimum time)
+  \item Confirmed: muon lifetimes, GPS corrections, Hafele-Keating, accelerator experiments
+  \item Twin paradox: the travelling twin is younger (acceleration breaks the symmetry)
+\end{itemize}
+\vspace{6pt}
+\textbf{Module 5.4 --- Length Contraction \& Spacetime}
+\begin{itemize}[leftmargin=1.5em,itemsep=2pt]
+  \item Length contraction: $L = L_0/\gamma$ along direction of motion (perpendicular: unchanged)
+  \item Relativity of simultaneity: simultaneous events for one observer are not simultaneous for another
+  \item Spacetime interval: $s^2 = (ct)^2 - x^2 - y^2 - z^2$ is the same for all observers
+  \item Timelike ($s^2>0$), lightlike ($s^2=0$), spacelike ($s^2<0$): determines causality
+  \item Pole-barn paradox: resolved by relativity of simultaneity
+  \item Relativistic Doppler: $f_{\rm obs} = f_0\sqrt{(1+v/c)/(1-v/c)}$
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{0.5cm}
+\begin{center}
+\begin{tikzpicture}
+  \draw[teal,line width=1.5pt] (0,0) -- (12,0);
+  \node[below,teal] at (6,-0.1)
+    {\small\itshape Next: $E = mc^2$ and the Classical Crisis (Modules 5.5--5.6)};
+\end{tikzpicture}
+\end{center}
+
+\end{document}

@@ -1,0 +1,457 @@
+\documentclass[12pt, a4paper]{book}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[charter, cal=cmcal]{mathdesign}
+\usepackage[scaled=0.92]{helvet}
+\usepackage{geometry}
+\geometry{a4paper, top=30mm, bottom=30mm, inner=32mm, outer=25mm, marginparwidth=18mm}
+
+\usepackage{amsmath, amsthm}
+\usepackage[version=4]{mhchem}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, shapes.geometric, positioning, calc, backgrounds}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable, theorems}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{parskip}
+\usepackage{siunitx}
+\usepackage[colorlinks=true, linkcolor=BrickRed,
+            urlcolor=NavyBlue, citecolor=ForestGreen]{hyperref}
+
+% ── Colours (Journey 5 — forest green / amber) ────────────────────────────────
+\definecolor{JourneyColor}{HTML}{065F46}
+\definecolor{ModuleColor}{HTML}{059669}
+\definecolor{PuzzleColor}{HTML}{B45309}
+\definecolor{DiscoveryColor}{HTML}{D97706}
+\definecolor{WarningColor}{HTML}{991B1B}
+\definecolor{ProblemColor}{HTML}{6B21A8}
+\definecolor{ReflectColor}{HTML}{0D9488}
+\definecolor{HistoryColor}{HTML}{78350F}
+
+% ── Boxes ─────────────────────────────────────────────────────────────────────
+\newtcolorbox{puzzlebox}[1][]{enhanced,breakable,
+  colback=PuzzleColor!6,colframe=PuzzleColor,fonttitle=\bfseries\sffamily,
+  title={The Puzzle},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=PuzzleColor},borderline west={3pt}{0pt}{PuzzleColor},#1}
+
+\newtcolorbox{discoverybox}[1][]{enhanced,breakable,
+  colback=DiscoveryColor!8,colframe=DiscoveryColor,fonttitle=\bfseries\sffamily,
+  title={Discovery},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=DiscoveryColor},borderline west={3pt}{0pt}{DiscoveryColor},#1}
+
+\newtcolorbox{problembox}[1][]{enhanced,breakable,
+  colback=ProblemColor!5,colframe=ProblemColor,fonttitle=\bfseries\sffamily,
+  title={Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ProblemColor},borderline west={3pt}{0pt}{ProblemColor},#1}
+
+\newtcolorbox{deepbox}[1][]{enhanced,breakable,
+  colback=JourneyColor!5,colframe=JourneyColor,fonttitle=\bfseries\sffamily,
+  title={Deep Problems},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=JourneyColor},borderline west={4pt}{0pt}{JourneyColor},#1}
+
+\newtcolorbox{historybox}[1][]{enhanced,breakable,
+  colback=HistoryColor!7,colframe=HistoryColor!60,fonttitle=\bfseries\sffamily\small,
+  title={Historical Note},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=HistoryColor!80},#1}
+
+\newtcolorbox{reflectionbox}[1][]{enhanced,breakable,
+  colback=ReflectColor!6,colframe=ReflectColor,fonttitle=\bfseries\sffamily,
+  title={Reflection},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ReflectColor},borderline west={3pt}{0pt}{ReflectColor},#1}
+
+\newtcolorbox{namedconcept}[2][]{enhanced,
+  colback=ModuleColor!6,colframe=ModuleColor,fonttitle=\bfseries\sffamily\large,
+  title={#2},attach boxed title to top left={yshift=-2mm,xshift=6mm},
+  boxed title style={colback=ModuleColor},#1}
+
+% ── Section formatting ────────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\normalfont\sffamily\huge\bfseries\color{JourneyColor}}
+  {\textcolor{JourneyColor!60}{\chaptertitlename\ \thechapter}}{10pt}{\Huge}
+  [\vspace{2pt}\textcolor{JourneyColor}{\titlerule[1.5pt]}]
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{ModuleColor}}
+  {\thesection}{1em}{}[\textcolor{ModuleColor!40}{\titlerule[0.6pt]}]
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{JourneyColor!80}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\small\sffamily\textcolor{JourneyColor}{\leftmark}}
+\fancyhead[RO]{\small\sffamily\textcolor{ModuleColor}{\rightmark}}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcommand{\newterm}[1]{\textit{\textcolor{DiscoveryColor}{#1}}}
+\newcommand{\important}[1]{\textcolor{ModuleColor}{\textbf{#1}}}
+
+\begin{document}
+
+\setcounter{chapter}{4}
+\chapter[Journey 5 --- Chemical Kinetics and Dynamics]
+        {Journey Five\\[8pt]
+         \textcolor{ModuleColor}{\large Chemical Kinetics and Dynamics}}
+\setcounter{section}{0}
+
+\section{Module 5.1 --- Rates, Orders, and Half-Lives}
+\label{sec:mod5.1}
+
+\subsection*{Motivation}
+
+Thermodynamics tells us whether a chemical reaction *can* occur. It tells us the energy differences between reactants and products.
+But thermodynamics is completely blind to time.
+A reaction can be highly thermodynamically favored, yet take billions of years to occur (such as the conversion of diamond to graphite, or the reaction of hydrogen and oxygen gas at room temperature).
+
+Kinetics is the science of time in chemistry.
+It studies how fast reactions proceed, what microscopic paths the molecules take, and how we can control the rate of chemical change.
+This module establishes the mathematical foundation of chemical rates: how to define rate, how to establish the order of a reaction, and how concentrations evolve over time.
+
+\subsection{Defining the Rate of Reaction}
+
+We track the speed of a reaction by measuring the change in concentration of reactants or products over time.
+
+\begin{puzzlebox}
+\textbf{Defining Rate.}
+
+Consider a simple decomposition reaction:
+\[
+  \ce{2 A -> B + 3 C}.
+\]
+As the reaction proceeds, reactant A is consumed, while products B and C are produced.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item We define the rate of consumption of reactant A as $R_{\ce{A}} = -\frac{d[\ce{A}]}{dt}$, and the rate of production of B as $R_{\ce{B}} = \frac{d[\ce{B}]}{dt}$. If $0.10$ moles of A disappear per liter per second, how many moles of B appear per liter per second? How many of C?
+  \item To define a single, unique **rate of reaction** $R$ that does not depend on which chemical species we track, we divide each rate by its stoichiometric coefficient:
+  \[
+    R \;=\; -\frac{1}{2}\frac{d[\ce{A}]}{dt} \;=\; \frac{d[\ce{B}]}{dt} \;=\; \frac{1}{3}\frac{d[\ce{C}]}{dt}.
+  \]
+  If a general reaction is $a\ce{A} + b\ce{B} -> c\ce{C} + d\ce{D}$, write the stoichiometric rate relation.
+  \item What are the units of reaction rate?
+\end{enumerate}
+\end{puzzlebox}
+
+\subsection{Reaction Orders and Rate Laws}
+
+The rate of a reaction typically depends on the concentrations of the reactants. This dependence is expressed as a **rate law**.
+
+\begin{explobox}
+For a general reaction with reactants A and B, the rate law has the form:
+\[
+  R \;=\; k [\ce{A}]^x [\ce{B}]^y,
+\]
+where $k$ is the **rate constant**, and the exponents $x$ and $y$ are the **partial orders** with respect to A and B. The **overall order** is $n = x + y$.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item **CRITICAL WARNING:** The exponents $x$ and $y$ are *not* necessarily equal to the stoichiometric coefficients $a$ and $b$ in the balanced equation. They must be determined experimentally. Why is this? (We will discover in Module 5.3 that most reactions do not occur in a single step).
+  \item Let a reaction have the rate law $R = k[\ce{A}]^2 [\ce{B}]$. What is the partial order with respect to A? What is the overall order? If we double the concentration of A, how does the rate change? If we double B?
+  \item The units of the rate constant $k$ must vary to ensure the rate has units of M$\cdot$s$^{-1}$. Find the units of $k$ for a zero-order, a first-order, and a second-order overall reaction.
+\end{enumerate}
+\end{explobox}
+
+\subsection{Step-by-Step Integrated Rate Laws}
+
+We use calculus to find how concentration varies as a function of time.
+
+\begin{explobox}
+Let us analyze a simple reaction $\ce{A -> B}$ under different reaction orders.
+\problem **Zero-Order Kinetics ($n=0$):** The rate is independent of reactant concentration.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Set up the differential equation: $-\frac{d[\ce{A}]}{dt} = k$. Solve this equation by integration, assuming $[\ce{A}] = [\ce{A}]_0$ at $t = 0$, to find the integrated rate law.
+  \item The **half-life** $t_{1/2}$ is the time required for the reactant concentration to fall to half of its initial value: $[\ce{A}]_{t_{1/2}} = \frac{1}{2}[\ce{A}]_0$. Show that for a zero-order reaction:
+  \[
+    t_{1/2} \;=\; \frac{[\ce{A}]_0}{2k}.
+  \]
+  Why does the half-life decrease as the starting concentration decreases?
+\end{enumerate}
+
+\problem **First-Order Kinetics ($n=1$):** The rate is directly proportional to concentration.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Set up the differential equation: $-\frac{d[\ce{A}]}{dt} = k[\ce{A}]$. Separate variables and integrate to prove the integrated rate law:
+  \[
+    [\ce{A}]_t \;=\; [\ce{A}]_0 e^{-kt}.
+  \]
+  \item Plot $\ln[\ce{A}]_t$ versus time $t$. Explain why this plot yields a straight line. What represents the slope? What represents the $y$-intercept?
+  \item Show that the half-life of a first-order reaction is:
+  \[
+    t_{1/2} \;=\; \frac{\ln 2}{k}.
+  \]
+  **CRITICAL INSIGHT:** Notice that the first-order half-life is completely independent of the starting concentration $[\ce{A}]_0$. Why is this property highly unique? (This is why radioactive isotopes have a fixed, invariant half-life).
+\end{enumerate}
+
+\problem **Second-Order Kinetics ($n=2$):** The rate is proportional to the square of concentration.
+\begin{enumerate}[label=(\alph*), leftmargin=*]
+  \item Set up the differential equation: $-\frac{d[\ce{A}]}{dt} = k[\ce{A}]^2$. Separate variables and integrate to prove the integrated rate law:
+  \[
+    \frac{1}{[\ce{A}]_t} \;=\; \frac{1}{[\ce{A}]_0} + kt.
+  \]
+  \item Plot $1/[\ce{A}]_t$ versus time $t$. What represents the slope?
+  \item Show that the half-life of a second-order reaction is:
+  \[
+    t_{1/2} \;=\; \frac{1}{k [\ce{A}]_0}.
+  \]
+  Explain why the half-life *doubles* each time the concentration is halved in a second-order reaction.
+\end{enumerate}
+\end{explobox}
+
+\newpage
+
+% ─── Section: Discovery ──────────────────────────────────────────────────────
+\section{Part 3 --- Discovery}
+
+\begin{discoverybox}
+\textbf{What have we built?}
+
+\textbf{First.} The reaction rate is a unique quantity defined by dividing concentration derivatives by their stoichiometric coefficients: $R = -\frac{1}{a}\frac{d[\ce{A}]}{dt}$.
+
+\textbf{Second.} The rate law $R = k[\ce{A}]^x[\ce{B}]^y$ must be determined experimentally. The exponents represent the reaction orders and are not dictated by stoichiometry.
+
+\textbf{Third.} Integrated rate laws allow us to determine reaction order by plotting experimental data:
+* A linear plot of $[\ce{A}]$ vs. $t$ indicates **zero-order**.
+* A linear plot of $\ln[\ce{A}]$ vs. $t$ indicates **first-order**.
+* A linear plot of $1/[\ce{A}]$ vs. $t$ indicates **second-order**.
+
+\textbf{Fourth.} The half-life is a diagnostic tool for reaction order. It is independent of concentration only for first-order dynamics ($t_{1/2} = \ln 2 / k$).
+\end{discoverybox}
+
+\newpage
+
+% ─── Section: Naming Concepts ────────────────────────────────────────────────
+\section{Part 4 --- What This Is Called}
+
+\begin{namedconcept}{Reaction Kinetics parameters}
+\textbf{Rate Law Summary:}
+
+\begin{center}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Order} & \textbf{Rate Law} & \textbf{Integrated Rate Law} & \textbf{Linear Plot} & \textbf{Half-Life } $t_{1/2}$ \\
+\midrule
+Zero & $R = k$ & $[\ce{A}]_t = [\ce{A}]_0 - kt$ & $[\ce{A}]$ vs. $t$ & $\dfrac{[\ce{A}]_0}{2k}$ \\[8pt]
+First & $R = k[\ce{A}]$ & $\ln[\ce{A}]_t = \ln[\ce{A}]_0 - kt$ & $\ln[\ce{A}]$ vs. $t$ & $\dfrac{\ln 2}{k}$ \\[8pt]
+Second & $R = k[\ce{A}]^2$ & $\dfrac{1}{[\ce{A}]_t} = \dfrac{1}{[\ce{A}]_0} + kt$ & $\dfrac{1}{[\ce{A}]}$ vs. $t$ & $\dfrac{1}{k[\ce{A}]_0}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+\textbf{Definitions:}
+* **Differential Rate Law:** Expresses the reaction rate as a function of concentrations.
+* **Integrated Rate Law:** Expresses concentration as a function of elapsed time.
+* **Rate Constant ($k$):** The proportionality constant in the rate law. It depends on temperature but is independent of concentrations.
+\end{namedconcept}
+
+\newpage
+
+% ─── Section: Solved Exercises ───────────────────────────────────────────────
+\section{Part 5 --- Solved Exercises}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{E\arabic*.}]
+  \item \textbf{Determining Order from Experimental Data.}
+  
+        The decomposition of dinitrogen pentoxide in carbon tetrachloride:
+        \[
+          \ce{2 N2O5 -> 4 NO2 + O2}
+        \]
+        was monitored at \SI{45}{\degree C}, yielding the following concentration-time data:
+        \begin{center}
+        \begin{tabular}{cc}
+        \toprule
+        \textbf{Time (s)} & \textbf{$[\ce{N2O5}]$ (M)} \\
+        \midrule
+        0 & 1.000 \\
+        100 & 0.822 \\
+        300 & 0.554 \\
+        600 & 0.307 \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+        Show that this reaction is first-order, and calculate the rate constant $k$.
+        
+        \textbf{Solution:}
+        If the reaction is first-order, the integrated rate law requires:
+        \[
+          \ln\left( \frac{[\ce{N2O5}]_0}{[\ce{N2O5}]_t} \right) \;=\; k t \implies k \;=\; \frac{1}{t} \ln\left( \frac{[\ce{N2O5}]_0}{[\ce{N2O5}]_t} \right).
+        \]
+        Let us calculate $k$ for each data point using $[\ce{N2O5}]_0 = 1.000$ M:
+        * At $t = 100$ s:
+        \[
+          k_1 \;=\; \frac{1}{100} \ln\left( \frac{1.000}{0.822} \right) \;=\; \frac{0.196}{100} \;=\; 1.96 \times 10^{-3} \text{ s}^{-1}.
+        \]
+        * At $t = 300$ s:
+        \[
+          k_2 \;=\; \frac{1}{300} \ln\left( \frac{1.000}{0.554} \right) \;=\; \frac{0.591}{300} \;=\; 1.97 \times 10^{-3} \text{ s}^{-1}.
+        \]
+        * At $t = 600$ s:
+        \[
+          k_3 \;=\; \frac{1}{600} \ln\left( \frac{1.000}{0.307} \right) \;=\; \frac{1.181}{600} \;=\; 1.97 \times 10^{-3} \text{ s}^{-1}.
+        \]
+        Since the calculated rate constant $k$ is highly consistent across all intervals (average $k \approx 1.97 \times 10^{-3}$ s$^{-1}$), the data fits the first-order integrated rate law. The reaction is **first-order**.
+        
+  \item \textbf{General $n$-th Order Integrated Rate Law.}
+  
+        Prove that for a general reaction $\ce{A -> B}$ of order $n \neq 1$, the integrated rate law is:
+        \[
+          \frac{1}{[\ce{A}]_t^{n-1}} \;=\; \frac{1}{[\ce{A}]_0^{n-1}} + (n-1)kt.
+        \]
+        
+        \textbf{Solution:}
+        Set up the differential rate equation for order $n$:
+        \[
+          -\frac{d[\ce{A}]}{dt} \;=\; k[\ce{A}]^n.
+        \]
+        Separate the variables by dividing both sides by $[\ce{A}]^n$ and multiplying by $-dt$:
+        \[
+          [\ce{A}]^{-n} \, d[\ce{A}] \;=\; -k \, dt.
+        \]
+        Integrate both sides from $t=0$ (concentration $[\ce{A}]_0$) to time $t$ (concentration $[\ce{A}]_t$):
+        \[
+          \int_{[\ce{A}]_0}^{[\ce{A}]_t} [\ce{A}]^{-n} \, d[\ce{A}] \;=\; -k \int_0^t dt.
+        \]
+        Use the power rule of integration ($\int x^{-n} dx = \frac{x^{-n+1}}{-n+1}$ for $n \neq 1$):
+        \[
+          \left[ \frac{[\ce{A}]^{-n+1}}{-n+1} \right]_{[\ce{A}]_0}^{[\ce{A}]_t} \;=\; -kt.
+        \]
+        Multiply both sides by $-(n-1) = -n+1$:
+        \[
+          \left[ [\ce{A}]^{-(n-1)} \right]_{[\ce{A}]_0}^{[\ce{A}]_t} \;=\; (n-1)kt.
+        \]
+        Substitute the limits:
+        \[
+          [\ce{A}]_t^{-(n-1)} - [\ce{A}]_0^{-(n-1)} \;=\; (n-1)kt.
+        \]
+        Rewriting with positive exponents in the denominator:
+        \[
+          \frac{1}{[\ce{A}]_t^{n-1}} \;=\; \frac{1}{[\ce{A}]_0^{n-1}} + (n-1)kt.
+        \]
+        This completes the general proof.
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Problems ───────────────────────────────────────────────────────
+\section{Part 6 --- Problems}
+
+\begin{problembox}
+\begin{enumerate}[label=\textbf{P\arabic*.}]
+  \item \textbf{Nuclear Kinetics & Carbon Dating.}
+  
+        Radioactive isotopes decay via unstable nuclear emissions. The probability of decay per unit time is a nuclear constant, independent of external factors (pressure, temperature) or chemical bonding.
+        \begin{enumerate}[label=(\alph*)]
+          \item Explain why this constant decay probability implies that radioactive decay must follow first-order kinetics.
+          \item Carbon-14 is continuously produced in the atmosphere and incorporated into living tissue. When an organism dies, it stops absorbing carbon. The carbon-14 level decays with a half-life of 5730 years.
+                A wooden tool recovered from an archaeological site has a carbon-14 activity that is 12.5\% of the level found in fresh wood. Calculate the age of the tool.
+        \end{enumerate}
+
+  \item \textbf{Butadiene Dimerization.}
+  
+        The gas-phase dimerization of butadiene:
+        \[
+          \ce{2 C4H6(g) -> C8H12(g)}
+        \]
+        is second-order with a rate constant $k = 0.0140$ M$^{-1}$s$^{-1}$ at \SI{500}{K}.
+        Suppose we start the reaction with an initial concentration $[\ce{C4H6}]_0 = 0.100$ M.
+        \begin{enumerate}[label=(\alph*)]
+          \item Calculate the concentration of butadiene remaining after 500 seconds.
+          \item Calculate the half-life $t_{1/2}$ for this starting concentration.
+          \item Suppose we start the reaction with $[\ce{C4H6}]_0 = 0.050$ M. Calculate the new half-life.
+        \end{enumerate}
+\end{enumerate}
+\end{problembox}
+
+\newpage
+
+% ─── Section: Deep Problems ──────────────────────────────────────────────────
+\section{Part 7 --- Deep Problems}
+
+\begin{deepbox}
+\begin{enumerate}[label=\textbf{D\arabic*.}]
+  \item \textbf{The Method of Initial Rates.}
+  
+        For a complex multi-reactant reaction:
+        \[
+          \ce{a A + b B -> Products}
+        \]
+        the rate law is $R = k[\ce{A}]^x[\ce{B}]^y$.
+        To determine the partial orders $x$ and $y$, we run the reaction multiple times varying the initial concentrations, and measure the initial rate $R_0 = -\frac{d[\ce{A}]}{dt}|_{t=0}$ before concentrations change significantly.
+        We obtain the following data at \SI{298}{K}:
+        \begin{center}
+        \begin{tabular}{cccc}
+        \toprule
+        \textbf{Trial} & \textbf{$[\ce{A}]_0$ (M)} & \textbf{$[\ce{B}]_0$ (M)} & \textbf{Initial Rate } $R_0$ (M$\cdot$s$^{-1}$) \\
+        \midrule
+        1 & 0.10 & 0.10 & $1.2 \times 10^{-4}$ \\
+        2 & 0.20 & 0.10 & $4.8 \times 10^{-4}$ \\
+        3 & 0.10 & 0.20 & $2.4 \times 10^{-4}$ \\
+        \bottomrule
+        \end{tabular}
+        \end{center}
+        \begin{enumerate}[label=(\alph*)]
+          \item By comparing Trial 1 and Trial 2, find the partial order $x$ with respect to reactant A.
+          \item By comparing Trial 1 and Trial 3, find the partial order $y$ with respect to reactant B.
+          \item Calculate the rate constant $k$, including its units.
+        \end{enumerate}
+
+  \item \textbf{Consecutive First-Order Reactions.}
+  
+        Many reactions proceed via a sequence of elementary steps:
+        \[
+          \ce{A ->[k_1] B ->[k_2] C},
+        \]
+        where B is an unstable intermediate. Assume both steps are first-order.
+        Let the initial concentrations be $[\ce{A}]_0 = A_0$, and $[\ce{B}]_0 = [\ce{C}]_0 = 0$.
+        \begin{enumerate}[label=(\alph*)]
+          \item Write the coupled differential equations for the rate of change of $[\ce{A}]$, $[\ce{B}]$, and $[\ce{C}]$.
+          \item Solve the equation for $[\ce{A}]$ to show $[\ce{A}]_t = A_0 e^{-k_1 t}$.
+          \item Substitute this into the differential equation for $[\ce{B}]$:
+          \[
+            \frac{d[\ce{B}]}{dt} \;=\; k_1 A_0 e^{-k_1 t} - k_2 [\ce{B}].
+          \]
+          Solve this linear first-order differential equation using an integrating factor to prove:
+          \[
+            [\ce{B}]_t \;=\; A_0 \frac{k_1}{k_2 - k_1} \left( e^{-k_1 t} - e^{-k_2 t} \right) \quad \text{for } k_1 \neq k_2.
+          \]
+          \item Find the time $t_{\text{max}}$ at which the concentration of the intermediate B reaches its maximum value. Express $t_{\text{max}}$ in terms of $k_1$ and $k_2$.
+        \end{enumerate}
+\end{enumerate}
+\end{deepbox}
+
+\newpage
+
+% ─── Section: Reflection ─────────────────────────────────────────────────────
+\section{Part 8 --- Reflection}
+
+\begin{reflectionbox}
+\textbf{Conceptual Reflection}
+
+Consider the following questions:
+\begin{enumerate}
+  \item **On Order and Mechanism:** The rate law exponents represent the number of molecules colliding in the rate-determining step. If a balanced equation is $\ce{2 H2 + O2 -> 2 H2O}$, why is it physically impossible for this reaction to occur in a single elementary step? (Consider the probability of three gas molecules colliding at the exact same point in space simultaneously).
+  \item **On Time and Scale:** Radioactive decay is first-order, meaning the decay rate of a sample is proportional to the number of atoms. But for a single atom, decay is a quantum event. How does a completely unpredictable quantum event for a single atom scale to a perfectly deterministic exponential decay curve for $10^{20}$ atoms?
+  \item **On Half-Lives:** In a second-order reaction, the half-life depends on the concentration. Why does a lower concentration make the reaction slow down so much that the half-life increases? (Consider the physical collision rate of molecules).
+\end{enumerate}
+\end{reflectionbox}
+
+\medskip
+\noindent\textbf{Looking ahead.}
+Module~5.2 introduces **Temperature Dependences and Activation Energies**. Having established how concentrations change rate over time, we will explore why temperature has such a massive impact on kinetic speeds. We will discover collision theory, transition state theory, and derive the Arrhenius equation.
+
+\vspace{1.4cm}
+\begin{center}
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}\\[6pt]
+{\small\color{JourneyColor}\textit{End of Journey 5, Module 5.1 --- Rates, Orders, and Half-Lives}}\\[4pt]
+{\small\color{JourneyColor}Continue to: \textbf{Module 5.2 --- Temperature Dependences and Activation Energies}}\\[6pt]
+{\color{JourneyColor}\rule{0.5\linewidth}{0.8pt}}
+\end{center}
+
+\end{document}

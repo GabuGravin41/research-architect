@@ -1,0 +1,5 @@
+﻿discovery_institute.zip
+__pycache__/
+*.pyc
+.venv/
+
